@@ -1,0 +1,4 @@
+intranet_main:
+    resource: "@IntranetMainBundle/Resources/config/routing.yml"
+    prefix:   /
+
