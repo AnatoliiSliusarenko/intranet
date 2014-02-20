@@ -26,7 +26,6 @@ class IndexController extends Controller
     	$section = $repository->find($section_id);
     	if ($section == null)
     		return $this->redirect($this->generateUrl('intranet_main_homepage'));
-    	//fetch topics
     	
     	return $this->render('IntranetMainBundle:Index:showSection.html.twig', array("section" => $section));
     }

@@ -42,6 +42,11 @@ class Topic
      */
     private $description;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="TopicSection", inversedBy="topics")
+     * @ORM\JoinColumn(name="section_id", referencedColumnName="id")
+     */
+    private $topicSection;
 
     /**
      * Get id
@@ -120,5 +125,28 @@ class Topic
     public function getDescription()
     {
         return $this->description;
+    }
+
+    /**
+     * Set topicSection
+     *
+     * @param TopicSection $topicSection
+     * @return Topic
+     */
+    public function setTopicSection(TopicSection $topicSection = null)
+    {
+        $this->topicSection = $topicSection;
+
+        return $this;
+    }
+
+    /**
+     * Get topicSection
+     *
+     * @return TopicSection 
+     */
+    public function getTopicSection()
+    {
+        return $this->topicSection;
     }
 }
