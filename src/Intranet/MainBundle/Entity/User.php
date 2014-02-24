@@ -3,14 +3,16 @@
 namespace Intranet\MainBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * User
  *
  * @ORM\Table(name="users")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Intranet\MainBundle\Entity\UserRepository")
  */
-class User
+class User implements UserInterface, \Serializable
 {
     /**
      * @var integer
@@ -24,7 +26,7 @@ class User
     /**
      * @var string
      *
-     * @ORM\Column(name="login", type="string", length=255)
+     * @ORM\Column(name="login", type="string", length=255, unique=true)
      */
     private $login;
 
@@ -38,7 +40,7 @@ class User
     /**
      * @var string
      *
-     * @ORM\Column(name="email", type="string", length=255)
+     * @ORM\Column(name="email", type="string", length=255, unique=true)
      */
     private $email;
 
@@ -70,7 +72,25 @@ class User
      */
     private $lastactive;
 
-
+    /**
+     * @var boolean
+     * @ORM\Column(name="active", type="boolean")
+     */
+	private $active;
+	
+	/**
+	 * @ORM\ManyToMany(targetEntity="Role", inversedBy="users")
+	 * @var array
+	 */
+	private $roles;
+    
+	public function __construct()
+	{
+		$this->active = true;
+		$this->salt = md5(uniqid(null, true));
+		$this->roles = new ArrayCollection();
+	}
+	
     /**
      * Get id
      *
@@ -104,6 +124,11 @@ class User
         return $this->login;
     }
 
+    public function getUsername()
+    {
+    	return $this->getLogin();
+    }
+    
     /**
      * Set password
      *
@@ -240,5 +265,89 @@ class User
     public function getLastactive()
     {
         return $this->lastactive;
+    }
+
+    /**
+     * Set active
+     *
+     * @param boolean $active
+     * @return User
+     */
+    public function setActive($active)
+    {
+        $this->active = $active;
+
+        return $this;
+    }
+
+    /**
+     * Get active
+     *
+     * @return boolean 
+     */
+    public function getActive()
+    {
+        return $this->active;
+    }
+    
+    /**
+     * @inheritDoc 
+     * @return multitype:string
+     */
+    public function getRoles()
+    {
+    	return $this->roles->toArray();
+    }
+    
+    /**
+     * @inheritDoc
+     */
+    public function getSalt()
+    {
+    	return null;
+    }
+    
+    /**
+     * @see \Serializable::serialize()
+     */
+    public function serialize()
+    {
+    	return serialize(array(
+    		$this->id,
+    		$this->login,
+    		$this->password,
+    		$this->email,
+    		$this->name,
+    		$this->surname,
+    		$this->registered,
+    		$this->lastactive,
+    		$this->active,
+    		$this->roles
+    	));
+    }
+    
+    /**
+     * @see \Serializable::unserialize()
+     */
+    public function unserialize($serialized)
+    {
+    	list(
+    		$this->id,
+    		$this->login,
+    		$this->password,
+    		$this->email,
+    		$this->name,
+    		$this->surname,
+    		$this->registered,
+    		$this->lastactive,
+    		$this->active,
+    		$this->roles) = unserialize($serialized);
+    }
+    
+    /**
+     * @inheritDoc
+     */
+    public function eraseCredentials()
+    {
     }
 }

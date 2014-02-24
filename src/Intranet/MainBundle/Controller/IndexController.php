@@ -9,10 +9,12 @@ class IndexController extends Controller
 {
 	public function getTopicSectionsAction()
 	{
+		$user = $this->getUser();
+		
 		$repository = $this->getDoctrine()->getRepository("IntranetMainBundle:TopicSection");
 		$topicSections = $repository->findAll();
 		
-		return $this->render("IntranetMainBundle::mainMenu.html.twig", array("topicSections" => $topicSections));
+		return $this->render("IntranetMainBundle::mainMenu.html.twig", array("topicSections" => $topicSections, 'user' => $user));
 	}
 	
     public function indexAction()

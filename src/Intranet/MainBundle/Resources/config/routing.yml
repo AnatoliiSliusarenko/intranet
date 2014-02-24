@@ -5,3 +5,13 @@ intranet_main_homepage:
 intranet_show_section:
     pattern:  /section/{section_id}/
     defaults: { _controller: IntranetMainBundle:Index:showSection }
+    
+intranet_security:
+    pattern: /security
+    defaults: { _controller: IntranetMainBundle:Security:index }
+    
+intranet_security_login_check:
+    path: /security/login_check
+    
+intranet_security_logout:
+    path: /security/logout

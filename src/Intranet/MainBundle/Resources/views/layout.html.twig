@@ -4,9 +4,9 @@
 		<title>{% block title %}Main page{% endblock %}</title>
 	</head>
 	<body>
-		{% render(controller('IntranetMainBundle:Index:getTopicSections')) %}
-		<hr>
 		{% block body %}
+		{% endblock %}
+		{% block javascripts %}
 		{% endblock %}
 	</body>
 </html>
