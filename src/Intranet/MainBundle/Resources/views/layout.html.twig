@@ -4,14 +4,14 @@
 		<meta charset="utf-8">
 		<title>{% block title %}Main page{% endblock %}</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		{% block libraries %}
-		{% endblock %}
+		<link rel="shortcut icon" href="{{ asset('bundles/intranet/images/icon.ico') }}">
 		{% block styles %}
 		{% endblock %}
 	</head>
 	<body>
 		{% block body %}
 		{% endblock %}
+		<!-- Load JS here for Faster site load =============================-->
 		{% block javascripts %}
 		{% endblock %}
 	</body>

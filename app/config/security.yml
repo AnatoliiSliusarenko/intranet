@@ -6,7 +6,7 @@ security:
             
     providers:
         user_db:
-            entity: { class: Intranet\MainBundle\Entity\User, property: 'login' }
+            entity: { class: Intranet\MainBundle\Entity\User }
 
     firewalls:
         dev:

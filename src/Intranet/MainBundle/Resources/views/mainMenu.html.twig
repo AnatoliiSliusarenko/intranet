@@ -1,7 +1,0 @@
-Hello, {{ user.name }}
-<br>You can <a href="{{ path('intranet_security_logout') }}">logout</a>
-<ul>
-{% for section in topicSections %}
-<li><a href="{{ url('intranet_show_section', {'section_id' : section.id}) }}">{{ section.name }}</a></li>
-{% endfor %}
-</ul>
