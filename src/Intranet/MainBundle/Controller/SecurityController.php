@@ -21,12 +21,9 @@ class SecurityController extends Controller
     		$session->remove(SecurityContext::AUTHENTICATION_ERROR);
     	}
     	
-    	$p = password_hash('12345', PASSWORD_BCRYPT, array('cost' => 12));
-    	
         return $this->render("IntranetMainBundle:Security:index.html.twig", 
         		array('last_username' => $session->get(SecurityContext::LAST_USERNAME),
-        			  'error' => $error,
-        			  'p' => $p
+        			  'error' => $error
         ));
     }
 }

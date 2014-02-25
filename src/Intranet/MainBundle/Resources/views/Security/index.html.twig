@@ -1,19 +1,124 @@
 {% extends 'IntranetMainBundle::layout.html.twig' %}
 
-{% block title %}Security page{% endblock %}
+{% block title %}Security area{% endblock %}
+
+{% block libraries %}
+{% endblock %}
+{% block styles %}
+	<!-- Loading Bootstrap -->
+  	<link href="{{ asset('bundles/intranet/css/bootstrap.css') }}" rel="stylesheet">
+
+  	<!-- Loading Stylesheets -->    
+  	<link href="{{ asset('bundles/intranet/css/style.css') }}" rel="stylesheet">
+  	<link href="{{ asset('bundles/intranet/css/login.css') }}" rel="stylesheet">
+  
+  	<!-- Loading Custom Stylesheets -->    
+  	<link href="{{ asset('bundles/intranet/css/custom.css') }}" rel="stylesheet">
+{% endblock %}
 
 {% block body %}
-<h1>This is Security page!!</h1>
-<p>We glad to welcome you at our private zona ^_^</p>
-{% if error %}
-{{ error.message }}
-{{ p }}
-{% endif %}
-<form action="{{ path('intranet_security_login_check') }}" method="post">
-Login
-	<input type="text" name="_username" value="{{ last_username }}"/>
-Password
-	<input type="password" name="_password"/>
-	<input type="submit" />
-</form>
+<div class="list-group side-menu ">
+	<a class="list-group-item" href="#login">Login</a>
+	<a class="list-group-item" href="#register">Register</a>
+	<a class="list-group-item" href="#forgot-password">Forgot Password?</a>
+</div>
+
+
+      
+   <section id="login">
+    <div class="row animated fadeILeftBig">
+     <div class="login-holder col-md-6 col-md-offset-3">
+       <h2 class="page-header text-center text-primary"> Welcome to Intranet </h2>
+       <form role="form" action="{{ path('intranet_security_login_check') }}" method="post">
+        <div class="form-group">
+          <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Enter username/email" name="_username" value="{{ last_username }}">
+        </div>
+        <div class="form-group">
+          <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" name="_password">
+        </div>
+        {% if error %}
+        <div class="alert alert-danger">
+		{{ error.message }}
+		</div>
+		{% endif %}
+        <div class="form-footer">
+          <label>
+            <input type="checkbox" class="hidden" id="input-checkbox" value="0" >  <i class="fa fa-check-square-o input-checkbox fa-square-o"></i> Remember me?
+          </label>
+          <label>
+            <input type="checkbox" class="hidden" id="input-checkbox" value="0" >  <i class="fa fa-check-square-o input-checkbox fa-square-o"></i> Forgot Password?
+          </label>
+          <button type="submit" class="btn btn-info pull-right btn-submit">Login</button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</section>
+<section id="register">
+  <div class="row animated fadeILeftBig">
+   <div class="login-holder col-md-6 col-md-offset-3">
+     <h2 class="page-header text-center text-primary"> Welcome to Intranet </h2>
+     <form role="form" action="http://bootstrapguru.com/preview/cascade/index.php" method="post">
+      <div class="form-group">
+        <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Full Name">
+      </div>
+      <div class="form-group">
+        <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter email">
+      </div>
+      <div class="form-group">
+        <input type="email" class="form-control" id="exampleInputEmail1" placeholder="City">
+      </div>
+      <div class="form-group">
+        <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+      </div>
+      <div class="form-footer">
+        <label>
+          <input type="checkbox" class="hidden" id="input-checkbox" value="0" >  <i class="fa fa-check-square-o input-checkbox fa-square-o"></i> I agree to the Terms &amp; Conditions
+        </label>
+        <button type="submit" class="btn btn-info pull-right btn-submit">Register</button>
+      </div>
+    </form>
+  </div>
+</div>
+</section>
+<section id="forgot-password">
+  <div class="row animated fadeILeftBig">
+   <div class="login-holder col-md-6 col-md-offset-3">
+     <h2 class="page-header text-center text-primary"> Welcome to Intranet </h2>
+     <form role="form" action="http://bootstrapguru.com/preview/cascade/index.php" method="post">
+      <div class="form-group">
+        <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Enter Username / Email">
+      </div>
+      <div class="form-footer">
+        
+        <button type="submit" class="btn btn-info pull-right btn-submit">Send Instructions</button>
+      </div>
+    </form>
+  </div>
+</div>
+</section>
+{% endblock %}
+{% block javascripts %}
+	<script src="{{ asset('bundles/intranet/js/jquery-1.10.2.min.js') }}"></script>
+	<script src="{{ asset('bundles/intranet/js/jquery-ui-1.10.3.custom.min.js') }}"></script>
+	<script src="{{ asset('bundles/intranet/js/jquery.ui.touch-punch.min.js') }}"></script>
+	<script src="{{ asset('bundles/intranet/js/bootstrap.min.js') }}"></script>
+	<script src="{{ asset('bundles/intranet/js/bootstrap-select.js') }}"></script>
+	<script src="{{ asset('bundles/intranet/js/bootstrap-switch.js') }}"></script>
+	<script src="{{ asset('bundles/intranet/js/jquery.tagsinput.js') }}"></script>
+	<script src="{{ asset('bundles/intranet/js/jquery.placeholder.js') }}"></script>
+	<script src="{{ asset('bundles/intranet/js/bootstrap-typeahead.js') }}"></script>
+	<script src="{{ asset('bundles/intranet/js/application.js') }}"></script>
+	<script src="{{ asset('bundles/intranet/js/moment.min.js') }}"></script>
+	<script src="{{ asset('bundles/intranet/js/jquery.dataTables.min.js') }}"></script>
+	<script src="{{ asset('bundles/intranet/js/jquery.sortable.js') }}"></script>
+	<script src="{{ asset('bundles/intranet/js/jquery.gritter.js') }}" type="text/javascript"></script>
+	<script src="{{ asset('bundles/intranet/js/jquery.nicescroll.min.js') }}"></script>
+	<script src="{{ asset('bundles/intranet/js/skylo.js') }}"></script>
+	<script src="{{ asset('bundles/intranet/js/prettify.min.js') }}"></script>
+	<script src="{{ asset('bundles/intranet/js/jquery.noty.js') }}"></script>
+	<script src="{{ asset('bundles/intranet/js/scroll.js') }}"></script>
+	<script src="{{ asset('bundles/intranet/js/jquery.panelSnap.js') }}"></script>
+	<script src="{{ asset('bundles/intranet/js/login.js') }}"></script>
 {% endblock %}
