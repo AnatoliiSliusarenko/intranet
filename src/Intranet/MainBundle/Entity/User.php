@@ -84,6 +84,13 @@ class User implements UserInterface, \Serializable
 	 */
 	private $roles;
     
+	/**
+	 * @var string
+	 *
+	 * @ORM\Column(name="avatar", type="string", length=255)
+	 */
+	private $avatar;
+	
 	public function __construct()
 	{
 		$this->active = true;
@@ -344,5 +351,51 @@ class User implements UserInterface, \Serializable
      */
     public function eraseCredentials()
     {
+    }
+
+    /**
+     * Set avatar
+     *
+     * @param string $avatar
+     * @return User
+     */
+    public function setAvatar($avatar)
+    {
+        $this->avatar = $avatar;
+
+        return $this;
+    }
+
+    /**
+     * Get avatar
+     *
+     * @return string 
+     */
+    public function getAvatar()
+    {
+        return $this->avatar;
+    }
+
+    /**
+     * Add roles
+     *
+     * @param \Intranet\MainBundle\Entity\Role $roles
+     * @return User
+     */
+    public function addRole(\Intranet\MainBundle\Entity\Role $roles)
+    {
+        $this->roles[] = $roles;
+
+        return $this;
+    }
+
+    /**
+     * Remove roles
+     *
+     * @param \Intranet\MainBundle\Entity\Role $roles
+     */
+    public function removeRole(\Intranet\MainBundle\Entity\Role $roles)
+    {
+        $this->roles->removeElement($roles);
     }
 }

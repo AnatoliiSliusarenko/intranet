@@ -27,6 +27,20 @@ class IndexController extends Controller
     	if ($section == null)
     		return $this->redirect($this->generateUrl('intranet_main_homepage'));
     	
+    	$this->get('twig')->addGlobal('activeSectionId', $section_id);
+    	
     	return $this->render('IntranetMainBundle:Index:showSection.html.twig', array("section" => $section));
+    }
+    
+    public function showTopicAction($topic_id)
+    {
+    	$repository = $this->getDoctrine()->getRepository("IntranetMainBundle:Topic");
+    	$topic = $repository->find($topic_id);
+    	if ($topic == null)
+    		return $this->redirect($this->generateUrl('intranet_main_homepage'));
+    	
+    	$this->get('twig')->addGlobal('activeSectionId', $topic->getTopicSection()->getId());
+    	
+    	return $this->render('IntranetMainBundle:Index:showTopic.html.twig', array("topic" => $topic));
     }
 }

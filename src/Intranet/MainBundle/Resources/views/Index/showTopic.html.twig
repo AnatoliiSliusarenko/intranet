@@ -1,0 +1,87 @@
+{% extends 'IntranetMainBundle:Index:index.html.twig' %}
+
+{% block title %}{{ topic.name }}{% endblock %}
+
+{% block breadcrumbs %}
+<li><a href="{{ path('intranet_main_homepage') }}">Intranet</a></li>
+<li><a href="{{ path('intranet_show_section', {section_id: topic.topicSection.id}) }}">{{ topic.topicSection.name }}</a></li>
+<li class="active">{{ topic.name }}</li>
+{% endblock %}
+
+{% block search %}
+<div class="form-group hiddn-minibar pull-right">
+	<input type="text" class="form-control form-cascade-control nav-input-search" size="20" placeholder="Search through discussion" />
+
+	<span class="input-icon fui-search"></span>
+</div>
+{% endblock %}
+
+{% block pageheader %}
+<h3 class="page-header"><i class="fa fa-comment"></i> {{ topic.name }} <i class="fa fa-info-circle animated bounceInDown show-info"></i> </h3>
+
+<blockquote class="page-information hidden">
+<p>
+	{{ topic.description }}
+</p>
+</blockquote>
+{% endblock %}
+
+{% block content %}
+<div class="row chat-box">
+  							<div class="col-md-2">
+  								<div class="panel panel-cascade contacts-box">
+  									<div class="panel-heading">
+  										<h5 class="panel-title "> <i class="fa fa-user"></i> Members</h5>
+  									</div>
+  									<div class="panel-body nopadding">
+  										<div class="list-group contact">
+  											<a class="list-group-item">
+  												<img src="{{ asset('bundles/intranet/images/profiles/eleven.png') }}" class="chat-user-avatar" alt="">
+  												Jane Doe
+  												<i class="fa fa-circle"></i>
+  											</a>
+  											<a class="list-group-item contact">
+  												<img src="{{ asset('bundles/intranet/images/profiles/eleven.png') }}" class="chat-user-avatar" alt="">
+  												Jenny
+  												<i class="fa fa-circle online"></i>
+  											</a>
+  											<a class="list-group-item contact">
+  												<img src="{{ asset('bundles/intranet/images/profiles/eleven.png') }}" class="chat-user-avatar" alt="">
+  												Vijay
+  												<i class="fa fa-circle busy"></i>
+  											</a>
+  											<a class="list-group-item">
+  												<img src="{{ asset('bundles/intranet/images/profiles/eleven.png') }}" class="chat-user-avatar" alt="">
+  												Nikky
+  												<i class="fa fa-circle offline"></i>
+  											</a>
+  										</div>
+  									</div>
+  								</div>
+
+  							</div>
+  							<div class="col-md-10">
+  								<div class="panel panel-cascade recipient-box">
+
+  									<div class="panel-body nopadding">
+  										<div class="list-group conversation">
+  											<a class="list-group-item">
+  												<img src="{{ asset('bundles/intranet/images/profiles/eleven.png') }}" class="chat-user-avatar" alt="">
+  												<span class="username" >Vijay kumar <span class="time">06:58</span> </span>
+  												<p>Lorem Ipsum is a dummy text to represetn any webcontent which wants to unrelated to the user or reader but can be understood that it is unrelated data</p>
+  											</a>
+  										</div>
+  										<div class="input-group">
+  											<input type="text" class="form-control write-message" id="write-message" placeholder="Type something here and hit enter" >
+  											<span class="input-group-btn">
+  												<button class="btn text-white bg-primary" type="button" id="send-message">Send</button>
+  											</span>
+
+  										</div><!-- /input-group -->
+
+  									</div>
+  								</div>
+  							</div>
+  						</div>
+{% endblock %}
+

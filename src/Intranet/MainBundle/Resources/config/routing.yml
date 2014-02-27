@@ -6,6 +6,10 @@ intranet_show_section:
     pattern:  /section/{section_id}/
     defaults: { _controller: IntranetMainBundle:Index:showSection }
     
+intranet_show_topic:
+    pattern:  /topic/{topic_id}/
+    defaults: { _controller: IntranetMainBundle:Index:showTopic }
+    
 intranet_security:
     pattern: /security
     defaults: { _controller: IntranetMainBundle:Security:index }
