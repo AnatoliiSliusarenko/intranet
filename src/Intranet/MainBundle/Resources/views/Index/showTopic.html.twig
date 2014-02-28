@@ -27,6 +27,7 @@
 {% endblock %}
 
 {% block content %}
+<a href="{{ path('intranet_post_get_posts', {topic_id: topic.id}) }}">Get Posts</a>
 <div class="row chat-box">
   							<div class="col-md-2">
   								<div class="panel panel-cascade contacts-box">
@@ -65,11 +66,6 @@
 
   									<div class="panel-body nopadding">
   										<div class="list-group conversation">
-  											<a class="list-group-item">
-  												<img src="{{ asset('bundles/intranet/images/profiles/eleven.png') }}" class="chat-user-avatar" alt="">
-  												<span class="username" >Vijay kumar <span class="time">06:58</span> </span>
-  												<p>Lorem Ipsum is a dummy text to represetn any webcontent which wants to unrelated to the user or reader but can be understood that it is unrelated data</p>
-  											</a>
   										</div>
   										<div class="input-group">
   											<input type="text" class="form-control write-message" id="write-message" placeholder="Type something here and hit enter" >
@@ -84,4 +80,22 @@
   							</div>
   						</div>
 {% endblock %}
+{% block javascripts %}
+	{{ parent() }}
+	<script src="{{ asset('bundles/intranet/js/custom/chat.js') }}"></script>
+	<script type="text/javascript">
+    var JSON_URLS = {
+        posts: "{{ path('intranet_post_get_posts', {topic_id: topic.id}) }}",
+        post_add: "{{ path('intranet_post_add_post', {topic_id: topic.id}) }}", 
+        avatar: "{{ asset('bundles/intranet/images/profiles/') }}"
+    };
 
+    var USER = {
+    	    id: "{{ app.user.getId() }}"
+   	};
+
+   	var TOPIC = {
+   		   	id: "{{ topic.id }}"
+    };
+</script>
+{% endblock %}

@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="posts")
  * @ORM\Entity
  */
-class Post
+class Post 
 {
     /**
      * @var integer
@@ -29,13 +29,32 @@ class Post
     private $topicid;
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="userid", type="integer")
+     */
+    private $userid;
+    
+    /**
      * @var string
      *
      * @ORM\Column(name="message", type="text")
      */
     private $message;
+    
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="posted", type="datetime")
+     */
+    private $posted;
 
-
+    /**
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="posts")
+     * @ORM\JoinColumn(name="userid", referencedColumnName="id")
+     */
+    private $user;
+    
     /**
      * Get id
      *
@@ -90,5 +109,123 @@ class Post
     public function getMessage()
     {
         return $this->message;
+    }
+    
+    /**
+     * Get inArray
+     *
+     * @return array
+     */
+    public function getInArray()
+    {
+    	return array(
+    			'id' => $this->getId(),
+    			'topicid' => $this->getTopicid(),
+    			'userid' => $this->getUserid(),
+    			'user' => $this->getUser()->getInArray(),
+    			'message' => $this->getMessage(),
+    			'posted' => $this->getPosted()
+    		);
+    }
+    
+    /**
+     * Get post by topic
+     * @return array
+     */
+    public static function getPostsByTopicId($r, $topic_id, $offset, $limit)
+    {
+    	$query = $r
+		    	->createQueryBuilder('p')
+		    	->select('p')
+		    	->where('p.topicid = :topicid')
+		    	->setParameter('topicid', $topic_id)
+		    	->setFirstResult( $offset )
+		    	->setMaxResults( $limit )
+		    	->orderBy('p.id', 'ASC')
+		    	->getQuery();
+    	
+    	$posts = $query->getResult();
+    	
+    	return array_map(function($post){
+    		return $post->getInArray();
+    	}, $posts);
+    }
+
+    /**
+     * Add post by topic
+     * @return Post
+     */
+    public static function addPostByTopicId($r, $topic_id, $post)
+    {
+    	// insert new post
+    }
+    
+    /**
+     * Set userid
+     *
+     * @param integer $userid
+     * @return Post
+     */
+    public function setUserid($userid)
+    {
+        $this->userid = $userid;
+
+        return $this;
+    }
+
+    /**
+     * Get userid
+     *
+     * @return integer 
+     */
+    public function getUserid()
+    {
+        return $this->userid;
+    }
+
+    /**
+     * Set user
+     *
+     * @param \Intranet\MainBundle\Entity\User $user
+     * @return Post
+     */
+    public function setUser(\Intranet\MainBundle\Entity\User $user = null)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return \Intranet\MainBundle\Entity\User 
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    /**
+     * Set posted
+     *
+     * @param \DateTime $posted
+     * @return Post
+     */
+    public function setPosted($posted)
+    {
+        $this->posted = $posted;
+
+        return $this;
+    }
+
+    /**
+     * Get posted
+     *
+     * @return \DateTime 
+     */
+    public function getPosted()
+    {
+        return $this->posted;
     }
 }

@@ -14,6 +14,14 @@ intranet_security:
     pattern: /security
     defaults: { _controller: IntranetMainBundle:Security:index }
     
+intranet_post_get_posts:
+    pattern:  /posts/{topic_id}/
+    defaults: { _controller: IntranetMainBundle:Post:getPosts }
+    
+intranet_post_add_post:
+    pattern:  /posts/{topic_id}/add/
+    defaults: { _controller: IntranetMainBundle:Post:addPost }
+    
 intranet_security_login_check:
     path: /security/login_check
     

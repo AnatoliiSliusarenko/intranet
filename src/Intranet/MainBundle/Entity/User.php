@@ -91,6 +91,11 @@ class User implements UserInterface, \Serializable
 	 */
 	private $avatar;
 	
+	/**
+	 * @ORM\OneToMany(targetEntity="Post", mappedBy="user")
+	 */
+	private $posts;
+	
 	public function __construct()
 	{
 		$this->active = true;
@@ -397,5 +402,59 @@ class User implements UserInterface, \Serializable
     public function removeRole(\Intranet\MainBundle\Entity\Role $roles)
     {
         $this->roles->removeElement($roles);
+    }
+
+    /**
+     * Add posts
+     *
+     * @param \Intranet\MainBundle\Entity\Post $posts
+     * @return User
+     */
+    public function addPost(\Intranet\MainBundle\Entity\Post $posts)
+    {
+        $this->posts[] = $posts;
+
+        return $this;
+    }
+
+    /**
+     * Remove posts
+     *
+     * @param \Intranet\MainBundle\Entity\Post $posts
+     */
+    public function removePost(\Intranet\MainBundle\Entity\Post $posts)
+    {
+        $this->posts->removeElement($posts);
+    }
+
+    /**
+     * Get posts
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getPosts()
+    {
+        return $this->posts;
+    }
+    
+    /**
+     * Get inArray
+     *
+     * @return array
+     */
+    public function getInArray()
+    {
+    	return array(
+    			'id' => $this->getId(),
+    			'username' => $this->getUsername(),
+    			'password' => $this->getPassword(),
+    			'email' => $this->getEmail(),
+    			'name' => $this->getName(),
+    			'surname' => $this->getSurname(),
+    			'registered' => $this->getRegistered(),
+    			'lastactive' => $this->getLastactive(),
+    			'active' => $this->getActive(),
+    			'avatar' => $this->getAvatar()
+    	);
     }
 }

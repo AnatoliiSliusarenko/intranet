@@ -1,0 +1,198 @@
+<?php
+
+namespace Intranet\MainBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Post
+ *
+ * @ORM\Table(name="posts")
+ * @ORM\Entity
+ */
+class Post 
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="topicid", type="integer")
+     */
+    private $topicid;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="userid", type="integer")
+     */
+    private $userid;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="message", type="text")
+     */
+    private $message;
+    
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="posted", type="datetime")
+     */
+    private $posted;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="posts")
+     * @ORM\JoinColumn(name="userid", referencedColumnName="id")
+     */
+    private $user;
+    
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set topicid
+     *
+     * @param integer $topicid
+     * @return Post
+     */
+    public function setTopicid($topicid)
+    {
+        $this->topicid = $topicid;
+
+        return $this;
+    }
+
+    /**
+     * Get topicid
+     *
+     * @return integer 
+     */
+    public function getTopicid()
+    {
+        return $this->topicid;
+    }
+
+    /**
+     * Set message
+     *
+     * @param string $message
+     * @return Post
+     */
+    public function setMessage($message)
+    {
+        $this->message = $message;
+
+        return $this;
+    }
+
+    /**
+     * Get message
+     *
+     * @return string 
+     */
+    public function getMessage()
+    {
+        return $this->message;
+    }
+    
+    /**
+     * Get inArray
+     *
+     * @return array
+     */
+    public function getInArray()
+    {
+    	return array(
+    			'id' => $this->getId(),
+    			'topicid' => $this->getTopicid(),
+    			'userid' => $this->getUserid(),
+    			'user' => $this->getUser()->getInArray(),
+    			'message' => $this->getMessage()
+    		);
+    }
+    
+    /**
+     * Get post by topic
+     * @return array
+     */
+    public static function getPostsByTopicId($r, $topic_id, $offset, $limit)
+    {
+    	$query = $r
+		    	->createQueryBuilder('p')
+		    	->select('p')
+		    	->where('p.topicid = :topicid')
+		    	->setParameter('topicid', $topic_id)
+		    	->setFirstResult( $offset )
+		    	->setMaxResults( $limit )
+		    	->orderBy('p.id', 'ASC')
+		    	->getQuery();
+    	
+    	$posts = $query->getResult();
+    	
+    	return array_map(function($post){
+    		return $post->getInArray();
+    	}, $posts);
+    }
+
+    /**
+     * Set userid
+     *
+     * @param integer $userid
+     * @return Post
+     */
+    public function setUserid($userid)
+    {
+        $this->userid = $userid;
+
+        return $this;
+    }
+
+    /**
+     * Get userid
+     *
+     * @return integer 
+     */
+    public function getUserid()
+    {
+        return $this->userid;
+    }
+
+    /**
+     * Set user
+     *
+     * @param \Intranet\MainBundle\Entity\User $user
+     * @return Post
+     */
+    public function setUser(\Intranet\MainBundle\Entity\User $user = null)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return \Intranet\MainBundle\Entity\User 
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+}
