@@ -11,9 +11,6 @@ class PostController extends Controller
 {
 	public function getPostsAction(Request $request, $topic_id)
     {
-    	if (!$request->isXmlHttpRequest())
-    		return new Response('It is used only with AJAX!'); 
-    		
     	$offset = ($request->query->get('offset')) ? $request->query->get('offset') : 0 ;
     	$limit = ($request->query->get('limit')) ? $request->query->get('limit') : 20 ;
     	
@@ -21,21 +18,24 @@ class PostController extends Controller
     	
     	$posts = Post::getPostsByTopicId($repository, $topic_id, $offset, $limit);
     	
-    	$response = new Response(json_encode($posts));
+    	$response = new Response(json_encode(array("result" => $posts)));
     	$response->headers->set('Content-Type', 'application/json');
     	
         return $response;
     }
     
-    public function addPostAction(Request $request, $topic_id)
+    public function addPostAction($topic_id)
     {
-    	//if (!$request->isXmlHttpRequest())
-    		//return new Response('It is used only with AJAX!');
-    		
-    	$post = $request->request->all();
-    	Post::addPostByTopicId($repository, $topic_id, $post);
+    	$em = $this->getDoctrine()->getManager();
     	
-    	$response = new Response(json_encode($post));
+    	//$data = $request->request->all();
+    	$data = json_decode(file_get_contents("php://input"));
+    	$post = (object) $data;
+    	
+    	$added = Post::addPostByTopicId($em, $post);
+    	
+    	$response = new Response(json_encode(array("result" => $added)));
+    	$response->headers->set('Content-Type', 'application/json');
     	
     	return $response;
     }

@@ -155,9 +155,25 @@ class Post
      * Add post by topic
      * @return Post
      */
-    public static function addPostByTopicId($r, $topic_id, $post)
+    public static function addPostByTopicId($em, $p)
     {
-    	// insert new post
+    	$user = $em->getRepository("IntranetMainBundle:User")->find(intval($p->userid));
+    	$topic = $em->getRepository("IntranetMainBundle:Topic")->find(intval($p->topicid));
+    	 
+    	if (($topic == null) || ($user == null))
+    		return null;
+    	
+    	$post = new Post();
+    	$post->setTopicid($topic->getId());
+    	$post->setUserid($user->getId());
+    	$post->setUser($user);
+    	$post->setMessage($p->message);
+    	$post->setPosted(new \DateTime($p->posted));
+    	
+    	$em->persist($post);
+    	$em->flush();
+    	
+    	return $post->getInArray();
     }
     
     /**
