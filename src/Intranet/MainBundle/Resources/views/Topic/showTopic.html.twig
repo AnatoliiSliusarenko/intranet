@@ -1,0 +1,164 @@
+{% extends 'IntranetMainBundle:Index:index.html.twig' %}
+
+{% block title %}{{ topic.name }}{% endblock %}
+
+{% block breadcrumbs %}
+	{% for item in breadcrumbs %}
+		<li><a href="{{ url('intranet_show_topic', {topic_id: item.getId()}) }}">{{ item.name }}</a></li>
+	{% endfor %}
+	<li class="active">{{ topic.name }}</li>
+{% endblock %}
+
+{% block search %}
+<div class="form-group hiddn-minibar pull-right">
+	<input type="text" class="form-control form-cascade-control nav-input-search" size="20" placeholder="Search through discussion" />
+
+	<span class="input-icon fui-search"></span>
+</div>
+{% endblock %}
+
+{% block pageheader %}
+<div class="row">
+	<div class="col-md-12">
+		<h3 class="page-header"><i class="fa fa-comment"></i> {{ topic.name }} <i class="fa fa-info-circle animated bounceInDown show-info"></i> </h3>
+
+		<blockquote class="page-information hidden">
+		<p>
+			{{ topic.description }}
+		</p>
+		</blockquote>
+	
+		<div class="panel panel-cascade">
+			<div class="panel-heading">
+                <h3 class="panel-title">
+                 Add New Subtopic
+                 <span class="pull-right">
+                  <a  href="#" class="panel-minimize"><i class="fa fa-chevron-down"></i></a>
+                </span>
+              </h3>
+            </div>
+            <div class="panel-body" style="display:none;">
+            	<form class="form-horizontal" role="form">
+            		<div class="form-group">
+                		<label for="inputEmail1" class="col-lg-2 col-md-3 control-label">Topic Name</label>
+                		<div class="col-lg-10 col-md-9">
+                 			<input type="email" class="form-control form-cascade-control" id="inputEmail1" placeholder="Type topic name here">
+               			</div>
+             		</div>
+             		<div class="form-group">
+                		<label for="inputEmail1" class="col-lg-2 col-md-3 control-label">Topic Description</label>
+                		<div class="col-lg-10 col-md-9">
+                 			<input type="email" class="form-control form-cascade-control" id="inputEmail1" placeholder="Type topic description here">
+               			</div>
+             		</div>
+             		<a href="#" class="btn btn-primary btn-block">Save New Topic</a>
+            	</form>
+            </div>
+		</div>
+		
+		<div class="panel panel-cascade">
+			<div class="panel-heading">
+                <h3 class="panel-title">
+                 Subtopics
+                 <span class="pull-right">
+                  <a  href="#" class="panel-minimize"><i class="fa fa-chevron-down"></i></a>
+                </span>
+              </h3>
+            </div>
+            <div class="panel-body" style="display:none;">
+            	{% for topic in topic.children %}
+            		<a href="{{ url('intranet_show_topic', {topic_id: topic.getId()}) }}" class="btn btn-primary btn-block">{{ topic.name }}</a>
+            	{% endfor %}
+            	
+            </div>
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="row chat-box" ng-app="Intranet" ng-controller="ChatController">
+  							<div class="col-md-2">
+  								<div class="panel panel-cascade contacts-box">
+  									<div class="panel-heading">
+  										<h5 class="panel-title "> <i class="fa fa-user"></i> Members</h5>
+  									</div>
+  									<div class="panel-body nopadding">
+  										<div class="list-group contact">
+  											<a class="list-group-item">
+  												<img src="{{ asset('bundles/intranet/images/profiles/eleven.png') }}" class="chat-user-avatar" alt="">
+  												Jane Doe
+  												<i class="fa fa-circle"></i>
+  											</a>
+  											<a class="list-group-item contact">
+  												<img src="{{ asset('bundles/intranet/images/profiles/eleven.png') }}" class="chat-user-avatar" alt="">
+  												Jenny
+  												<i class="fa fa-circle online"></i>
+  											</a>
+  											<a class="list-group-item contact">
+  												<img src="{{ asset('bundles/intranet/images/profiles/eleven.png') }}" class="chat-user-avatar" alt="">
+  												Vijay
+  												<i class="fa fa-circle busy"></i>
+  											</a>
+  											<a class="list-group-item">
+  												<img src="{{ asset('bundles/intranet/images/profiles/eleven.png') }}" class="chat-user-avatar" alt="">
+  												Nikky
+  												<i class="fa fa-circle offline"></i>
+  											</a>
+  										</div>
+  									</div>
+  								</div>
+
+  							</div>
+  							
+  							
+  							<div class="col-md-10">
+  								<div class="panel panel-cascade recipient-box">
+									<div class="panel-heading">
+										
+									</div>
+									
+  									<div class="panel-body nopadding">
+  										<div class="list-group conversation">
+  											<a class="list-group-item" ng-repeat="post in posts">
+  												<img src="[[avatarURL + post.user.avatar]]" class="chat-user-avatar" alt="" />
+  												<span class="username" >[[post.user.username]]<span class="time">[[ post.posted.date ]]</span> </span>
+  												<p>[[post.message]]</p>
+  											</a>
+  										</div>
+  										<div class="input-group">
+  											<input type="text" class="form-control write-message" id="write-message" placeholder="Type something here and hit enter" ng-model="message" ng-keypress="pressEnter()">
+  											<span class="input-group-btn">
+  												<button class="btn text-white bg-primary" type="button" id="send-message" ng-click="sendPost()">Send</button>
+  											</span>
+
+  										</div><!-- /input-group -->
+
+  									</div>
+  								</div>
+  							</div>
+  						</div>
+{% endblock %}
+{% block javascripts %}
+	{{ parent() }}
+	<script src="{{ asset('bundles/intranet/js/angular.min.js') }}"></script>
+	<script src="{{ asset('bundles/intranet/js/underscore-min.js') }}"></script>
+	
+	<script src="{{ asset('bundles/intranet/js/custom/chat.js') }}"></script>
+	
+	<script type="text/javascript">
+    var JSON_URLS = {
+        posts: "{{ path('intranet_post_get_posts', {topic_id: topic.id}) }}",
+        post_add: "{{ path('intranet_post_add_post', {topic_id: topic.id}) }}", 
+        avatar: "{{ asset('bundles/intranet/images/profiles/') }}"
+    };
+
+    var USER = {
+    	    id: "{{ app.user.getId() }}"
+   	};
+
+   	var TOPIC = {
+   		   	id: "{{ topic.id }}"
+    };
+</script>
+{% endblock %}

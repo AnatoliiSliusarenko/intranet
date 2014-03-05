@@ -24,9 +24,9 @@ class Topic
     /**
      * @var integer
      *
-     * @ORM\Column(name="section_id", type="integer")
+     * @ORM\Column(name="parentid", type="integer")
      */
-    private $sectionId;
+    private $parentid;
 
     /**
      * @var string
@@ -42,12 +42,21 @@ class Topic
      */
     private $description;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="TopicSection", inversedBy="topics")
-     * @ORM\JoinColumn(name="section_id", referencedColumnName="id")
-     */
-    private $topicSection;
-
+    public $children = null;
+    
+    private static function fetchChildren($em, $parentid)
+    {
+    	$children = $em->getRepository('IntranetMainBundle:Topic')
+    	->findBy(array('parentid' => $parentid));
+    	
+    	return $children;
+    }
+    
+    public function __construct()
+    {
+    	$this->children = array();
+    }
+    
     /**
      * Get id
      *
@@ -59,26 +68,26 @@ class Topic
     }
 
     /**
-     * Set sectionId
+     * Set parentid
      *
-     * @param integer $sectionId
+     * @param integer $parentid
      * @return Topic
      */
-    public function setSectionId($sectionId)
+    public function setParentid($parentid)
     {
-        $this->sectionId = $sectionId;
+        $this->parentid = $parentid;
 
         return $this;
     }
 
     /**
-     * Get sectionId
+     * Get parentid
      *
      * @return integer 
      */
-    public function getSectionId()
+    public function getParentid()
     {
-        return $this->sectionId;
+        return $this->parentid;
     }
 
     /**
@@ -126,27 +135,58 @@ class Topic
     {
         return $this->description;
     }
-
+    
     /**
-     * Set topicSection
+     * Get children
      *
-     * @param TopicSection $topicSection
-     * @return Topic
+     * @return array
      */
-    public function setTopicSection(TopicSection $topicSection = null)
+    public function getChildren($em)
     {
-        $this->topicSection = $topicSection;
-
-        return $this;
+    	if ($this->children == null)
+    		$this->children = $this->fetchChildren($em, $this->id);
+    	
+    	return $this->children;
     }
-
+    
     /**
-     * Get topicSection
+     * Get Topic tree
      *
-     * @return TopicSection 
+     * @return array
      */
-    public function getTopicSection()
+    public static function getTopicTree($em, &$topic = null)
     {
-        return $this->topicSection;
+    	$tree = ($topic == null) ? self::fetchChildren($em, 0) : $topic->getChildren($em);
+    	    	
+    	foreach ($tree as $topic)
+    	{
+    		if ($topic->getChildren($em) != array())
+    			$topic->getTopicTree($em, $topic);
+    	}
+    	
+    	return $tree;
+    }
+    
+    /**
+     * Get breadcrumbs
+     * 
+     * @return array
+     */
+    public function getBreadcrumbs($em)
+    {
+    	$breadcrumbs = array();
+    	$topic = $this;
+    	
+    	while ($topic->getParentid() != 0)
+    	{
+    		$parent = $em->getRepository('IntranetMainBundle:Topic')
+    					 ->find($topic->getParentid());
+    		
+    		array_unshift($breadcrumbs, $parent);
+    		
+    		$topic = $parent;
+    	}
+    	
+    	return $breadcrumbs;
     }
 }

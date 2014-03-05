@@ -2,13 +2,9 @@ intranet_main_homepage:
     pattern:  /
     defaults: { _controller: IntranetMainBundle:Index:index }
 
-intranet_show_section:
-    pattern:  /section/{section_id}/
-    defaults: { _controller: IntranetMainBundle:Index:showSection }
-    
 intranet_show_topic:
     pattern:  /topic/{topic_id}/
-    defaults: { _controller: IntranetMainBundle:Index:showTopic }
+    defaults: { _controller: IntranetMainBundle:Topic:showTopic }
     
 intranet_security:
     pattern: /security

@@ -1,0 +1,8 @@
+{% for topic in topicTree %}
+	<li class=' ' >
+		<a href='{{ url('intranet_show_topic', {topic_id: topic.getId()}) }}' data-original-title='{{ topic.name }}'>
+			<i class='fa fa-comment'></i>
+			<span class='hidden-minibar'> {{ topic.name }}</span>
+		</a>
+	</li>
+{% endfor %}

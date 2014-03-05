@@ -50,7 +50,7 @@
                   <li class="nav-toggle">
                     <button class="btn  btn-nav-toggle text-primary"><i class="fa fa-angle-double-left toggle-left"></i> </button>
                   </li>
-                    {% render(controller('IntranetMainBundle:Index:getTopicSections')) %}
+                    {% render(controller('IntranetMainBundle:Topic:getTopicMenuTree')) %}
                 </ul>
               </div>
             </div> <!-- /.left-sidebar -->
@@ -61,7 +61,6 @@
   							<div class="col-mod-12">
   								<ul class="breadcrumb">
   									{% block breadcrumbs %}
-  									<li class="active">Intranet</li>
   									{% endblock %}
   								</ul>
   								{% block search %}
@@ -72,6 +71,9 @@
   						</div>
 
 						{% block content %}
+						
+						<h1>Hello, {{ app.user.name }}</h1>
+						
 						{% endblock %}
 
   						<div class="footer">
