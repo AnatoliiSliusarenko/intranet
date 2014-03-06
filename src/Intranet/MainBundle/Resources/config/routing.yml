@@ -6,9 +6,17 @@ intranet_show_topic:
     pattern:  /topic/{topic_id}/
     defaults: { _controller: IntranetMainBundle:Topic:showTopic }
     
+intranet_add_topic:
+    pattern:  /topic/{topic_id}/add
+    defaults: { _controller: IntranetMainBundle:Topic:addTopic }
+    
 intranet_security:
     pattern: /security
     defaults: { _controller: IntranetMainBundle:Security:index }
+    
+intranet_add_user:
+    pattern:  /security/user/add
+    defaults: { _controller: IntranetMainBundle:User:addUser }
     
 intranet_post_get_posts:
     pattern:  /posts/{topic_id}/

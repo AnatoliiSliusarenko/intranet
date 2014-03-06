@@ -53,27 +53,32 @@
   <div class="row animated fadeILeftBig">
    <div class="login-holder col-md-6 col-md-offset-3">
      <h2 class="page-header text-center text-primary"> Welcome to Intranet </h2>
-     <form role="form" action="http://bootstrapguru.com/preview/cascade/index.php" method="post">
+     <form role="form" action="{{ url('intranet_add_user') }}" method="post">
       <div class="form-group">
-        <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Name">
+        <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Name" name="name" required>
       </div>
       <div class="form-group">
-        <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Surname">
+        <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Surname" name="surname" required>
       </div>
       <div class="form-group">
-        <input type="email" class="form-control" id="exampleInputEmail1" placeholder="email">
+        <input type="email" class="form-control" id="exampleInputEmail1" placeholder="email" name="email" required>
       </div>
       <div class="form-group">
-        <input type="email" class="form-control" id="exampleInputEmail1" placeholder="username">
+        <input type="text" class="form-control" id="exampleInputEmail1" placeholder="username" name="username" required>
       </div>
       <div class="form-group">
-        <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+        <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" name="password" required>
       </div>
+      {% if error %}
+        <div class="alert alert-danger">
+			{{ error.message }}
+		</div>
+	  {% endif %}
       <div class="form-footer">
         <label>
           <input type="checkbox" class="hidden" id="input-checkbox" value="0" >  <i class="fa fa-check-square-o input-checkbox fa-square-o"></i> I agree to the Terms &amp; Conditions
         </label>
-        <button type="submit" class="btn btn-info pull-right btn-submit">Register</button>
+        <input type="submit" class="btn btn-info pull-right btn-submit" value="Register">
       </div>
     </form>
   </div>
