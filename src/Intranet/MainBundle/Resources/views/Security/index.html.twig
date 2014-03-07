@@ -53,25 +53,25 @@
   <div class="row animated fadeILeftBig">
    <div class="login-holder col-md-6 col-md-offset-3">
      <h2 class="page-header text-center text-primary"> Welcome to Intranet </h2>
-     <form role="form" action="{{ url('intranet_add_user') }}" method="post">
+     <form role="form" action="{{ url('intranet_register') }}" method="post">
       <div class="form-group">
-        <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Name" name="name" required>
+        <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Name" name="name" value="{% if register_user %}{{ register_user.name }}{% endif %}" required>
       </div>
       <div class="form-group">
-        <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Surname" name="surname" required>
+        <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Surname" name="surname" value="{% if register_user %}{{ register_user.surname }}{% endif %}" required>
       </div>
       <div class="form-group">
-        <input type="email" class="form-control" id="exampleInputEmail1" placeholder="email" name="email" required>
+        <input type="email" class="form-control" id="exampleInputEmail1" placeholder="email" name="email" value="{% if register_user %}{{ register_user.email }}{% endif %}" required>
       </div>
       <div class="form-group">
-        <input type="text" class="form-control" id="exampleInputEmail1" placeholder="username" name="username" required>
+        <input type="text" class="form-control" id="exampleInputEmail1" placeholder="username" name="username" value="{% if register_user %}{{ register_user.username }}{% endif %}" required>
       </div>
       <div class="form-group">
-        <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" name="password" required>
+        <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" name="password" value="{% if register_user %}{{ register_user.password }}{% endif %}" required>
       </div>
-      {% if error %}
+      {% if register_error %}
         <div class="alert alert-danger">
-			{{ error.message }}
+			{{ register_error }}
 		</div>
 	  {% endif %}
       <div class="form-footer">

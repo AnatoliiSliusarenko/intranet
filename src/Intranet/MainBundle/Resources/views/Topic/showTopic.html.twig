@@ -86,6 +86,7 @@
 {% endblock %}
 
 {% block content %}
+<a href="{{ path('intranet_post_count', {topic_id:topic.getId()}) }}">Get Count</a>
 <div class="row chat-box" ng-app="Intranet" ng-controller="ChatController">
   							<div class="col-md-2">
   								<div class="panel panel-cascade contacts-box">

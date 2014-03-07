@@ -176,6 +176,20 @@ class Post
     	return $post->getInArray();
     }
     
+    public static function getPostsCount($em, $topic_id)
+    {
+    	$query = $em->getRepository("IntranetMainBundle:Post")
+    				->createQueryBuilder('p')
+    				->select('COUNT(p.id)') 
+    				->where('p.topicid = :topicid')
+    				->setParameter('topicid', $topic_id)
+    				->getQuery();
+    	
+    	$total = $query->getSingleScalarResult();
+    	
+    	return $total;
+    }
+    
     /**
      * Set userid
      *

@@ -10,14 +10,6 @@ intranet_add_topic:
     pattern:  /topic/{topic_id}/add
     defaults: { _controller: IntranetMainBundle:Topic:addTopic }
     
-intranet_security:
-    pattern: /security
-    defaults: { _controller: IntranetMainBundle:Security:index }
-    
-intranet_add_user:
-    pattern:  /security/user/add
-    defaults: { _controller: IntranetMainBundle:User:addUser }
-    
 intranet_post_get_posts:
     pattern:  /posts/{topic_id}/
     defaults: { _controller: IntranetMainBundle:Post:getPosts }
@@ -26,8 +18,20 @@ intranet_post_add_post:
     pattern:  /posts/{topic_id}/add/
     defaults: { _controller: IntranetMainBundle:Post:addPost }
     
+intranet_post_count:
+    pattern:  /posts/{topic_id}/count/
+    defaults: { _controller: IntranetMainBundle:Post:getPostsCount }
+    
+intranet_security:
+    pattern: /security
+    defaults: { _controller: IntranetMainBundle:Security:index }
+    
 intranet_security_login_check:
     path: /security/login_check
     
 intranet_security_logout:
     path: /security/logout
+    
+intranet_register:
+    pattern:  /register/
+    defaults: { _controller: IntranetMainBundle:User:addUser }

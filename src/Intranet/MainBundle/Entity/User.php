@@ -5,6 +5,7 @@ namespace Intranet\MainBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 /**
  * User
@@ -456,5 +457,42 @@ class User implements UserInterface, \Serializable
     			'active' => $this->getActive(),
     			'avatar' => $this->getAvatar()
     	);
+    }
+    
+    public static function isRegisteredByEmail($em, $email)
+    {
+    	$repository = $em->getRepository('IntranetMainBundle:User');
+    	$query = $repository->createQueryBuilder('u')
+						    ->where('u.email = :email')
+						    ->setParameter('email', $email)
+						    ->getQuery();
+
+	    try {
+	        return $query->getSingleResult();
+	    } catch (\Doctrine\ORM\NoResultException $e) {
+	        return null;
+	    }
+    }
+    
+    public static function isRegisteredByUsername($em, $username)
+    {
+    	$repository = $em->getRepository('IntranetMainBundle:User');
+    	$query = $repository->createQueryBuilder('u')
+    						->where('u.username = :username')
+					    	->setParameter('username', $username)
+					    	->getQuery();
+    	
+    	try {
+    		return $query->getSingleResult();
+    	} catch (\Doctrine\ORM\NoResultException $e) {
+    		return null;
+    	}
+    }
+    
+    public static function forceLogin(UserInterface $user, $firewall_name, $securityContext, $request)
+    {
+    	$token = new UsernamePasswordToken($user, null, $firewall_name, $user->getRoles());
+    	$securityContext->setToken($token);
+    	$request->getSession()->set('_security_' . $firewall_name, serialize($token));
     }
 }

@@ -5,6 +5,7 @@ namespace Intranet\MainBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Intranet\MainBundle\Entity\Topic;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class TopicController extends Controller
 {

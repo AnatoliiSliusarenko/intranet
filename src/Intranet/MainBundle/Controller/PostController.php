@@ -9,6 +9,22 @@ use Symfony\Component\HttpFoundation\Request;
 
 class PostController extends Controller
 {
+	public function getPostsCountAction($topic_id)
+	{
+		$em = $this->getDoctrine()->getEntityManager();
+		return new Response(var_dump(Post::getPostsCount($em, $topic_id)));
+	}
+	
+	public function getPostsMembersAction($topic_id)
+	{
+		
+	}
+	
+	public function getNewPostsAction(Request $request, $topic_id)
+	{
+		
+	}
+	
 	public function getPostsAction(Request $request, $topic_id)
     {
     	$offset = ($request->query->get('offset')) ? $request->query->get('offset') : 0 ;

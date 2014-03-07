@@ -19,11 +19,22 @@ class SecurityController extends Controller
     	{
     		$error = $session->get(SecurityContext::AUTHENTICATION_ERROR);
     		$session->remove(SecurityContext::AUTHENTICATION_ERROR);
+    		
+    		$register_error = $session->get('register_error');
+    		$session->remove('register_error');
+    		
+    		$register_user = $session->get('register_user');
+    		$session->remove('register_user');
     	}
     	
+    	$parameters = array('last_username' => $session->get(SecurityContext::LAST_USERNAME),
+        			  'error' => $error,
+        			  'register_error' => $register_error,
+    				  'register_user' => $register_user
+        );
+    	
+    	
         return $this->render("IntranetMainBundle:Security:index.html.twig", 
-        		array('last_username' => $session->get(SecurityContext::LAST_USERNAME),
-        			  'error' => $error
-        ));
+        		$parameters);
     }
 }
