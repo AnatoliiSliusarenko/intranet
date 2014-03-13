@@ -141,7 +141,7 @@ class Post
 		    	->setParameter('topicid', $topic_id)
 		    	->setFirstResult( $offset )
 		    	->setMaxResults( $limit )
-		    	->orderBy('p.id', 'ASC')
+		    	->orderBy('p.posted', 'DESC')
 		    	->getQuery();
     	
     	$posts = $query->getResult();
