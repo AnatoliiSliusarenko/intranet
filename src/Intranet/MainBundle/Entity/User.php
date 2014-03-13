@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+use Doctrine\ORM\Query\Expr\Join;
 
 /**
  * User
@@ -494,5 +495,22 @@ class User implements UserInterface, \Serializable
     	$token = new UsernamePasswordToken($user, null, $firewall_name, $user->getRoles());
     	$securityContext->setToken($token);
     	$request->getSession()->set('_security_' . $firewall_name, serialize($token));
+    }
+    
+    public static function getTopicMembers($em, $topic_id)
+    {
+    	$query = $em->getRepository("IntranetMainBundle:User")
+    	->createQueryBuilder('u')
+    	->select('u')
+    	->innerJoin('u.posts', 'p', 'WITH', 'u.id = p.userid')
+    	->where('p.topicid = :topicid')
+    	->setParameter('topicid', $topic_id)
+    	->getQuery();
+    
+    	$result = $query->getResult();
+    
+    	return array_map(function($user){
+    		return $user->getInArray();
+    	}, $result);
     }
 }

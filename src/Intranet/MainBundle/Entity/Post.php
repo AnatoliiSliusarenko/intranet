@@ -189,6 +189,28 @@ class Post
     	
     	return $total;
     }
+        
+    public static function getNewPosts($em, $topic_id, $last_posted)
+    {
+    	$qb = $em->getRepository("IntranetMainBundle:Post")
+    				->createQueryBuilder('p');
+    	$qb->select('p')
+    	   ->where('p.topicid = :topicid')
+    	   ->setParameter('topicid', $topic_id);
+    	
+    	
+    	if ($last_posted != null)
+    	{
+    		$qb->andWhere('p.posted > :last_posted')
+    		   ->setParameter('last_posted', $last_posted);
+    	}
+        		
+    	$result = $qb->getQuery()->getResult();
+    
+    	return array_map(function($post){
+    		return $post->getInArray();
+    	}, $result);
+    }
     
     /**
      * Set userid

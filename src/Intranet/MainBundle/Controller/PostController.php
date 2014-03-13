@@ -12,17 +12,23 @@ class PostController extends Controller
 	public function getPostsCountAction($topic_id)
 	{
 		$em = $this->getDoctrine()->getEntityManager();
-		return new Response(var_dump(Post::getPostsCount($em, $topic_id)));
-	}
-	
-	public function getPostsMembersAction($topic_id)
-	{
 		
+		$response = new Response(json_encode(array("result" => Post::getPostsCount($em, $topic_id))));
+		$response->headers->set('Content-Type', 'application/json');
+		 
+		return $response;
 	}
 	
 	public function getNewPostsAction(Request $request, $topic_id)
 	{
+		$em = $this->getDoctrine()->getEntityManager();
 		
+		$last_posted = ($request->query->get('last_posted')) ? $request->query->get('last_posted') : null ;
+		
+		$response = new Response(json_encode(array("result" => Post::getNewPosts($em, $topic_id, $last_posted))));
+		$response->headers->set('Content-Type', 'application/json');
+			
+		return $response;
 	}
 	
 	public function getPostsAction(Request $request, $topic_id)

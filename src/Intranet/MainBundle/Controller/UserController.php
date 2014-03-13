@@ -58,4 +58,14 @@ class UserController extends Controller
     	
     	return $this->redirect($this->generateUrl('intranet_main_homepage'));
     }
+    
+    public function getTopicMembersAction($topic_id)
+    {
+    	$em = $this->getDoctrine()->getEntityManager();
+    
+    	$response = new Response(json_encode(array("result" => User::getTopicMembers($em, $topic_id))));
+    	$response->headers->set('Content-Type', 'application/json');
+    
+    	return $response;
+    }
 }

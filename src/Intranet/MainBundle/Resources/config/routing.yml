@@ -22,6 +22,14 @@ intranet_post_count:
     pattern:  /posts/{topic_id}/count/
     defaults: { _controller: IntranetMainBundle:Post:getPostsCount }
     
+intranet_topic_members:
+    pattern:  /topic/{topic_id}/members/
+    defaults: { _controller: IntranetMainBundle:User:getTopicMembers }
+    
+intranet_post_new:
+    pattern:  /posts/{topic_id}/new/
+    defaults: { _controller: IntranetMainBundle:Post:getNewPosts }
+    
 intranet_security:
     pattern: /security
     defaults: { _controller: IntranetMainBundle:Security:index }
