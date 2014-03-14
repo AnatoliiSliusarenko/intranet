@@ -43,3 +43,7 @@ intranet_security_logout:
 intranet_register:
     pattern:  /register/
     defaults: { _controller: IntranetMainBundle:User:addUser }
+    
+intranet_show_office:
+    pattern:  /office/{office_id}
+    defaults: { _controller: IntranetMainBundle:Office:showOffice }

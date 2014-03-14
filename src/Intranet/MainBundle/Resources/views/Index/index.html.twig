@@ -51,6 +51,7 @@
                     <button class="btn  btn-nav-toggle text-primary"><i class="fa fa-angle-double-left toggle-left"></i> </button>
                   </li>
                     {% render(controller('IntranetMainBundle:Topic:getTopicMenuTree')) %}
+                  	{% render(controller('IntranetMainBundle:Office:getOfficeMenuTree')) %}
                 </ul>
               </div>
             </div> <!-- /.left-sidebar -->
@@ -69,9 +70,14 @@
   						</div>
 
 						{% block content %}
-						
-						<h1>Hello, {{ app.user.name }}</h1>
-						
+						<div class="row">
+							<div class="col-md-12">
+								<div class="jumbotron">
+									<h1>Hello, {{ app.user.name }}!</h1>
+									<p>We welcome to our service. Here you can chat with other users, create your own private community with its topics for discussion.</p>
+								</div>
+							</div>
+						</div>
 						{% endblock %}
 
   						<div class="footer">

@@ -532,37 +532,4 @@ class User implements UserInterface, \Serializable
     
     	return $result;
     }
-
-    /**
-     * Add offices
-     *
-     * @param \Intranet\MainBundle\Entity\Office $offices
-     * @return User
-     */
-    public function addOffice(\Intranet\MainBundle\Entity\Office $offices)
-    {
-        $this->offices[] = $offices;
-
-        return $this;
-    }
-
-    /**
-     * Remove offices
-     *
-     * @param \Intranet\MainBundle\Entity\Office $offices
-     */
-    public function removeOffice(\Intranet\MainBundle\Entity\Office $offices)
-    {
-        $this->offices->removeElement($offices);
-    }
-
-    /**
-     * Get offices
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getOffices()
-    {
-        return $this->offices;
-    }
 }

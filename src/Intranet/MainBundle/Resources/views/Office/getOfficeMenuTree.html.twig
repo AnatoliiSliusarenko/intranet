@@ -1,0 +1,8 @@
+{% for office in officeTree %}
+	<li class=' ' >
+		<a href='{{ url('intranet_show_office', {office_id: office.getId()}) }}' data-original-title='{{ office.name }}'>
+			<i class='fa fa-sitemap'></i>
+			<span class='hidden-minibar'> {{ office.name }}</span>
+		</a>
+	</li>
+{% endfor %}

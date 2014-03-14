@@ -1,0 +1,126 @@
+{% extends 'IntranetMainBundle:Index:index.html.twig' %}
+
+{% block title %}My offices{% endblock %}
+
+{% block breadcrumbs %}
+<ul class="breadcrumb">
+	{% for item in breadcrumbs %}
+		<li><a href="{{ url('intranet_show_office', {office_id: item.getId()}) }}">{{ item.name }}</a></li>
+	{% endfor %}
+	<li class="active">{{ office.name }}</li>
+</ul>
+{% endblock %}
+
+{% block pageheader %}
+<div class="row">
+	<div class="col-md-12">
+		<h3 class="page-header"><i class="fa fa-comment"></i> {{ office.name }} <i class="fa fa-info-circle animated bounceInDown show-info"></i> </h3>
+
+		<blockquote class="page-information hidden">
+		<p>
+			{{ office.description }}
+		</p>
+		</blockquote>
+	
+		<div class="panel panel-cascade">
+			<div class="panel-heading">
+                <h3 class="panel-title">
+                 Add New Local Office
+                 <span class="pull-right">
+                  <a  href="#" class="panel-minimize"><i class="fa fa-chevron-down"></i></a>
+                </span>
+              </h3>
+            </div>
+            <div class="panel-body" style="{% if error is defined %}{{ 'display:block;' }}{% else %}{{ 'display:none;' }}{% endif %}">
+            	<form action="#" class="form-horizontal" role="form" method="post">
+            		<div class="form-group">
+                		<label for="inputEmail1" class="col-lg-2 col-md-3 control-label">Office Name</label>
+                		<div class="col-lg-10 col-md-9">
+                 			<input type="text" name="name" class="form-control form-cascade-control" id="inputEmail1" placeholder="Type office name here" value="{% if name is defined %}{{ name }}{% endif %}" required>
+               			</div>
+             		</div>
+             		<div class="form-group">
+                		<label for="inputEmail1" class="col-lg-2 col-md-3 control-label">Office Description</label>
+                		<div class="col-lg-10 col-md-9">
+                 			<input type="text" name="description" class="form-control form-cascade-control" id="inputEmail1" placeholder="Type office description here" value="{% if description is defined %}{{ description }}{% endif %}" required>
+               			</div>
+             		</div>
+             		<div class="form-group">
+  						<label for="inputEmail1" class="col-lg-2 col-md-3 control-label">Select members</label>
+  						<div class="col-lg-10 col-md-9">
+   							<select multiple class="form-control">
+   								{% for user in users %}
+            						<option value="{{ user.id }}">{{ user.surname }} {{ user.name }} ({{ user.username }})</option>
+            					{% endfor %}
+  							</select>
+						</div>
+					</div>
+             		
+             		{% if error is defined %}
+             		<div class="alert alert-danger">
+               			{{ error }}
+             		</div>
+             		{% endif %}
+             		<div class="form-actions">
+             			<input type="submit" value="Save New Office" class="btn bg-primary btn-block text-white">
+             		</div>
+            	</form>
+            </div>
+		</div>
+		{% if offices|length > 0 %}
+		<div class="panel panel-cascade">
+			<div class="panel-heading">
+                <h3 class="panel-title">
+                 Offices in which you are
+                 <span class="pull-right">
+                  <a  href="#" class="panel-minimize"><i class="fa fa-chevron-down"></i></a>
+                </span>
+              </h3>
+            </div>
+            <div class="panel-body" style="display:none;">
+            	{% for office in offices %}
+            		<a href="#" class="btn btn-primary btn-block">{{ office.name }}{% if app.user.getId() == office.getUserid() %} (You are owner){% endif %}</a>
+            	{% endfor %}
+            	
+            </div>
+		</div>
+		{% endif %}
+		<div class="panel panel-cascade">
+			<div class="panel-heading">
+                <h3 class="panel-title">
+                 Members of this office
+                 <span class="pull-right">
+                  <a  href="#" class="panel-minimize"><i class="fa fa-chevron-down"></i></a>
+                </span>
+              </h3>
+            </div>
+            <div class="panel-body" style="display:none;">
+            	
+            </div>
+		</div>
+		<div class="panel panel-cascade">
+			<div class="panel-heading">
+                <h3 class="panel-title">
+                 Topics of this office
+                 <span class="pull-right">
+                  <a  href="#" class="panel-minimize"><i class="fa fa-chevron-down"></i></a>
+                </span>
+              </h3>
+            </div>
+            <div class="panel-body" style="display:none;">
+            	
+            </div>
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+{% block content %}
+
+{% endblock %}
+{% block javascripts %}
+	{{ parent() }}
+	
+	
+	
+{% endblock %}
