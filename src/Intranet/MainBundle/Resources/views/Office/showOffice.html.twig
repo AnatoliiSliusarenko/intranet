@@ -14,7 +14,7 @@
 {% block pageheader %}
 <div class="row">
 	<div class="col-md-12">
-		<h3 class="page-header"><i class="fa fa-comment"></i> {{ office.name }} <i class="fa fa-info-circle animated bounceInDown show-info"></i> </h3>
+		<h3 class="page-header"><i class="fa fa-sitemap"></i> {{ office.name }} <i class="fa fa-info-circle animated bounceInDown show-info"></i> </h3>
 
 		<blockquote class="page-information hidden">
 		<p>
@@ -32,7 +32,7 @@
               </h3>
             </div>
             <div class="panel-body" style="{% if error is defined %}{{ 'display:block;' }}{% else %}{{ 'display:none;' }}{% endif %}">
-            	<form action="#" class="form-horizontal" role="form" method="post">
+            	<form action="{{ url('intranet_add_office', {office_id: office.getId()}) }}" class="form-horizontal" role="form" method="post">
             		<div class="form-group">
                 		<label for="inputEmail1" class="col-lg-2 col-md-3 control-label">Office Name</label>
                 		<div class="col-lg-10 col-md-9">
@@ -48,7 +48,7 @@
              		<div class="form-group">
   						<label for="inputEmail1" class="col-lg-2 col-md-3 control-label">Select members</label>
   						<div class="col-lg-10 col-md-9">
-   							<select multiple class="form-control">
+   							<select name="members[]" multiple class="form-control">
    								{% for user in users %}
             						<option value="{{ user.id }}">{{ user.surname }} {{ user.name }} ({{ user.username }})</option>
             					{% endfor %}
@@ -79,13 +79,13 @@
             </div>
             <div class="panel-body" style="display:none;">
             	{% for office in offices %}
-            		<a href="#" class="btn btn-primary btn-block">{{ office.name }}{% if app.user.getId() == office.getUserid() %} (You are owner){% endif %}</a>
+            		<a href="{{ url('intranet_show_office', {office_id: office.getId()}) }}" class="btn btn-primary btn-block">{{ office.name }}{% if app.user.getId() == office.getUserid() %} (You are owner){% endif %}</a>
             	{% endfor %}
             	
             </div>
 		</div>
 		{% endif %}
-		<div class="panel panel-cascade">
+		<div class="panel panel-cascade" ng-app="Intranet" ng-controller="ChooseSelectController">
 			<div class="panel-heading">
                 <h3 class="panel-title">
                  Members of this office
@@ -95,7 +95,38 @@
               </h3>
             </div>
             <div class="panel-body" style="display:none;">
-            	
+            	<form action="#" class="form-horizontal" role="form" method="post">
+	            	<div class="form-group">
+	            		<label for="inputEmail1" class="col-lg-1 col-md-3 control-label">Members</label>
+	  					<div class="col-lg-11 col-md-9">
+	   						<select id="officeUsersList" name="members[]" multiple class="form-control">
+	   							<option ng-repeat="user in officeUsers" value="[[ user.id ]]">[[ user.surname ]] [[ user.name ]] ([[ user.username ]])</option>
+	  						</select>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="inputEmail1" class="col-lg-1 col-md-3 control-label">&nbsp;</label>
+						<div class="col-lg-11 col-md-9">
+							<div class="col-md-6">
+								<a ng-click="removeFromMembers($event)" href="#" class="btn btn-primary btn-block"><i class="fa fa-chevron-circle-down"></i></a>
+							</div>
+							<div class="col-md-6">
+								<a ng-click="addToMembers($event)" href="#" class="btn btn-primary btn-block"><i class="fa fa-chevron-circle-up"></i></a>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+	            		<label for="inputEmail1" class="col-lg-1 col-md-3 control-label">Available Members</label>
+	  					<div class="col-lg-11 col-md-9">
+	   						<select id="usersList" name="members[]" multiple class="form-control">
+	            					<option ng-repeat="user in users" value="[[ user.id ]]">[[ user.surname ]] [[ user.name ]] ([[ user.username ]])</option>
+	  						</select>
+						</div>
+					</div>
+					<div class="form-actions">
+	             		<input type="submit" value="Save Members" class="btn bg-primary btn-block text-white">
+	             	</div>
+	             </form>
             </div>
 		</div>
 		<div class="panel panel-cascade">
@@ -120,7 +151,11 @@
 {% endblock %}
 {% block javascripts %}
 	{{ parent() }}
-	
-	
-	
+	<script src="{{ asset('bundles/intranet/js/angular.min.js') }}"></script>
+	<script src="{{ asset('bundles/intranet/js/underscore-min.js') }}"></script>
+	<script src="{{ asset('bundles/intranet/js/custom/choose-select.js') }}"></script>
+	<script type="text/javascript">
+	var USERS = {{ users|json_encode|raw }};
+	var OFFICE_USERS = {{ officeUsers|json_encode|raw }};
+	</script>
 {% endblock %}

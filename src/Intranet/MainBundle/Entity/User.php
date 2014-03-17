@@ -539,9 +539,9 @@ class User implements UserInterface, \Serializable
      * @param \Intranet\MainBundle\Entity\Office $offices
      * @return User
      */
-    public function addOffice(\Intranet\MainBundle\Entity\Office $offices)
+    public function addOffice(\Intranet\MainBundle\Entity\Office $office)
     {
-        $this->offices[] = $offices;
+        $this->offices[] = $office;
 
         return $this;
     }
@@ -551,9 +551,9 @@ class User implements UserInterface, \Serializable
      *
      * @param \Intranet\MainBundle\Entity\Office $offices
      */
-    public function removeOffice(\Intranet\MainBundle\Entity\Office $offices)
+    public function removeOffice(\Intranet\MainBundle\Entity\Office $office)
     {
-        $this->offices->removeElement($offices);
+        $this->offices->removeElement($office);
     }
 
     /**

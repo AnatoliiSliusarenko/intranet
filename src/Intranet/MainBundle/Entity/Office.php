@@ -78,6 +78,21 @@ class Office
     	return $this->children;
     }
     
+    public function getChildrenForUser($em, \Intranet\MainBundle\Entity\User $user)
+    {
+    	$officeChildren = $this->getChildren($em);
+    	$userOfficesId = array_map(function($e){return $e->getId();}, $user->getOffices()->toArray());
+    	$result = array();
+    	
+    	foreach ($officeChildren as $office)
+    	{
+    		if (in_array($office->getId(), $userOfficesId))
+    			$result[] = $office;
+    	}
+    	
+    	return $result;
+    }
+    
     /**
      * Get Office tree
      *
@@ -236,11 +251,27 @@ class Office
      * @param \Intranet\MainBundle\Entity\User $users
      * @return Office
      */
-    public function addUser(\Intranet\MainBundle\Entity\User $users)
+    public function addUser(\Intranet\MainBundle\Entity\User $user)
     {
-        $this->users[] = $users;
+        $this->users[] = $user;
 
         return $this;
+    }
+    
+    public function addUsers($em, $users)
+    {
+    	foreach ($users as $userid)
+    	{
+    		$user = $em->getRepository('IntranetMainBundle:User')->find($userid);
+    		if ($user == null)
+    			continue;
+    		
+    		$this->addUser($user);
+    		$user->addOffice($this);
+    		$em->persist($user);
+    	}
+    
+    	return $this;
     }
 
     /**
@@ -248,9 +279,9 @@ class Office
      *
      * @param \Intranet\MainBundle\Entity\User $users
      */
-    public function removeUser(\Intranet\MainBundle\Entity\User $users)
+    public function removeUser(\Intranet\MainBundle\Entity\User $user)
     {
-        $this->users->removeElement($users);
+        $this->users->removeElement($user);
     }
 
     /**

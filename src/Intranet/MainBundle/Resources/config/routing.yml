@@ -9,7 +9,7 @@ intranet_show_topic:
 intranet_add_topic:
     pattern:  /topic/{topic_id}/add
     defaults: { _controller: IntranetMainBundle:Topic:addTopic }
-    
+        
 intranet_post_get_posts:
     pattern:  /posts/{topic_id}/
     defaults: { _controller: IntranetMainBundle:Post:getPosts }
@@ -47,3 +47,7 @@ intranet_register:
 intranet_show_office:
     pattern:  /office/{office_id}
     defaults: { _controller: IntranetMainBundle:Office:showOffice }
+    
+intranet_add_office:
+    pattern:  /office/{office_id}/add
+    defaults: { _controller: IntranetMainBundle:Office:addOffice }
