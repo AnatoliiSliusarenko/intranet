@@ -1,5 +1,5 @@
 {% for topic in topicTree %}
-	<li class=' ' >
+	<li class='{% if (activeSection is defined and activeSection=='topic') %}{{ 'active' }}{% endif %}' >
 		<a href='{{ url('intranet_show_topic', {topic_id: topic.getId()}) }}' data-original-title='{{ topic.name }}'>
 			<i class='fa fa-comment'></i>
 			<span class='hidden-minibar'> {{ topic.name }}</span>

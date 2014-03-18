@@ -33,6 +33,9 @@ class TopicController extends Controller
     	{
     		$offices = $this->getUser()->getOffices()->toArray();
     		$publicOffice = Office::getOfficeTree($em)[0];
+    		$key = array_search($publicOffice, $offices, true);
+    		if ($key !== false)
+    			unset($offices[$key]);
     		array_unshift($offices, $publicOffice->getInArray());
     	}else 
     	{
@@ -52,6 +55,7 @@ class TopicController extends Controller
     		$request->getSession()->remove('description');
     	}
     	
+    	$this->get('twig')->addGlobal('activeSection', 'topic');
     	return $this->render('IntranetMainBundle:Topic:showTopic.html.twig', $parameters);
     }
     

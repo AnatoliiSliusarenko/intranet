@@ -55,7 +55,7 @@ class OfficeController extends Controller
 			$request->getSession()->remove('errorMembers');
 		}
 		
-		 
+		$this->get('twig')->addGlobal('activeSection', 'office');
 		return $this->render("IntranetMainBundle:Office:showOffice.html.twig", $parameters);
 	}
 	
