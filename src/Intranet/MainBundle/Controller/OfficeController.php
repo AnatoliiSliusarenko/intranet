@@ -23,17 +23,19 @@ class OfficeController extends Controller
 	{
 		$em = $this->getDoctrine()->getEntityManager();
 		$office = $em->getRepository('IntranetMainBundle:Office')->find($office_id);
-		if ($office == null)
+		if (($office == null) || (!$office->hasUser($this->getUser())))
 			return $this->redirect($this->generateUrl('intranet_main_homepage'));
 		 
 		$breadcrumbs = $office->getBreadcrumbs($em);
-		$users = User::getAllUsers($em);
+		$users = $this->getUser()->getAllUsers($em);
+		
+		$officeUsers = $office->getUsers();
 		$childrenOfficesForUser = $office->getChildrenForUser($em, $this->getUser());
 		
 		$parameters = array(
 				"office" => $office, 
 				"breadcrumbs" => $breadcrumbs, 
-				'officeUsers' => array_map(function($e){return $e->getInArray();}, $office->getUsers()->toArray()), 
+				'officeUsers' => array_map(function($e){return $e->getInArray();}, $officeUsers->toArray()),
 				'users' => array_map(function($e){return $e->getInArray();}, $users), 
 				'offices' => $childrenOfficesForUser);
 		
@@ -46,6 +48,11 @@ class OfficeController extends Controller
 			$request->getSession()->remove('error');
 			$request->getSession()->remove('name');
 			$request->getSession()->remove('description');
+		}
+		if ($request->getSession()->has('errorMembers'))
+		{
+			$parameters['errorMembers'] = $request->getSession()->get('errorMembers');
+			$request->getSession()->remove('errorMembers');
 		}
 		
 		 
@@ -86,6 +93,28 @@ class OfficeController extends Controller
 		$em->persist($office);
 		$em->flush();
 		 
+		return $this->redirect($this->generateUrl('intranet_show_office', array('office_id' => $office->getId())));
+	}
+	
+	public function changeOfficeMembersAction(Request $request, $office_id)
+	{
+		$members = $request->request->get('members');
+		$em = $this->getDoctrine()->getManager();
+		
+		if (($members == null) || (count($members) < 2))
+		{
+			$request->getSession()->set('errorMembers', 'In office should be not less two members!');
+			return $this->redirect($this->generateUrl('intranet_show_office', array("office_id" => $office_id)));
+		}
+		
+		$office = $em->getRepository('IntranetMainBundle:Office')->find($office_id);
+		if ($office == null)
+			return $this->redirect($this->generateUrl('intranet_main_homepage'));
+		
+		$office->resetUsers($em, $members);
+		$em->persist($office);
+		$em->flush();
+		
 		return $this->redirect($this->generateUrl('intranet_show_office', array('office_id' => $office->getId())));
 	}
 }

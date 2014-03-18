@@ -51,3 +51,7 @@ intranet_show_office:
 intranet_add_office:
     pattern:  /office/{office_id}/add
     defaults: { _controller: IntranetMainBundle:Office:addOffice }
+    
+intranet_change_office_members:
+    pattern:  /office/{office_id}/members
+    defaults: { _controller: IntranetMainBundle:Office:changeOfficeMembers }

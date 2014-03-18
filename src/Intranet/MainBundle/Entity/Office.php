@@ -283,6 +283,18 @@ class Office
     {
         $this->users->removeElement($user);
     }
+    
+    public function resetUsers($em, $users)
+    {
+    	foreach ($this->users as $user)
+    	{
+    		$user->removeOffice($this);
+    		$this->removeUser($user);
+    		$em->persist($user);
+    	}
+    	
+    	return $this->addUsers($em, $users);
+    }
 
     /**
      * Get users
@@ -292,5 +304,10 @@ class Office
     public function getUsers()
     {
         return $this->users;
+    }
+    
+    public function hasUser(\Intranet\MainBundle\Entity\User $user)
+    {
+    	return $this->users->contains($user);
     }
 }

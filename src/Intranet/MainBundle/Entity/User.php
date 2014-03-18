@@ -520,11 +520,13 @@ class User implements UserInterface, \Serializable
     	}, $result);
     }
     
-    public static function getAllUsers($em)
+    public function getAllUsers($em)
     {
     	$query = $em->getRepository("IntranetMainBundle:User")
 			    	->createQueryBuilder('u')
 			    	->select('u')
+			    	->where('u.id != :userid')
+			    	->setParameter('userid', $this->id)
 			    	->orderBy('u.surname', 'ASC')
 			    	->getQuery();
     
