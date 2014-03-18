@@ -53,6 +53,16 @@
                  			<input type="text" name="description" class="form-control form-cascade-control" id="inputEmail1" placeholder="Type topic description here" value="{% if description is defined %}{{ description }}{% endif %}" required>
                			</div>
              		</div>
+             		<div class="form-group">
+  						<label for="inputEmail1" class="col-lg-2 col-md-3 control-label">Select office</label>
+  						<div class="col-lg-10 col-md-9">
+   							<select name="officeid" class="form-control">
+							    {% for office in offices %}
+							    <option value="{{ office.id }}">{{ office.name }}</option>
+							    {% endfor %}
+  							</select>
+						</div>
+					</div>
              		{% if error is defined %}
              		<div class="alert alert-danger">
                			{{ error }}
@@ -64,7 +74,7 @@
             	</form>
             </div>
 		</div>
-		
+		{% if subtopics|length > 0 %}
 		<div class="panel panel-cascade">
 			<div class="panel-heading">
                 <h3 class="panel-title">
@@ -75,12 +85,13 @@
               </h3>
             </div>
             <div class="panel-body" style="display:none;">
-            	{% for topic in topic.children %}
-            		<a href="{{ url('intranet_show_topic', {topic_id: topic.getId()}) }}" class="btn btn-primary btn-block">{{ topic.name }}</a>
+            	{% for topic in subtopics %}
+            		<a href="{{ url('intranet_show_topic', {topic_id: topic.getId()}) }}" class="btn btn-primary btn-block">{{ topic.name }} ({{ topic.getOffice().name }})</a>
             	{% endfor %}
             	
             </div>
 		</div>
+		{% endif %}
 	</div>
 </div>
 {% endblock %}

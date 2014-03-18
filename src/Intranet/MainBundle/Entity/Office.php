@@ -55,6 +55,12 @@ class Office
      */
     private $users;
     
+    /**
+     * @ORM\OneToMany(targetEntity="Topic", mappedBy="office")
+     * @var array
+     */
+    private $topics;
+    
     public $children = null;
     
     private static function fetchChildren($em, $officeid)
@@ -309,5 +315,54 @@ class Office
     public function hasUser(\Intranet\MainBundle\Entity\User $user)
     {
     	return $this->users->contains($user);
+    }
+
+    /**
+     * Add topic
+     *
+     * @param \Intranet\MainBundle\Entity\Topic $topic
+     * @return Office
+     */
+    public function addTopic(\Intranet\MainBundle\Entity\Topic $topic)
+    {
+        $this->topics[] = $topic;
+
+        return $this;
+    }
+
+    /**
+     * Remove topic
+     *
+     * @param \Intranet\MainBundle\Entity\Topic $topic
+     */
+    public function removeTopic(\Intranet\MainBundle\Entity\Topic $topic)
+    {
+        $this->topics->removeElement($topic);
+    }
+
+    /**
+     * Get topics
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getTopics()
+    {
+        return $this->topics;
+    }
+    
+    /**
+     * Get inArray
+     *
+     * @return array
+     */
+    public function getInArray()
+    {
+    	return array(
+    			'id' => $this->getId(),
+    			'officeid' => $this->getOfficeid(),
+    			'userid' => $this->getUserid(),
+    			'name' => $this->getName(),
+    			'description' => $this->getDescription()
+    	);
     }
 }

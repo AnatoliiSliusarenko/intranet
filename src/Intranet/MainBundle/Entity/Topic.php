@@ -27,6 +27,13 @@ class Topic
      * @ORM\Column(name="parentid", type="integer")
      */
     private $parentid;
+    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="officeid", type="integer")
+     */
+    private $officeid;
 
     /**
      * @var string
@@ -42,6 +49,13 @@ class Topic
      */
     private $description;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="Office", inversedBy="topics")
+     * @ORM\JoinColumn(name="officeid")
+     * @var Office
+     */
+    private $office;
+    
     public $children = null;
     
     private static function fetchChildren($em, $parentid)
@@ -149,6 +163,20 @@ class Topic
     	return $this->children;
     }
     
+    public function getChildrenForUser($em, \Intranet\MainBundle\Entity\User $user)
+    {
+    	$topicChildren = $this->getChildren($em);
+    	$result = array();
+    	 
+    	foreach ($topicChildren as $topic)
+    	{
+    		if ($topic->getOffice()->hasUser($user))
+    			$result[] = $topic;
+    	}
+    	 
+    	return $result;
+    }
+    
     /**
      * Get Topic tree
      *
@@ -188,5 +216,51 @@ class Topic
     	}
     	
     	return $breadcrumbs;
+    }
+
+    /**
+     * Set office
+     *
+     * @param \Intranet\MainBundle\Entity\Office $office
+     * @return Topic
+     */
+    public function setOffice(\Intranet\MainBundle\Entity\Office $office = null)
+    {
+        $this->office = $office;
+
+        return $this;
+    }
+
+    /**
+     * Get office
+     *
+     * @return \Intranet\MainBundle\Entity\Office 
+     */
+    public function getOffice()
+    {
+        return $this->office;
+    }
+
+    /**
+     * Set officeid
+     *
+     * @param integer $officeid
+     * @return Topic
+     */
+    public function setOfficeid($officeid)
+    {
+        $this->officeid = $officeid;
+
+        return $this;
+    }
+
+    /**
+     * Get officeid
+     *
+     * @return integer 
+     */
+    public function getOfficeid()
+    {
+        return $this->officeid;
     }
 }

@@ -4,6 +4,7 @@ namespace Intranet\MainBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Intranet\MainBundle\Entity\Topic;
+use Intranet\MainBundle\Entity\Office;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -22,12 +23,24 @@ class TopicController extends Controller
     {
     	$em = $this->getDoctrine()->getEntityManager();
     	$topic = $em->getRepository('IntranetMainBundle:Topic')->find($topic_id);
-    	if ($topic == null)
+    	if (($topic == null) || (($topic->getOfficeid() != 0) && (!$topic->getOffice()->hasUser($this->getUser()))))
     		return $this->redirect($this->generateUrl('intranet_main_homepage'));
     	
     	$breadcrumbs = $topic->getBreadcrumbs($em);
+    	$subtopics = $topic->getChildrenForUser($em, $this->getUser());
     	
-    	$parameters = array("topic" => $topic, "breadcrumbs" => $breadcrumbs);
+    	if ($topic->getOfficeid() == 0)
+    	{
+    		$offices = $this->getUser()->getOffices()->toArray();
+    		$publicOffice = Office::getOfficeTree($em)[0];
+    		array_unshift($offices, $publicOffice->getInArray());
+    	}else 
+    	{
+    		$offices = array($topic->getOffice());
+    	}
+    	
+    	
+    	$parameters = array("topic" => $topic, "breadcrumbs" => $breadcrumbs, 'offices' => $offices, 'subtopics' => $subtopics);
     	
     	if ($request->getSession()->has('error'))
     	{
@@ -46,6 +59,7 @@ class TopicController extends Controller
     {
     	$name = $request->request->get('name');
     	$description = $request->request->get('description');
+    	$officeid = $request->request->get('officeid');
     	
     	if ($name == '' || $description == '')
     	{
@@ -56,12 +70,17 @@ class TopicController extends Controller
     		return $this->redirect($this->generateUrl('intranet_show_topic', array("topic_id" => $topic_id)));
     	}
     	
+    	$em = $this->getDoctrine()->getManager();
+    	$office = $em->getRepository('IntranetMainBundle:Office')->find($officeid);
+    	if ($office == null)
+    		return $this->redirect($this->generateUrl('intranet_main_homepage'));
+    	
     	$topic = new Topic();
     	$topic->setParentid($topic_id);
     	$topic->setName($name);
     	$topic->setDescription($description);
+    	$topic->setOffice($office);
     	
-    	$em = $this->getDoctrine()->getManager();
     	$em->persist($topic);
     	$em->flush();
     	
