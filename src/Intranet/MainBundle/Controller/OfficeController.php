@@ -12,7 +12,7 @@ class OfficeController extends Controller
 {
 	public function getOfficeMenuTreeAction()
 	{
-		$em = $this->getDoctrine()->getEntityManager();
+		$em = $this->getDoctrine()->getManager();
 		 
 		$officeTree = Office::getOfficeTree($em);
 	
@@ -21,7 +21,7 @@ class OfficeController extends Controller
 	
 	public function showOfficeAction(Request $request, $office_id)
 	{
-		$em = $this->getDoctrine()->getEntityManager();
+		$em = $this->getDoctrine()->getManager();
 		$office = $em->getRepository('IntranetMainBundle:Office')->find($office_id);
 		if (($office == null) || (!$office->hasUser($this->getUser())))
 			return $this->redirect($this->generateUrl('intranet_main_homepage'));

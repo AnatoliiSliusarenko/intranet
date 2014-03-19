@@ -11,7 +11,7 @@ class PostController extends Controller
 {
 	public function getPostsCountAction($topic_id)
 	{
-		$em = $this->getDoctrine()->getEntityManager();
+		$em = $this->getDoctrine()->getManager();
 		
 		$response = new Response(json_encode(array("result" => Post::getPostsCount($em, $topic_id))));
 		$response->headers->set('Content-Type', 'application/json');
@@ -21,7 +21,7 @@ class PostController extends Controller
 	
 	public function getNewPostsAction(Request $request, $topic_id)
 	{
-		$em = $this->getDoctrine()->getEntityManager();
+		$em = $this->getDoctrine()->getManager();
 		
 		$last_posted = ($request->query->get('last_posted')) ? $request->query->get('last_posted') : null ;
 		

@@ -12,7 +12,7 @@ class TopicController extends Controller
 {
 	public function getTopicMenuTreeAction()
 	{
-		$em = $this->getDoctrine()->getEntityManager();
+		$em = $this->getDoctrine()->getManager();
     	
     	$topicTree = Topic::getTopicTree($em);
 		
@@ -21,7 +21,7 @@ class TopicController extends Controller
 	    
     public function showTopicAction(Request $request, $topic_id)
     {
-    	$em = $this->getDoctrine()->getEntityManager();
+    	$em = $this->getDoctrine()->getManager();
     	$topic = $em->getRepository('IntranetMainBundle:Topic')->find($topic_id);
     	if (($topic == null) || (($topic->getOfficeid() != 0) && (!$topic->getOffice()->hasUser($this->getUser()))))
     		return $this->redirect($this->generateUrl('intranet_main_homepage'));
@@ -32,7 +32,8 @@ class TopicController extends Controller
     	if ($topic->getOfficeid() == 0)
     	{
     		$offices = $this->getUser()->getOffices()->toArray();
-    		$publicOffice = Office::getOfficeTree($em)[0];
+    		$tree = Office::getOfficeTree($em);
+    		$publicOffice = $tree[0];
     		$key = array_search($publicOffice, $offices, true);
     		if ($key !== false)
     			unset($offices[$key]);

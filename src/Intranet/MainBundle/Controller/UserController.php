@@ -22,7 +22,7 @@ class UserController extends Controller
     		'password' => $request->request->get('password')
     	);
     	
-    	$em = $this->getDoctrine()->getEntityManager();
+    	$em = $this->getDoctrine()->getManager();
     	
     	if (User::isRegisteredByEmail($em, $parameters['email']) != null)
     	{
@@ -52,7 +52,8 @@ class UserController extends Controller
     	$user->setAvatar('eleven.png');
     	
     	//add to public office
-    	$publicOffice = Office::getOfficeTree($em)[0];
+    	$tree = Office::getOfficeTree($em);
+    	$publicOffice = $tree[0];
     	$user->addOffice($publicOffice);
     	$publicOffice->addUser($user);
     	
@@ -68,7 +69,7 @@ class UserController extends Controller
     
     public function getTopicMembersAction($topic_id)
     {
-    	$em = $this->getDoctrine()->getEntityManager();
+    	$em = $this->getDoctrine()->getManager();
     
     	$response = new Response(json_encode(array("result" => User::getTopicMembers($em, $topic_id))));
     	$response->headers->set('Content-Type', 'application/json');
