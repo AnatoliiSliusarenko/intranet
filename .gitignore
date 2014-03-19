@@ -8,7 +8,6 @@ vendor/*
 app/cache/*
 app/logs/*
 web/uploads/*
-web/bundles/acmedemo/*
 web/bundles/framework/*
 web/bundles/sensiodistribution/*
 
