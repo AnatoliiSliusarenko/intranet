@@ -319,7 +319,7 @@ class User implements UserInterface, \Serializable
      */
     public function getSalt()
     {
-    	return null;
+    	return '7v8b6ghjb6834bdkjndsjb233409fjvsiu8892d';
     }
     
     /**
