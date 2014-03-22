@@ -1,11 +1,11 @@
 # This file is auto-generated during the composer install
 parameters:
     database_driver: pdo_mysql
-    database_host: localhost
-    database_port: 3600
-    database_name: intranet
-    database_user: root
-    database_password: 12345
+    database_host: tunnel.pagodabox.com
+    database_port: 3306
+    database_name: amplointranet
+    database_user: stefania
+    database_password: 2xpAv5HY
     mailer_transport: smtp
     mailer_host: 127.0.0.1
     mailer_user: null
