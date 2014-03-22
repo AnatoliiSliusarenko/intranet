@@ -37,6 +37,16 @@ class UserController extends Controller
     		return $this->redirect($this->generateUrl('intranet_security')."#register");
     	}
         
+    	
+    	
+    	$request->getSession()->set('register_error', 'In this place all is okay');
+    	$request->getSession()->set('register_user', $parameters);
+    	return $this->redirect($this->generateUrl('intranet_security')."#register");
+    	
+    	
+    	
+    	
+    	
     	//create new user
     	$user = new User();
     	$factory = $this->get('security.encoder_factory');
