@@ -16,7 +16,7 @@ web1:
   ################################################
   ## PHP SPECIFIC SETTINGS
   ################################################
-  php_version: 5.3.7
+  php_version: 5.3.8
   php_extensions:
     - intl
     - mbstring
