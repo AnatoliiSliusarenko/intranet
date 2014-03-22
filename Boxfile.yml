@@ -3,13 +3,13 @@ web1:
   ## GENERAL SETTINGS
   ################################################
   shared_writable_dirs:
-      - /home/amplointranet/app/cache
-      - /home/amplointranet/app/logs
+      - app/cache
+      - app/logs
  
   ################################################
   ## WEB SPECIFIC SETTINGS
   ################################################
-  document_root: /home/amplointranet/web
+  document_root: web
   default_gateway: app.php
   index_list: [app.php]
  
