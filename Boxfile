@@ -5,6 +5,8 @@ web1:
   shared_writable_dirs:
       - app/cache
       - app/logs
+  after_deploy:
+    - "bash scripts/clear_cache.sh"
  
   ################################################
   ## WEB SPECIFIC SETTINGS
@@ -16,7 +18,7 @@ web1:
   ################################################
   ## PHP SPECIFIC SETTINGS
   ################################################
-  php_version: 5.3.8
+  php_version: 5.4.14
   php_extensions:
     - intl
     - mbstring
