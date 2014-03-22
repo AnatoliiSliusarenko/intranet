@@ -40,6 +40,7 @@ class UserController extends Controller
     	//create new user
     	$user = new User();
     	$factory = $this->get('security.encoder_factory');
+    	$encoder = $factory->getEncoder($user);
     	
     	///------test section
     	$request->getSession()->set('register_error', 'In this place all is okay');
@@ -48,7 +49,7 @@ class UserController extends Controller
     	///------
     	
     	
-    	$encoder = $factory->getEncoder($user);
+    	
     	
     	
     	
