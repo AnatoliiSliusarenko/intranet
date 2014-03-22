@@ -1,6 +1,6 @@
 security:
     encoders:
-        Intranet\MainBundle\Entity\User: 
+        "@IntranetMainBundle/Entity/User": 
             algorithm: bcrypt
             cost: 12
             
