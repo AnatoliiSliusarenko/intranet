@@ -1,1 +1,2 @@
-rm -R ../app/cache/prod
+pwd
+rm -R app/cache/prod
