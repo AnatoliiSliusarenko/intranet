@@ -5,6 +5,8 @@ web1:
   shared_writable_dirs:
       - app/cache
       - app/logs
+  after_deploy:
+    - "bash scripts/clear_cache.sh"
  
   ################################################
   ## WEB SPECIFIC SETTINGS

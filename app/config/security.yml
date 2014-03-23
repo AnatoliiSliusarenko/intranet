@@ -1,8 +1,9 @@
 security:
     encoders:
         Intranet\MainBundle\Entity\User: 
-            algorithm: bcrypt
-            cost: 12
+            algorithm: sha512
+            encode_as_base64: false
+            iterations: 1
             
     providers:
         user_db:
