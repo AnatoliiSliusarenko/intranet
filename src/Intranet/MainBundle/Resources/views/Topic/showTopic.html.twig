@@ -147,7 +147,7 @@
   										<div class="list-group conversation">
   											<a class="list-group-item" ng-repeat="post in posts">
   												<img src="[[avatarURL + post.user.avatar]]" class="chat-user-avatar" alt="" />
-  												<span class="username" >[[post.user.username]]<span class="time">[[ post.posted.date ]]</span> </span>
+  												<span class="username" >[[post.user.name + ' ' + post.user.surname]] ([[post.user.username]])<span class="time">[[ post.posted.date ]]</span> </span>
   												<p>[[post.message]]</p>
   											</a>
   										</div>
