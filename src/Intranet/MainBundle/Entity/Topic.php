@@ -263,4 +263,15 @@ class Topic
     {
         return $this->officeid;
     }
+    
+    public function clearPosts($em)
+    {
+    	$qb = $em->createQueryBuilder();
+    	
+    	$qb->delete('IntranetMainBundle:Post', 'p')
+    	   ->where('p.topicid = :topicid')
+    	   ->setParameter('topicid', $this->getId());
+    	
+    	$result = $qb->getQuery()->getResult();
+    }
 }

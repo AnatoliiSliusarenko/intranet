@@ -14,23 +14,28 @@
 {% block pageheader %}
 <div class="row">
 	<div class="col-md-12">
-		<h3 class="page-header"><i class="fa fa-sitemap"></i> {{ office.name }} <i class="fa fa-info-circle animated bounceInDown show-info"></i> </h3>
+		<h3 class="page-header"><i class="fa fa-sitemap"></i> {{ office.name }} <i class="fa fa-info-circle animated bounceInDown show-info"></i> {% if (office.getUserid() != 0 or office.getUserid() == app.user.getId()) %}<i class="fa fa-times-circle animated bounceInDown show-danger"></i>{% endif %} </h3>
 
 		<blockquote class="page-information hidden">
 		<p>
 			{{ office.description }}
 		</p>
 		</blockquote>
-	
+		{% if (office.getUserid() != 0 or office.getUserid() == app.user.getId()) %}
+		<blockquote class="page-danger-zone hidden">
+		<p>
+			If you really want to delete this office please click <a href="{{ url('intranet_delete_office', {office_id: office.getId()}) }}">here</a> (can't be rollback!)
+		</p>
+		</blockquote>
+		{% endif %}
 		{% if (office.getUserid() == 0 or office.getUserid() == app.user.getId()) %}
 		<div class="panel panel-cascade">
 			<div class="panel-heading">
                 <h3 class="panel-title">
-                 Add New Local Office
-                 <span class="pull-right">
-                  <a  href="#" class="panel-minimize"><i class="fa fa-chevron-down"></i></a>
-                </span>
-              </h3>
+                	<span>
+                    	<a href="#" class="panel-minimize">Add New Local Office</a>
+                    </span>
+                </h3>
             </div>
             <div class="panel-body" style="{% if error is defined %}{{ 'display:block;' }}{% else %}{{ 'display:none;' }}{% endif %}">
             	<form action="{{ url('intranet_add_office', {office_id: office.getId()}) }}" class="form-horizontal" role="form" method="post">
@@ -73,11 +78,10 @@
 		<div class="panel panel-cascade">
 			<div class="panel-heading">
                 <h3 class="panel-title">
-                 Offices in which you are
-                 <span class="pull-right">
-                  <a  href="#" class="panel-minimize"><i class="fa fa-chevron-down"></i></a>
-                </span>
-              </h3>
+                 	<span>
+                    	<a href="#" class="panel-minimize">Offices in which you are</a>
+                    </span>
+                </h3>
             </div>
             <div class="panel-body" style="display:none;">
             	{% for office in offices %}
@@ -90,11 +94,10 @@
 		<div class="panel panel-cascade" ng-app="Intranet" ng-controller="ChooseSelectController">
 			<div class="panel-heading">
                 <h3 class="panel-title">
-                 Members of this office
-                 <span class="pull-right">
-                  <a  href="#" class="panel-minimize"><i class="fa fa-chevron-down"></i></a>
-                </span>
-              </h3>
+                	<span>
+                    	<a href="#" class="panel-minimize">Members of this office</a>
+                    </span>
+                </h3>
             </div>
             <div class="panel-body" style="{% if errorMembers is defined %}{{ 'display:block;' }}{% else %}{{ 'display:none;' }}{% endif %}">
             	<form action="{{ url('intranet_change_office_members', {office_id: office.getId()}) }}" class="form-horizontal" role="form" method="post">
@@ -142,11 +145,10 @@
 		<div class="panel panel-cascade">
 			<div class="panel-heading">
                 <h3 class="panel-title">
-                 Topics of this office
-                 <span class="pull-right">
-                  <a  href="#" class="panel-minimize"><i class="fa fa-chevron-down"></i></a>
-                </span>
-              </h3>
+                	<span>
+                    	<a href="#" class="panel-minimize">Topics of this office</a>
+                    </span> 
+                </h3>
             </div>
             <div class="panel-body" style="display:none;">
             	{% for topic in office.getTopics() %}

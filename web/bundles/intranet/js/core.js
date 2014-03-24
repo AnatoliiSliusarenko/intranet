@@ -89,6 +89,10 @@ $('document').ready(function(){
 	$('.show-info').click(function(){
 		$('.page-information').toggleClass('hidden');
 	});
+	
+	$('.show-danger').click(function(){
+		$('.page-danger-zone').toggleClass('hidden');
+	});
 
 
 	// PANELS

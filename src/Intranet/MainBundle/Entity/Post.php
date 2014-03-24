@@ -160,7 +160,7 @@ class Post
     	$user = $em->getRepository("IntranetMainBundle:User")->find(intval($p->userid));
     	$topic = $em->getRepository("IntranetMainBundle:Topic")->find(intval($p->topicid));
     	 
-    	if (($topic == null) || ($user == null))
+    	if (($topic == null) || ($user == null) || (trim($p->message) === ''))
     		return null;
     	
     	$post = new Post();

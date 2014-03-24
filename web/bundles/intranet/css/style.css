@@ -718,9 +718,21 @@ a {
   color: #54b5df;
   cursor: pointer;
 }
+
+.content .page-header .show-danger {
+  font-size: 16px;
+  color: red;
+  cursor: pointer;
+}
+
 .content .page-header .show-info:hover {
   font-size: 24px;
 }
+
+.content .page-header .show-danger:hover {
+  font-size: 24px;
+}
+
 .nav-input-search {
   margin-right: 30px;
   float: right;
@@ -2562,6 +2574,27 @@ blockquote.page-information {
   transition: 500ms ease;
 }
 blockquote.page-information p {
+  font-size: 14px;
+  font-weight: normal;
+}
+
+blockquote.page-danger-zone {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  border-left: 5px solid red;
+  background: #f9f9f9;
+  -webkit-transition: 500ms ease;
+  -moz-transition: 500ms ease;
+  -o-transition: 500ms ease;
+  -ms-transition: 500ms ease;
+  transition: 500ms ease;
+}
+blockquote.page-danger-zone p {
+  font-size: 14px;
+  font-weight: normal;
+}
+blockquote.page-danger-zone a {
+  color: red;
   font-size: 14px;
   font-weight: normal;
 }

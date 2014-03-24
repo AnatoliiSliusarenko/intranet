@@ -73,10 +73,7 @@ angular.module('Intranet', [])
 		
 	$scope.pressEnter = function(e)
 	{
-		var event = e || window.event;
-		var charCode = event.which || event.keyCode;
-
-		if ( charCode == '13' ) 
+		if ( e.keyCode == 13 )
 		{
 			$scope.sendPost();
 		}

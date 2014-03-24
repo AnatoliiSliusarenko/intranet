@@ -117,4 +117,18 @@ class OfficeController extends Controller
 		
 		return $this->redirect($this->generateUrl('intranet_show_office', array('office_id' => $office->getId())));
 	}
+	
+	public function deleteOfficeAction($office_id)
+	{
+		$em = $this->getDoctrine()->getManager();
+		$office = $em->getRepository('IntranetMainBundle:Office')->find($office_id);
+		if (($office == null) || ($office->getUserid() !== $this->getUser()->getId()))
+			return $this->redirect($this->generateUrl('intranet_main_homepage'));
+		
+		$parent = $office->getOfficeid();
+		$office->deleteAllChildren($em);
+		$em->flush();
+		
+		return $this->redirect($this->generateUrl('intranet_show_office', array('office_id' => $parent)));
+	}
 }

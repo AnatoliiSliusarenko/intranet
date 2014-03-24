@@ -117,6 +117,31 @@ class Office
     	return $tree;
     }
     
+    public function deleteAllChildren($em)
+    {
+    	$em->remove($this);
+    	
+    	$qb = $em->createQueryBuilder();
+    	
+    	$qb->select('t')
+    	   ->from('IntranetMainBundle:Topic', 't')
+    	   ->where('t.officeid = :officeid')
+    	   ->setParameter('officeid', $this->getId());
+    	   
+    	$topics = $qb->getQuery()->getResult();
+    	
+    	foreach ($topics as $topic)
+    	{
+    		$topic->clearPosts($em);
+    		$em->remove($topic);
+    	}
+    	
+    	foreach ($this->getChildren($em) as $office)
+    	{
+    		$office->deleteAllChildren($em);
+    	}
+    }
+    
     /**
      * Get breadcrumbs
      *

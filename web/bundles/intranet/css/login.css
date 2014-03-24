@@ -82,8 +82,12 @@ section:nth-child(2n) {
   border-left: 10px solid #425971;
 }
 .login-holder .form-group .form-control {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
   border-radius: 0px;
-  padding: 20px;
+  padding: 10px 20px;
+  height: auto;
 }
 .login-holder .form-footer {
   padding: 20px;
