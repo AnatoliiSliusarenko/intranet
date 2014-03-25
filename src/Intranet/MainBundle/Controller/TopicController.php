@@ -27,8 +27,8 @@ class TopicController extends Controller
     		return $this->redirect($this->generateUrl('intranet_main_homepage'));
     	
     	$breadcrumbs = $topic->getBreadcrumbs($em);
-    	$subtopics = $topic->getChildrenForUser($em, $this->getUser());
-    	
+    	//$subtopics = $topic->getChildrenForUser($em, $this->getUser());
+    	$subtopics = $topic->getChildrenForOffice($em);
     	
     	$parameters = array("topic" => $topic, "breadcrumbs" => $breadcrumbs, 'subtopics' => $subtopics);
     	
@@ -76,10 +76,26 @@ class TopicController extends Controller
     	$topic->setName($name);
     	$topic->setDescription($description);
     	$topic->setOffice($office);
+    	$topic->setUserid($this->getUser()->getId());
+    	$topic->setUser($this->getUser());
     	
     	$em->persist($topic);
     	$em->flush();
     	
     	return $this->redirect($this->generateUrl('intranet_show_topic', array('topic_id' => $topic->getId())));
+    }
+    
+    public function deleteTopicAction($topic_id)
+    {
+    	$em = $this->getDoctrine()->getManager();
+    	$topic = $em->getRepository('IntranetMainBundle:Topic')->find($topic_id);
+    	if (($topic == null) || (($topic->getUserid() !== $this->getUser()->getId()) && (false === $this->get('security.context')->isGranted('ROLE_ADMIN'))) )
+    		return $this->redirect($this->generateUrl('intranet_main_homepage'));
+    
+    	$parent = $topic->getParentid();
+    	$topic->deleteAllChildren($em);
+    	$em->flush();
+    
+    	return $this->redirect($this->generateUrl('intranet_show_topic', array('topic_id' => $parent)));
     }
 }

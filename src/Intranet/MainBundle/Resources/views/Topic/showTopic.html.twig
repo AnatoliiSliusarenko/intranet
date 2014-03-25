@@ -22,13 +22,20 @@
 {% block pageheader %}
 <div class="row">
 	<div class="col-md-12">
-		<h3 class="page-header"><i class="fa fa-comment"></i> {{ topic.name }} <i class="fa fa-info-circle animated bounceInDown show-info"></i> </h3>
+		<h3 class="page-header"><i class="fa fa-comment"></i> {{ topic.name }} <i class="fa fa-info-circle animated bounceInDown show-info"></i> {% if (topic.getUserid() != 0 and (is_granted('ROLE_ADMIN') or topic.getUserid() == app.user.getId())) %}<i class="fa fa-times-circle animated bounceInDown show-danger"></i>{% endif %} </h3>
 
 		<blockquote class="page-information hidden">
 		<p>
 			{{ topic.description }}
 		</p>
 		</blockquote>
+		{% if (topic.getUserid() != 0 and (is_granted('ROLE_ADMIN') or topic.getUserid() == app.user.getId())) %}
+		<blockquote class="page-danger-zone hidden">
+		<p>
+			If you really want to delete this topic please click <a href="{{ url('intranet_delete_topic', {'topic_id': topic.getId()}) }}">here</a> (can't be rollback!)
+		</p>
+		</blockquote>
+		{% endif %}
 	
 		<div class="panel panel-cascade">
 			<div class="panel-heading">

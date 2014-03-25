@@ -34,6 +34,13 @@ class Topic
      * @ORM\Column(name="officeid", type="integer")
      */
     private $officeid;
+    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="userid", type="integer")
+     */
+    private $userid;
 
     /**
      * @var string
@@ -55,6 +62,13 @@ class Topic
      * @var Office
      */
     private $office;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="topics")
+     * @ORM\JoinColumn(name="userid")
+     * @var User
+     */
+    private $user;
     
     public $children = null;
     
@@ -177,6 +191,22 @@ class Topic
     	return $result;
     }
     
+    public function getChildrenForOffice($em, \Intranet\MainBundle\Entity\Office $office = null)
+    {
+    	if ($office == null) $office = $this->getOffice();
+    	
+    	$topicChildren = $this->getChildren($em);
+    	$result = array();
+    
+    	foreach ($topicChildren as $topic)
+    	{
+    		if ($topic->getOfficeid() == $office->getId())
+    			$result[] = $topic;
+    	}
+    
+    	return $result;
+    }
+    
     /**
      * Get Topic tree
      *
@@ -273,5 +303,62 @@ class Topic
     	   ->setParameter('topicid', $this->getId());
     	
     	$result = $qb->getQuery()->getResult();
+    }
+
+    /**
+     * Set userid
+     *
+     * @param integer $userid
+     * @return Topic
+     */
+    public function setUserid($userid)
+    {
+        $this->userid = $userid;
+
+        return $this;
+    }
+
+    /**
+     * Get userid
+     *
+     * @return integer 
+     */
+    public function getUserid()
+    {
+        return $this->userid;
+    }
+
+    /**
+     * Set user
+     *
+     * @param \Intranet\MainBundle\Entity\User $user
+     * @return Topic
+     */
+    public function setUser(\Intranet\MainBundle\Entity\User $user = null)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return \Intranet\MainBundle\Entity\User 
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+    
+    public function deleteAllChildren($em)
+    {
+    	$em->remove($this);
+    	$this->clearPosts($em);
+    	
+    	foreach ($this->getChildren($em) as $topic)
+    	{
+    		$topic->deleteAllChildren($em);
+    	}
     }
 }

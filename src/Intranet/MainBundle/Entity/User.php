@@ -91,6 +91,12 @@ class User implements UserInterface, \Serializable
 	 * @var array
 	 */
 	private $offices;
+	
+	/**
+	 * @ORM\OneToMany(targetEntity="Topic", mappedBy="user")
+	 * @var array
+	 */
+	private $topics;
     
 	/**
 	 * @var string
@@ -336,8 +342,7 @@ class User implements UserInterface, \Serializable
     		$this->surname,
     		$this->registered,
     		$this->lastactive,
-    		$this->active,
-    		$this->roles
+    		$this->active
     	));
     }
     
@@ -355,8 +360,7 @@ class User implements UserInterface, \Serializable
     		$this->surname,
     		$this->registered,
     		$this->lastactive,
-    		$this->active,
-    		$this->roles) = unserialize($serialized);
+    		$this->active) = unserialize($serialized);
     }
     
     /**
@@ -390,14 +394,14 @@ class User implements UserInterface, \Serializable
     }
 
     /**
-     * Add roles
+     * Add role
      *
-     * @param \Intranet\MainBundle\Entity\Role $roles
+     * @param \Intranet\MainBundle\Entity\Role $role
      * @return User
      */
-    public function addRole(\Intranet\MainBundle\Entity\Role $roles)
+    public function addRole(\Intranet\MainBundle\Entity\Role $role)
     {
-        $this->roles[] = $roles;
+        $this->roles[] = $role;
 
         return $this;
     }
@@ -566,5 +570,38 @@ class User implements UserInterface, \Serializable
     public function getOffices()
     {
         return $this->offices;
+    }
+
+    /**
+     * Add topic
+     *
+     * @param \Intranet\MainBundle\Entity\Topic $topic
+     * @return User
+     */
+    public function addTopic(\Intranet\MainBundle\Entity\Topic $topic)
+    {
+        $this->topics[] = $topic;
+
+        return $this;
+    }
+
+    /**
+     * Remove topic
+     *
+     * @param \Intranet\MainBundle\Entity\Topic $topic
+     */
+    public function removeTopic(\Intranet\MainBundle\Entity\Topic $topic)
+    {
+        $this->topics->removeElement($topic);
+    }
+
+    /**
+     * Get topics
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getTopics()
+    {
+        return $this->topics;
     }
 }

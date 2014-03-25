@@ -29,7 +29,7 @@ CREATE TABLE `offices` (
   `name` varchar(255) DEFAULT NULL,
   `description` text,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -56,7 +56,7 @@ CREATE TABLE `posts` (
   `message` longtext NOT NULL,
   `posted` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=149 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -89,7 +89,7 @@ CREATE TABLE `roles` (
 
 LOCK TABLES `roles` WRITE;
 /*!40000 ALTER TABLE `roles` DISABLE KEYS */;
-INSERT INTO `roles` VALUES (1,'ROLE_ADMIN',''),(2,'ROLE_USER',''),(3,'ROLE_GUEST','');
+INSERT INTO `roles` VALUES (1,'ROLE_ADMIN',''),(2,'ROLE_USER','');
 /*!40000 ALTER TABLE `roles` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -104,11 +104,12 @@ CREATE TABLE `topics` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `parentid` int(11) NOT NULL,
   `officeid` int(11) NOT NULL,
+  `userid` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
   `description` longtext NOT NULL,
   PRIMARY KEY (`id`),
   KEY `IDX_91F64639D823E37A` (`parentid`)
-) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=45 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -117,7 +118,7 @@ CREATE TABLE `topics` (
 
 LOCK TABLES `topics` WRITE;
 /*!40000 ALTER TABLE `topics` DISABLE KEYS */;
-INSERT INTO `topics` VALUES (1,0,1,'Public','Here you can post topics for all users.');
+INSERT INTO `topics` VALUES (1,0,1,0,'Public','Here you can post topics for all users.');
 /*!40000 ALTER TABLE `topics` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -186,7 +187,7 @@ CREATE TABLE `users` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `login_UNIQUE` (`username`),
   UNIQUE KEY `email_UNIQUE` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -207,4 +208,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-03-25 14:08:43
+-- Dump completed on 2014-03-25 17:55:58

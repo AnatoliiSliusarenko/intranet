@@ -50,7 +50,7 @@ class Role implements RoleInterface
     
     public function getRole()
     {
-    	return $this->name;
+    	return $this->getName();
     }
     
     /**
@@ -107,5 +107,15 @@ class Role implements RoleInterface
     public function getDescription()
     {
         return $this->description;
+    }
+    
+    public static function getUserRole($em)
+    {
+    	return $em->getRepository("IntranetMainBundle:Role")->find(2);
+    }
+    
+    public static function getAdminRole($em)
+    {
+    	return $em->getRepository("IntranetMainBundle:Role")->find(1);
     }
 }

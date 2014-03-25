@@ -5,6 +5,7 @@ namespace Intranet\MainBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Intranet\MainBundle\Entity\User;
 use Intranet\MainBundle\Entity\Office;
+use Intranet\MainBundle\Entity\Role;
 
 use Symfony\Component\HttpFoundation\Request;
 
@@ -49,6 +50,7 @@ class UserController extends Controller
     	$user->setRegistered(new \DateTime());
     	$user->setLastActive(new \DateTime());
     	$user->setAvatar('eleven.png');
+    	$user->addRole(Role::getUserRole($em));
     	
     	//add to public office
     	$tree = Office::getOfficeTree($em);
