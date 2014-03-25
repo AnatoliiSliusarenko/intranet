@@ -1,5 +1,3 @@
-/*CREATE DATABASE  IF NOT EXISTS `intranet` /*!40100 DEFAULT CHARACTER SET utf8 */;
-/*USE `intranet`;*/
 -- MySQL dump 10.13  Distrib 5.5.35, for debian-linux-gnu (i686)
 --
 -- Host: 127.0.0.1    Database: intranet
@@ -31,7 +29,7 @@ CREATE TABLE `offices` (
   `name` varchar(255) DEFAULT NULL,
   `description` text,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -40,7 +38,7 @@ CREATE TABLE `offices` (
 
 LOCK TABLES `offices` WRITE;
 /*!40000 ALTER TABLE `offices` DISABLE KEYS */;
-INSERT INTO `offices` VALUES (1,0,0,'Public Office','In this place you can browse your own offices and offices where you in. Also can create new offices. Each user of Intranet is in Public office.');
+INSERT INTO `offices` VALUES (1,0,0,'Local','In this place you can browse your own offices and offices where you in. Also can create new offices.');
 /*!40000 ALTER TABLE `offices` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -58,7 +56,7 @@ CREATE TABLE `posts` (
   `message` longtext NOT NULL,
   `posted` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=124 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=149 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -110,7 +108,7 @@ CREATE TABLE `topics` (
   `description` longtext NOT NULL,
   PRIMARY KEY (`id`),
   KEY `IDX_91F64639D823E37A` (`parentid`)
-) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -119,7 +117,7 @@ CREATE TABLE `topics` (
 
 LOCK TABLES `topics` WRITE;
 /*!40000 ALTER TABLE `topics` DISABLE KEYS */;
-INSERT INTO `topics` VALUES (1,0,0,'Public Topics','Here you can post topics for all users or for users of one of the offices of participant you are.');
+INSERT INTO `topics` VALUES (1,0,1,'Public','Here you can post topics for all users.');
 /*!40000 ALTER TABLE `topics` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -188,7 +186,7 @@ CREATE TABLE `users` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `login_UNIQUE` (`username`),
   UNIQUE KEY `email_UNIQUE` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -209,4 +207,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-03-18 23:55:44
+-- Dump completed on 2014-03-25 14:08:43
