@@ -4,6 +4,7 @@ namespace Intranet\MainBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Intranet\MainBundle\Entity\Office;
+use Intranet\MainBundle\Entity\Topic;
 use Intranet\MainBundle\Entity\User;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -32,22 +33,35 @@ class OfficeController extends Controller
 		$officeUsers = $office->getUsers();
 		$childrenOfficesForUser = $office->getChildrenForUser($em, $this->getUser());
 		
+		$topicTree = Topic::getTopicTree($em);
+		$parentTopic = $topicTree[0];
+		
 		$parameters = array(
 				"office" => $office, 
+				"parentTopic" => $parentTopic,
 				"breadcrumbs" => $breadcrumbs, 
 				'officeUsers' => array_map(function($e){return $e->getInArray();}, $officeUsers->toArray()),
 				'users' => array_map(function($e){return $e->getInArray();}, $users), 
 				'offices' => $childrenOfficesForUser);
 		
 		
-		if ($request->getSession()->has('error'))
+		if ($request->getSession()->has('errorOffice'))
 		{
-			$parameters['error'] = $request->getSession()->get('error');
-			$parameters['name'] = $request->getSession()->get('name');
-			$parameters['description'] = $request->getSession()->get('description');
-			$request->getSession()->remove('error');
-			$request->getSession()->remove('name');
-			$request->getSession()->remove('description');
+			$parameters['errorOffice'] = $request->getSession()->get('errorOffice');
+			$parameters['nameOffice'] = $request->getSession()->get('nameOffice');
+			$parameters['descriptionOffice'] = $request->getSession()->get('descriptionOffice');
+			$request->getSession()->remove('errorOffice');
+			$request->getSession()->remove('nameOffice');
+			$request->getSession()->remove('descriptionOffice');
+		}
+		if ($request->getSession()->has('errorTopic'))
+		{
+			$parameters['errorTopic'] = $request->getSession()->get('errorTopic');
+			$parameters['nameTopic'] = $request->getSession()->get('nameTopic');
+			$parameters['descriptionTopic'] = $request->getSession()->get('descriptionTopic');
+			$request->getSession()->remove('errorTopic');
+			$request->getSession()->remove('nameTopic');
+			$request->getSession()->remove('descriptionTopic');
 		}
 		if ($request->getSession()->has('errorMembers'))
 		{
@@ -56,6 +70,7 @@ class OfficeController extends Controller
 		}
 		
 		$this->get('twig')->addGlobal('activeSection', 'office');
+		$this->get('twig')->addGlobal('offices', $childrenOfficesForUser);
 		return $this->render("IntranetMainBundle:Office:showOffice.html.twig", $parameters);
 	}
 	
@@ -69,12 +84,12 @@ class OfficeController extends Controller
 		if ($name == '' || $description == '' || $members == null)
 		{
 			if ($members == null)
-				$request->getSession()->set('error', 'In new office should be someone else besides you!');
+				$request->getSession()->set('errorOffice', 'In new office should be someone else besides you!');
 			else
-				$request->getSession()->set('error', 'Please fill out all fields!');
+				$request->getSession()->set('errorOffice', 'Please fill out all fields!');
 			
-			$request->getSession()->set('name', $name);
-			$request->getSession()->set('description', $description);
+			$request->getSession()->set('nameOffice', $name);
+			$request->getSession()->set('descriptionOffice', $description);
 	
 			return $this->redirect($this->generateUrl('intranet_show_office', array("office_id" => $office_id)));
 		}

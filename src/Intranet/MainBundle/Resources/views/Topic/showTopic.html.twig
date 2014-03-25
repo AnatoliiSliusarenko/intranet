@@ -38,33 +38,24 @@
                     </span>  
                 </h3>
             </div>
-            <div class="panel-body" style="{% if error is defined %}{{ 'display:block;' }}{% else %}{{ 'display:none;' }}{% endif %}">
+            <div class="panel-body" style="{% if errorTopic is defined %}{{ 'display:block;' }}{% else %}{{ 'display:none;' }}{% endif %}">
             	<form action="{{ url('intranet_add_topic', {topic_id: topic.getId()}) }}" class="form-horizontal" role="form" method="post">
             		<div class="form-group">
                 		<label for="inputEmail1" class="col-lg-2 col-md-3 control-label">Topic Name</label>
                 		<div class="col-lg-10 col-md-9">
-                 			<input type="text" name="name" class="form-control form-cascade-control" id="inputEmail1" placeholder="Type topic name here" value="{% if name is defined %}{{ name }}{% endif %}" required>
+                 			<input type="text" name="name" class="form-control form-cascade-control" id="inputEmail1" placeholder="Type topic name here" value="{% if nameTopic is defined %}{{ nameTopic }}{% endif %}" required>
                			</div>
              		</div>
              		<div class="form-group">
                 		<label for="inputEmail1" class="col-lg-2 col-md-3 control-label">Topic Description</label>
                 		<div class="col-lg-10 col-md-9">
-                 			<input type="text" name="description" class="form-control form-cascade-control" id="inputEmail1" placeholder="Type topic description here" value="{% if description is defined %}{{ description }}{% endif %}" required>
+                 			<input type="text" name="description" class="form-control form-cascade-control" id="inputEmail1" placeholder="Type topic description here" value="{% if descriptionTopic is defined %}{{ descriptionTopic }}{% endif %}" required>
                			</div>
              		</div>
-             		<div class="form-group">
-  						<label for="inputEmail1" class="col-lg-2 col-md-3 control-label">Select office</label>
-  						<div class="col-lg-10 col-md-9">
-   							<select name="officeid" class="form-control">
-							    {% for office in offices %}
-							    <option value="{{ office.id }}">{{ office.name }}</option>
-							    {% endfor %}
-  							</select>
-						</div>
-					</div>
-             		{% if error is defined %}
+             		<input type="hidden" value="{{ topic.getOfficeid() }}" name="officeid" />
+             		{% if errorTopic is defined %}
              		<div class="alert alert-danger">
-               			{{ error }}
+               			{{ errorTopic }}
              		</div>
              		{% endif %}
              		<div class="form-actions">

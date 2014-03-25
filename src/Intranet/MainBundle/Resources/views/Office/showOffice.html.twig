@@ -14,14 +14,14 @@
 {% block pageheader %}
 <div class="row">
 	<div class="col-md-12">
-		<h3 class="page-header"><i class="fa fa-sitemap"></i> {{ office.name }} <i class="fa fa-info-circle animated bounceInDown show-info"></i> {% if (office.getUserid() != 0 or office.getUserid() == app.user.getId()) %}<i class="fa fa-times-circle animated bounceInDown show-danger"></i>{% endif %} </h3>
+		<h3 class="page-header"><i class="fa fa-sitemap"></i> {{ office.name }} <i class="fa fa-info-circle animated bounceInDown show-info"></i> {% if (office.getUserid() != 0 and office.getUserid() == app.user.getId()) %}<i class="fa fa-times-circle animated bounceInDown show-danger"></i>{% endif %} </h3>
 
 		<blockquote class="page-information hidden">
 		<p>
 			{{ office.description }}
 		</p>
 		</blockquote>
-		{% if (office.getUserid() != 0 or office.getUserid() == app.user.getId()) %}
+		{% if (office.getUserid() != 0 and office.getUserid() == app.user.getId()) %}
 		<blockquote class="page-danger-zone hidden">
 		<p>
 			If you really want to delete this office please click <a href="{{ url('intranet_delete_office', {office_id: office.getId()}) }}">here</a> (can't be rollback!)
@@ -37,18 +37,18 @@
                     </span>
                 </h3>
             </div>
-            <div class="panel-body" style="{% if error is defined %}{{ 'display:block;' }}{% else %}{{ 'display:none;' }}{% endif %}">
+            <div class="panel-body" style="{% if errorOffice is defined %}{{ 'display:block;' }}{% else %}{{ 'display:none;' }}{% endif %}">
             	<form action="{{ url('intranet_add_office', {office_id: office.getId()}) }}" class="form-horizontal" role="form" method="post">
             		<div class="form-group">
                 		<label for="inputEmail1" class="col-lg-2 col-md-3 control-label">Office Name</label>
                 		<div class="col-lg-10 col-md-9">
-                 			<input type="text" name="name" class="form-control form-cascade-control" id="inputEmail1" placeholder="Type office name here" value="{% if name is defined %}{{ name }}{% endif %}" required>
+                 			<input type="text" name="name" class="form-control form-cascade-control" id="inputEmail1" placeholder="Type office name here" value="{% if nameOffice is defined %}{{ nameOffice }}{% endif %}" required>
                			</div>
              		</div>
              		<div class="form-group">
                 		<label for="inputEmail1" class="col-lg-2 col-md-3 control-label">Office Description</label>
                 		<div class="col-lg-10 col-md-9">
-                 			<input type="text" name="description" class="form-control form-cascade-control" id="inputEmail1" placeholder="Type office description here" value="{% if description is defined %}{{ description }}{% endif %}" required>
+                 			<input type="text" name="description" class="form-control form-cascade-control" id="inputEmail1" placeholder="Type office description here" value="{% if descriptionOffice is defined %}{{ descriptionOffice }}{% endif %}" required>
                			</div>
              		</div>
              		<div class="form-group">
@@ -62,9 +62,9 @@
 						</div>
 					</div>
              		
-             		{% if error is defined %}
+             		{% if errorOffice is defined %}
              		<div class="alert alert-danger">
-               			{{ error }}
+               			{{ errorOffice }}
              		</div>
              		{% endif %}
              		<div class="form-actions">
@@ -91,6 +91,7 @@
             </div>
 		</div>
 		{% endif %}
+		{% if office.getUserid() != 0 %}
 		<div class="panel panel-cascade" ng-app="Intranet" ng-controller="ChooseSelectController">
 			<div class="panel-heading">
                 <h3 class="panel-title">
@@ -141,7 +142,8 @@
 	             </form>
             </div>
 		</div>
-		{% if office.getTopics()|length > 0 %}
+		{% endif %}
+		{% if (office.getUserid() != 0 and office.getTopics()|length > 0) %}
 		<div class="panel panel-cascade">
 			<div class="panel-heading">
                 <h3 class="panel-title">
@@ -154,6 +156,44 @@
             	{% for topic in office.getTopics() %}
             		<a href="{{ url('intranet_show_topic', {topic_id: topic.getId()}) }}" class="btn btn-primary btn-block">{{ topic.name }}</a>
             	{% endfor %}
+            </div>
+		</div>
+		{% endif %}
+		
+		
+		{% if office.getUserid() != 0 %}
+		<div class="panel panel-cascade">
+			<div class="panel-heading">
+                <h3 class="panel-title">
+                	<span>
+                    	<a href="#" class="panel-minimize">Add New Topic</a>
+                    </span>  
+                </h3>
+            </div>
+            <div class="panel-body" style="{% if errorTopic is defined %}{{ 'display:block;' }}{% else %}{{ 'display:none;' }}{% endif %}">
+            	<form action="{{ url('intranet_add_topic', {topic_id: parentTopic.getId()}) }}" class="form-horizontal" role="form" method="post">
+            		<div class="form-group">
+                		<label for="inputEmail1" class="col-lg-2 col-md-3 control-label">Topic Name</label>
+                		<div class="col-lg-10 col-md-9">
+                 			<input type="text" name="name" class="form-control form-cascade-control" id="inputEmail1" placeholder="Type topic name here" value="{% if nameTopic is defined %}{{ nameTopic }}{% endif %}" required>
+               			</div>
+             		</div>
+             		<div class="form-group">
+                		<label for="inputEmail1" class="col-lg-2 col-md-3 control-label">Topic Description</label>
+                		<div class="col-lg-10 col-md-9">
+                 			<input type="text" name="description" class="form-control form-cascade-control" id="inputEmail1" placeholder="Type topic description here" value="{% if descriptionTopic is defined %}{{ descriptionTopic }}{% endif %}" required>
+               			</div>
+             		</div>
+             		<input type="hidden" value="{{ office.getId() }}" name="officeid" />
+             		{% if errorTopic is defined %}
+             		<div class="alert alert-danger">
+               			{{ errorTopic }}
+             		</div>
+             		{% endif %}
+             		<div class="form-actions">
+             			<input type="submit" value="Save New Topic" class="btn bg-primary btn-block text-white">
+             		</div>
+            	</form>
             </div>
 		</div>
 		{% endif %}

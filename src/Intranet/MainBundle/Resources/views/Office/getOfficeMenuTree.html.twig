@@ -6,3 +6,13 @@
 		</a>
 	</li>
 {% endfor %}
+{% if offices is defined %}
+	{% for office in offices %}
+		<li>
+			<a href='{{ url('intranet_show_office', {office_id: office.getId()}) }}' data-original-title='{{ office.name }}'>
+				<i class='fa fa-group'></i>
+				<span class='hidden-minibar'> {{ office.name }}</span>
+			</a>
+		</li>
+	{% endfor %}
+{% endif %}
