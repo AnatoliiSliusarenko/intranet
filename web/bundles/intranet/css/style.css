@@ -2110,6 +2110,9 @@ div[data-role="editor-toolbar"] {
 }
 .chat-box .recipient-box .btn {
   border-top-right-radius: 0px;
+  height: 100%;
+  padding: 0px 12px;
+  border: 0px;
 }
 /* Pagination
 ---------------------------------------------------------------------------------------------- */

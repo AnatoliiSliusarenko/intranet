@@ -148,13 +148,12 @@
   											</a>
   										</div>
   										<div class="input-group">
-  											<input type="text" class="form-control write-message" id="write-message" placeholder="Type something here and hit enter" ng-model="message" ng-keypress="pressEnter($event)">
+  											<textarea style="resize:vertical;" class="form-control write-message" id="write-message" placeholder="Type something here and hit enter" ng-model="message" ng-keypress="pressEnter($event)"></textarea>
   											<span class="input-group-btn">
-  												<button class="btn text-white bg-primary" type="button" id="send-message" ng-click="sendPost()">Send</button>
+  												<button class="btn text-white bg-primary send-message" type="button" id="send-message" ng-click="sendPost()">Send</button>
   											</span>
 
   										</div><!-- /input-group -->
-
   									</div>
   								</div>
   							</div>

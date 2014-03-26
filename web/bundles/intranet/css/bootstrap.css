@@ -4024,7 +4024,7 @@ textarea.input-group-sm > .input-group-btn > .btn {
 }
 
 .input-group-btn:last-child > .btn {
-  margin-left: -1px;
+  margin-right: -1px;
 }
 
 .input-group-btn > .btn {
