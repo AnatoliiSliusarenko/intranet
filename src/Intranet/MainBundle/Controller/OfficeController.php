@@ -17,7 +17,7 @@ class OfficeController extends Controller
 		 
 		$officeTree = Office::getOfficeTree($em);
 	
-		return $this->render("IntranetMainBundle:Office:getOfficeMenuTree.html.twig", array("officeTree" => $officeTree));
+		return $this->render("IntranetMainBundle:Office:getOfficeMenuTree.html.twig", array("officeTree" => $officeTree, "em" => $em));
 	}
 	
 	public function showOfficeAction(Request $request, $office_id)
@@ -70,7 +70,8 @@ class OfficeController extends Controller
 		}
 		
 		$this->get('twig')->addGlobal('activeSection', 'office');
-		$this->get('twig')->addGlobal('offices', $childrenOfficesForUser);
+		$this->get('twig')->addGlobal('officeBreadcrumbs', $breadcrumbs);
+		$this->get('twig')->addGlobal('curentOffice', $office);
 		return $this->render("IntranetMainBundle:Office:showOffice.html.twig", $parameters);
 	}
 	

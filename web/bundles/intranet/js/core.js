@@ -146,6 +146,8 @@ $('document').ready(function(){
 	
 	$(document).skylo('end');
 
+	$('ul.active').css('display', 'block');
+	
 });
 
 
@@ -291,3 +293,11 @@ function displayResult(item, val, text) {
 	    ],
         itemSelected: displayResult
 });*/
+
+$('.submenu').hover(function(){
+	$(this).addClass('active');
+	$(this).find('ul').css('display', 'block')
+}, function(){
+	$(this).removeClass('active');
+	$(this).find('ul').css('display', 'none')
+});
