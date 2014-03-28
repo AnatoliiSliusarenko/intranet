@@ -1,62 +1,4 @@
-angular.module('Intranet', [])
-.config(['$interpolateProvider', '$httpProvider', function ($interpolateProvider, $httpProvider) {
-    $interpolateProvider.startSymbol('[[');
-    $interpolateProvider.endSymbol(']]');
-}])
-.factory('$paginator', function() {
-    var paginator = {};
-    
-    paginator.countPages = 5;
-    paginator.curPageId = 1;
-    paginator.pages = [];
-    paginator.postsPerPage = 5;
-    paginator.postsPerPageValues = [5, 10, 20, 50, 100];
-    paginator.countPosts = 100;
-    
-    paginator.nextPage = function(event){
-    	event.preventDefault();
-    	if (this.curPageId < this.countPages)
-    		this.curPageId++;
-    }
-    
-    paginator.prevPage = function(event){
-    	event.preventDefault();
-    	if (this.curPageId > 1)
-    		this.curPageId--;
-    }
-    
-    paginator.toPage = function(event, id){
-    	event.preventDefault();
-    	if ((id > 0) && (id <= this.countPages))
-    		this.curPageId = id;
-    }
-    
-    paginator.firstPage = function(event){
-    	event.preventDefault();
-    	this.curPageId = 1;
-    }
-    
-    paginator.lastPage = function(event){
-    	event.preventDefault();
-    	this.curPageId = this.countPages;
-    }
-    
-    paginator.init = function(postsCount, postsPerPage){
-    	this.countPosts = postsCount;
-    	this.postsPerPage = postsPerPage
-    	this.countPages = Math.ceil(postsCount/postsPerPage);
-    	this.curPageId = 1;
-    	
-    	if(this.countPages == 0) this.countPages++;
-    	
-    	this.pages = _.range(1, this.countPages + 1);
-    	
-    	return this;
-    }
-	
-	return paginator;
- })
-.controller('ChatController', ['$scope', '$http', '$paginator', function($scope, $http, $paginator){
+Intranet.controller('ChatController', ['$scope', '$http', '$paginator', function($scope, $http, $paginator){
 	container = $('.conversation');
 	messageContainer = $('.write-message');
 	
@@ -86,12 +28,12 @@ angular.module('Intranet', [])
 	$scope.postsGetURL = JSON_URLS.posts;
 	$scope.avatarURL = JSON_URLS.avatar;
 	$scope.postAddURL = JSON_URLS.post_add;
-	$scope.topicMembersURL = JSON_URLS.topic_members;
+	$scope.topicMembersURL = JSON_URLS.members;
 	$scope.postsNewURL = JSON_URLS.posts_new;
 	$scope.postsCountURL = JSON_URLS.post_count;
 	
 	
-	$scope.topicid = window.TOPIC.id;
+	$scope.entityid = window.ENTITY.id;
 	$scope.userid = window.USER.id;
 	
 	function getPosts(offset, limit)
@@ -121,7 +63,7 @@ angular.module('Intranet', [])
 		})
 	}
 	
-	function getTopicMembers()
+	function getMembers()
 	{
 		$http({
 			method: "GET", 
@@ -151,7 +93,7 @@ angular.module('Intranet', [])
 						var offset = $scope.paginator.postsPerPage*($scope.paginator.curPageId - 1);
 						var limit = $scope.paginator.postsPerPage;
 						getPosts(offset, limit);
-						getTopicMembers();
+						getMembers();
 					});
 				}
 			})
@@ -161,7 +103,7 @@ angular.module('Intranet', [])
 	$scope.sendPost = function()
 	{
 		var post = {
-				topicid: $scope.topicid, 
+				entityid: $scope.entityid, 
 				userid: $scope.userid,
 				message: $scope.message,
 				posted: new Date()
@@ -180,7 +122,7 @@ angular.module('Intranet', [])
 				$scope.message = '';
 				messageContainer.focus();
 				container.animate({ scrollTop: container.height()+1900 },1000);
-				getTopicMembers();
+				getMembers();
 			}
 		})
 	}
@@ -196,7 +138,7 @@ angular.module('Intranet', [])
 	
 	function startChat()
 	{
-		getTopicMembers();
+		getMembers();
 		getPostsCount(function(postsCount){
 			$scope.paginator.init(postsCount, $scope.postsPerPage);
 			

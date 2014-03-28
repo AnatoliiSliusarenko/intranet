@@ -10,25 +10,45 @@ intranet_add_topic:
     pattern:  /topic/{topic_id}/add
     defaults: { _controller: IntranetMainBundle:Topic:addTopic }
         
-intranet_post_get_posts:
-    pattern:  /posts/{topic_id}/
-    defaults: { _controller: IntranetMainBundle:Post:getPosts }
+intranet_post_topic_get_posts:
+    pattern:  /posts/topic/{topic_id}/
+    defaults: { _controller: IntranetMainBundle:PostTopic:getPosts }
     
-intranet_post_add_post:
-    pattern:  /posts/{topic_id}/add/
-    defaults: { _controller: IntranetMainBundle:Post:addPost }
+intranet_post_office_get_posts:
+    pattern:  /posts/office/{office_id}/
+    defaults: { _controller: IntranetMainBundle:PostOffice:getPosts }
     
-intranet_post_count:
-    pattern:  /posts/{topic_id}/count/
-    defaults: { _controller: IntranetMainBundle:Post:getPostsCount }
+intranet_post_topic_add_post:
+    pattern:  /posts/topic/{topic_id}/add/
+    defaults: { _controller: IntranetMainBundle:PostTopic:addPost }
+    
+intranet_post_office_add_post:
+    pattern:  /posts/office/{office_id}/add/
+    defaults: { _controller: IntranetMainBundle:PostOffice:addPost }
+    
+intranet_post_topic_count:
+    pattern:  /posts/topic/{topic_id}/count/
+    defaults: { _controller: IntranetMainBundle:PostTopic:getPostsCount }
+    
+intranet_post_office_count:
+    pattern:  /posts/office/{office_id}/count/
+    defaults: { _controller: IntranetMainBundle:PostOffice:getPostsCount }
     
 intranet_topic_members:
     pattern:  /topic/{topic_id}/members/
     defaults: { _controller: IntranetMainBundle:User:getTopicMembers }
     
-intranet_post_new:
-    pattern:  /posts/{topic_id}/new/
-    defaults: { _controller: IntranetMainBundle:Post:getNewPosts }
+intranet_office_members:
+    pattern:  /office/{office_id}/members/
+    defaults: { _controller: IntranetMainBundle:User:getOfficeMembers }
+    
+intranet_post_topic_new:
+    pattern:  /posts/topic/{topic_id}/new/
+    defaults: { _controller: IntranetMainBundle:PostTopic:getNewPosts }
+    
+intranet_post_office_new:
+    pattern:  /posts/office/{office_id}/new/
+    defaults: { _controller: IntranetMainBundle:PostOffice:getNewPosts }
     
 intranet_security:
     pattern: /security

@@ -5,12 +5,12 @@ namespace Intranet\MainBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Post
+ * PostOffice
  *
- * @ORM\Table(name="posts")
+ * @ORM\Table(name="posts_office")
  * @ORM\Entity
  */
-class Post 
+class PostOffice
 {
     /**
      * @var integer
@@ -24,9 +24,9 @@ class Post
     /**
      * @var integer
      *
-     * @ORM\Column(name="topicid", type="integer")
+     * @ORM\Column(name="officeid", type="integer")
      */
-    private $topicid;
+    private $officeid;
 
     /**
      * @var integer
@@ -50,7 +50,7 @@ class Post
     private $posted;
 
     /**
-     * @ORM\ManyToOne(targetEntity="User", inversedBy="posts")
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="postsOffice")
      * @ORM\JoinColumn(name="userid", referencedColumnName="id")
      */
     private $user;
@@ -66,33 +66,33 @@ class Post
     }
 
     /**
-     * Set topicid
+     * Set officeid
      *
-     * @param integer $topicid
-     * @return Post
+     * @param integer $officeid
+     * @return PostOffice
      */
-    public function setTopicid($topicid)
+    public function setOfficeid($officeid)
     {
-        $this->topicid = $topicid;
+        $this->officeid = $officeid;
 
         return $this;
     }
 
     /**
-     * Get topicid
+     * Get officeid
      *
      * @return integer 
      */
-    public function getTopicid()
+    public function getOfficeid()
     {
-        return $this->topicid;
+        return $this->officeid;
     }
 
     /**
      * Set message
      *
      * @param string $message
-     * @return Post
+     * @return PostOffice
      */
     public function setMessage($message)
     {
@@ -120,7 +120,7 @@ class Post
     {
     	return array(
     			'id' => $this->getId(),
-    			'topicid' => $this->getTopicid(),
+    			'officeid' => $this->getOfficeid(),
     			'userid' => $this->getUserid(),
     			'user' => $this->getUser()->getInArray(),
     			'message' => $this->getMessage(),
@@ -129,16 +129,16 @@ class Post
     }
     
     /**
-     * Get post by topic
+     * Get post by office
      * @return array
      */
-    public static function getPostsByTopicId($r, $topic_id, $offset, $limit)
+    public static function getPostsByOfficeId($r, $office_id, $offset, $limit)
     {
     	$query = $r
 		    	->createQueryBuilder('p')
 		    	->select('p')
-		    	->where('p.topicid = :topicid')
-		    	->setParameter('topicid', $topic_id)
+		    	->where('p.officeid = :officeid')
+		    	->setParameter('officeid', $office_id)
 		    	->setFirstResult( $offset )
 		    	->setMaxResults( $limit )
 		    	->orderBy('p.posted', 'DESC')
@@ -152,19 +152,19 @@ class Post
     }
 
     /**
-     * Add post by topic
-     * @return Post
+     * Add post by office
+     * @return PostOffice
      */
-    public static function addPostByTopicId($em, $p)
+    public static function addPostByOfficeId($em, $p)
     {
     	$user = $em->getRepository("IntranetMainBundle:User")->find(intval($p->userid));
-    	$topic = $em->getRepository("IntranetMainBundle:Topic")->find(intval($p->topicid));
+    	$office = $em->getRepository("IntranetMainBundle:Office")->find(intval($p->entityid));
     	 
-    	if (($topic == null) || ($user == null) || (trim($p->message) === ''))
+    	if (($office == null) || ($user == null) || (trim($p->message) === ''))
     		return null;
     	
-    	$post = new Post();
-    	$post->setTopicid($topic->getId());
+    	$post = new PostOffice();
+    	$post->setOfficeid($office->getId());
     	$post->setUserid($user->getId());
     	$post->setUser($user);
     	$post->setMessage($p->message);
@@ -176,13 +176,13 @@ class Post
     	return $post->getInArray();
     }
     
-    public static function getPostsCount($em, $topic_id)
+    public static function getPostsCount($em, $office_id)
     {
-    	$query = $em->getRepository("IntranetMainBundle:Post")
+    	$query = $em->getRepository("IntranetMainBundle:PostOffice")
     				->createQueryBuilder('p')
     				->select('COUNT(p.id)') 
-    				->where('p.topicid = :topicid')
-    				->setParameter('topicid', $topic_id)
+    				->where('p.officeid = :officeid')
+    				->setParameter('officeid', $office_id)
     				->getQuery();
     	
     	$total = $query->getSingleScalarResult();
@@ -190,13 +190,13 @@ class Post
     	return $total;
     }
         
-    public static function getNewPosts($em, $topic_id, $last_posted)
+    public static function getNewPosts($em, $office_id, $last_posted)
     {
-    	$qb = $em->getRepository("IntranetMainBundle:Post")
+    	$qb = $em->getRepository("IntranetMainBundle:PostOffice")
     				->createQueryBuilder('p');
     	$qb->select('p')
-    	   ->where('p.topicid = :topicid')
-    	   ->setParameter('topicid', $topic_id);
+    	   ->where('p.officeid = :officeid')
+    	   ->setParameter('officeid', $office_id);
     	
     	
     	if ($last_posted != null)
@@ -216,7 +216,7 @@ class Post
      * Set userid
      *
      * @param integer $userid
-     * @return Post
+     * @return PostOffice
      */
     public function setUserid($userid)
     {
@@ -239,7 +239,7 @@ class Post
      * Set user
      *
      * @param \Intranet\MainBundle\Entity\User $user
-     * @return Post
+     * @return PostOffice
      */
     public function setUser(\Intranet\MainBundle\Entity\User $user = null)
     {
@@ -262,7 +262,7 @@ class Post
      * Set posted
      *
      * @param \DateTime $posted
-     * @return Post
+     * @return PostOffice
      */
     public function setPosted($posted)
     {

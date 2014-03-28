@@ -106,9 +106,14 @@ class User implements UserInterface, \Serializable
 	private $avatar;
 	
 	/**
-	 * @ORM\OneToMany(targetEntity="Post", mappedBy="user")
+	 * @ORM\OneToMany(targetEntity="PostTopic", mappedBy="user")
 	 */
-	private $posts;
+	private $postsTopic;
+	
+	/**
+	 * @ORM\OneToMany(targetEntity="PostOffice", mappedBy="user")
+	 */
+	private $postsOffice;
 	
 	public function __construct()
 	{
@@ -417,36 +422,69 @@ class User implements UserInterface, \Serializable
     }
 
     /**
-     * Add posts
+     * Add postsTopic
      *
-     * @param \Intranet\MainBundle\Entity\Post $posts
+     * @param \Intranet\MainBundle\Entity\PostTopic $postsTopic
      * @return User
      */
-    public function addPost(\Intranet\MainBundle\Entity\Post $posts)
+    public function addPostTopic(\Intranet\MainBundle\Entity\PostTopic $postsTopic)
     {
-        $this->posts[] = $posts;
+        $this->postsTopic[] = $postsTopic;
 
         return $this;
     }
 
     /**
-     * Remove posts
+     * Remove postsTopic
      *
-     * @param \Intranet\MainBundle\Entity\Post $posts
+     * @param \Intranet\MainBundle\Entity\PostTopic $posts
      */
-    public function removePost(\Intranet\MainBundle\Entity\Post $posts)
+    public function removePostTopic(\Intranet\MainBundle\Entity\PostTopic $postTopic)
     {
-        $this->posts->removeElement($posts);
+        $this->postsTopic->removeElement($postTopic);
     }
 
     /**
-     * Get posts
+     * Get postsTopic
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getPosts()
+    public function getPostsTopic()
     {
-        return $this->posts;
+        return $this->postsTopic;
+    }
+    
+    /**
+     * Add postsOffice
+     *
+     * @param \Intranet\MainBundle\Entity\PostOffice $postsOffice
+     * @return User
+     */
+    public function addPostOffice(\Intranet\MainBundle\Entity\PostOffice $postsOffice)
+    {
+    	$this->postsOffice[] = $postsOffice;
+    
+    	return $this;
+    }
+    
+    /**
+     * Remove postsOffice
+     *
+     * @param \Intranet\MainBundle\Entity\PostOffice $postsOffice
+     */
+    public function removePostOffice(\Intranet\MainBundle\Entity\PostTopic $postOffice)
+    {
+    	$this->postsOffice->removeElement($postOffice);
+    }
+    
+    /**
+     * Get postsOffice
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPostsOffice()
+    {
+    	return $this->postsOffice;
     }
     
     /**
@@ -510,11 +548,28 @@ class User implements UserInterface, \Serializable
     public static function getTopicMembers($em, $topic_id)
     {
     	$query = $em->getRepository("IntranetMainBundle:User")
+    				->createQueryBuilder('u')
+    				->select('u')
+    				->innerJoin('u.postsTopic', 'p', 'WITH', 'u.id = p.userid')
+    				->where('p.topicid = :topicid')
+    				->setParameter('topicid', $topic_id)
+    				->getQuery();
+    
+    	$result = $query->getResult();
+    
+    	return array_map(function($user){
+    		return $user->getInArray();
+    	}, $result);
+    }
+    
+    public static function getOfficeMembers($em, $office_id)
+    {
+    	$query = $em->getRepository("IntranetMainBundle:User")
     	->createQueryBuilder('u')
     	->select('u')
-    	->innerJoin('u.posts', 'p', 'WITH', 'u.id = p.userid')
-    	->where('p.topicid = :topicid')
-    	->setParameter('topicid', $topic_id)
+    	->innerJoin('u.postsOffice', 'p', 'WITH', 'u.id = p.userid')
+    	->where('p.officeid = :officeid')
+    	->setParameter('officeid', $office_id)
     	->getQuery();
     
     	$result = $query->getResult();

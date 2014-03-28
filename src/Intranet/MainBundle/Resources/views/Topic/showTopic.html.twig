@@ -163,24 +163,24 @@
 	{{ parent() }}
 	<script src="{{ asset('bundles/intranet/js/angular.min.js') }}"></script>
 	<script src="{{ asset('bundles/intranet/js/underscore-min.js') }}"></script>
-	
+	<script src="{{ asset('bundles/intranet/js/custom/angular-core.js') }}"></script>
 	<script src="{{ asset('bundles/intranet/js/custom/chat.js') }}"></script>
 	
 	<script type="text/javascript">
     var JSON_URLS = {
-        posts: "{{ path('intranet_post_get_posts', {topic_id: topic.id}) }}",
-        post_add: "{{ path('intranet_post_add_post', {topic_id: topic.id}) }}", 
+        posts: "{{ path('intranet_post_topic_get_posts', {topic_id: topic.id}) }}",
+        post_add: "{{ path('intranet_post_topic_add_post', {topic_id: topic.id}) }}", 
         avatar: "{{ asset('bundles/intranet/images/profiles/') }}",
-        topic_members: "{{ path('intranet_topic_members', {topic_id: topic.id}) }}",
-        posts_new: "{{ path('intranet_post_new', {topic_id: topic.id}) }}",
-        post_count: "{{ path('intranet_post_count', {topic_id: topic.id}) }}"
+        members: "{{ path('intranet_topic_members', {topic_id: topic.id}) }}",
+        posts_new: "{{ path('intranet_post_topic_new', {topic_id: topic.id}) }}",
+        post_count: "{{ path('intranet_post_topic_count', {topic_id: topic.id}) }}"
     };
 
     var USER = {
     	    id: "{{ app.user.getId() }}"
    	};
 
-   	var TOPIC = {
+   	var ENTITY = {
    		   	id: "{{ topic.id }}"
     };
 </script>

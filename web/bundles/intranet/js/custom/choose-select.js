@@ -1,9 +1,4 @@
-angular.module('Intranet', [])
-.config(['$interpolateProvider', '$httpProvider', function ($interpolateProvider, $httpProvider) {
-    $interpolateProvider.startSymbol('[[');
-    $interpolateProvider.endSymbol(']]');
-}])
-.controller('ChooseSelectController', ['$scope', function($scope){
+Intranet.controller('ChooseSelectController', ['$scope', function($scope){
 	officeUsersList = $('#officeUsersList');
 	usersList = $('#usersList');
 	

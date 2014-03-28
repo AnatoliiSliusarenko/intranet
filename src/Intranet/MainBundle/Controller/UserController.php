@@ -78,4 +78,14 @@ class UserController extends Controller
     
     	return $response;
     }
+    
+    public function getOfficeMembersAction($office_id)
+    {
+    	$em = $this->getDoctrine()->getManager();
+    
+    	$response = new Response(json_encode(array("result" => User::getOfficeMembers($em, $office_id))));
+    	$response->headers->set('Content-Type', 'application/json');
+    
+    	return $response;
+    }
 }
