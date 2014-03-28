@@ -69,9 +69,13 @@ class OfficeController extends Controller
 			$request->getSession()->remove('errorMembers');
 		}
 		
+		$fullOfficeBreadcrumbs = $breadcrumbs;
+		array_push($fullOfficeBreadcrumbs, $office);
+		$fullOfficeBreadcrumbsIds = array_map(function($e){return $e->getId();}, $fullOfficeBreadcrumbs);
+		
+		
 		$this->get('twig')->addGlobal('activeSection', 'office');
-		$this->get('twig')->addGlobal('officeBreadcrumbs', $breadcrumbs);
-		$this->get('twig')->addGlobal('curentOffice', $office);
+		$this->get('twig')->addGlobal('fullOfficeBreadcrumbsIds', $fullOfficeBreadcrumbsIds);
 		return $this->render("IntranetMainBundle:Office:showOffice.html.twig", $parameters);
 	}
 	

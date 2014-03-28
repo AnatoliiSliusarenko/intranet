@@ -7,21 +7,23 @@
 	
 		<ul class="active">
 		{% for localOffice in office.getChildrenForUser(em, app.user) %}
-			<li class="{% if (curentOffice is defined and localOffice.getId() == curentOffice.getId()) or (officeBreadcrumbs[1] is defined and localOffice.getId() == officeBreadcrumbs[1].getId()) %}{{ 'active' }}{% else %}{{ 'submenu' }}{% endif %}">
+			<li class="{% if (fullOfficeBreadcrumbsIds is defined and localOffice.getId() in fullOfficeBreadcrumbsIds) %}{{ 'active' }}{% else %}{{ 'submenu' }}{% endif %}">
 				<a href='{{ url('intranet_show_office', {office_id: localOffice.getId()}) }}' data-original-title='{{ localOffice.name }}'>
 					<i class='fa fa-group'></i>
 					<span class='hidden-minibar'> {{ localOffice.getName() }}</span>
 				</a>
-				<ul class="{% if (curentOffice is defined and localOffice.getId() == curentOffice.getId()) or (officeBreadcrumbs[1] is defined and localOffice.getId() == officeBreadcrumbs[1].getId()) %}{{ 'active' }}{% endif %}">
-				{% for subOffice in localOffice.getChildrenForUser(em, app.user) %}
-					<li class="{% if (curentOffice is defined and subOffice.getId() == curentOffice.getId()) %}{{ 'active' }}{% endif %}">
-						<a href='{{ url('intranet_show_office', {office_id: subOffice.getId()}) }}' data-original-title='{{ subOffice.name }}'>
-							<i class='fa fa-user'></i>
-							<span class='hidden-minibar'> {{ subOffice.name }}</span>
-						</a>
-					</li>
-				{% endfor %}
-				</ul>
+				{% if localOffice.getChildrenForUser(em, app.user)|length>0 %}
+					<ul class="{% if (fullOfficeBreadcrumbsIds is defined and localOffice.getId() in fullOfficeBreadcrumbsIds) %}{{ 'active' }}{% endif %}">
+					{% for subOffice in localOffice.getChildrenForUser(em, app.user) %}
+						<li class="{% if (fullOfficeBreadcrumbsIds is defined and subOffice.getId() in fullOfficeBreadcrumbsIds) %}{{ 'active' }}{% endif %}">
+							<a href='{{ url('intranet_show_office', {office_id: subOffice.getId()}) }}' data-original-title='{{ subOffice.name }}'>
+								<i class='fa fa-user'></i>
+								<span class='hidden-minibar'> {{ subOffice.name }}</span>
+							</a>
+						</li>
+					{% endfor %}
+					</ul>
+				{% endif %}
 			</li>
 		{% endfor %}
 		</ul>
