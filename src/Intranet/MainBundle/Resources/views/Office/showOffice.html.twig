@@ -28,6 +28,108 @@
 		</p>
 		</blockquote>
 		{% endif %}
+		
+		{% if office.getUserid() != 0 %}
+		<div class="row chat-box">
+  							<div class="col-md-4" ng-controller="MembersController">
+  								<div class="panel panel-cascade contacts-box" >
+  									<div class="panel-heading">
+  										<h3 class="panel-title "> 
+  											<i class="fa fa-user"></i> Members
+  											{% if office.getUserid() == app.user.getId() %}
+  											<div class="btn-group pull-right">
+  												<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+  													Options <span class="caret"></span>
+  												</button>
+  												<ul class="dropdown-menu options" role="menu">
+  													<li ng-class="{disabled: removeEnabled == false}" ng-click="removeFromMembers($event)"><a href="#">Remove from Office</a></li>
+  													<li class="divider"></li>
+  													<li ng-click="addBox($event)"><a href="#">Add Memeber Box [[ (showAddBox) ? '(Hide)' : '(Show)' ]]</a></li>
+  												</ul>
+  											</div>
+  											{% endif %}
+  										</h3>
+  									</div>
+  									{% if office.getUserid() == app.user.getId() %}
+						            <div class="panel-body" ng-show="showAddBox">
+						            	<form action="#" class="form-horizontal" role="form" method="post">
+							            	<div class="form-group">
+						  						<label for="inputEmail1" class="col-lg-2 col-md-3 control-label">Users</label>
+						  						<div class="col-lg-10 col-md-9">
+						   							<select multiple class="form-control">
+						   								<option ng-repeat="user in users" ng-selected="user.selected" ng-click="selection(users, $index)">[[user.username]]</option>
+						  							</select>
+												</div>
+											</div>
+											<div class="form-actions" >
+						             			<input type="submit" value="Add to Office" class="btn bg-primary btn-block text-white" ng-click="addToMembers($event)">
+						             		</div>
+						             	</form>
+						            </div>
+						            {% endif %}
+  									<div class="panel-body nopadding">
+  										<div class="list-group contact">
+  											<a class="list-group-item" ng-repeat="member in members" {% if office.getUserid() == app.user.getId() %}ng-class="{active: member.selected == true}" ng-click="selection(members, $index)"{% endif %}>
+  												<img src="[[avatarURL + member.avatar]]" class="chat-user-avatar" alt="">
+  												[[member.name + ' ' + member.surname]] ([[member.username]])
+  												<!-- <i class="fa fa-circle"></i> -->
+  											</a>
+  										</div>
+  									</div>
+  								</div>
+								<div id="members-alert" class="alert alert-danger" style="display:none;">
+               						[[alert]]
+             					</div>
+  							</div>
+  							
+  							
+  							<div class="col-md-8" ng-controller="ChatController">
+  								<div class="panel panel-cascade recipient-box">
+									<div class="panel-body nopadding">
+										<div class="row">
+											<div class="col-md-7">
+												<ul class="pagination" style="margin-left: 5px;">
+													<li ng-class="{disabled: paginator.curPageId == 1}"><a href="#" ng-click="paginator.firstPage($event)">first</a></li>
+													<li ng-class="{disabled: paginator.curPageId == 1}"><a href="#" ng-click="paginator.prevPage($event)">«</a></li>
+													<li ng-class="{active: paginator.curPageId == item }" ng-repeat="item in paginator.pages"><a href="#" ng-click="paginator.toPage($event, item)">[[item]]</a></li>
+													<li ng-class="{disabled: paginator.curPageId == paginator.countPages}"><a href="#" ng-click="paginator.nextPage($event)">&raquo;</a>
+													<li ng-class="{disabled: paginator.curPageId == paginator.countPages}"><a href="#" ng-click="paginator.lastPage($event)">last</a></li></li>
+												</ul>
+											</div>
+											
+											<div class="col-md-5" style="margin: 20px 0;">
+												  <label for="inputEmail1" class="col-lg-5 col-md-3 control-label" style="margin-top: 7px;">Messages/Page</label>
+												  <div class="col-lg-5 col-md-9">
+												   <select class="form-control" ng-model="postsPerPage" ng-change="changePostsPerPage()">
+												   	<option ng-repeat="item in paginator.postsPerPageValues">[[item]]</option>
+												  </select>
+												</div>
+											</div>
+											
+										</div>
+									</div>
+									
+  									<div class="panel-body nopadding">
+  										<div class="list-group conversation">
+  											<a class="list-group-item" ng-repeat="post in posts">
+  												<img src="[[avatarURL + post.user.avatar]]" class="chat-user-avatar" alt="" />
+  												<span class="username" >[[post.user.name + ' ' + post.user.surname]] ([[post.user.username]])<span class="time">[[ post.posted.date ]]</span> </span>
+  												<p>[[post.message]]</p>
+  											</a>
+  										</div>
+  										<div class="input-group">
+  											<textarea style="resize:vertical;" class="form-control write-message" id="write-message" placeholder="Type something here and hit enter" ng-model="message" ng-keypress="pressEnter($event)"></textarea>
+  											<span class="input-group-btn">
+  												<button class="btn text-white bg-primary send-message" type="button" id="send-message" ng-click="sendPost()">Send</button>
+  											</span>
+
+  										</div><!-- /input-group -->
+  									</div>
+  								</div>
+  							</div>
+  						</div>
+		{% endif %}
+		
 		{% if (office.getUserid() == 0 or office.getUserid() == app.user.getId()) %}
 		<div class="panel panel-cascade">
 			<div class="panel-heading">
@@ -91,58 +193,7 @@
             </div>
 		</div>
 		{% endif %}
-		{% if office.getUserid() != 0 %}
-		<div class="panel panel-cascade" ng-controller="ChooseSelectController">
-			<div class="panel-heading">
-                <h3 class="panel-title">
-                	<span>
-                    	<a href="#" class="panel-minimize">Members of this office</a>
-                    </span>
-                </h3>
-            </div>
-            <div class="panel-body" style="{% if errorMembers is defined %}{{ 'display:block;' }}{% else %}{{ 'display:none;' }}{% endif %}">
-            	<form action="{{ url('intranet_change_office_members', {office_id: office.getId()}) }}" class="form-horizontal" role="form" method="post">
-	            	<div class="form-group">
-	            		<label for="inputEmail1" class="col-lg-1 col-md-3 control-label">Members</label>
-	  					<div class="col-lg-11 col-md-9">
-	   						<select id="officeUsersList" name="members[]" multiple class="form-control">
-	   							<option ng-repeat="user in officeUsers" value="[[ user.id ]]">[[ user.surname ]] [[ user.name ]] ([[ user.username ]])</option>
-	  						</select>
-						</div>
-					</div>
-					{% if (office.getUserid() != 0  and office.getUserid() == app.user.getId() ) %}
-					<div class="form-group">
-						<label for="inputEmail1" class="col-lg-1 col-md-3 control-label">&nbsp;</label>
-						<div class="col-lg-11 col-md-9">
-							<div class="col-md-6">
-								<a ng-click="removeFromMembers($event)" href="#" class="btn btn-primary btn-block"><i class="fa fa-chevron-circle-down"></i></a>
-							</div>
-							<div class="col-md-6">
-								<a ng-click="addToMembers($event)" href="#" class="btn btn-primary btn-block"><i class="fa fa-chevron-circle-up"></i></a>
-							</div>
-						</div>
-					</div>
-					<div class="form-group">
-	            		<label for="inputEmail1" class="col-lg-1 col-md-3 control-label">Available Members</label>
-	  					<div class="col-lg-11 col-md-9">
-	   						<select id="usersList" multiple class="form-control">
-	            					<option ng-repeat="user in users" value="[[ user.id ]]">[[ user.surname ]] [[ user.name ]] ([[ user.username ]])</option>
-	  						</select>
-						</div>
-					</div>
-					{% if errorMembers is defined %}
-             		<div class="alert alert-danger">
-               			{{ errorMembers }}
-             		</div>
-             		{% endif %}
-					<div class="form-actions">
-	             		<input type="submit" value="Save Members" class="btn bg-primary btn-block text-white" ng-click="makeAllSelected()">
-	             	</div>
-	             	{% endif %}
-	             </form>
-            </div>
-		</div>
-		{% endif %}
+		
 		{% if (office.getUserid() != 0 and office.getTopics()|length > 0) %}
 		<div class="panel panel-cascade">
 			<div class="panel-heading">
@@ -152,7 +203,7 @@
                     </span> 
                 </h3>
             </div>
-            <div class="panel-body" style="display:none;">
+            <div class="panel-body" style="display:block;">
             	{% for topic in office.getTopics() %}
             		<a href="{{ url('intranet_show_topic', {topic_id: topic.getId()}) }}" class="btn btn-primary btn-block">{{ topic.name }}</a>
             	{% endfor %}
@@ -197,74 +248,6 @@
             </div>
 		</div>
 		{% endif %}
-		
-		{% if office.getUserid() != 0 %}
-		<div class="row chat-box" ng-controller="ChatController">
-  							<div class="col-md-2">
-  								<div class="panel panel-cascade contacts-box">
-  									<div class="panel-heading">
-  										<h5 class="panel-title "> <i class="fa fa-user"></i> Members</h5>
-  									</div>
-  									<div class="panel-body nopadding">
-  										<div class="list-group contact">
-  											<a class="list-group-item" ng-repeat="member in members">
-  												<img src="[[avatarURL + member.avatar]]" class="chat-user-avatar" alt="">
-  												[[member.username]]
-  												<!-- <i class="fa fa-circle"></i> -->
-  											</a>
-  										</div>
-  									</div>
-  								</div>
-
-  							</div>
-  							
-  							
-  							<div class="col-md-10">
-  								<div class="panel panel-cascade recipient-box">
-									<div class="panel-body nopadding">
-										<div class="row">
-											<div class="col-md-8">
-												<ul class="pagination" style="margin-left: 5px;">
-													<li ng-class="{disabled: paginator.curPageId == 1}"><a href="#" ng-click="paginator.firstPage($event)">first</a></li>
-													<li ng-class="{disabled: paginator.curPageId == 1}"><a href="#" ng-click="paginator.prevPage($event)">«</a></li>
-													<li ng-class="{active: paginator.curPageId == item }" ng-repeat="item in paginator.pages"><a href="#" ng-click="paginator.toPage($event, item)">[[item]]</a></li>
-													<li ng-class="{disabled: paginator.curPageId == paginator.countPages}"><a href="#" ng-click="paginator.nextPage($event)">&raquo;</a>
-													<li ng-class="{disabled: paginator.curPageId == paginator.countPages}"><a href="#" ng-click="paginator.lastPage($event)">last</a></li></li>
-												</ul>
-											</div>
-											
-											<div class="col-md-4" style="margin: 20px 0;">
-												  <label for="inputEmail1" class="col-lg-5 col-md-3 control-label" style="margin-top: 7px;">Messages/Page</label>
-												  <div class="col-lg-5 col-md-9">
-												   <select class="form-control" ng-model="postsPerPage" ng-change="changePostsPerPage()">
-												   	<option ng-repeat="item in paginator.postsPerPageValues">[[item]]</option>
-												  </select>
-												</div>
-											</div>
-											
-										</div>
-									</div>
-									
-  									<div class="panel-body nopadding">
-  										<div class="list-group conversation">
-  											<a class="list-group-item" ng-repeat="post in posts">
-  												<img src="[[avatarURL + post.user.avatar]]" class="chat-user-avatar" alt="" />
-  												<span class="username" >[[post.user.name + ' ' + post.user.surname]] ([[post.user.username]])<span class="time">[[ post.posted.date ]]</span> </span>
-  												<p>[[post.message]]</p>
-  											</a>
-  										</div>
-  										<div class="input-group">
-  											<textarea style="resize:vertical;" class="form-control write-message" id="write-message" placeholder="Type something here and hit enter" ng-model="message" ng-keypress="pressEnter($event)"></textarea>
-  											<span class="input-group-btn">
-  												<button class="btn text-white bg-primary send-message" type="button" id="send-message" ng-click="sendPost()">Send</button>
-  											</span>
-
-  										</div><!-- /input-group -->
-  									</div>
-  								</div>
-  							</div>
-  						</div>
-		{% endif %}
 	</div>
 </div>
 {% endblock %}
@@ -277,20 +260,19 @@
 	<script src="{{ asset('bundles/intranet/js/angular.min.js') }}"></script>
 	<script src="{{ asset('bundles/intranet/js/underscore-min.js') }}"></script>
 	<script src="{{ asset('bundles/intranet/js/custom/angular-core.js') }}"></script>
-	<script src="{{ asset('bundles/intranet/js/custom/choose-select.js') }}"></script>
-	<script type="text/javascript">
-	var USERS = {{ users|json_encode|raw }};
-	var OFFICE_USERS = {{ officeUsers|json_encode|raw }};
-	</script>
 	
 	{% if office.getUserid() != 0 %}
 	<script src="{{ asset('bundles/intranet/js/custom/chat.js') }}"></script>
+	<script src="{{ asset('bundles/intranet/js/custom/members.js') }}"></script>
 	<script type="text/javascript">
+	var USERS = {{ users|json_encode|raw }};
+	var MEMBERS = {{ officeUsers|json_encode|raw }};
 	var JSON_URLS = {
 	        posts: "{{ path('intranet_post_office_get_posts', {office_id: office.id}) }}",
 	        post_add: "{{ path('intranet_post_office_add_post', {office_id: office.id}) }}", 
 	        avatar: "{{ asset('bundles/intranet/images/profiles/') }}",
 	        members: "{{ path('intranet_office_members', {office_id: office.id}) }}",
+	        editMembers: "{{ url('intranet_change_office_members', {office_id: office.getId()}) }}",
 	        posts_new: "{{ path('intranet_post_office_new', {office_id: office.id}) }}",
 	        post_count: "{{ path('intranet_post_office_count', {office_id: office.id}) }}"
 	    };

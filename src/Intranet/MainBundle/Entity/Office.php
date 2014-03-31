@@ -120,7 +120,7 @@ class Office
     public function deleteAllChildren($em)
     {
     	$em->remove($this);
-    	
+    	$this->clearPosts($em);
     	$qb = $em->createQueryBuilder();
     	
     	$qb->select('t')
@@ -140,6 +140,17 @@ class Office
     	{
     		$office->deleteAllChildren($em);
     	}
+    }
+    
+    public function clearPosts($em)
+    {
+    	$qb = $em->createQueryBuilder();
+    	 
+    	$qb->delete('IntranetMainBundle:PostOffice', 'p')
+    	->where('p.officeid = :officeid')
+    	->setParameter('officeid', $this->getId());
+    	 
+    	$result = $qb->getQuery()->getResult();
     }
     
     /**

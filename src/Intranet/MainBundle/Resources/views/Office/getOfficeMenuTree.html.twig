@@ -28,4 +28,15 @@
 		{% endfor %}
 		</ul>
 	</li>
+	{% if office.getChildrenForUser(em, app.user)|length==0 %}
+		{% for userOffice in app.user.getOfficesWithoutOne(office) %}
+		<li class='{% if (fullOfficeBreadcrumbsIds is defined and userOffice.getId() in fullOfficeBreadcrumbsIds) %}{{ 'active' }}{% endif %}' >
+				<a class="dropdown" href='{{ url('intranet_show_office', {office_id: userOffice.getId()}) }}' data-original-title='{{ userOffice.name }}'>
+					<i class='fa fa-group'></i>
+					<span class='hidden-minibar'> {{ userOffice.name }}</span>
+				</a>
+		</li>
+		{% endfor %}
+	{% endif %}
 {% endfor %}
+

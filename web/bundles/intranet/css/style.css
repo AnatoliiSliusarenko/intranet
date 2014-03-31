@@ -793,6 +793,23 @@ a {
   background-color: #495b79;
   outline: 0 !important;
 }
+
+.panel > .panel-heading .dropdown-menu > .disabled > a,
+.panel > .panel-heading .dropdown-menu > .disabled > a:hover,
+.panel > .panel-heading .dropdown-menu > .disabled > a:focus {
+  color: #999999;
+}
+
+.panel > .panel-heading .dropdown-menu > .disabled > a:hover,
+.panel > .panel-heading .dropdown-menu > .disabled > a:focus {
+  text-decoration: none;
+  cursor: not-allowed;
+  background-color: transparent;
+  background-image: none;
+  filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+}
+
+
 .panel > .panel-heading .panel-icon {
   margin-right: 5px;
 }
@@ -2080,6 +2097,9 @@ div[data-role="editor-toolbar"] {
 .chat-box .contacts-box .list-group a.list-group-item.active {
   background: #495b79;
 }
+.chat-box .contacts-box .options {
+  padding: 10px;
+}
 .chat-box .recipient-box .options {
   padding: 10px;
 }
@@ -2107,6 +2127,13 @@ div[data-role="editor-toolbar"] {
 .chat-box .recipient-box .write-message {
   border-top-right-radius: 0px;
   border-top-left-radius: 0px;
+}
+.chat-box .contacts-box .btn {   
+  border-top-right-radius: 0px;
+  height: 100%;
+  padding: 0px 12px;
+  border: 0px;
+  border-radius: 2px;
 }
 .chat-box .recipient-box .btn {
   border-top-right-radius: 0px;

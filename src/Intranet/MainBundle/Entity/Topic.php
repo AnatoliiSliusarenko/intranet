@@ -298,7 +298,7 @@ class Topic
     {
     	$qb = $em->createQueryBuilder();
     	
-    	$qb->delete('IntranetMainBundle:Post', 'p')
+    	$qb->delete('IntranetMainBundle:PostTopic', 'p')
     	   ->where('p.topicid = :topicid')
     	   ->setParameter('topicid', $this->getId());
     	

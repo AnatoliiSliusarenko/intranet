@@ -28,7 +28,7 @@ Intranet.controller('ChatController', ['$scope', '$http', '$paginator', function
 	$scope.postsGetURL = JSON_URLS.posts;
 	$scope.avatarURL = JSON_URLS.avatar;
 	$scope.postAddURL = JSON_URLS.post_add;
-	$scope.topicMembersURL = JSON_URLS.members;
+	$scope.membersURL = JSON_URLS.members;
 	$scope.postsNewURL = JSON_URLS.posts_new;
 	$scope.postsCountURL = JSON_URLS.post_count;
 	
@@ -67,7 +67,7 @@ Intranet.controller('ChatController', ['$scope', '$http', '$paginator', function
 	{
 		$http({
 			method: "GET", 
-			url: $scope.topicMembersURL, 
+			url: $scope.membersURL, 
 			})
 		.success(function(response){
 			console.log("members-->", response.result);

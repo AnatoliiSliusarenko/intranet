@@ -81,5 +81,5 @@ intranet_delete_topic:
     defaults: { _controller: IntranetMainBundle:Topic:deleteTopic }
     
 intranet_change_office_members:
-    pattern:  /office/{office_id}/members
+    pattern:  /office/{office_id}/members/change
     defaults: { _controller: IntranetMainBundle:Office:changeOfficeMembers }

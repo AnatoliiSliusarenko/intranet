@@ -626,6 +626,13 @@ class User implements UserInterface, \Serializable
     {
         return $this->offices;
     }
+    
+    public function getOfficesWithoutOne(\Intranet\MainBundle\Entity\Office $office)
+    {
+    	$offices = $this->offices;
+    	$offices->removeElement($office);
+    	return $offices;
+    }
 
     /**
      * Add topic

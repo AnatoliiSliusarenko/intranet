@@ -63,11 +63,6 @@ class OfficeController extends Controller
 			$request->getSession()->remove('nameTopic');
 			$request->getSession()->remove('descriptionTopic');
 		}
-		if ($request->getSession()->has('errorMembers'))
-		{
-			$parameters['errorMembers'] = $request->getSession()->get('errorMembers');
-			$request->getSession()->remove('errorMembers');
-		}
 		
 		$fullOfficeBreadcrumbs = $breadcrumbs;
 		array_push($fullOfficeBreadcrumbs, $office);
@@ -118,24 +113,32 @@ class OfficeController extends Controller
 	
 	public function changeOfficeMembersAction(Request $request, $office_id)
 	{
-		$members = $request->request->get('members');
+		$data = json_decode(file_get_contents("php://input"));
+		$members = $data->members;
 		$em = $this->getDoctrine()->getManager();
 		
 		if (($members == null) || (count($members) < 2))
 		{
-			$request->getSession()->set('errorMembers', 'In office should be not less two members!');
-			return $this->redirect($this->generateUrl('intranet_show_office', array("office_id" => $office_id)));
+			$response = new Response(json_encode(array("result" => null, "message" => 'In office should be not less two members!')));
+			$response->headers->set('Content-Type', 'application/json');
+			return $response;
 		}
 		
 		$office = $em->getRepository('IntranetMainBundle:Office')->find($office_id);
 		if ($office == null)
-			return $this->redirect($this->generateUrl('intranet_main_homepage'));
+		{
+			$response = new Response(json_encode(array("result" => null, "message" => 'Office not found!')));
+			$response->headers->set('Content-Type', 'application/json');
+			return $response;
+		}
 		
 		$office->resetUsers($em, $members);
 		$em->persist($office);
 		$em->flush();
 		
-		return $this->redirect($this->generateUrl('intranet_show_office', array('office_id' => $office->getId())));
+		$response = new Response(json_encode(array("result" => true,  "message" => 'Members changed!')));
+		$response->headers->set('Content-Type', 'application/json');
+		return $response;
 	}
 	
 	public function deleteOfficeAction($office_id)
