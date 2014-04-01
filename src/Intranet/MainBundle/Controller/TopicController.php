@@ -26,11 +26,24 @@ class TopicController extends Controller
     	if (($topic == null) || (!$topic->getOffice()->hasUser($this->getUser())))
     		return $this->redirect($this->generateUrl('intranet_main_homepage'));
     	
+    	$office = $topic->getOffice();
+    	$officeTree = Office::getOfficeTree($em);
     	$breadcrumbs = $topic->getBreadcrumbs($em);
+    	if ($office->getId() != $officeTree[0]->getId())
+    	{
+    		$officeBreadcrumbs = $office->getBreadcrumbs($em);
+    		array_push($officeBreadcrumbs, $office);
+    		$this->get('twig')->addGlobal('fullOfficeBreadcrumbsIds', array_map(function($e){return $e->getId();}, $officeBreadcrumbs));
+    		$breadcrumbs = array_splice($breadcrumbs, 1, 1);
+    		$this->get('twig')->addGlobal('activeSection', 'office');
+    	}
+    	else 
+    		$this->get('twig')->addGlobal('activeSection', 'topic');
+    	
     	//$subtopics = $topic->getChildrenForUser($em, $this->getUser());
     	$subtopics = $topic->getChildrenForOffice($em);
     	
-    	$parameters = array("topic" => $topic, "breadcrumbs" => $breadcrumbs, 'subtopics' => $subtopics);
+    	$parameters = array("topic" => $topic, "breadcrumbs" => $breadcrumbs, 'subtopics' => $subtopics, 'office' => $office);
     	
     	if ($request->getSession()->has('errorTopic'))
     	{
@@ -42,7 +55,6 @@ class TopicController extends Controller
     		$request->getSession()->remove('descriptionTopic');
     	}
     	
-    	$this->get('twig')->addGlobal('activeSection', 'topic');
     	return $this->render('IntranetMainBundle:Topic:showTopic.html.twig', $parameters);
     }
     

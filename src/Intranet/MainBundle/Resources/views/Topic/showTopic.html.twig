@@ -4,6 +4,9 @@
 
 {% block breadcrumbs %}
 <ul class="breadcrumb">
+	{% if activeSection == 'office' %}
+	<li><a href="{{ url('intranet_show_office', {office_id: office.getId()}) }}">{{ office.name }}</a></li>
+	{% endif %}
 	{% for item in breadcrumbs %}
 		<li><a href="{{ url('intranet_show_topic', {topic_id: item.getId()}) }}">{{ item.name }}</a></li>
 	{% endfor %}
@@ -92,7 +95,7 @@
   											<a class="list-group-item" ng-repeat="post in posts">
   												<img src="[[avatarURL + post.user.avatar]]" class="chat-user-avatar" alt="" />
   												<span class="username" >[[post.user.name + ' ' + post.user.surname]] ([[post.user.username]])<span class="time">[[ post.posted.date ]]</span> </span>
-  												<p>[[post.message]]</p>
+  												<p style="white-space: pre-line;">[[post.message]]</p>
   											</a>
   										</div>
   										<div class="input-group">
