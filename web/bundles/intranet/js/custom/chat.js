@@ -17,6 +17,7 @@ Intranet.controller('ChatController', ['$scope', '$http', '$paginator', function
 	{
 		if ((e.shiftKey == false) && ( e.keyCode == 13 ))
 		{
+			e.preventDefault();
 			$scope.sendPost();
 		}
 	}
