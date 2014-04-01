@@ -1,6 +1,6 @@
 {% extends 'IntranetMainBundle:Index:index.html.twig' %}
 
-{% block title %}My offices{% endblock %}
+{% block title %}{{ office.name }}{% endblock %}
 
 {% block breadcrumbs %}
 <ul class="breadcrumb">
@@ -204,7 +204,7 @@
                 </h3>
             </div>
             <div class="panel-body" style="display:block;">
-            	{% for topic in office.getTopics() %}
+            	{% for topic in office.getTopTopics(em) %}
             		<a href="{{ url('intranet_show_topic', {topic_id: topic.getId()}) }}" class="btn btn-primary btn-block">{{ topic.name }}</a>
             	{% endfor %}
             </div>

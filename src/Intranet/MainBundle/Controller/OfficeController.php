@@ -37,6 +37,7 @@ class OfficeController extends Controller
 		$parentTopic = $topicTree[0];
 		
 		$parameters = array(
+				"em" => $em,
 				"office" => $office, 
 				"parentTopic" => $parentTopic,
 				"breadcrumbs" => $breadcrumbs, 
