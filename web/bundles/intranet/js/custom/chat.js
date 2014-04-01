@@ -108,7 +108,7 @@ Intranet.controller('ChatController', ['$scope', '$http', '$paginator', function
 				message: $scope.message,
 				posted: new Date()
 		}
-		
+				
 		$http({
 			method: "POST", 
 			url: $scope.postAddURL, 
