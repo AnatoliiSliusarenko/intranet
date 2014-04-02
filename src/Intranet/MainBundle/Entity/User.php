@@ -97,6 +97,12 @@ class User implements UserInterface, \Serializable
 	 * @var array
 	 */
 	private $topics;
+	
+	/**
+	 * @ORM\OneToMany(targetEntity="Notification", mappedBy="user")
+	 * @var array
+	 */
+	private $notifications;
     
 	/**
 	 * @var string
@@ -665,5 +671,84 @@ class User implements UserInterface, \Serializable
     public function getTopics()
     {
         return $this->topics;
+    }
+
+    /**
+     * Add notifications
+     *
+     * @param \Intranet\MainBundle\Entity\Notification $notifications
+     * @return User
+     */
+    public function addNotification(\Intranet\MainBundle\Entity\Notification $notifications)
+    {
+        $this->notifications[] = $notifications;
+
+        return $this;
+    }
+
+    /**
+     * Remove notifications
+     *
+     * @param \Intranet\MainBundle\Entity\Notification $notifications
+     */
+    public function removeNotification(\Intranet\MainBundle\Entity\Notification $notifications)
+    {
+        $this->notifications->removeElement($notifications);
+    }
+
+    /**
+     * Get notifications
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getNotifications()
+    {
+        return $this->notifications;
+    }
+
+    /**
+     * Add postsTopic
+     *
+     * @param \Intranet\MainBundle\Entity\PostTopic $postsTopic
+     * @return User
+     */
+    public function addPostsTopic(\Intranet\MainBundle\Entity\PostTopic $postsTopic)
+    {
+        $this->postsTopic[] = $postsTopic;
+
+        return $this;
+    }
+
+    /**
+     * Remove postsTopic
+     *
+     * @param \Intranet\MainBundle\Entity\PostTopic $postsTopic
+     */
+    public function removePostsTopic(\Intranet\MainBundle\Entity\PostTopic $postsTopic)
+    {
+        $this->postsTopic->removeElement($postsTopic);
+    }
+
+    /**
+     * Add postsOffice
+     *
+     * @param \Intranet\MainBundle\Entity\PostOffice $postsOffice
+     * @return User
+     */
+    public function addPostsOffice(\Intranet\MainBundle\Entity\PostOffice $postsOffice)
+    {
+        $this->postsOffice[] = $postsOffice;
+
+        return $this;
+    }
+
+    /**
+     * Remove postsOffice
+     *
+     * @param \Intranet\MainBundle\Entity\PostOffice $postsOffice
+     */
+    public function removePostsOffice(\Intranet\MainBundle\Entity\PostOffice $postsOffice)
+    {
+        $this->postsOffice->removeElement($postsOffice);
     }
 }
