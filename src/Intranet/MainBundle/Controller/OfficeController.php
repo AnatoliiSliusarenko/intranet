@@ -3,6 +3,7 @@
 namespace Intranet\MainBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Intranet\MainBundle\Entity\Notification;
 use Intranet\MainBundle\Entity\Office;
 use Intranet\MainBundle\Entity\Topic;
 use Intranet\MainBundle\Entity\User;
@@ -148,6 +149,8 @@ class OfficeController extends Controller
 		$office = $em->getRepository('IntranetMainBundle:Office')->find($office_id);
 		if (($office == null) || ($office->getUserid() !== $this->getUser()->getId()))
 			return $this->redirect($this->generateUrl('intranet_main_homepage'));
+		
+		Notification::createNotification($em, $this->getUser(), "removed_office", $office, $office);
 		
 		$parent = $office->getOfficeid();
 		$office->deleteAllChildren($em);

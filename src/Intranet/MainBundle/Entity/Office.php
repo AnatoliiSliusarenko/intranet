@@ -311,6 +311,8 @@ class Office
     		$this->addUser($user);
     		$user->addOffice($this);
     		$em->persist($user);
+    		
+    		//notify for adding new
     	}
     
     	return $this;
@@ -328,14 +330,29 @@ class Office
     
     public function resetUsers($em, $users)
     {
+    	$existUsersIds = array_map(function($u){return $u->getId();}, $this->users->toArray());
+    	$usersToAdd = array();
+    	$usersToRemove = array();
+    	
     	foreach ($this->users as $user)
     	{
+    		if (!in_array($user->getId(), $users)) $usersToRemove[] = $user;
+    	}
+    	foreach ($users as $userId)
+    	{
+    		if (!in_array($userId, $existUsersIds)) $usersToAdd[] = $userId;
+    	}
+    	
+    	foreach ($usersToRemove as $user)
+    	{
+    		//notify for removing
+    		
     		$user->removeOffice($this);
     		$this->removeUser($user);
     		$em->persist($user);
     	}
     	
-    	return $this->addUsers($em, $users);
+    	return $this->addUsers($em, $usersToAdd);
     }
 
     /**

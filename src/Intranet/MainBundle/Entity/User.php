@@ -551,7 +551,7 @@ class User implements UserInterface, \Serializable
     	$request->getSession()->set('_security_' . $firewall_name, serialize($token));
     }
     
-    public static function getTopicMembers($em, $topic_id)
+    public static function getTopicMembers($em, $topic_id, $inArray=false)
     {
     	$query = $em->getRepository("IntranetMainBundle:User")
     				->createQueryBuilder('u')
@@ -563,12 +563,14 @@ class User implements UserInterface, \Serializable
     
     	$result = $query->getResult();
     
+    	if ($inArray == true)
     	return array_map(function($user){
     		return $user->getInArray();
     	}, $result);
+    	else return $result;
     }
     
-    public static function getOfficeMembers($em, $office_id)
+    public static function getOfficeMembers($em, $office_id, $inArray = false)
     {
     	$query = $em->getRepository("IntranetMainBundle:User")
     	->createQueryBuilder('u')
@@ -580,9 +582,11 @@ class User implements UserInterface, \Serializable
     
     	$result = $query->getResult();
     
+    	if ($inArray == true)
     	return array_map(function($user){
     		return $user->getInArray();
     	}, $result);
+    	else return $result;
     }
     
     public function getAllUsers($em)

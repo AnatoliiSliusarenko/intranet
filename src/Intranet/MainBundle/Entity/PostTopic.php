@@ -163,6 +163,8 @@ class PostTopic
     	if (($topic == null) || ($user == null) || (trim($p->message) === ''))
     		return null;
     	
+    	Notification::createNotification($em, $user, "message_topic", $user, $topic);
+    	
     	$post = new PostTopic();
     	$post->setTopicid($topic->getId());
     	$post->setUserid($user->getId());

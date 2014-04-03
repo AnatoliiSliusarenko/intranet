@@ -55,6 +55,13 @@ class Notification
      * @ORM\Column(name="message", type="text")
      */
     private $message;
+    
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="activated", type="datetime")
+     */
+    private $activated;
 
     /**
      * Get id
@@ -181,8 +188,88 @@ class Notification
         return $this->user;
     }
     
-    public static function createNotification()
+    public static function createNotification($em, $creator, $type, $resource, $destination)
     {
+    	$types = array("message_office", "message_topic", "membership_own", "membership_user", "removed_office", "removed_topic");
+    	if (!in_array($type, $types)) return false;
+    	switch ($type)
+    	{
+    		case "message_office":
+    		{
+    			$message = "New message from ".$resource->getUsername()." in ".$destination->getName();
+    			$users = $destination->getUsers();
+    			break;
+    		}
+    		case "message_topic":
+    		{
+    			$message = "New message from ".$resource->getUsername()." in ".$destination->getName();
+    			$users = $destination->getOffice()->getUsers();
+    			break;
+    		}
+    		case "membership_own":
+    		{
+    			$message = "You was added to ".$destination->getName();
+    			$users = $destination->getUsers();
+    			break;
+    		}
+    		case "membership_user":
+    		{
+    			$message = $resource->getUsername()." was added to ".$destination->getName();
+    			$users = $destination->getUsers();
+    			break;
+    		}
+    		case "removed_office":
+    		{
+    			$message = $destination->getName()." was delated!";
+    			$users = $destination->getUsers();
+    			break;
+    		}
+    		case "removed_topic":
+    		{
+    			$message = $destination->getName()." was delated!";
+    			$users = $destination->getOffice()->getUsers();
+    			break;
+    		}
+    	}
     	
+    	foreach($users as $user)
+    	{
+    		if ($user->getId() == $creator->getId()) continue;
+    		
+    		$notification = new Notification();
+    		$notification->setUserid($user->getId());
+    		$notification->setUser($user);
+    		$notification->setDestinationid($destination->getId());
+    		$notification->setType($type);
+    		$notification->setMessage($message);
+    		$notification->setActivated(new \DateTime());
+    		$em->persist($notification);
+    		$em->flush();
+    	}
+    	
+    	return true;
+    }
+
+    /**
+     * Set activated
+     *
+     * @param \DateTime $activated
+     * @return Notification
+     */
+    public function setActivated($activated)
+    {
+        $this->activated = $activated;
+
+        return $this;
+    }
+
+    /**
+     * Get activated
+     *
+     * @return \DateTime 
+     */
+    public function getActivated()
+    {
+        return $this->activated;
     }
 }

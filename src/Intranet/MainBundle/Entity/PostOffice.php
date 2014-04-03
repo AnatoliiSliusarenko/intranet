@@ -155,13 +155,15 @@ class PostOffice
      * Add post by office
      * @return PostOffice
      */
-    public static function addPostByOfficeId($em, $p)
+    public static function addPostByOfficeId($em, $p, $user)
     {
     	$user = $em->getRepository("IntranetMainBundle:User")->find(intval($p->userid));
     	$office = $em->getRepository("IntranetMainBundle:Office")->find(intval($p->entityid));
     	 
     	if (($office == null) || ($user == null) || (trim($p->message) === ''))
     		return null;
+    	
+    	Notification::createNotification($em, $user, "message_office", $user, $office);
     	
     	$post = new PostOffice();
     	$post->setOfficeid($office->getId());

@@ -73,7 +73,7 @@ class UserController extends Controller
     {
     	$em = $this->getDoctrine()->getManager();
     
-    	$response = new Response(json_encode(array("result" => User::getTopicMembers($em, $topic_id))));
+    	$response = new Response(json_encode(array("result" => User::getTopicMembers($em, $topic_id, true))));
     	$response->headers->set('Content-Type', 'application/json');
     
     	return $response;
@@ -83,7 +83,7 @@ class UserController extends Controller
     {
     	$em = $this->getDoctrine()->getManager();
     
-    	$response = new Response(json_encode(array("result" => User::getOfficeMembers($em, $office_id))));
+    	$response = new Response(json_encode(array("result" => User::getOfficeMembers($em, $office_id, true))));
     	$response->headers->set('Content-Type', 'application/json');
     
     	return $response;

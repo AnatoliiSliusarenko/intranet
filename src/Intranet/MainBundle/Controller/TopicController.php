@@ -3,6 +3,7 @@
 namespace Intranet\MainBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Intranet\MainBundle\Entity\Notification;
 use Intranet\MainBundle\Entity\Topic;
 use Intranet\MainBundle\Entity\Office;
 use Symfony\Component\HttpFoundation\Request;
@@ -104,6 +105,8 @@ class TopicController extends Controller
     	if (($topic == null) || (($topic->getUserid() !== $this->getUser()->getId()) && (false === $this->get('security.context')->isGranted('ROLE_ADMIN'))) )
     		return $this->redirect($this->generateUrl('intranet_main_homepage'));
     
+    	Notification::createNotification($em, $this->getUser(), "removed_topic", $topic, $topic);
+    	
     	$parent = $topic->getParentid();
     	$topic->deleteAllChildren($em);
     	$em->flush();

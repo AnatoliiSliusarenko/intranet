@@ -34,6 +34,43 @@
                 <li class="divider"></li>
                 <li><a href="{{ path('intranet_security_logout') }}" class="text-danger"><i class="fa fa-lock"></i> Logout</a></li>
               </ul>
+              {% if app.user.notifications|length>0 %}
+              <li><a href="#" class="settings dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bell animated shake"></i><span class="badge bg-success">{{ app.user.notifications|length }}</span></a>
+                  <ul class="dropdown-menu notifications">
+                    {% for notification in app.user.notifications%}
+                    <li>
+                      <a
+                        {% if notification.type=='membership_own' %}
+                        href="{{ url('intranet_show_office', {office_id: notification.destinationid}) }}"
+                        class="text-success">
+                        <i class="fa noty-icon fa-user bg-success"></i> 
+                        {% elseif notification.type=='membership_user' %}
+                        href="{{ url('intranet_show_office', {office_id: notification.destinationid}) }}"
+                        class="text-warning">
+                        <i class="fa noty-icon fa-user bg-warning"></i> 
+                        {% elseif notification.type=='message_office' %}
+                        href="{{ url('intranet_show_office', {office_id: notification.destinationid}) }}">
+                        <i class="fa noty-icon fa-comment bg-primary"></i> 
+						{% elseif notification.type=='message_topic' %}
+						href="{{ url('intranet_show_topic', {topic_id: notification.destinationid}) }}"
+						class="text-info">
+						<i class="fa noty-icon fa-comment bg-info"></i> 
+						{% elseif notification.type=='removed_office' %}
+						href="#" class="text-danger">
+						<i class="fa noty-icon fa-exclamation bg-danger"></i> 
+						{% elseif notification.type=='removed_topic' %}
+						href="#" class="text-danger">
+						<i class="fa noty-icon fa-exclamation bg-danger"></i> 
+                        {% endif %}
+                        <span class="description">{{ notification.message }}</span>
+                        <span class="time"> <i class="fa fa-clock-o"></i>  {{ notification.activated|date('d/m/y H:i:s') }}</span>
+                      </a>
+                    </li>
+                    {% endfor %}
+                    <li><a href="#" class="btn bg-primary">View All</a></li>
+                  </ul>
+                </li>
+                {% endif %}
                 </li>
               </ul>
             </div><!-- /.navbar-collapse -->
