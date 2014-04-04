@@ -100,6 +100,7 @@ class User implements UserInterface, \Serializable
 	
 	/**
 	 * @ORM\OneToMany(targetEntity="Notification", mappedBy="user")
+	 * @ORM\OrderBy({"activated" = "DESC"})
 	 * @var array
 	 */
 	private $notifications;

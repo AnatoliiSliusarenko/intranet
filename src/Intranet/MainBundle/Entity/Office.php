@@ -302,20 +302,20 @@ class Office
     
     public function addUsers($em, $users)
     {
+    	$usersAdded = array();
     	foreach ($users as $userid)
     	{
     		$user = $em->getRepository('IntranetMainBundle:User')->find($userid);
     		if ($user == null)
     			continue;
     		
+    		$usersAdded[] = $user;
     		$this->addUser($user);
     		$user->addOffice($this);
     		$em->persist($user);
-    		
-    		//notify for adding new
     	}
     
-    	return $this;
+    	return $usersAdded;
     }
 
     /**

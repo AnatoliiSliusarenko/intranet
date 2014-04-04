@@ -37,7 +37,7 @@
               {% if app.user.notifications|length>0 %}
               <li><a href="#" class="settings dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bell animated shake"></i><span class="badge bg-success">{{ app.user.notifications|length }}</span></a>
                   <ul class="dropdown-menu notifications">
-                    {% for notification in app.user.notifications%}
+                    {% for notification in app.user.notifications|slice(0, 10)%}
                     <li>
                       <a
                         {% if notification.type=='membership_own' %}
@@ -56,10 +56,12 @@
 						class="text-info">
 						<i class="fa noty-icon fa-comment bg-info"></i> 
 						{% elseif notification.type=='removed_office' %}
-						href="#" class="text-danger">
+						href="{{ url('intranet_show_office', {office_id: notification.destinationid}) }}" 
+						class="text-danger">
 						<i class="fa noty-icon fa-exclamation bg-danger"></i> 
 						{% elseif notification.type=='removed_topic' %}
-						href="#" class="text-danger">
+						href="{{ url('intranet_show_topic', {topic_id: notification.destinationid}) }}" 
+						class="text-danger">
 						<i class="fa noty-icon fa-exclamation bg-danger"></i> 
                         {% endif %}
                         <span class="description">{{ notification.message }}</span>
@@ -67,7 +69,7 @@
                       </a>
                     </li>
                     {% endfor %}
-                    <li><a href="#" class="btn bg-primary">View All</a></li>
+                    <li><a href="{{ url('intranet_notifications_show') }}" class="btn bg-primary">View All</a></li>
                   </ul>
                 </li>
                 {% endif %}

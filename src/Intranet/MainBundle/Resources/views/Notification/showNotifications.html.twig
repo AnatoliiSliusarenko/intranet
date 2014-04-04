@@ -1,0 +1,49 @@
+{% extends 'IntranetMainBundle:Index:index.html.twig' %}
+
+{% block title %}Notifications{% endblock %}
+
+{% block breadcrumbs %}
+<ul class="breadcrumb">
+	<li class="active">Notifications</li>
+</ul>
+{% endblock %}
+
+{% block pageheader %}
+<div ng-app="Intranet" class="row">
+	<div class="col-md-12">
+		<h3 class="page-header"><i class="fa fa-exclamation-triangle animated slide"></i> Notifications <i class="fa fa-info-circle animated bounceInDown show-info"></i></h3>
+
+		<blockquote class="page-information hidden">
+		<p>
+			Here you can view all your notifications...
+		</p>
+		</blockquote>
+	</div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+	<div class="col-md-12">
+	{% for notification in app.user.notifications%}
+		{% if notification.type=='membership_own' %}
+		<a href="{{ url('intranet_show_office', {'office_id': notification.destinationid }) }}" class="btn btn-success btn-block"><i class="fa fa-user aligned-left"></i> {{ notification.message }} <span class="time aligned-right"> <i class="fa fa-clock-o"></i>  {{ notification.activated|date('d/m/y H:i:s') }}</span></a>
+        {% elseif notification.type=='membership_user' %}
+        <a href="{{ url('intranet_show_office', {'office_id': notification.destinationid }) }}" class="btn btn-warning btn-block"><i class="fa fa-user aligned-left"></i> {{ notification.message }} <span class="time aligned-right"> <i class="fa fa-clock-o"></i>  {{ notification.activated|date('d/m/y H:i:s') }}</span></a>
+        {% elseif notification.type=='message_office' %}
+        <a href="{{ url('intranet_show_office', {'office_id': notification.destinationid }) }}" class="btn btn-primary btn-block"><i class="fa fa-comment aligned-left"></i> {{ notification.message }} <span class="time aligned-right"> <i class="fa fa-clock-o"></i>  {{ notification.activated|date('d/m/y H:i:s') }}</span></a>
+		{% elseif notification.type=='message_topic' %}
+		<a href="{{ url('intranet_show_topic', {'topic_id': notification.destinationid }) }}" class="btn btn-info btn-block"><i class="fa fa-comment aligned-left"></i> {{ notification.message }} <span class="time aligned-right"> <i class="fa fa-clock-o"></i>  {{ notification.activated|date('d/m/y H:i:s') }}</span></a>
+		{% elseif notification.type=='removed_office' %}
+		<a href="{{ url('intranet_show_office', {'office_id': notification.destinationid }) }}" class="btn btn-danger btn-block"><i class="fa fa-exclamation aligned-left"></i> {{ notification.message }} <span class="time aligned-right"> <i class="fa fa-clock-o"></i>  {{ notification.activated|date('d/m/y H:i:s') }}</span></a>
+		{% elseif notification.type=='removed_topic' %}
+		<a href="{{ url('intranet_show_topic', {'topic_id': notification.destinationid }) }}" class="btn btn-danger btn-block"><i class="fa fa-exclamation aligned-left"></i> {{ notification.message }} <span class="time aligned-right"> <i class="fa fa-clock-o"></i>  {{ notification.activated|date('d/m/y H:i:s') }}</span></a>
+        {% endif %}		
+	{% endfor %}
+	</div>
+</div>
+{% endblock %}
+{% block javascripts %}
+	{{ parent() }}
+	
+{% endblock %}

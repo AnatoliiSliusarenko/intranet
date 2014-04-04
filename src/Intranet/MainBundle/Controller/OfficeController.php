@@ -24,6 +24,7 @@ class OfficeController extends Controller
 	public function showOfficeAction(Request $request, $office_id)
 	{
 		$em = $this->getDoctrine()->getManager();
+		Notification::clearNotificationsByOfficeId($em, $this->getUser(), $office_id);
 		$office = $em->getRepository('IntranetMainBundle:Office')->find($office_id);
 		if (($office == null) || (!$office->hasUser($this->getUser())))
 			return $this->redirect($this->generateUrl('intranet_main_homepage'));
@@ -103,13 +104,15 @@ class OfficeController extends Controller
 		$office->setOfficeid($office_id);
 		$office->setName($name);
 		$office->setDescription($description);
-		$office->addUsers($em, $members);
+		$usersAdded = $office->addUsers($em, $members);
 		$office->setUserid($this->getUser()->getId());
 		 
 		
 		$em->persist($office);
 		$em->flush();
 		 
+		Notification::createNotification($em, $this->getUser(), "membership_user", $usersAdded, $office);
+		
 		return $this->redirect($this->generateUrl('intranet_show_office', array('office_id' => $office->getId())));
 	}
 	
@@ -134,9 +137,11 @@ class OfficeController extends Controller
 			return $response;
 		}
 		
-		$office->resetUsers($em, $members);
+		$usersAdded = $office->resetUsers($em, $members);
 		$em->persist($office);
 		$em->flush();
+		
+		Notification::createNotification($em, $this->getUser(), "membership_user", $usersAdded, $office);
 		
 		$response = new Response(json_encode(array("result" => true,  "message" => 'Members changed!')));
 		$response->headers->set('Content-Type', 'application/json');

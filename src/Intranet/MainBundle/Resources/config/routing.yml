@@ -83,3 +83,7 @@ intranet_delete_topic:
 intranet_change_office_members:
     pattern:  /office/{office_id}/members/change
     defaults: { _controller: IntranetMainBundle:Office:changeOfficeMembers }
+    
+intranet_notifications_show:
+    pattern:  /notifications/
+    defaults: { _controller: IntranetMainBundle:Notification:showNotifications }

@@ -23,6 +23,7 @@ class TopicController extends Controller
     public function showTopicAction(Request $request, $topic_id)
     {
     	$em = $this->getDoctrine()->getManager();
+    	Notification::clearNotificationsByTopicId($em, $this->getUser(), $topic_id);
     	$topic = $em->getRepository('IntranetMainBundle:Topic')->find($topic_id);
     	if (($topic == null) || (!$topic->getOffice()->hasUser($this->getUser())))
     		return $this->redirect($this->generateUrl('intranet_main_homepage'));

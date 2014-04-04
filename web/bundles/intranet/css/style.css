@@ -397,7 +397,7 @@ a {
   margin-bottom: 0px !important;
   padding-bottom: 0px;
   padding-top: 0px;
-  width: 400px;
+  width: 700px;
 }
 .navbar .user-menu > li ul.dropdown-menu.notifications > li > a {
   padding: 0px;
@@ -458,11 +458,11 @@ a {
   margin-right: 0px;
 }
 .navbar .navbar-nav > li > a.settings > i {
-  padding: 12px 10px;
+  padding: 13px 10px;
   background-color: #5c7399;
   border: 2px solid #3f4f69;
   border-left: 0px;
-  font-size: 18px;
+  font-size: 17px;
 }
 .navbar .navbar-nav > li > a .settings-toggle {
   border-radius: 0px 4px 4px 0px;
@@ -537,6 +537,19 @@ a {
 .navbar.navbar-fixed-bottom ul.dropdown-menu > li:first-child:before {
   border-width: 0 0px 0px 0px !important;
 }
+
+.aligned-left
+{
+	float:left;
+	margin-top:3px;
+	margin-left:10px;
+}
+.aligned-right
+{
+	float:right;
+	margin-right:10px;
+}
+
 /*	 Left Sidebar
 ---------------------------------------------------------------------------------------------- */
 .left-sidebar {
