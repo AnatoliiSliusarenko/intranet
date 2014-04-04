@@ -1,3 +1,5 @@
+CREATE DATABASE  IF NOT EXISTS `intranet` /*!40100 DEFAULT CHARACTER SET utf8 */;
+USE `intranet`;
 -- MySQL dump 10.13  Distrib 5.5.35, for debian-linux-gnu (i686)
 --
 -- Host: 127.0.0.1    Database: intranet
@@ -16,6 +18,55 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Table structure for table `documents`
+--
+
+DROP TABLE IF EXISTS `documents`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `documents` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `documents`
+--
+
+LOCK TABLES `documents` WRITE;
+/*!40000 ALTER TABLE `documents` DISABLE KEYS */;
+/*!40000 ALTER TABLE `documents` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `notifications`
+--
+
+DROP TABLE IF EXISTS `notifications`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `notifications` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `userid` int(11) NOT NULL,
+  `type` enum('message_office','message_topic','membership_own','membership_user','removed_office','removed_topic') DEFAULT NULL,
+  `destinationid` int(11) DEFAULT NULL,
+  `message` text,
+  `activated` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=80 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `notifications`
+--
+
+LOCK TABLES `notifications` WRITE;
+/*!40000 ALTER TABLE `notifications` DISABLE KEYS */;
+/*!40000 ALTER TABLE `notifications` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `offices`
 --
 
@@ -29,7 +80,7 @@ CREATE TABLE `offices` (
   `name` varchar(255) DEFAULT NULL,
   `description` text,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -43,29 +94,55 @@ INSERT INTO `offices` VALUES (1,0,0,'Local','In this place you can browse your o
 UNLOCK TABLES;
 
 --
--- Table structure for table `posts`
+-- Table structure for table `posts_office`
 --
 
-DROP TABLE IF EXISTS `posts`;
+DROP TABLE IF EXISTS `posts_office`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `posts` (
+CREATE TABLE `posts_office` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `officeid` int(11) NOT NULL,
+  `userid` int(11) NOT NULL,
+  `message` longtext NOT NULL,
+  `posted` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `posts_office`
+--
+
+LOCK TABLES `posts_office` WRITE;
+/*!40000 ALTER TABLE `posts_office` DISABLE KEYS */;
+/*!40000 ALTER TABLE `posts_office` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `posts_topic`
+--
+
+DROP TABLE IF EXISTS `posts_topic`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `posts_topic` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `topicid` int(11) NOT NULL,
   `userid` varchar(45) NOT NULL,
   `message` longtext NOT NULL,
   `posted` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `posts`
+-- Dumping data for table `posts_topic`
 --
 
-LOCK TABLES `posts` WRITE;
-/*!40000 ALTER TABLE `posts` DISABLE KEYS */;
-/*!40000 ALTER TABLE `posts` ENABLE KEYS */;
+LOCK TABLES `posts_topic` WRITE;
+/*!40000 ALTER TABLE `posts_topic` DISABLE KEYS */;
+/*!40000 ALTER TABLE `posts_topic` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -80,7 +157,7 @@ CREATE TABLE `roles` (
   `name` varchar(255) NOT NULL,
   `description` longtext NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -109,7 +186,7 @@ CREATE TABLE `topics` (
   `description` longtext NOT NULL,
   PRIMARY KEY (`id`),
   KEY `IDX_91F64639D823E37A` (`parentid`)
-) ENGINE=InnoDB AUTO_INCREMENT=45 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -187,7 +264,7 @@ CREATE TABLE `users` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `login_UNIQUE` (`username`),
   UNIQUE KEY `email_UNIQUE` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -208,4 +285,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-03-25 17:55:58
+-- Dump completed on 2014-04-04 19:48:30
