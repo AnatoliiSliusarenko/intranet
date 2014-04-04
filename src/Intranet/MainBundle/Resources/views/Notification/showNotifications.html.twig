@@ -25,7 +25,7 @@
 {% block content %}
 <div class="row">
 	<div class="col-md-12">
-	{% for notification in app.user.notifications%}
+	{% for notification in app.user.getNotifications()%}
 		{% if notification.type=='membership_own' %}
 		<a href="{{ url('intranet_show_office', {'office_id': notification.destinationid }) }}" class="btn btn-success btn-block"><i class="fa fa-user aligned-left"></i> {{ notification.message }} <span class="time aligned-right"> <i class="fa fa-clock-o"></i>  {{ notification.activated|date('d/m/y H:i:s') }}</span></a>
         {% elseif notification.type=='membership_user' %}
