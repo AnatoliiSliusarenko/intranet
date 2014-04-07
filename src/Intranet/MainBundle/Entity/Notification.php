@@ -206,34 +206,84 @@ class Notification
     	$types = array(
     			"message_office", 
     			"message_topic", 
-    			"membership_own", 
-    			"membership_user", 
+    			"membership_own",
+    			"membership_own_out", 
+    			"membership_user",
+    			"membership_user_out", 
     			"membership_out_own", 
     			"membership_out_user", 
     			"removed_office", 
-    			"removed_topic");
+    			"removed_topic",
+    			"topic_added");
     	
     	if (!in_array($type, $types)) return false;
     	
     	switch ($type)
     	{
+    		case "topic_added":
+    		{
+    			$topicTree = Topic::getTopicTree($em);
+    			$rootTopic = $topicTree[0];
+    			
+    			$officeTree = Office::getOfficeTree($em);
+    			$rootOffice = $officeTree[0];
+    			
+    			if ($destination->getParentid() == $rootTopic->getId())
+    			{
+    				$officeTitle = ($resource->getOffice()->getId() == $rootOffice->getId()) 
+    								? 'Public'
+    								:  $resource->getOffice()->getName();
+    				$message = 'New topic "'.$resource->getName().'" was added in "'.$officeTitle.'"';
+    			}
+    			else 
+    			{
+    				$parent = $resource->getParent($em);
+    				$message = 'New subtopic "'.$resource->getName().'" was added in "'.$parent->getName().'"';
+    			}
+    				
+    			$users = $destination->getOffice()->getUsers();
+    			break;
+    		}
     		case "message_office":
     		{
-    			$message = "New message from ".$resource->getName()." ".$resource->getSurname()." in ".$destination->getName();
+    			$message = 'New message from '.$resource->getName().' '.$resource->getSurname().' in "'.$destination->getName().'"';
     			$users = $destination->getUsers();
     			break;
     		}
     		case "message_topic":
     		{
-    			$message = "New message from ".$resource->getName()." ".$resource->getSurname()." in ".$destination->getName();
+    			$message = 'New message from '.$resource->getName().' '.$resource->getSurname().' in "'.$destination->getName().'"';
     			$users = $destination->getOffice()->getUsers();
     			break;
     		}
     		case "membership_own":
     		{
-    			$message = "You was added to ".$destination->getName();
+    			$message = 'You was added to "'.$destination->getName().'"';
     			$users = $destination->getUsers();
     			break;
+    		}
+    		case "membership_user_out":
+    		{
+    			$users = $destination->getUsers();
+    			foreach($resource as $userOffice)
+    			{
+    				if ($userOffice->getId() == $creator->getId()) continue;
+    				
+    				$message = 'You was deleted from "'.$destination->getName().'"';
+    				$type = "membership_own_out";
+    			
+    				self::postNotification($em, $userOffice, $type, $destination->getId(), $message);
+    				    				
+    				foreach ($users as $user)
+    				{
+    					if (($user->getId() == $creator->getId()) || ($user->getId() == $userOffice->getId())) continue;
+    					$type = "membership_user_out";
+    					$message = $userOffice->getName().' '.$userOffice->getSurname().' was deleted from "'.$destination->getName().'"';
+    					
+    					self::postNotification($em, $user, $type, $destination->getId(), $message);
+    				}
+    			}
+    			return true;
     		}
     		case "membership_user":
     		{
@@ -242,7 +292,7 @@ class Notification
     			{
     				if ($userOffice->getId() == $creator->getId()) continue;
     				
-    				$message = "You was added to ".$destination->getName();
+    				$message = 'You was added to "'.$destination->getName().'"';
     				$type = "membership_own";
     			
     				self::postNotification($em, $userOffice, $type, $destination->getId(), $message);
@@ -251,7 +301,7 @@ class Notification
     				{
     					if (($user->getId() == $creator->getId()) || ($user->getId() == $userOffice->getId())) continue;
     					$type = "membership_user";
-    					$message = $userOffice->getName()." ".$userOffice->getSurname()." was added to ".$destination->getName();
+    					$message = $userOffice->getName().' '.$userOffice->getSurname().' was added to "'.$destination->getName().'"';
     					
     					self::postNotification($em, $user, $type, $destination->getId(), $message);
     				}
@@ -260,13 +310,13 @@ class Notification
     		}
     		case "removed_office":
     		{
-    			$message = $destination->getName()." was delated!";
+    			$message = '"'.$destination->getName().'" was delated!';
     			$users = $destination->getUsers();
     			break;
     		}
     		case "removed_topic":
     		{
-    			$message = $destination->getName()." was delated!";
+    			$message = '"'.$destination->getName().'" was delated!';
     			$users = $destination->getOffice()->getUsers();
     			break;
     		}
@@ -290,7 +340,9 @@ class Notification
     	   ->andWhere("n.destinationid = :destinationid")
     	   ->andWhere("n.type = 'message_office' 
     	   		    OR n.type = 'membership_own' 
+    	   		    OR n.type = 'membership_own_out'
     	   		    OR n.type = 'membership_user' 
+    	   		    OR n.type = 'membership_user_out'
     	   		    OR n.type = 'removed_office'")
     	   ->setParameter("userid", $user->getId())
     	   ->setParameter("destinationid", $office_id);
@@ -304,7 +356,9 @@ class Notification
     	$qb->delete('IntranetMainBundle:Notification', 'n')
     	->where("n.userid = :userid")
     	->andWhere("n.destinationid = :destinationid")
-    	->andWhere("n.type = 'message_topic' OR n.type = 'removed_topic'")
+    	->andWhere("n.type = 'message_topic' 
+    			 OR n.type = 'removed_topic'
+    			 OR n.type = 'topic_added'")
     	->setParameter("userid", $user->getId())
     	->setParameter("destinationid", $topic_id);
     	 

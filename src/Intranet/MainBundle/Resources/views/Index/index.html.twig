@@ -44,10 +44,17 @@
                         href="{{ url('intranet_show_office', {office_id: notification.destinationid}) }}"
                         class="text-success">
                         <i class="fa noty-icon fa-user bg-success"></i> 
+                        {% elseif notification.type=='membership_own_out' %}
+                        href="{{ url('intranet_show_office', {office_id: notification.destinationid}) }}"
+                        class="text-danger">
+                        <i class="fa noty-icon fa-user bg-danger"></i> 
                         {% elseif notification.type=='membership_user' %}
                         href="{{ url('intranet_show_office', {office_id: notification.destinationid}) }}"
                         class="text-warning">
-                        <i class="fa noty-icon fa-user bg-warning"></i> 
+                        {% elseif notification.type=='membership_user_out' %}
+                        href="{{ url('intranet_show_office', {office_id: notification.destinationid}) }}"
+                        class="text-danger">
+                        <i class="fa noty-icon fa-user bg-danger"></i> 
                         {% elseif notification.type=='message_office' %}
                         href="{{ url('intranet_show_office', {office_id: notification.destinationid}) }}">
                         <i class="fa noty-icon fa-comment bg-primary"></i> 
@@ -63,6 +70,10 @@
 						href="{{ url('intranet_show_topic', {topic_id: notification.destinationid}) }}" 
 						class="text-danger">
 						<i class="fa noty-icon fa-exclamation bg-danger"></i> 
+						{% elseif notification.type=='topic_added' %}
+						href="{{ url('intranet_show_topic', {topic_id: notification.destinationid}) }}" 
+						class="text-success">
+						<i class="fa noty-icon fa-comment bg-success"></i>
                         {% endif %}
                         <span class="description">{{ notification.message }}</span>
                         <span class="time"> <i class="fa fa-clock-o"></i>  {{ notification.activated|date('d/m/y H:i:s') }}</span>

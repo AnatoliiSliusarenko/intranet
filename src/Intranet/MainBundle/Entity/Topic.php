@@ -117,6 +117,11 @@ class Topic
     {
         return $this->parentid;
     }
+    
+    public function getParent($em)
+    {
+    	return $em->getRepository('IntranetMainBundle:Topic')->find($this->parentid);
+    }
 
     /**
      * Set name

@@ -137,12 +137,12 @@ class OfficeController extends Controller
 			return $response;
 		}
 		
-		$usersAdded = $office->resetUsers($em, $members);
+		$resetUsers = $office->resetUsers($em, $members);
 		$em->persist($office);
 		$em->flush();
 		
-		Notification::createNotification($em, $this->getUser(), "membership_user", $usersAdded, $office);
-		
+		Notification::createNotification($em, $this->getUser(), "membership_user", $resetUsers['added'], $office);
+		Notification::createNotification($em, $this->getUser(), "membership_user_out", $resetUsers['removed'], $office);
 		$response = new Response(json_encode(array("result" => true,  "message" => 'Members changed!')));
 		$response->headers->set('Content-Type', 'application/json');
 		return $response;

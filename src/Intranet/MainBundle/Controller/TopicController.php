@@ -96,6 +96,8 @@ class TopicController extends Controller
     	$em->persist($topic);
     	$em->flush();
     	
+    	Notification::createNotification($em, $this->getUser(), "topic_added", $topic, $topic);
+    	
     	return $this->redirect($this->generateUrl('intranet_show_topic', array('topic_id' => $topic->getId())));
     }
     

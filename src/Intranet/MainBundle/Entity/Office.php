@@ -352,7 +352,7 @@ class Office
     		$em->persist($user);
     	}
     	
-    	return $this->addUsers($em, $usersToAdd);
+    	return  array("added" => $this->addUsers($em, $usersToAdd), "removed" => $usersToRemove);
     }
 
     /**
