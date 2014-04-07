@@ -51,6 +51,7 @@
                         {% elseif notification.type=='membership_user' %}
                         href="{{ url('intranet_show_office', {office_id: notification.destinationid}) }}"
                         class="text-warning">
+                        <i class="fa noty-icon fa-user bg-danger"></i> 
                         {% elseif notification.type=='membership_user_out' %}
                         href="{{ url('intranet_show_office', {office_id: notification.destinationid}) }}"
                         class="text-danger">
