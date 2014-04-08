@@ -87,6 +87,12 @@ class User implements UserInterface, \Serializable
 	private $roles;
 	
 	/**
+	 * @ORM\ManyToMany(targetEntity="Task", inversedBy="users")
+	 * @var array
+	 */
+	private $tasks;
+	
+	/**
 	 * @ORM\ManyToMany(targetEntity="Office", inversedBy="users")
 	 * @var array
 	 */
@@ -755,5 +761,38 @@ class User implements UserInterface, \Serializable
     public function removePostsOffice(\Intranet\MainBundle\Entity\PostOffice $postsOffice)
     {
         $this->postsOffice->removeElement($postsOffice);
+    }
+
+    /**
+     * Add tasks
+     *
+     * @param \Intranet\MainBundle\Entity\Task $tasks
+     * @return User
+     */
+    public function addTask(\Intranet\MainBundle\Entity\Task $tasks)
+    {
+        $this->tasks[] = $tasks;
+
+        return $this;
+    }
+
+    /**
+     * Remove tasks
+     *
+     * @param \Intranet\MainBundle\Entity\Task $tasks
+     */
+    public function removeTask(\Intranet\MainBundle\Entity\Task $tasks)
+    {
+        $this->tasks->removeElement($tasks);
+    }
+
+    /**
+     * Get tasks
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getTasks()
+    {
+        return $this->tasks;
     }
 }

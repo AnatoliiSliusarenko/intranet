@@ -70,6 +70,12 @@ class Topic
      */
     private $user;
     
+    /**
+     * @ORM\ManyToMany(targetEntity="Task", inversedBy="topics")
+     * @var array
+     */
+    private $tasks;
+    
     public $children = null;
     
     private static function fetchChildren($em, $parentid)
@@ -365,5 +371,38 @@ class Topic
     	{
     		$topic->deleteAllChildren($em);
     	}
+    }
+
+    /**
+     * Add tasks
+     *
+     * @param \Intranet\MainBundle\Entity\Task $tasks
+     * @return Topic
+     */
+    public function addTask(\Intranet\MainBundle\Entity\Task $tasks)
+    {
+        $this->tasks[] = $tasks;
+
+        return $this;
+    }
+
+    /**
+     * Remove tasks
+     *
+     * @param \Intranet\MainBundle\Entity\Task $tasks
+     */
+    public function removeTask(\Intranet\MainBundle\Entity\Task $tasks)
+    {
+        $this->tasks->removeElement($tasks);
+    }
+
+    /**
+     * Get tasks
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getTasks()
+    {
+        return $this->tasks;
     }
 }
