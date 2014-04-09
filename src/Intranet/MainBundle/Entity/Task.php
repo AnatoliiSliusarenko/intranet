@@ -31,6 +31,13 @@ class Task
     /**
      * @var string
      *
+     * @ORM\Column(name="priority", type="text")
+     */
+    private $priority;
+    
+    /**
+     * @var string
+     *
      * @ORM\Column(name="name", type="text")
      */
     private $name;
@@ -265,5 +272,28 @@ class Task
     public function getTopics()
     {
         return $this->topics;
+    }
+
+    /**
+     * Set priority
+     *
+     * @param string $priority
+     * @return Task
+     */
+    public function setPriority($priority)
+    {
+        $this->priority = $priority;
+
+        return $this;
+    }
+
+    /**
+     * Get priority
+     *
+     * @return string 
+     */
+    public function getPriority()
+    {
+        return $this->priority;
     }
 }

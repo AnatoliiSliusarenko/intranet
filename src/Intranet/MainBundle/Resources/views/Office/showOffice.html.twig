@@ -248,6 +248,74 @@
             </div>
 		</div>
 		{% endif %}
+		<div class="panel panel-cascade">
+			<div class="panel-heading">
+                <h3 class="panel-title">
+                	<span>
+                    	<a href="#" class="panel-minimize"><i class="fa fa-pencil-square"></i> Tasks of this office</a>
+                    </span> 
+                    <button type="button" class="btn btn-success"><i class="fa fa-plus-circle"></i></button>
+                </h3>
+            </div>
+            <div class="panel-body">
+	          <table class="table users-table table-condensed table-hover" >
+	           <thead>
+	           		<tr>
+			             <th  class="visible-lg">#</th>
+			             <th  class="visible-lg">Name</th>
+			             <th class="visible-lg">Status</th>
+			             <th class="visible-lg">Priority</th>
+			             <th class="visible-lg">StartDate</th>
+			             <th class="visible-lg">EndDate</th>
+			             <th class="visible-lg">Users</th>
+			             <th class="visible-lg">Topics</th>
+			             <th>&nbsp;</th>
+	           		</tr>
+	           </thead>
+	           <tbody>
+	           {% for task in app.user.getTasks() %}
+	           <tr>
+			   		<td class="visible-lg">{{ loop.index }}</td>
+		            <td class="visible-lg">{{ task.name }}</td>
+		            <td class="visible-lg">
+		            {% if task.status == 'pending' %}
+		            <label class="label label-default">Pending</label>
+		            {% elseif task.status == 'opened' %}
+		            <label class="label label-danger">Opened</label>
+		            {% elseif task.status == 're-opened' %}
+		            <label class="label label-warning">Re-opened</label>
+		            {% elseif task.status == 'in-progress' %}
+		            <label class="label label-primary">In-progress</label>
+		            {% elseif task.status == 'resolved' %}
+		            <label class="label label-success">Resolved</label>
+		            {% elseif task.status == 'testing' %}
+		            <label class="label label-info">Testing</label>
+		            {% elseif task.status == 'closed' %}
+		            <label class="label label-dark">Closed</label>
+		            {% endif %}
+		            </td>
+		            <td class="visible-lg">
+		            {% if task.priority == 'high' %}
+		            <label class="label label-danger">High</label>
+		            {% elseif task.priority == 'medium' %}
+		            <label class="label label-warning">Medium</label>
+		            {% else %}
+		            <label class="label label-success">Low</label>
+		            {% endif %}
+		            </td>
+		            <td class="visible-lg">{{ task.startdate|date('d/m/y H:i:s') }}</td>
+		            <td class="visible-lg">{{ task.enddate|date('d/m/y H:i:s') }}</td>
+		            <td class="visible-lg">Deo</td>
+		            <td class="visible-lg">Deo</td>
+		            <td>
+		             <button type="button" class="btn btn-warning"><i class="fa fa-edit"></i></button>
+		            </td>
+	           </tr>
+	           {% endfor %}
+			  </tbody>
+			</table>
+		  </div>
+		</div>
 	</div>
 </div>
 {% endblock %}
