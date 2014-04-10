@@ -93,5 +93,5 @@ intranet_task_add:
     defaults: { _controller: IntranetMainBundle:Task:addTask }
     
 intranet_task_edit:
-    pattern:  /office/{office_id}/task/{task_id}/edit
+    pattern:  /office/{office_id}/task/{task_id}/edit/
     defaults: { _controller: IntranetMainBundle:Task:editTask }
