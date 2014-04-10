@@ -4,6 +4,7 @@
 
 {% block styles %}
 	{{ parent() }}
+	<link href="{{ asset('bundles/intranet/css/bootstrap-datetimepicker.min.css') }}" rel="stylesheet">
   	<!-- Loading Stylesheets -->    
   	<link href="{{ asset('bundles/intranet/css/font-awesome.css') }}" rel="stylesheet">
 	<!-- Loading Less -->
@@ -146,6 +147,7 @@
 {% block javascripts %}
 {{ parent() }}
 
+<script src="{{ asset('bundles/intranet/js/bootstrap-datetimepicker.min.js') }}"></script>
 <script src="{{ asset('bundles/intranet/js/less-1.5.0.min.js') }}"></script>
 
 <script src="{{ asset('bundles/intranet/js/bic_calendar.js') }}"></script>

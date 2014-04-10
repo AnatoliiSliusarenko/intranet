@@ -61,6 +61,12 @@ class Office
      */
     private $topics;
     
+    /**
+     * @ORM\OneToMany(targetEntity="Task", mappedBy="office")
+     * @var array
+     */
+    private $tasks;
+    
     public $children = null;
     
     private static function fetchChildren($em, $officeid)
@@ -433,5 +439,38 @@ class Office
     			'name' => $this->getName(),
     			'description' => $this->getDescription()
     	);
+    }
+
+    /**
+     * Add tasks
+     *
+     * @param \Intranet\MainBundle\Entity\Task $tasks
+     * @return Office
+     */
+    public function addTask(\Intranet\MainBundle\Entity\Task $tasks)
+    {
+        $this->tasks[] = $tasks;
+
+        return $this;
+    }
+
+    /**
+     * Remove tasks
+     *
+     * @param \Intranet\MainBundle\Entity\Task $tasks
+     */
+    public function removeTask(\Intranet\MainBundle\Entity\Task $tasks)
+    {
+        $this->tasks->removeElement($tasks);
+    }
+
+    /**
+     * Get tasks
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getTasks()
+    {
+        return $this->tasks;
     }
 }

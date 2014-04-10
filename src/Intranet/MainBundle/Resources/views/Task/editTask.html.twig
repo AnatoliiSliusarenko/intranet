@@ -1,0 +1,65 @@
+<div class="row" id="popup">
+	<div class="col-md-12">
+		<div class="panel panel-cascade" style="width:600px;">
+			<div class="panel-body">
+            	<form action="{{ url('intranet_task_edit', {office_id: office.getId(), task_id: task.getId()}) }}" class="form-horizontal" role="form" method="post">
+            		<div class="form-group">
+                		<label for="inputEmail1" class="col-lg-2 col-md-3 control-label">Name</label>
+                		<div class="col-lg-10 col-md-9">
+                 			<input type="text" name="name" class="form-control form-cascade-control" id="inputEmail1" placeholder="Type task name here" value="{{ task.name }}" required>
+               			</div>
+             		</div>
+             		<div class="form-group">
+						  <label for="inputEmail1" class="col-lg-2 col-md-3 control-label">Priority</label>
+						  <div class="col-lg-10 col-md-9">
+						   <select name="priority" class="form-control">
+						    <option value="high" {% if task.priority == 'high' %}{{ 'selected' }}{% endif %}>High</option>
+						    <option value="medium" {% if task.priority == 'medium' %}{{ 'selected' }}{% endif %}>Medium</option>
+						    <option value="low" {% if task.priority == 'low' %}{{ 'selected' }}{% endif %}>Low</option>
+						   </select>
+						  </div>
+					</div>
+					<div class="form-group">
+						  <label for="inputEmail1" class="col-lg-2 col-md-3 control-label">Status</label>
+						  <div class="col-lg-10 col-md-9">
+						   <select name="status" class="form-control">
+						    <option value="pending" {% if task.status == 'pending' %}{{ 'selected' }}{% endif %}>Pending</option>
+						    <option value="opened" {% if task.status == 'opened' %}{{ 'selected' }}{% endif %}>Opened</option>
+						    <option value="re-opened" {% if task.status == 're-opened' %}{{ 'selected' }}{% endif %}>Re-opened</option>
+						    <option value="in-progress" {% if task.status == 'in-progress' %}{{ 'selected' }}{% endif %}>In-progress</option>
+						    <option value="resolved" {% if task.status == 'resolved' %}{{ 'selected' }}{% endif %}>Resolved</option>
+						    <option value="testing" {% if task.status == 'testing' %}{{ 'selected' }}{% endif %}>Testing</option>
+						    <option value="closed" {% if task.status == 'closed' %}{{ 'selected' }}{% endif %}>Closed</option>
+						   </select>
+						  </div>
+					</div>
+             		<div class="form-group">
+  						<label for="inputEmail1" class="col-lg-2 col-md-3 control-label">Members</label>
+  						<div class="col-lg-10 col-md-9">
+   							<select name="members[]" multiple class="form-control">
+   								{% for user in users %}
+   								<option value="{{ user.id }}" {% if task.hasUser(user) %}{{ 'selected' }}{% endif %}>{{ user.surname ~ ' ' ~ user.name ~ ' (' ~ user.username ~ ')' }}</option>
+   								{% endfor %}	
+  							</select>
+						</div>
+					</div>
+					
+					<div class="form-group">
+  						<label for="inputEmail1" class="col-lg-2 col-md-3 control-label">Topics</label>
+  						<div class="col-lg-10 col-md-9">
+   							<select name="topics[]" multiple class="form-control">
+   								{% for topic in topics %}
+   								<option value="{{ topic.id }}" {% if task.hasTopic(topic) %}{{ 'selected' }}{% endif %}>{{ topic.name }}</option>
+   								{% endfor %}
+  							</select>
+						</div>
+					</div>
+             		<input type="hidden" name="backUrl" value="{{ backUrl }}">
+             		<div class="form-actions">
+             			<input type="submit" value="Save Task" class="btn bg-primary btn-block text-white">
+             		</div>
+            	</form>
+			</div>
+		</div>
+	</div>
+</div>

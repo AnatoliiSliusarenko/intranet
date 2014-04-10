@@ -87,3 +87,11 @@ intranet_change_office_members:
 intranet_notifications_show:
     pattern:  /notifications/
     defaults: { _controller: IntranetMainBundle:Notification:showNotifications }
+    
+intranet_task_add:
+    pattern:  /office/{office_id}/task/add/
+    defaults: { _controller: IntranetMainBundle:Task:addTask }
+    
+intranet_task_edit:
+    pattern:  /office/{office_id}/task/{task_id}/edit
+    defaults: { _controller: IntranetMainBundle:Task:editTask }

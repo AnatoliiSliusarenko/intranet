@@ -164,6 +164,97 @@
             </div>
 		</div>
 		
+		<div class="panel panel-cascade">
+			<div class="panel-heading">
+                <h3 class="panel-title">
+                	<span>
+                    	<a href="#" class="panel-minimize"><i class="fa fa-pencil-square"></i> Tasks of this topic</a>
+                    </span> 
+                    <button type="button" href="{{ url('intranet_task_add', {office_id: topic.getOffice().getId()}) }}" class="btn btn-success popup"><i class="fa fa-plus-circle"></i></button>
+                </h3>
+            </div>
+            <div class="panel-body">
+	          <table class="table users-table table-condensed table-hover" >
+	           <thead>
+	           		<tr>
+			             <th  class="visible-lg">#</th>
+			             <th  class="visible-lg">Name</th>
+			             <th class="visible-lg">Status</th>
+			             <th class="visible-lg">Priority</th>
+			             <th class="visible-lg">StartDate</th>
+			             <th class="visible-lg">EndDate</th>
+			             <th class="visible-lg">Users</th>
+			             <th class="visible-lg">Topics</th>
+			             <th>&nbsp;</th>
+	           		</tr>
+	           </thead>
+	           <tbody>
+	           {% for task in topic.getTasks() %}
+	           <tr>
+			   		<td class="visible-lg">{{ loop.index }}</td>
+		            <td class="visible-lg">{{ task.name }}</td>
+		            <td class="visible-lg">
+		            {% if task.status == 'pending' %}
+		            <label class="label label-default">Pending</label>
+		            {% elseif task.status == 'opened' %}
+		            <label class="label label-danger">Opened</label>
+		            {% elseif task.status == 're-opened' %}
+		            <label class="label label-warning">Re-opened</label>
+		            {% elseif task.status == 'in-progress' %}
+		            <label class="label label-primary">In-progress</label>
+		            {% elseif task.status == 'resolved' %}
+		            <label class="label label-success">Resolved</label>
+		            {% elseif task.status == 'testing' %}
+		            <label class="label label-info">Testing</label>
+		            {% elseif task.status == 'closed' %}
+		            <label class="label label-dark">Closed</label>
+		            {% endif %}
+		            </td>
+		            <td class="visible-lg">
+		            {% if task.priority == 'high' %}
+		            <label class="label label-danger">High</label>
+		            {% elseif task.priority == 'medium' %}
+		            <label class="label label-warning">Medium</label>
+		            {% else %}
+		            <label class="label label-success">Low</label>
+		            {% endif %}
+		            </td>
+		            <td class="visible-lg">{{ task.startdate|date('d/m/y H:i:s') }}</td>
+		            <td class="visible-lg">{% if task.enddate != null %}{{ task.enddate|date('d/m/y H:i:s') }}{% else %}{{ '-' }}{% endif %}</td>
+		            <td class="visible-lg">
+		            {% if task.users|length>0 %}
+		            <select class="form-control">
+		            {% for user in task.users %}
+					    <option>{{ user.surname ~ ' ' ~ user.name }}</option>
+					{% endfor %}
+					</select>
+					{% else %}
+					{{ '-' }}
+					{% endif %}
+		            </td>
+		            <td class="visible-lg">
+		            {% if task.topics|length>0 %}
+		            <select class="form-control">
+					{% for topic in task.topics %}
+					    <option>{{ topic.name }}</option>
+					{% endfor %}
+					</select>
+					{% else %}
+					{{ '-' }}
+					{% endif %}
+		            </td>
+		            <td>
+		             {% if is_granted('ROLE_ADMIN') or topic.getOffice().getUserid() == app.user.getId() or task.hasUser(app.user) %}
+		             <button type="button" href="{{ url('intranet_task_edit', {office_id: office.getId(), task_id: task.id}) }}" class="btn btn-warning popup"><i class="fa fa-edit"></i></button>
+		             {% endif %}
+		            </td>
+	           </tr>
+	           {% endfor %}
+			  </tbody>
+			</table>
+		  </div>
+		</div>
+		
 	</div>
  </div>
 {% endblock %}
@@ -173,6 +264,7 @@
 	<script src="{{ asset('bundles/intranet/js/underscore-min.js') }}"></script>
 	<script src="{{ asset('bundles/intranet/js/custom/angular-core.js') }}"></script>
 	<script src="{{ asset('bundles/intranet/js/custom/chat.js') }}"></script>
+	<script src="{{ asset('bundles/intranet/js/jquery.bpopup.min.js') }}"></script>
 	
 	<script type="text/javascript">
     var JSON_URLS = {
@@ -191,5 +283,26 @@
    	var ENTITY = {
    		   	id: "{{ topic.id }}"
     };
-</script>
+	</script>
+	<script type="text/javascript">
+	$(".popup").click(function(){
+		var url = $(this).attr('href');
+		$.ajax({
+			  url: url,
+			  data: {backUrl: '{{ app.request.uri }}'}
+		}).success(function(resp) {
+			debugger
+			  $(".content").append(resp);
+			  $('#popup').bPopup({
+				    position: [window.innerWidth/2 - 250, 100],
+				    easing: 'easeOutBack',
+			        speed: 800,
+			        transition: 'slideDown',
+			        onClose: function(){
+			        	$("#popup").remove();
+					}
+			  });
+		});
+	});
+	</script>
 {% endblock %}

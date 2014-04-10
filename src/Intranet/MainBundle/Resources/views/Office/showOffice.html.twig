@@ -248,13 +248,14 @@
             </div>
 		</div>
 		{% endif %}
+		{% if office.getUserid() != 0 %}
 		<div class="panel panel-cascade">
 			<div class="panel-heading">
                 <h3 class="panel-title">
                 	<span>
                     	<a href="#" class="panel-minimize"><i class="fa fa-pencil-square"></i> Tasks of this office</a>
                     </span> 
-                    <button type="button" class="btn btn-success"><i class="fa fa-plus-circle"></i></button>
+                    <button type="button" href="{{ url('intranet_task_add', {office_id: office.getId()}) }}" class="btn btn-success popup"><i class="fa fa-plus-circle"></i></button>
                 </h3>
             </div>
             <div class="panel-body">
@@ -273,7 +274,7 @@
 	           		</tr>
 	           </thead>
 	           <tbody>
-	           {% for task in app.user.getTasks() %}
+	           {% for task in office.getTasks() %}
 	           <tr>
 			   		<td class="visible-lg">{{ loop.index }}</td>
 		            <td class="visible-lg">{{ task.name }}</td>
@@ -304,11 +305,33 @@
 		            {% endif %}
 		            </td>
 		            <td class="visible-lg">{{ task.startdate|date('d/m/y H:i:s') }}</td>
-		            <td class="visible-lg">{{ task.enddate|date('d/m/y H:i:s') }}</td>
-		            <td class="visible-lg">Deo</td>
-		            <td class="visible-lg">Deo</td>
+		            <td class="visible-lg">{% if task.enddate != null %}{{ task.enddate|date('d/m/y H:i:s') }}{% else %}{{ '-' }}{% endif %}</td>
+		            <td class="visible-lg">
+		            {% if task.users|length>0 %}
+		            <select class="form-control">
+		            {% for user in task.users %}
+					    <option>{{ user.surname ~ ' ' ~ user.name }}</option>
+					{% endfor %}
+					</select>
+					{% else %}
+					{{ '-' }}
+					{% endif %}
+		            </td>
+		            <td class="visible-lg">
+		            {% if task.topics|length>0 %}
+		            <select class="form-control">
+					{% for topic in task.topics %}
+					    <option>{{ topic.name }}</option>
+					{% endfor %}
+					</select>
+					{% else %}
+					{{ '-' }}
+					{% endif %}
+		            </td>
 		            <td>
-		             <button type="button" class="btn btn-warning"><i class="fa fa-edit"></i></button>
+		             {% if is_granted('ROLE_ADMIN') or office.getUserid() == app.user.getId() or task.hasUser(app.user) %}
+		             <button type="button" href="{{ url('intranet_task_edit', {office_id: office.getId(), task_id: task.id}) }}" class="btn btn-warning popup"><i class="fa fa-edit"></i></button>
+		             {% endif %}
 		            </td>
 	           </tr>
 	           {% endfor %}
@@ -316,18 +339,19 @@
 			</table>
 		  </div>
 		</div>
+		{% endif %}
 	</div>
 </div>
 {% endblock %}
-
 {% block content %}
-
 {% endblock %}
 {% block javascripts %}
 	{{ parent() }}
+	
 	<script src="{{ asset('bundles/intranet/js/angular.min.js') }}"></script>
 	<script src="{{ asset('bundles/intranet/js/underscore-min.js') }}"></script>
 	<script src="{{ asset('bundles/intranet/js/custom/angular-core.js') }}"></script>
+	<script src="{{ asset('bundles/intranet/js/jquery.bpopup.min.js') }}"></script>
 	
 	{% if office.getUserid() != 0 %}
 	<script src="{{ asset('bundles/intranet/js/custom/chat.js') }}"></script>
@@ -354,4 +378,27 @@
     };
 	</script>
 	{% endif %}
+	
+	
+	<script type="text/javascript">
+	$(".popup").click(function(){
+		var url = $(this).attr('href');
+		$.ajax({
+			  url: url,
+			  data: {backUrl: '{{ app.request.uri }}'}
+		}).success(function(resp) {
+			  $(".content").append(resp);
+			  $('#popup').bPopup({
+				    position: [window.innerWidth/2 - 250, 100],
+				    easing: 'easeOutBack',
+			        speed: 800,
+			        transition: 'slideDown',
+			        onClose: function(){
+			        	$("#popup").remove();
+					}
+			  });
+		});
+	});
+	</script>
+	
 {% endblock %}

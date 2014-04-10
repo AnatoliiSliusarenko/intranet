@@ -596,17 +596,20 @@ class User implements UserInterface, \Serializable
     	else return $result;
     }
     
-    public function getAllUsers($em)
+    public function getAllUsers($em, $withOutMe = true)
     {
-    	$query = $em->getRepository("IntranetMainBundle:User")
-			    	->createQueryBuilder('u')
-			    	->select('u')
-			    	->where('u.id != :userid')
-			    	->setParameter('userid', $this->id)
-			    	->orderBy('u.surname', 'ASC')
-			    	->getQuery();
-    
-    	$result = $query->getResult();
+    	$qb = $em->getRepository("IntranetMainBundle:User")
+			     ->createQueryBuilder('u')
+			     ->select('u')
+			     ->orderBy('u.surname', 'ASC');
+    	
+    	if ($withOutMe == true)
+    	{
+    		$qb->where('u.id != :userid')
+    		   ->setParameter('userid', $this->id);
+    	}
+    	
+    	$result = $qb->getQuery()->getResult();
     
     	return $result;
     }

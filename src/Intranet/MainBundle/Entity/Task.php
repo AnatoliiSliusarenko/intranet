@@ -29,6 +29,13 @@ class Task
     private $officeid;
     
     /**
+     * @ORM\ManyToOne(targetEntity="Office", inversedBy="tasks")
+     * @ORM\JoinColumn(name="officeid")
+     * @var Office
+     */
+    private $office;
+    
+    /**
      * @var string
      *
      * @ORM\Column(name="priority", type="text")
@@ -140,6 +147,14 @@ class Task
     public function setStatus($status)
     {
         $this->status = $status;
+        
+        if ($status == 'opened' || $status == 're-opened')
+        {
+        	$this->startdate = new \DateTime();
+        	$this->enddate = null;
+        }
+        elseif ($status == 'closed')
+        	$this->enddate = new \DateTime();
 
         return $this;
     }
@@ -220,6 +235,24 @@ class Task
 
         return $this;
     }
+    
+    public function addUsers($em, $users)
+    {
+    	$usersAdded = array();
+    	foreach ($users as $userid)
+    	{
+    		$user = $em->getRepository('IntranetMainBundle:User')->find($userid);
+    		if ($user == null)
+    			continue;
+    
+    		$usersAdded[] = $user;
+    		$this->addUser($user);
+    		$user->addTask($this);
+    		$em->persist($user);
+    	}
+    
+    	return $usersAdded;
+    }
 
     /**
      * Remove user
@@ -240,6 +273,41 @@ class Task
     {
         return $this->users;
     }
+    
+    public function resetUsers($em, $users)
+    {
+    	$existUsersIds = array_map(function($u){return $u->getId();}, $this->users->toArray());
+    	$usersToAdd = array();
+    	$usersToRemove = array();
+    	 
+    	foreach ($this->users as $user)
+    	{
+    		if (!in_array($user->getId(), $users)) $usersToRemove[] = $user;
+    	}
+    	foreach ($users as $userId)
+    	{
+    		if (!in_array($userId, $existUsersIds)) $usersToAdd[] = $userId;
+    	}
+    	 
+    	foreach ($usersToRemove as $user)
+    	{
+    		$user->removeTask($this);
+    		$this->removeUser($user);
+    		$em->persist($user);
+    	}
+    	 
+    	return  array("added" => $this->addUsers($em, $usersToAdd), "removed" => $usersToRemove);
+    }
+    
+    public function hasUser(\Intranet\MainBundle\Entity\User $user)
+    {
+    	foreach ($this->users as $curUser)
+    	{
+    		if ($curUser->getId() == $user->getId()) return true;
+    	}
+    	 
+    	return false;
+    }
 
     /**
      * Add topic
@@ -254,6 +322,24 @@ class Task
         return $this;
     }
 
+    public function addTopics($em, $topics)
+    {
+    	$topicsAdded = array();
+    	foreach ($topics as $topicid)
+    	{
+    		$topic = $em->getRepository('IntranetMainBundle:Topic')->find($topicid);
+    		if ($topic == null)
+    			continue;
+    
+    		$topicsAdded[] = $topic;
+    		$this->addTopic($topic);
+    		$topic->addTask($this);
+    		$em->persist($topic);
+    	}
+    
+    	return $topicsAdded;
+    }
+    
     /**
      * Remove topic
      *
@@ -272,6 +358,41 @@ class Task
     public function getTopics()
     {
         return $this->topics;
+    }
+    
+    public function resetTopics($em, $topics)
+    {
+    	$existTopicsIds = array_map(function($t){return $t->getId();}, $this->topics->toArray());
+    	$topicsToAdd = array();
+    	$topicsToRemove = array();
+    
+    	foreach ($this->topics as $topic)
+    	{
+    		if (!in_array($topic->getId(), $topics)) $topicsToRemove[] = $topic;
+    	}
+    	foreach ($topics as $topicId)
+    	{
+    		if (!in_array($topicId, $existTopicsIds)) $topicsToAdd[] = $topicId;
+    	}
+    
+    	foreach ($topicsToRemove as $topic)
+    	{
+    		$topic->removeTask($this);
+    		$this->removeTopic($topic);
+    		$em->persist($topic);
+    	}
+    
+    	return  array("added" => $this->addTopics($em, $topicsToAdd), "removed" => $topicsToRemove);
+    }
+    
+    public function hasTopic(\Intranet\MainBundle\Entity\Topic $topic)
+    {
+    	foreach ($this->topics as $curTopic)
+    	{
+    		if ($curTopic->getId() == $topic->getId()) return true;
+    	}
+    	
+    	return false;
     }
 
     /**
@@ -295,5 +416,28 @@ class Task
     public function getPriority()
     {
         return $this->priority;
+    }
+
+    /**
+     * Set office
+     *
+     * @param \Intranet\MainBundle\Entity\Office $office
+     * @return Task
+     */
+    public function setOffice(\Intranet\MainBundle\Entity\Office $office = null)
+    {
+        $this->office = $office;
+
+        return $this;
+    }
+
+    /**
+     * Get office
+     *
+     * @return \Intranet\MainBundle\Entity\Office 
+     */
+    public function getOffice()
+    {
+        return $this->office;
     }
 }

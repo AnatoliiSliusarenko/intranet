@@ -1,0 +1,65 @@
+<div class="row" id="popup">
+	<div class="col-md-12">
+		<div class="panel panel-cascade" style="width:600px;">
+			<div class="panel-body">
+            	<form action="{{ url('intranet_task_add', {office_id: office.getId()}) }}" class="form-horizontal" role="form" method="post">
+            		<div class="form-group">
+                		<label for="inputEmail1" class="col-lg-2 col-md-3 control-label">Name</label>
+                		<div class="col-lg-10 col-md-9">
+                 			<input type="text" name="name" class="form-control form-cascade-control" id="inputEmail1" placeholder="Type task name here" required>
+               			</div>
+             		</div>
+             		<div class="form-group">
+						  <label for="inputEmail1" class="col-lg-2 col-md-3 control-label">Priority</label>
+						  <div class="col-lg-10 col-md-9">
+						   <select name="priority" class="form-control">
+						    <option value="high">High</option>
+						    <option value="medium">Medium</option>
+						    <option value="low" selected>Low</option>
+						   </select>
+						  </div>
+					</div>
+					<div class="form-group">
+						  <label for="inputEmail1" class="col-lg-2 col-md-3 control-label">Status</label>
+						  <div class="col-lg-10 col-md-9">
+						   <select name="status" class="form-control">
+						    <option value="pending">Pending</option>
+						    <option value="opened" selected>Opened</option>
+						    <option value="re-opened">Re-opened</option>
+						    <option value="in-progress">In-progress</option>
+						    <option value="resolved">Resolved</option>
+						    <option value="testing">Testing</option>
+						    <option value="closed">Closed</option>
+						   </select>
+						  </div>
+					</div>
+             		<div class="form-group">
+  						<label for="inputEmail1" class="col-lg-2 col-md-3 control-label">Members</label>
+  						<div class="col-lg-10 col-md-9">
+   							<select name="members[]" multiple class="form-control">
+   								{% for user in users %}
+   								<option value="{{ user.id }}">{{ user.surname ~ ' ' ~ user.name ~ ' (' ~ user.username ~ ')' }}</option>
+   								{% endfor %}	
+  							</select>
+						</div>
+					</div>
+					
+					<div class="form-group">
+  						<label for="inputEmail1" class="col-lg-2 col-md-3 control-label">Topics</label>
+  						<div class="col-lg-10 col-md-9">
+   							<select name="topics[]" multiple class="form-control">
+   								{% for topic in topics %}
+   								<option value="{{ topic.id }}">{{ topic.name }}</option>
+   								{% endfor %}
+  							</select>
+						</div>
+					</div>
+             		<input type="hidden" name="backUrl" value="{{ backUrl }}">
+             		<div class="form-actions">
+             			<input type="submit" value="Save New Task" class="btn bg-primary btn-block text-white">
+             		</div>
+            	</form>
+			</div>
+		</div>
+	</div>
+</div>
