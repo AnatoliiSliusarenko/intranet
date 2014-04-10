@@ -36,7 +36,7 @@ class TopicController extends Controller
     		$officeBreadcrumbs = $office->getBreadcrumbs($em);
     		array_push($officeBreadcrumbs, $office);
     		$this->get('twig')->addGlobal('fullOfficeBreadcrumbsIds', array_map(function($e){return $e->getId();}, $officeBreadcrumbs));
-    		$breadcrumbs = array_splice($breadcrumbs, 1, 1);
+    		array_shift($breadcrumbs);
     		$this->get('twig')->addGlobal('activeSection', 'office');
     	}
     	else 
