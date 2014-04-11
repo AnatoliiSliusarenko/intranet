@@ -38,7 +38,7 @@
   						<div class="col-lg-10 col-md-9">
    							<select name="members[]" multiple class="form-control">
    								{% for user in users %}
-   								<option value="{{ user.id }}">{{ user.surname ~ ' ' ~ user.name ~ ' (' ~ user.username ~ ')' }}</option>
+   								<option value="{{ user.getId() }}">{{ user.getSurname() ~ ' ' ~ user.getName() ~ ' (' ~ user.getUsername() ~ ')' }}</option>
    								{% endfor %}	
   							</select>
 						</div>
@@ -49,7 +49,7 @@
   						<div class="col-lg-10 col-md-9">
    							<select name="topics[]" multiple class="form-control">
    								{% for topic in topics %}
-   								<option value="{{ topic.id }}">{{ topic.name }}</option>
+   								<option value="{{ topic.getId() }}">{{ topic.getName() }}</option>
    								{% endfor %}
   							</select>
 						</div>
