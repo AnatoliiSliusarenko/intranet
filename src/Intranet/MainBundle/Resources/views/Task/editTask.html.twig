@@ -43,7 +43,7 @@
   							</select>
 						</div>
 					</div>
-					
+					{% if topic is not defined %}
 					<div class="form-group">
   						<label for="inputEmail1" class="col-lg-2 col-md-3 control-label">Topics</label>
   						<div class="col-lg-10 col-md-9">
@@ -54,7 +54,11 @@
   							</select>
 						</div>
 					</div>
+					{% endif %}
              		<input type="hidden" name="backUrl" value="{{ backUrl }}">
+             		{% if topic is defined %}
+             		<input type="hidden" name="topicid" value="{{ topic.getId() }}">
+             		{% endif %}
              		<div class="form-actions">
              			<input type="submit" value="Save Task" class="btn bg-primary btn-block text-white">
              		</div>

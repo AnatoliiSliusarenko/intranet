@@ -148,10 +148,10 @@ class Task
     {
         $this->status = $status;
         
-        if ($status == 'opened' || $status == 're-opened')
+        if ($status == 'opened')
         {
-        	$this->startdate = new \DateTime();
-        	$this->enddate = null;
+        	if ($this->startdate == null)
+        		$this->startdate = new \DateTime();
         }
         elseif ($status == 'closed')
         	$this->enddate = new \DateTime();

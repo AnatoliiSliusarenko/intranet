@@ -331,6 +331,7 @@
 		            <td>
 		             {% if is_granted('ROLE_ADMIN') or office.getUserid() == app.user.getId() or task.hasUser(app.user) %}
 		             <button type="button" href="{{ url('intranet_task_edit', {office_id: office.getId(), task_id: task.id}) }}" class="btn btn-warning popup"><i class="fa fa-edit"></i></button>
+		             <button type="button" href="{{ url('intranet_task_remove', {office_id: office.getId(), task_id: task.id}) }}" class="btn btn-danger remove"><i class="fa fa-trash-o"></i></button>
 		             {% endif %}
 		            </td>
 	           </tr>
@@ -398,6 +399,13 @@
 					}
 			  });
 		});
+	});
+
+	$(".remove").click(function(){
+		var url = $(this).attr('href');
+		url = url + '?backUrl=' + '{{ app.request.uri }}';
+		var answer = confirm("Realy want to remove?");
+		if (answer) window.location.href = url;
 	});
 	</script>
 	
