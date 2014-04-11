@@ -41,8 +41,9 @@ class TaskController extends Controller
     		
     		return $this->redirect($backUrl);
     	}
-    	return new Response('Office not found!');
+    	
     	$topics = $office->getTopTopics($em);
+    	return new Response('Office not found!');
     	$users = $this->getUser()->getAllUsers($em, false);
     	$backUrl = $request->query->get('backUrl');
         return $this->render('IntranetMainBundle:Task:addTask.html.twig', array("topics" => $topics, "users" => $users, "office" => $office, "backUrl" => $backUrl));
