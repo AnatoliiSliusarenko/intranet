@@ -16,7 +16,6 @@ class TaskController extends Controller
     	if ($office == null)
     		return new Response('Office not found!');
     	
-    	return new Response('Office not found!');
     	if ($request->getMethod() == 'POST')
     	{
     		$name = $request->request->get('name');
@@ -42,7 +41,7 @@ class TaskController extends Controller
     		
     		return $this->redirect($backUrl);
     	}
-    	
+    	return new Response('Office not found!');
     	$topics = $office->getTopTopics($em);
     	$users = $this->getUser()->getAllUsers($em, false);
     	$backUrl = $request->query->get('backUrl');
