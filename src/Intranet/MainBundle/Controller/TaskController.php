@@ -16,6 +16,7 @@ class TaskController extends Controller
     	if ($office == null)
     		return new Response('Office not found!');
     	
+    	return new Response('Office not found!');
     	if ($request->getMethod() == 'POST')
     	{
     		$name = $request->request->get('name');
