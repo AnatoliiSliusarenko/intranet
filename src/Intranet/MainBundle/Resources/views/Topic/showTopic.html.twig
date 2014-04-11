@@ -219,7 +219,7 @@
 		            <label class="label label-success">Low</label>
 		            {% endif %}
 		            </td>
-		            <td class="visible-lg">{{ task.startdate|date('d/m/y H:i:s') }}</td>
+		            <td class="visible-lg">{% if task.startdate != null %}{{ task.startdate|date('d/m/y H:i:s') }}{% else %}{{ '-' }}{% endif %}</td>
 		            <td class="visible-lg">{% if task.enddate != null %}{{ task.enddate|date('d/m/y H:i:s') }}{% else %}{{ '-' }}{% endif %}</td>
 		            <td class="visible-lg">
 		            {% if task.users|length>0 %}
@@ -291,7 +291,6 @@
 			  url: url,
 			  data: {backUrl: '{{ app.request.uri }}'}
 		}).success(function(resp) {
-			debugger
 			  $(".content").append(resp);
 			  $('#popup').bPopup({
 				    position: [window.innerWidth/2 - 250, 100],

@@ -6,16 +6,16 @@
             		<div class="form-group">
                 		<label for="inputEmail1" class="col-lg-2 col-md-3 control-label">Name</label>
                 		<div class="col-lg-10 col-md-9">
-                 			<input type="text" name="name" class="form-control form-cascade-control" id="inputEmail1" placeholder="Type task name here" value="{{ task.name }}" required>
+                 			<input type="text" name="name" class="form-control form-cascade-control" id="inputEmail1" placeholder="Type task name here" value="{{ task.getName() }}" required>
                			</div>
              		</div>
              		<div class="form-group">
 						  <label for="inputEmail1" class="col-lg-2 col-md-3 control-label">Priority</label>
 						  <div class="col-lg-10 col-md-9">
 						   <select name="priority" class="form-control">
-						    <option value="high" {% if task.priority == 'high' %}{{ 'selected' }}{% endif %}>High</option>
-						    <option value="medium" {% if task.priority == 'medium' %}{{ 'selected' }}{% endif %}>Medium</option>
-						    <option value="low" {% if task.priority == 'low' %}{{ 'selected' }}{% endif %}>Low</option>
+						    <option value="high" {% if task.getPriority() == 'high' %}{{ 'selected' }}{% endif %}>High</option>
+						    <option value="medium" {% if task.getPriority() == 'medium' %}{{ 'selected' }}{% endif %}>Medium</option>
+						    <option value="low" {% if task.getPriority() == 'low' %}{{ 'selected' }}{% endif %}>Low</option>
 						   </select>
 						  </div>
 					</div>
@@ -23,13 +23,13 @@
 						  <label for="inputEmail1" class="col-lg-2 col-md-3 control-label">Status</label>
 						  <div class="col-lg-10 col-md-9">
 						   <select name="status" class="form-control">
-						    <option value="pending" {% if task.status == 'pending' %}{{ 'selected' }}{% endif %}>Pending</option>
-						    <option value="opened" {% if task.status == 'opened' %}{{ 'selected' }}{% endif %}>Opened</option>
-						    <option value="re-opened" {% if task.status == 're-opened' %}{{ 'selected' }}{% endif %}>Re-opened</option>
-						    <option value="in-progress" {% if task.status == 'in-progress' %}{{ 'selected' }}{% endif %}>In-progress</option>
-						    <option value="resolved" {% if task.status == 'resolved' %}{{ 'selected' }}{% endif %}>Resolved</option>
-						    <option value="testing" {% if task.status == 'testing' %}{{ 'selected' }}{% endif %}>Testing</option>
-						    <option value="closed" {% if task.status == 'closed' %}{{ 'selected' }}{% endif %}>Closed</option>
+						    <option value="pending" {% if task.getStatus() == 'pending' %}{{ 'selected' }}{% endif %}>Pending</option>
+						    <option value="opened" {% if task.getStatus() == 'opened' %}{{ 'selected' }}{% endif %}>Opened</option>
+						    <option value="re-opened" {% if task.getStatus() == 're-opened' %}{{ 'selected' }}{% endif %}>Re-opened</option>
+						    <option value="in-progress" {% if task.getStatus() == 'in-progress' %}{{ 'selected' }}{% endif %}>In-progress</option>
+						    <option value="resolved" {% if task.getStatus() == 'resolved' %}{{ 'selected' }}{% endif %}>Resolved</option>
+						    <option value="testing" {% if task.getStatus() == 'testing' %}{{ 'selected' }}{% endif %}>Testing</option>
+						    <option value="closed" {% if task.getStatus() == 'closed' %}{{ 'selected' }}{% endif %}>Closed</option>
 						   </select>
 						  </div>
 					</div>
@@ -38,7 +38,7 @@
   						<div class="col-lg-10 col-md-9">
    							<select name="members[]" multiple class="form-control">
    								{% for user in users %}
-   								<option value="{{ user.id }}" {% if task.hasUser(user) %}{{ 'selected' }}{% endif %}>{{ user.surname ~ ' ' ~ user.name ~ ' (' ~ user.username ~ ')' }}</option>
+   								<option value="{{ user.getId() }}" {% if task.hasUser(user) %}{{ 'selected' }}{% endif %}>{{ user.getSurname() ~ ' ' ~ user.getName() ~ ' (' ~ user.getUsername() ~ ')' }}</option>
    								{% endfor %}	
   							</select>
 						</div>
@@ -49,7 +49,7 @@
   						<div class="col-lg-10 col-md-9">
    							<select name="topics[]" multiple class="form-control">
    								{% for topic in topics %}
-   								<option value="{{ topic.id }}" {% if task.hasTopic(topic) %}{{ 'selected' }}{% endif %}>{{ topic.name }}</option>
+   								<option value="{{ topic.getId() }}" {% if task.hasTopic(topic) %}{{ 'selected' }}{% endif %}>{{ topic.getName() }}</option>
    								{% endfor %}
   							</select>
 						</div>
