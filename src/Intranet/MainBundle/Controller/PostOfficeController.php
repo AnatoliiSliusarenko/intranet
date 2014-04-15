@@ -54,7 +54,10 @@ class PostOfficeController extends Controller
     	$data = json_decode(file_get_contents("php://input"));
     	$post = (object) $data;
     	
-    	$added = PostOffice::addPostByOfficeId($em, $post, $this->getUser());
+    	if (isset($post->postid))
+    		$added = PostOffice::editPostByOfficeId($em, $post);
+    	else
+    		$added = PostOffice::addPostByOfficeId($em, $post);
     	
     	$response = new Response(json_encode(array("result" => $added)));
     	$response->headers->set('Content-Type', 'application/json');

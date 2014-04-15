@@ -48,6 +48,13 @@ class PostOffice
      * @ORM\Column(name="posted", type="datetime")
      */
     private $posted;
+    
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="edited", type="boolean")
+     */
+    private $edited;
 
     /**
      * @ORM\ManyToOne(targetEntity="User", inversedBy="postsOffice")
@@ -124,7 +131,8 @@ class PostOffice
     			'userid' => $this->getUserid(),
     			'user' => $this->getUser()->getInArray(),
     			'message' => $this->getMessage(),
-    			'posted' => $this->getPosted()
+    			'posted' => $this->getPosted(),
+    			'edited' => $this->getEdited()
     		);
     }
     
@@ -155,7 +163,7 @@ class PostOffice
      * Add post by office
      * @return PostOffice
      */
-    public static function addPostByOfficeId($em, $p, $user)
+    public static function addPostByOfficeId($em, $p)
     {
     	$user = $em->getRepository("IntranetMainBundle:User")->find(intval($p->userid));
     	$office = $em->getRepository("IntranetMainBundle:Office")->find(intval($p->entityid));
@@ -175,6 +183,22 @@ class PostOffice
     	$em->persist($post);
     	$em->flush();
     	
+    	return $post->getInArray();
+    }
+    
+    public static function editPostByOfficeId($em, $p)
+    {
+    	$post = $em->getRepository("IntranetMainBundle:PostOffice")->find(intval($p->postid));
+    	
+    	if (($post == null) || (trim($p->message) === ''))
+    		return null;
+    	
+    	$post->setMessage($p->message);
+    	$post->setEdited(true);
+    	 
+    	$em->persist($post);
+    	$em->flush();
+    	 
     	return $post->getInArray();
     }
     
@@ -281,5 +305,28 @@ class PostOffice
     public function getPosted()
     {
         return $this->posted;
+    }
+
+    /**
+     * Set edited
+     *
+     * @param boolean $edited
+     * @return PostOffice
+     */
+    public function setEdited($edited)
+    {
+        $this->edited = $edited;
+
+        return $this;
+    }
+
+    /**
+     * Get edited
+     *
+     * @return boolean 
+     */
+    public function getEdited()
+    {
+        return $this->edited;
     }
 }

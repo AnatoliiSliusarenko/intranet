@@ -25,6 +25,7 @@ Intranet.controller('ChatController', ['$scope', '$http', '$paginator', function
 	$scope.posts = [];
 	$scope.members = [];
 	$scope.message = '';
+	$scope.editingPost = null;
 		
 	$scope.postsGetURL = JSON_URLS.posts;
 	$scope.avatarURL = JSON_URLS.avatar;
@@ -101,6 +102,34 @@ Intranet.controller('ChatController', ['$scope', '$http', '$paginator', function
 		}
 	}
 	
+	$scope.editPost = function(post)
+	{
+		if ((!$scope.isEditable(post)) || ($scope.editingPost != null)) return;
+		console.log(post);
+		$scope.editingPost = post;
+		messageContainer.val(post.message);
+	}
+	
+	Date.minutesBetween = function( date1, date2 ) {
+		  var one_minute=1000*60;
+		  var date1_ms = date1.getTime();
+		  var date2_ms = date2.getTime();
+		  var difference_ms = date2_ms - date1_ms;
+		  
+		  return Math.ceil(difference_ms/one_minute); 
+	}
+	
+	$scope.isEditable = function(post)
+	{
+		var postedTime = new Date(Date.parse(post.posted.date));
+		var now = new Date();
+		var utc = new Date(now.getTime() + now.getTimezoneOffset() * 60000);
+		
+		var minutesAgo = Date.minutesBetween(postedTime, utc);
+
+		return (minutesAgo <= 5 && post.userid == $scope.userid);
+	}
+	
 	$scope.sendPost = function()
 	{
 		var post = {
@@ -109,6 +138,9 @@ Intranet.controller('ChatController', ['$scope', '$http', '$paginator', function
 				message: $scope.message,
 				posted: new Date()
 		}
+		
+		if ($scope.editingPost)
+			post.postid = $scope.editingPost.id;
 				
 		$http({
 			method: "POST", 
@@ -119,12 +151,25 @@ Intranet.controller('ChatController', ['$scope', '$http', '$paginator', function
 			if (response.result)
 			{
 				// maybe need to request for posts and init paginator!!!
-				$scope.posts.push(response.result);
-				$scope.message = '';
-				messageContainer.focus();
-				container.animate({ scrollTop: container.height()+1900 },1000);
-				getMembers();
+				if ($scope.editingPost == null)
+				{
+					$scope.posts.push(response.result);
+					container.animate({ scrollTop: container.height()+1900 },1000);
+				}
+				else
+				{
+					_.map($scope.posts, function(p, i){
+						if (p.id == response.result.id)
+							$scope.posts[i] = response.result;
+					});
+				}
 			}
+			
+			$scope.editingPost = null;
+			$scope.message = "";
+			messageContainer.val("");
+			messageContainer.focus();
+			getMembers();
 		})
 	}
 	

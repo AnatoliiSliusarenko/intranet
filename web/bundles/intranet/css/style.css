@@ -2127,6 +2127,10 @@ div[data-role="editor-toolbar"] {
 .chat-box .recipient-box .conversation .list-group-item .username {
   font-weight: bold;
 }
+.chat-box .recipient-box .conversation .list-group-item p.editable:hover {
+  cursor:pointer;
+  text-decoration: underline;
+}
 .chat-box .recipient-box .conversation .list-group-item .time {
   float: right;
   font-size: 12px;
@@ -2140,6 +2144,9 @@ div[data-role="editor-toolbar"] {
 .chat-box .recipient-box .write-message {
   border-top-right-radius: 0px;
   border-top-left-radius: 0px;
+}
+.chat-box .recipient-box .write-message.editing{
+  background-color: #FFFE87;
 }
 .chat-box .contacts-box .btn {   
   border-top-right-radius: 0px;

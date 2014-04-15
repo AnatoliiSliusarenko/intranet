@@ -48,6 +48,13 @@ class PostTopic
      * @ORM\Column(name="posted", type="datetime")
      */
     private $posted;
+    
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="edited", type="boolean")
+     */
+    private $edited;
 
     /**
      * @ORM\ManyToOne(targetEntity="User", inversedBy="postsTopic")
@@ -124,7 +131,8 @@ class PostTopic
     			'userid' => $this->getUserid(),
     			'user' => $this->getUser()->getInArray(),
     			'message' => $this->getMessage(),
-    			'posted' => $this->getPosted()
+    			'posted' => $this->getPosted(),
+    			'edited' => $this->getEdited()
     		);
     }
     
@@ -175,6 +183,22 @@ class PostTopic
     	$em->persist($post);
     	$em->flush();
     	
+    	return $post->getInArray();
+    }
+    
+    public static function editPostByOfficeId($em, $p)
+    {
+    	$post = $em->getRepository("IntranetMainBundle:PostTopic")->find(intval($p->postid));
+    	 
+    	if (($post == null) || (trim($p->message) === ''))
+    		return null;
+    	 
+    	$post->setMessage($p->message);
+    	$post->setEdited(true);
+    
+    	$em->persist($post);
+    	$em->flush();
+    
     	return $post->getInArray();
     }
     
@@ -281,5 +305,28 @@ class PostTopic
     public function getPosted()
     {
         return $this->posted;
+    }
+
+    /**
+     * Set edited
+     *
+     * @param boolean $edited
+     * @return PostTopic
+     */
+    public function setEdited($edited)
+    {
+        $this->edited = $edited;
+
+        return $this;
+    }
+
+    /**
+     * Get edited
+     *
+     * @return boolean 
+     */
+    public function getEdited()
+    {
+        return $this->edited;
     }
 }
