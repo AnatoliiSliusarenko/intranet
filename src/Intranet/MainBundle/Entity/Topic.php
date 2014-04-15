@@ -405,4 +405,18 @@ class Topic
     {
         return $this->tasks;
     }
+    
+    public function getTasksWithChildren($em, $topic = null, &$tasks = null)
+    {
+    	if ($topic == null) $topic = $this;
+    	if ($tasks == null) $tasks = array(); 
+    	$tasks = array_merge($tasks, $topic->getTasks()->toArray());
+    	
+    	foreach ($topic->getChildrenForOffice($em) as $subtopic)
+    	{
+    		$topic->getTasksWithChildren($em, $subtopic, $tasks);
+    	}
+    	
+    	return $tasks;
+    }
 }
