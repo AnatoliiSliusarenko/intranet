@@ -50,9 +50,9 @@ class PostOffice
     private $posted;
     
     /**
-     * @var bool
+     * @var \DateTime
      *
-     * @ORM\Column(name="edited", type="boolean")
+     * @ORM\Column(name="edited", type="datetime")
      */
     private $edited;
 
@@ -194,7 +194,7 @@ class PostOffice
     		return null;
     	
     	$post->setMessage($p->message);
-    	$post->setEdited(true);
+    	$post->setEdited(new \DateTime());
     	 
     	$em->persist($post);
     	$em->flush();
@@ -227,7 +227,7 @@ class PostOffice
     	
     	if ($last_posted != null)
     	{
-    		$qb->andWhere('p.posted > :last_posted')
+    		$qb->andWhere('p.posted > :last_posted OR p.edited > :last_posted')
     		   ->setParameter('last_posted', $last_posted);
     	}
         		
@@ -310,7 +310,7 @@ class PostOffice
     /**
      * Set edited
      *
-     * @param boolean $edited
+     * @param \DateTime $edited
      * @return PostOffice
      */
     public function setEdited($edited)
@@ -323,7 +323,7 @@ class PostOffice
     /**
      * Get edited
      *
-     * @return boolean 
+     * @return \DateTime 
      */
     public function getEdited()
     {
