@@ -1,4 +1,5 @@
 web1:
+  apache_error_log: true
   ################################################
   ## GENERAL SETTINGS
   ################################################
@@ -6,7 +7,7 @@ web1:
       - app/cache
       - app/logs
   after_deploy:
-    - "bash scripts/clear_cache.sh"
+    - "php app/console cache:clear --env=prod --no-debug"
  
   ################################################
   ## WEB SPECIFIC SETTINGS
