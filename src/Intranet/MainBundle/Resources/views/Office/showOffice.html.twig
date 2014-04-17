@@ -250,7 +250,7 @@
 		</div>
 		{% endif %}
 		{% if office.getUserid() != 0 %}
-		<div class="panel panel-cascade">
+		<div class="panel panel-cascade" ng-controller="TasksController">
 			<div class="panel-heading">
                 <h3 class="panel-title">
                 	<span>
@@ -355,7 +355,7 @@
 	<script src="{{ asset('bundles/intranet/js/underscore-min.js') }}"></script>
 	<script src="{{ asset('bundles/intranet/js/custom/angular-core.js') }}"></script>
 	<script src="{{ asset('bundles/intranet/js/jquery.bpopup.min.js') }}"></script>
-	
+	<script src="{{ asset('bundles/intranet/js/custom/tasks.js') }}"></script>
 	{% if office.getUserid() != 0 %}
 	<script src="{{ asset('bundles/intranet/js/custom/chat.js') }}"></script>
 	<script src="{{ asset('bundles/intranet/js/custom/members.js') }}"></script>
@@ -369,7 +369,8 @@
 	        members: "{{ path('intranet_office_members', {office_id: office.id}) }}",
 	        editMembers: "{{ url('intranet_change_office_members', {office_id: office.getId()}) }}",
 	        posts_new: "{{ path('intranet_post_office_new', {office_id: office.id}) }}",
-	        post_count: "{{ path('intranet_post_office_count', {office_id: office.id}) }}"
+	        post_count: "{{ path('intranet_post_office_count', {office_id: office.id}) }}",
+	        tasksGet: "dddddd"
 	    };
 
     var USER = {

@@ -1,5 +1,5 @@
 var Intranet = angular.module('Intranet', [])
-.config(['$interpolateProvider', '$httpProvider', function ($interpolateProvider, $httpProvider) {
+.config(['$interpolateProvider', function ($interpolateProvider) {
     $interpolateProvider.startSymbol('[[');
     $interpolateProvider.endSymbol(']]');
 }])

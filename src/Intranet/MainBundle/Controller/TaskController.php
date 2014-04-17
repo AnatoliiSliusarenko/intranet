@@ -9,6 +9,16 @@ use Intranet\MainBundle\Entity\Task;
 
 class TaskController extends Controller
 {
+	public function getTasksForOfficeAction(Request $request, $office_id)
+	{
+		
+	}
+	
+	public function getTasksForTopicAction(Request $request, $topic_id)
+	{
+	
+	}
+	
     public function addTaskAction(Request $request, $office_id)
     {
     	$em = $this->getDoctrine()->getManager();
