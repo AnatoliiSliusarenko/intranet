@@ -11,6 +11,20 @@ class TaskController extends Controller
 {
 	public function getTasksForOfficeAction(Request $request, $office_id)
 	{
+		$em = $this->getDoctrine()->getManager();
+		
+		$office = $em->getRepository('IntranetMainBundle:Office')->find($office_id);
+		if ($office == null)
+		{
+			$response = new Response(json_encode(array("result" => null, "message" => 'Office not found!')));
+			$response->headers->set('Content-Type', 'application/json');
+			return $response;
+		}
+				
+		$response = new Response(json_encode(array("result" => $office->getTasksInArray())));
+		$response->headers->set('Content-Type', 'application/json');
+		return $response;
+		
 		
 	}
 	
@@ -128,23 +142,22 @@ class TaskController extends Controller
     	return $this->render('IntranetMainBundle:Task:editTask.html.twig', $parameters);
     }
     
-    public function removeTaskAction(Request $request, $office_id, $task_id)
+    public function removeTaskAction(Request $request, $task_id)
     {
     	$em = $this->getDoctrine()->getManager();
-    	$backUrl = $request->query->get('backUrl');
-    	if ($backUrl == null)
-    		$backUrl = $this->generateUrl('intranet_main_homepage');
-    	$office = $em->getRepository('IntranetMainBundle:Office')->find($office_id);
-    	if ($office == null)
-    		return $this->redirect($backUrl);
-    	 
+    	
     	$task = $em->getRepository('IntranetMainBundle:Task')->find($task_id);
     	if ($task == null)
-    		return $this->redirect($backUrl);
-    	
+    	{
+    		$response = new Response(json_encode(array("result" => null, "message" => 'Task not found!')));
+    		$response->headers->set('Content-Type', 'application/json');
+    		return $response;
+    	}
     	$em->remove($task);
     	$em->flush();
     	
-    	return $this->redirect($backUrl);
+    	$response = new Response(json_encode(array("result" => $task_id)));
+    	$response->headers->set('Content-Type', 'application/json');
+    	return $response;
     }
 }

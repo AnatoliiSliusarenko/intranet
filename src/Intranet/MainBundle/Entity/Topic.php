@@ -419,4 +419,21 @@ class Topic
     	
     	return $tasks;
     }
+    
+    /**
+     * Get inArray
+     *
+     * @return array
+     */
+    public function getInArray()
+    {
+    	return array(
+    			'id' => $this->getId(),
+    			'parentid' => $this->getParentid(),
+    			'officeid' => $this->getOfficeid(),
+    			'userid' => $this->getUserid(),
+    			'name' => $this->getName(),
+    			'description' => $this->getDescription()
+    	);
+    }
 }

@@ -97,5 +97,9 @@ intranet_task_edit:
     defaults: { _controller: IntranetMainBundle:Task:editTask }
     
 intranet_task_remove:
-    pattern:  /office/{office_id}/task/{task_id}/remove/
+    pattern:  /task/{task_id}/remove/
     defaults: { _controller: IntranetMainBundle:Task:removeTask }
+    
+intranet_task_get_for_office:
+    pattern:  /office/{office_id}/tasks/
+    defaults: { _controller: IntranetMainBundle:Task:getTasksForOffice }

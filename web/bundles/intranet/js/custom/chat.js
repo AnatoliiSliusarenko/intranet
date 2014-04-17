@@ -48,7 +48,7 @@ Intranet.controller('ChatController', ['$scope', '$http', '$paginator', function
 			console.log(response.result);
 			if (response.result)
 				$scope.posts = response.result.reverse();
-			container.animate({ scrollTop: container.height()+1900 },1000);
+			//container.animate({ scrollTop: container.height()+1900 },1000);
 		})
 	}
 	

@@ -473,4 +473,9 @@ class Office
     {
         return $this->tasks;
     }
+    
+    public function getTasksInArray()
+    {
+    	return array_map(function($t){return $t->getInArray();}, $this->tasks->toArray());
+    }
 }

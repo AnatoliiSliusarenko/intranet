@@ -440,4 +440,24 @@ class Task
     {
         return $this->office;
     }
+    
+    /**
+     * Get inArray
+     *
+     * @return array
+     */
+    public function getInArray()
+    {
+    	return array(
+    			'id' => $this->getId(),
+    			'officeid' => $this->getOfficeid(),
+    			'priority' => $this->getPriority(),
+    			'name' => $this->getName(),
+    			'status' => $this->getStatus(),
+    			'startdate' => $this->getStartdate(),
+    			'enddate' => $this->getEnddate(),
+    			'users' => array_map(function($u){return $u->getInArray();}, $this->getUsers()->toArray()),
+    			'topics' => array_map(function($t){return $t->getInArray();}, $this->getTopics()->toArray())
+    	);
+    }
 }

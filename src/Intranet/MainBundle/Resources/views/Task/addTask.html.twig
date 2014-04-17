@@ -1,5 +1,5 @@
 <div class="row" id="popup">
-	<div class="col-md-12">
+	<div class="col-md-12" ng-controler="AddTasksController">
 		<div class="panel panel-cascade" style="width:600px;">
 			<div class="panel-body">
             	<form action="{{ url('intranet_task_add', {office_id: office.getId()}) }}" class="form-horizontal" role="form" method="post">

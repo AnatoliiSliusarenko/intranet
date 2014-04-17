@@ -256,7 +256,7 @@
                 	<span>
                     	<a href="#" class="panel-minimize"><i class="fa fa-pencil-square"></i> Tasks of this office</a>
                     </span> 
-                    <button type="button" href="{{ url('intranet_task_add', {office_id: office.getId()}) }}" class="btn btn-success popup"><i class="fa fa-plus-circle"></i></button>
+                    <button type="button" class="btn btn-success" ng-click="addTask()"><i class="fa fa-plus-circle"></i></button>
                 </h3>
             </div>
             <div class="panel-body">
@@ -275,69 +275,41 @@
 	           		</tr>
 	           </thead>
 	           <tbody>
-	           {% for task in office.getTasks() %}
-	           <tr>
-			   		<td class="visible-lg">{{ loop.index }}</td>
-		            <td class="visible-lg">{{ task.name }}</td>
+	           <tr ng-repeat="task in tasks">
+			   		<td class="visible-lg">[[$index+1]]</td>
+		            <td class="visible-lg">[[ task.name ]]</td>
 		            <td class="visible-lg">
-		            {% if task.status == 'pending' %}
-		            <label class="label label-default">Pending</label>
-		            {% elseif task.status == 'opened' %}
-		            <label class="label label-danger">Opened</label>
-		            {% elseif task.status == 're-opened' %}
-		            <label class="label label-warning">Re-opened</label>
-		            {% elseif task.status == 'in-progress' %}
-		            <label class="label label-primary">In-progress</label>
-		            {% elseif task.status == 'resolved' %}
-		            <label class="label label-success">Resolved</label>
-		            {% elseif task.status == 'testing' %}
-		            <label class="label label-info">Testing</label>
-		            {% elseif task.status == 'closed' %}
-		            <label class="label label-dark">Closed</label>
-		            {% endif %}
+		            <label ng-show="task.status=='pending'" class="label label-default">Pending</label>
+		            <label ng-show="task.status=='opened'" class="label label-danger">Opened</label>
+		            <label ng-show="task.status=='re-opened'" class="label label-warning">Re-opened</label>
+		            <label ng-show="task.status=='in-progress'" class="label label-primary">In-progress</label>
+		            <label ng-show="task.status=='resolved'" class="label label-success">Resolved</label>
+		            <label ng-show="task.status=='testing'" class="label label-info">Testing</label>
+		            <label ng-show="task.status=='closed'" class="label label-dark">Closed</label>
 		            </td>
 		            <td class="visible-lg">
-		            {% if task.priority == 'high' %}
-		            <label class="label label-danger">High</label>
-		            {% elseif task.priority == 'medium' %}
-		            <label class="label label-warning">Medium</label>
-		            {% else %}
-		            <label class="label label-success">Low</label>
-		            {% endif %}
+		            <label ng-show="task.priority=='high'" class="label label-danger">High</label>
+		            <label ng-show="task.priority=='medium'" class="label label-warning">Medium</label>
+		            <label ng-show="task.priority=='low'" class="label label-success">Low</label>
 		            </td>
-		            <td class="visible-lg">{% if task.startdate != null %}{{ task.startdate|date('d/m/y H:i:s') }}{% else %}{{ '-' }}{% endif %}</td>
-		            <td class="visible-lg">{% if task.enddate != null %}{{ task.enddate|date('d/m/y H:i:s') }}{% else %}{{ '-' }}{% endif %}</td>
+		            <td class="visible-lg">[[ task.startdate.date ]]</td>
+		            <td class="visible-lg">[[ task.enddate.date ]]</td>
 		            <td class="visible-lg">
-		            {% if task.users|length>0 %}
-		            <select class="form-control">
-		            {% for user in task.users %}
-					    <option>{{ user.surname ~ ' ' ~ user.name }}</option>
-					{% endfor %}
+		            <select class="form-control" ng-show="task.users.length>0">
+					    <option ng-repeat="user in task.users">[[ user.surname + " " + user.name ]]</option>
 					</select>
-					{% else %}
-					{{ '-' }}
-					{% endif %}
 		            </td>
-		            <td class="visible-lg" id="topic-urls">
-		            {% if task.topics|length>0 %}
-		            <select class="form-control">
-					{% for topic in task.topics %}
-					    <option value="{{ topic.getId() }}" href="{{ url('intranet_show_topic', {topic_id: topic.getId()}) }}">{{ topic.name }}</option>
-					{% endfor %}
+		            <td class="visible-lg">
+		            <select class="form-control" ng-show="task.topics.length>0" ng-model="task.currentTopicId">
+					    <option ng-repeat="topic in task.topics" value="[[ topic.id ]]">[[ topic.name ]]</option>
 					</select>
-					{% else %}
-					{{ '-' }}
-					{% endif %}
 		            </td>
 		            <td>
-		             {% if is_granted('ROLE_ADMIN') or office.getUserid() == app.user.getId() or task.hasUser(app.user) %}
-		             <button type="button" href="{{ url('intranet_task_edit', {office_id: office.getId(), task_id: task.id}) }}" class="btn btn-warning popup"><i class="fa fa-edit"></i></button>
-		             <button type="button" href="{{ url('intranet_task_remove', {office_id: office.getId(), task_id: task.id}) }}" class="btn btn-danger remove"><i class="fa fa-trash-o"></i></button>
-		             {% endif %}
-		             <button type="button" class="btn btn-info topic-urls"><i class="fa fa-comment"></i></button>
+		             <button type="button" href="#" class="btn btn-warning popup"><i class="fa fa-edit"></i></button>
+		             <button type="button" class="btn btn-danger" ng-click="removeTask(task)"><i class="fa fa-trash-o"></i></button>
+		             <button type="button" class="btn btn-info" ng-click="showTopic(task)"><i class="fa fa-comment"></i></button>
 		            </td>
 	           </tr>
-	           {% endfor %}
 			  </tbody>
 			</table>
 		  </div>
@@ -370,7 +342,10 @@
 	        editMembers: "{{ url('intranet_change_office_members', {office_id: office.getId()}) }}",
 	        posts_new: "{{ path('intranet_post_office_new', {office_id: office.id}) }}",
 	        post_count: "{{ path('intranet_post_office_count', {office_id: office.id}) }}",
-	        tasksGet: "dddddd"
+			tasksAdd: "{{ url('intranet_task_add', {office_id: office.id}) }}",
+	        tasksGet: "{{ path('intranet_task_get_for_office', {office_id: office.id}) }}",
+	        tasksRemove: "{{ path('intranet_task_remove', {task_id: 0}) }}",
+	        topicsShow: "{{ path('intranet_show_topic', {topic_id: 0}) }}"
 	    };
 
     var USER = {
@@ -382,39 +357,5 @@
     };
 	</script>
 	{% endif %}
-	
-	
-	<script type="text/javascript">
-	$(".popup").click(function(){
-		var url = $(this).attr('href');
-		$.ajax({
-			  url: url,
-			  data: {backUrl: '{{ app.request.uri }}'}
-		}).success(function(resp) {
-			  $(".content").append(resp);
-			  $('#popup').bPopup({
-				    position: [window.innerWidth/2 - 250, 100],
-				    easing: 'easeOutBack',
-			        speed: 800,
-			        transition: 'slideDown',
-			        onClose: function(){
-			        	$("#popup").remove();
-					}
-			  });
-		});
-	});
-
-	$(".remove").click(function(){
-		var url = $(this).attr('href');
-		url = url + '?backUrl=' + '{{ app.request.uri }}';
-		var answer = confirm("Realy want to remove?");
-		if (answer) window.location.href = url;
-	});
-
-	$(".topic-urls").click(function(){
-		var url = $(this).parent().parent().find("td#topic-urls select option:selected").attr('href');
-		window.location.href = url; 
-	});
-	</script>
 	
 {% endblock %}
