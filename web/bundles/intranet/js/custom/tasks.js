@@ -1,5 +1,5 @@
 Intranet.controller('TasksController', ['$scope', '$http', function($scope, $http){
-	alert('TasksController was loaded!');
+	console.log('TasksController was loaded!');
 	
 	$scope.tasks = [];
 	
@@ -16,6 +16,6 @@ Intranet.controller('TasksController', ['$scope', '$http', function($scope, $htt
 		})
 	}
 	
-	getTasks();
+	//getTasks();
 	
 }]);
