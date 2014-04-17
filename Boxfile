@@ -4,7 +4,10 @@ web1:
   ## GENERAL SETTINGS
   ################################################
   shared_writable_dirs:
+      - app/cache
       - app/logs
+  after_deploy:
+    - "php app/console cache:clear --env=prod --no-debug"
  
   ################################################
   ## WEB SPECIFIC SETTINGS
