@@ -103,3 +103,7 @@ intranet_task_remove:
 intranet_task_get_for_office:
     pattern:  /office/{office_id}/tasks/
     defaults: { _controller: IntranetMainBundle:Task:getTasksForOffice }
+    
+intranet_task_get_for_topic:
+    pattern:  /topic/{topic_id}/tasks/
+    defaults: { _controller: IntranetMainBundle:Task:getTasksForTopic }

@@ -21,7 +21,7 @@ class TaskController extends Controller
 			return $response;
 		}
 				
-		$response = new Response(json_encode(array("result" => $office->getTasksInArray())));
+		$response = new Response(json_encode(array("result" => $office->getTasksFilteredInArray($em, $request->query->all()))));
 		$response->headers->set('Content-Type', 'application/json');
 		return $response;
 		
@@ -30,7 +30,19 @@ class TaskController extends Controller
 	
 	public function getTasksForTopicAction(Request $request, $topic_id)
 	{
-	
+		$em = $this->getDoctrine()->getManager();
+		
+		$topic = $em->getRepository('IntranetMainBundle:Topic')->find($topic_id);
+		if ($topic == null)
+		{
+			$response = new Response(json_encode(array("result" => null, "message" => 'Topic not found!')));
+			$response->headers->set('Content-Type', 'application/json');
+			return $response;
+		}
+		
+		$response = new Response(json_encode(array("result" => $topic->getTasksFilteredInArray($em, $topic->getOffice(), $request->query->all()))));
+		$response->headers->set('Content-Type', 'application/json');
+		return $response;
 	}
 	
     public function addTaskAction(Request $request, $office_id)
@@ -98,8 +110,8 @@ class TaskController extends Controller
     		$name = $taskData->name;
     		$priority = $taskData->priority;
     		$status = $taskData->status;
-    		$users = (isset($taskData->users)) ? $taskData->users : array();
-    		$topics = (isset($taskData->topics)) ? $taskData->topics : array();
+    		$users = (isset($taskData->usersIds)) ? $taskData->usersIds : array();
+    		$topics = (isset($taskData->topicsIds)) ? $taskData->topicsIds : array();
     		
     		$task->setName($name);
     		$task->setPriority($priority);

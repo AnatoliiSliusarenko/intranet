@@ -33,7 +33,7 @@
              		<div class="form-group">
   						<label for="inputEmail1" class="col-lg-2 col-md-3 control-label">Members</label>
   						<div class="col-lg-10 col-md-9">
-   							<select ng-model="task.users" multiple class="form-control">
+   							<select ng-model="task.usersIds" multiple class="form-control">
    								<option ng-repeat="user in users" value="[[ user.id ]]" ng-selected="hasUser(user)">[[ user.surname + ' ' + user.name + ' (' + user.username + ')' ]]</option>
   							</select>
 						</div>
@@ -42,7 +42,7 @@
 					<div class="form-group">
   						<label for="inputEmail1" class="col-lg-2 col-md-3 control-label">Topics</label>
   						<div class="col-lg-10 col-md-9">
-   							<select ng-model="task.topics" multiple class="form-control">
+   							<select ng-model="task.topicsIds" multiple class="form-control">
    								<option ng-repeat="topic in topics" value="[[ topic.id ]]" ng-selected="hasTopic(topic)">[[ topic.name ]]</option>
   							</select>
 						</div>

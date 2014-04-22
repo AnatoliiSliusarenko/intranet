@@ -1,6 +1,19 @@
 Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($scope, $http, $modal){
 	console.log('TasksController was loaded!');
 	
+	$scope.filter = {
+			status: 'all',
+			priority: 'all',
+			name: "",
+			user: null,
+			topic: null
+	}
+	
+	$scope.$watch('filter', function(){
+		console.log('--->changed', $scope.filter);
+		getTasks();
+	}, true);
+	
 	$scope.tasks = [];
 	$scope.users = USERS;
 	$scope.topics = TOPICS;
@@ -12,12 +25,14 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 	$scope.urlsTasksAdd = JSON_URLS.tasksAdd;
 	
 	function getTasks()
-	{
+	{	
 		$http({
 			method: "GET", 
-			url: $scope.urlsTasksGet
+			url: $scope.urlsTasksGet,
+			params: $scope.filter
 			  })
 		.success(function(response){
+			console.log(response);
 			if (response.result)
 			{
 				_.map(response.result, function(task){task.currentTopicId = (task.topics.length > 0) ? task.topics[0].id : 0});
@@ -147,6 +162,8 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 	$scope.users = users;
 	$scope.topics = topics;
 	$scope.task = task;
+	$scope.task.usersIds = _.map($scope.task.users, function($e){return $e.id});
+	$scope.task.topicsIds = _.map($scope.task.topics, function($e){return $e.id});
 	
 	$scope.editTask = function(event)
 	{
@@ -168,15 +185,15 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 	
 	$scope.hasTopic = function(topic)
 	{
-		return _.find($scope.task.topics, function(t){
-			return t.id==topic.id;
+		return _.find($scope.task.topicsIds, function(t){
+			return t==topic.id;
 		});
 	}
 	
 	$scope.hasUser = function(user)
 	{
-		return _.find($scope.task.users, function(u){
-			return u.id==user.id;
+		return _.find($scope.task.usersIds, function(u){
+			return u==user.id;
 		});
 	}
 	

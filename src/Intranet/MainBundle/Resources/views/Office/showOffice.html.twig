@@ -259,6 +259,58 @@
                     <button type="button" class="btn btn-success" ng-click="addTask()"><i class="fa fa-plus-circle"></i></button>
                 </h3>
             </div>
+            <div class="panel-body" style="display:none;">
+            	<div class="form-group">
+                		<label for="inputEmail1" class="col-lg-2 col-md-3 control-label">Name</label>
+                		<div class="col-lg-10 col-md-9">
+                 			<input type="text" ng-model="filter.name" class="form-control form-cascade-control" id="inputEmail1" placeholder="Type task name here" value="">
+               			</div>
+             	</div>
+            	<div class="form-group">
+  					<label for="inputEmail1" class="col-lg-2 col-md-3 control-label">Status</label>
+  					<div class="col-lg-10 col-md-9">
+   						<select ng-model="filter.status" class="form-control">
+   							<option value="all">All</option>
+						    <option value="pending">Pending</option>
+						    <option value="opened">Opened</option>
+						    <option value="re-opened">Re-opened</option>
+						    <option value="in-progress">In-progress</option>
+						    <option value="resolved">Resolved</option>
+						    <option value="testing">Testing</option>
+						    <option value="closed">Closed</option>
+						</select>
+					</div>
+				</div>
+				<div class="form-group">
+  					<label for="inputEmail1" class="col-lg-2 col-md-3 control-label">Priority</label>
+  					<div class="col-lg-10 col-md-9">
+   						<select ng-model="filter.priority" class="form-control">
+   							<option value="all">All</option>
+						    <option value="high">High</option>
+						    <option value="medium">Medium</option>
+						    <option value="low">Low</option>
+						</select>
+					</div>
+				</div>
+             	<div class="form-group">
+  					<label for="inputEmail1" class="col-lg-2 col-md-3 control-label">User</label>
+  					<div class="col-lg-10 col-md-9">
+   						<select ng-model="filter.user" class="form-control">
+   							<option value="null">All</option>
+						    <option ng-repeat="user in users" value="[[user.id]]">[[ user.surname + ' ' + user.name + ' (' + user.username + ')' ]]</option>
+						</select>
+					</div>
+				</div>
+				<div class="form-group">
+  					<label for="inputEmail1" class="col-lg-2 col-md-3 control-label">Topic</label>
+  					<div class="col-lg-10 col-md-9">
+   						<select ng-model="filter.topic" class="form-control">
+   							<option value="null">All</option>
+						    <option ng-repeat="topic in topics" value="[[topic.id]]" >[[topic.name]]</option>
+						</select>
+					</div>
+				</div>
+            </div>
             <div class="panel-body">
 	          <table class="table users-table table-condensed table-hover" >
 	           <thead>
@@ -334,7 +386,7 @@
 	<script type="text/javascript">
 	var USERS = {{ users|json_encode|raw }};
 	var MEMBERS = {{ officeUsers|json_encode|raw }};
-	var TOPICS = {{ topics|json_encode|raw }}
+	var TOPICS = {{ topics|json_encode|raw }};
 	var JSON_URLS = {
 	        posts: "{{ path('intranet_post_office_get_posts', {office_id: office.id}) }}",
 	        post_add: "{{ path('intranet_post_office_add_post', {office_id: office.id}) }}", 

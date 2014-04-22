@@ -46,8 +46,15 @@ class TopicController extends Controller
     	$subtopics = $topic->getChildrenForOffice($em);
     	
     	$tasks = $topic->getTasksWithChildren($em);
+    	$users = $this->getUser()->getAllUsers($em, false);
     	
-    	$parameters = array("topic" => $topic, "breadcrumbs" => $breadcrumbs, 'subtopics' => $subtopics, 'office' => $office, "tasks" => $tasks);
+    	$parameters = array("users" => array_map(function($e){return $e->getInArray();}, $users), 
+					    	"topic" => $topic, 
+					    	"breadcrumbs" => $breadcrumbs, 
+					    	'subtopics' => $subtopics, 
+					    	'subtopicsArray' => array_map(function($e){return $e->getInArray();}, $subtopics),
+					    	'office' => $office, 
+					    	"tasks" => $tasks);
     	
     	if ($request->getSession()->has('errorTopic'))
     	{

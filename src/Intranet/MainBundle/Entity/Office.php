@@ -478,4 +478,64 @@ class Office
     {
     	return array_map(function($t){return $t->getInArray();}, $this->tasks->toArray());
     }
+    
+    public function getTasksFilteredInArray($em, $filter = array())
+    {
+    	$qb = $em->createQueryBuilder();
+    	 
+    	$qb->select('t')
+    	->from('IntranetMainBundle:Task', 't')
+    	->where('t.officeid = :officeid')
+    	->setParameter('officeid', $this->getId());
+    	if (isset($filter['name']))
+    	{
+    		$qb->andWhere($qb->expr()->like('t.name', ':name'))
+    			->setParameter('name', '%'.$filter['name'].'%');
+    	}
+    	
+    	if ($filter['status'] != 'all')
+    	{
+    		$qb->andWhere('t.status = :status')
+    		->setParameter('status', $filter['status']);
+    	}
+    	
+    	if ($filter['priority'] != 'all')
+    	{
+    		$qb->andWhere('t.priority = :priority')
+    		->setParameter('priority', $filter['priority']);
+    	}
+    	
+    	
+    	$tasks = $qb->getQuery()->getResult();
+    	
+    	if (isset($filter['user']) && $filter['user'] !== 'null')
+    	{
+    		$user = $em->getRepository('IntranetMainBundle:User')->find($filter['user']);
+    		$filteredTasks = new \Doctrine\Common\Collections\ArrayCollection();
+    		foreach ($tasks as $task)
+    		{
+    			if ($task->hasUser($user))
+    				$filteredTasks[] = $task;
+    		}
+    		
+    		$tasks = $filteredTasks->toArray();
+    	}
+    	
+    	if (isset($filter['topic']) && $filter['topic'] !== 'null')
+    	{
+    		$topic = $em->getRepository('IntranetMainBundle:Topic')->find($filter['topic']);
+    		$filteredTasks = new \Doctrine\Common\Collections\ArrayCollection();
+    		foreach ($tasks as $task)
+    		{
+    			if ($task->hasTopic($topic))
+    				$filteredTasks[] = $task;
+    		}
+    	
+    		$tasks = $filteredTasks->toArray();
+    	}
+    	
+    	
+    	
+    	return array_map(function($t){return $t->getInArray();}, $tasks);
+    }
 }
