@@ -30,7 +30,7 @@ class OfficeController extends Controller
 			return $this->redirect($this->generateUrl('intranet_main_homepage'));
 		 
 		$breadcrumbs = $office->getBreadcrumbs($em);
-		$users = $this->getUser()->getAllUsers($em);
+		$users = $this->getUser()->getAllUsers($em, false);
 		
 		$officeUsers = $office->getUsers();
 		$childrenOfficesForUser = $office->getChildrenForUser($em, $this->getUser());
@@ -42,7 +42,8 @@ class OfficeController extends Controller
 				"em" => $em,
 				"office" => $office, 
 				"parentTopic" => $parentTopic,
-				"breadcrumbs" => $breadcrumbs, 
+				"breadcrumbs" => $breadcrumbs,
+				"topics" => array_map(function($e){return $e->getInArray();}, $office->getTopics()->toArray()), 
 				'officeUsers' => array_map(function($e){return $e->getInArray();}, $officeUsers->toArray()),
 				'users' => array_map(function($e){return $e->getInArray();}, $users), 
 				'offices' => $childrenOfficesForUser);

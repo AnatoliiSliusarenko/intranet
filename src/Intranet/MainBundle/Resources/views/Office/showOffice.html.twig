@@ -195,7 +195,7 @@
 		</div>
 		{% endif %}
 		
-		{% if (office.getUserid() != 0 and office.getTopics()|length > 0) %}
+		{% if (office.getUserid() != 0 and topics|length > 0) %}
 		<div class="panel panel-cascade">
 			<div class="panel-heading">
                 <h3 class="panel-title">
@@ -305,7 +305,7 @@
 					</select>
 		            </td>
 		            <td>
-		             <button type="button" href="#" class="btn btn-warning popup"><i class="fa fa-edit"></i></button>
+		             <button type="button" class="btn btn-warning" ng-click="editTask(task)"><i class="fa fa-edit"></i></button>
 		             <button type="button" class="btn btn-danger" ng-click="removeTask(task)"><i class="fa fa-trash-o"></i></button>
 		             <button type="button" class="btn btn-info" ng-click="showTopic(task)"><i class="fa fa-comment"></i></button>
 		            </td>
@@ -324,9 +324,9 @@
 	{{ parent() }}
 	
 	<script src="{{ asset('bundles/intranet/js/angular.min.js') }}"></script>
+	<script src="{{ asset('bundles/intranet/js/ui-bootstrap-tpls-0.10.0.min.js') }}"></script>
 	<script src="{{ asset('bundles/intranet/js/underscore-min.js') }}"></script>
 	<script src="{{ asset('bundles/intranet/js/custom/angular-core.js') }}"></script>
-	<script src="{{ asset('bundles/intranet/js/jquery.bpopup.min.js') }}"></script>
 	<script src="{{ asset('bundles/intranet/js/custom/tasks.js') }}"></script>
 	{% if office.getUserid() != 0 %}
 	<script src="{{ asset('bundles/intranet/js/custom/chat.js') }}"></script>
@@ -334,6 +334,7 @@
 	<script type="text/javascript">
 	var USERS = {{ users|json_encode|raw }};
 	var MEMBERS = {{ officeUsers|json_encode|raw }};
+	var TOPICS = {{ topics|json_encode|raw }}
 	var JSON_URLS = {
 	        posts: "{{ path('intranet_post_office_get_posts', {office_id: office.id}) }}",
 	        post_add: "{{ path('intranet_post_office_add_post', {office_id: office.id}) }}", 
@@ -344,6 +345,7 @@
 	        post_count: "{{ path('intranet_post_office_count', {office_id: office.id}) }}",
 			tasksAdd: "{{ url('intranet_task_add', {office_id: office.id}) }}",
 	        tasksGet: "{{ path('intranet_task_get_for_office', {office_id: office.id}) }}",
+	        tasksEdit: "{{ path('intranet_task_edit', {task_id: 0}) }}",
 	        tasksRemove: "{{ path('intranet_task_remove', {task_id: 0}) }}",
 	        topicsShow: "{{ path('intranet_show_topic', {topic_id: 0}) }}"
 	    };

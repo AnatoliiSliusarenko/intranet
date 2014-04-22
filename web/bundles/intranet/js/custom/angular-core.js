@@ -1,4 +1,4 @@
-var Intranet = angular.module('Intranet', [])
+var Intranet = angular.module('Intranet', ['ui.bootstrap'])
 .config(['$interpolateProvider', function ($interpolateProvider) {
     $interpolateProvider.startSymbol('[[');
     $interpolateProvider.endSymbol(']]');
