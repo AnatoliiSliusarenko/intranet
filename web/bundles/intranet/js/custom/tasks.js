@@ -10,7 +10,6 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 	}
 	
 	$scope.$watch('filter', function(){
-		console.log('--->changed', $scope.filter);
 		getTasks();
 	}, true);
 	
