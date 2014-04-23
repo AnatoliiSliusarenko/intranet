@@ -40,7 +40,7 @@ class TaskController extends Controller
 			return $response;
 		}
 		
-		$response = new Response(json_encode(array("result" => $topic->getTasksFilteredInArray($em, $topic->getOffice(), $request->query->all()))));
+		$response = new Response(json_encode(array("result" => $topic->getTasksFilteredInArray($em, $request->query->all()))));
 		$response->headers->set('Content-Type', 'application/json');
 		return $response;
 	}

@@ -300,7 +300,7 @@
 	
 	<script type="text/javascript">
 	var USERS = {{ users|json_encode|raw }};
-	var TOPICS = {{ subtopicsArray|json_encode|raw }};
+	var TOPICS = {{ topicsForTasks|json_encode|raw }};
     var JSON_URLS = {
         posts: "{{ path('intranet_post_topic_get_posts', {topic_id: topic.id}) }}",
         post_add: "{{ path('intranet_post_topic_add_post', {topic_id: topic.id}) }}", 

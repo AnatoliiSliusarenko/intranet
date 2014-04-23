@@ -218,6 +218,22 @@ class Topic
     	return $result;
     }
     
+    public function getAllChildrenForOffice($em, &$children = null, \Intranet\MainBundle\Entity\Topic $topic = null)
+    {
+    	if ($children == null) $children = array();
+    	if ($topic == null) $topic = $this;
+    	
+    	$currentChildren = $topic->getChildrenForOffice($em);
+    	$children = array_merge($children, $currentChildren);
+    	
+    	foreach ($currentChildren as $subtopic)
+    	{
+    		$topic->getAllChildrenForOffice($em, $children, $subtopic);
+    	}
+    	
+    	return $children;
+    }
+    
     /**
      * Get Topic tree
      *
@@ -420,6 +436,19 @@ class Topic
     	return $tasks;
     }
     
+    private function getQBforAllChildren($em, &$qb, $topic = null)
+    {
+    	if ($topic == null) $topic = $this;
+    	
+    	$qb->orWhere('tt = :topic'.$topic->getId())
+    	   ->setParameter('topic'.$topic->getId(), $topic->getId());
+    	   
+    	foreach ($topic->getChildrenForOffice($em) as $subtopic)
+    	{
+    		$topic->getQBforAllChildren($em, $qb, $subtopic);
+    	}
+    }
+    
     /**
      * Get inArray
      *
@@ -437,14 +466,16 @@ class Topic
     	);
     }
     
-    public function getTasksFilteredInArray($em, $office, $filter = array())
+    public function getTasksFilteredInArray($em, $filter = array())
     {
     	$qb = $em->createQueryBuilder();
     
     	$qb->select('t')
-    	->from('IntranetMainBundle:Task', 't')
-    	->where('t.officeid = :officeid')
-    	->setParameter('officeid', $office->getId());
+    	   ->from('IntranetMainBundle:Task', 't')
+    	   ->innerJoin('t.topics', 'tt');
+    	
+    	$this->getQBforAllChildren($em, $qb);
+    	
     	if (isset($filter['name']))
     	{
     		$qb->andWhere($qb->expr()->like('t.name', ':name'))

@@ -47,12 +47,14 @@ class TopicController extends Controller
     	
     	$tasks = $topic->getTasksWithChildren($em);
     	$users = $this->getUser()->getAllUsers($em, false);
+    	$topicsForTasks = $topic->getAllChildrenForOffice($em);
+    	array_unshift($topicsForTasks, $topic);
     	
     	$parameters = array("users" => array_map(function($e){return $e->getInArray();}, $users), 
 					    	"topic" => $topic, 
 					    	"breadcrumbs" => $breadcrumbs, 
 					    	'subtopics' => $subtopics, 
-					    	'subtopicsArray' => array_map(function($e){return $e->getInArray();}, $subtopics),
+					    	'topicsForTasks' => array_map(function($e){return $e->getInArray();}, $topicsForTasks),
 					    	'office' => $office, 
 					    	"tasks" => $tasks);
     	
