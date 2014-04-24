@@ -482,12 +482,12 @@ class Topic
     		->setParameter('name', '%'.$filter->name.'%');
     	}
     	 
-    	if (isset($filter->status) && ($filter->status != []))
+    	if (isset($filter->status) && ($filter->status != array()))
     	{
     		$qb->andWhere($qb->expr()->in('t.status', $filter->status));
     	}
     	 
-    	if (isset($filter->priority) && ($filter->priority != []))
+    	if (isset($filter->priority) && ($filter->priority != array()))
     	{
     		$qb->andWhere($qb->expr()->in('t.priority', $filter->priority));
     	}
@@ -495,7 +495,7 @@ class Topic
     	 
     	$tasks = $qb->getQuery()->getResult();
     	 
-    	if (isset($filter->user) && ($filter->user != []))
+    	if (isset($filter->user) && ($filter->user != array()))
     	{
     		$filteredTasks = new \Doctrine\Common\Collections\ArrayCollection();
     		foreach ($tasks as $task)
@@ -507,7 +507,7 @@ class Topic
     		$tasks = $filteredTasks->toArray();
     	}
     	 
-    	if (isset($filter->topic) && ($filter->topic != []))
+    	if (isset($filter->topic) && ($filter->topic != array()))
     	{
     		$filteredTasks = new \Doctrine\Common\Collections\ArrayCollection();
     		foreach ($tasks as $task)
