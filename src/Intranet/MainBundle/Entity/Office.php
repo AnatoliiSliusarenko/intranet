@@ -493,12 +493,12 @@ class Office
     			->setParameter('name', '%'.$filter->name.'%');
     	}
     	
-    	if (isset($filter->status) && $filter->status != [] )
+    	if (isset($filter->status) && ($filter->status != []))
     	{
     		$qb->andWhere($qb->expr()->in('t.status', $filter->status));
     	}
     	
-    	if (isset($filter->priority) && $filter->priority != [])
+    	if (isset($filter->priority) && ($filter->priority != []))
     	{
     		$qb->andWhere($qb->expr()->in('t.priority', $filter->priority));
     	}
@@ -506,7 +506,7 @@ class Office
     	
     	$tasks = $qb->getQuery()->getResult();
     	
-    	if (isset($filter->user) && $filter->user != [])
+    	if (isset($filter->user) && ($filter->user != []))
     	{
     		$filteredTasks = new \Doctrine\Common\Collections\ArrayCollection();
     		foreach ($tasks as $task)
@@ -518,7 +518,7 @@ class Office
     		$tasks = $filteredTasks->toArray();
     	}
     	
-    	if (isset($filter->topic) && $filter->topic != [])
+    	if (isset($filter->topic) && ($filter->topic != []))
     	{
     		$filteredTasks = new \Doctrine\Common\Collections\ArrayCollection();
     		foreach ($tasks as $task)
