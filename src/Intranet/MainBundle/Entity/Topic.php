@@ -476,47 +476,43 @@ class Topic
     	
     	$this->getQBforAllChildren($em, $qb);
     	
-    	if (isset($filter['name']))
+    	if (isset($filter->name))
     	{
     		$qb->andWhere($qb->expr()->like('t.name', ':name'))
-    		->setParameter('name', '%'.$filter['name'].'%');
+    		->setParameter('name', '%'.$filter->name.'%');
     	}
     	 
-    	if ($filter['status'] != 'all')
+    	if (isset($filter->status) && $filter->status != [])
     	{
-    		$qb->andWhere('t.status = :status')
-    		->setParameter('status', $filter['status']);
+    		$qb->andWhere($qb->expr()->in('t.status', $filter->status));
     	}
     	 
-    	if ($filter['priority'] != 'all')
+    	if (isset($filter->priority) && $filter->priority != [])
     	{
-    		$qb->andWhere('t.priority = :priority')
-    		->setParameter('priority', $filter['priority']);
+    		$qb->andWhere($qb->expr()->in('t.priority', $filter->priority));
     	}
     	 
     	 
     	$tasks = $qb->getQuery()->getResult();
     	 
-    	if (isset($filter['user']) && $filter['user'] !== 'null')
+    	if (isset($filter->user) && $filter->user != [])
     	{
-    		$user = $em->getRepository('IntranetMainBundle:User')->find($filter['user']);
     		$filteredTasks = new \Doctrine\Common\Collections\ArrayCollection();
     		foreach ($tasks as $task)
     		{
-    			if ($task->hasUser($user))
+    			if ($task->hasOneOfUsers($em, $filter->user))
     				$filteredTasks[] = $task;
     		}
     
     		$tasks = $filteredTasks->toArray();
     	}
     	 
-    	if (isset($filter['topic']) && $filter['topic'] !== 'null')
+    	if (isset($filter->topic) && $filter->topic != [])
     	{
-    		$topic = $em->getRepository('IntranetMainBundle:Topic')->find($filter['topic']);
     		$filteredTasks = new \Doctrine\Common\Collections\ArrayCollection();
     		foreach ($tasks as $task)
     		{
-    			if ($task->hasTopic($topic))
+    			if ($task->hasOneOfTopics($em, $filter->topic))
     				$filteredTasks[] = $task;
     		}
     		 

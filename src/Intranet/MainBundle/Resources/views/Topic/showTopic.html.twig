@@ -186,8 +186,7 @@
             	<div class="form-group">
   					<label for="inputEmail1" class="col-lg-2 col-md-3 control-label">Status</label>
   					<div class="col-lg-10 col-md-9">
-   						<select ng-model="filter.status" class="form-control">
-   							<option value="all">All</option>
+   						<select multiple ng-model="filter.status" class="form-control">
 						    <option value="pending">Pending</option>
 						    <option value="opened">Opened</option>
 						    <option value="re-opened">Re-opened</option>
@@ -201,8 +200,7 @@
 				<div class="form-group">
   					<label for="inputEmail1" class="col-lg-2 col-md-3 control-label">Priority</label>
   					<div class="col-lg-10 col-md-9">
-   						<select ng-model="filter.priority" class="form-control">
-   							<option value="all">All</option>
+   						<select multiple ng-model="filter.priority" class="form-control">
 						    <option value="high">High</option>
 						    <option value="medium">Medium</option>
 						    <option value="low">Low</option>
@@ -212,8 +210,7 @@
              	<div class="form-group">
   					<label for="inputEmail1" class="col-lg-2 col-md-3 control-label">User</label>
   					<div class="col-lg-10 col-md-9">
-   						<select ng-model="filter.user" class="form-control">
-   							<option value="null">All</option>
+   						<select multiple ng-model="filter.user" class="form-control">
 						    <option ng-repeat="user in users" value="[[user.id]]">[[ user.surname + ' ' + user.name + ' (' + user.username + ')' ]]</option>
 						</select>
 					</div>
@@ -221,8 +218,7 @@
 				<div class="form-group">
   					<label for="inputEmail1" class="col-lg-2 col-md-3 control-label">Topic</label>
   					<div class="col-lg-10 col-md-9">
-   						<select ng-model="filter.topic" class="form-control">
-   							<option value="null">All</option>
+   						<select multiple ng-model="filter.topic" class="form-control">
 						    <option ng-repeat="topic in topics" value="[[topic.id]]" >[[topic.name]]</option>
 						</select>
 					</div>
