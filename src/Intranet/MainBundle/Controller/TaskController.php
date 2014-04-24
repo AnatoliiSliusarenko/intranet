@@ -21,7 +21,10 @@ class TaskController extends Controller
 			return $response;
 		}
 				
-		$response = new Response(json_encode(array("result" => $office->getTasksFilteredInArray($em, $request->query->all()))));
+		$data = json_decode(file_get_contents("php://input"));
+		$filter = (object) $data;
+		
+		$response = new Response(json_encode(array("result" => $office->getTasksFilteredInArray($em, $filter))));
 		$response->headers->set('Content-Type', 'application/json');
 		return $response;
 		
@@ -40,7 +43,10 @@ class TaskController extends Controller
 			return $response;
 		}
 		
-		$response = new Response(json_encode(array("result" => $topic->getTasksFilteredInArray($em, $request->query->all()))));
+		$data = json_decode(file_get_contents("php://input"));
+		$filter = (object) $data;
+		
+		$response = new Response(json_encode(array("result" => $topic->getTasksFilteredInArray($em, $filter))));
 		$response->headers->set('Content-Type', 'application/json');
 		return $response;
 	}

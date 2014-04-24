@@ -2,15 +2,16 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 	console.log('TasksController was loaded!');
 	
 	$scope.filter = {
-			status: 'all',
-			priority: 'all',
+			status: [],
+			priority: [],
 			name: "",
-			user: null,
-			topic: null
+			user: [],
+			topic: []
 	}
 	
 	$scope.$watch('filter', function(){
 		getTasks();
+		//console.log($scope.filter);
 	}, true);
 	
 	$scope.tasks = [];
@@ -26,9 +27,9 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 	function getTasks()
 	{	
 		$http({
-			method: "GET", 
+			method: "POST", 
 			url: $scope.urlsTasksGet,
-			params: $scope.filter
+			data: $scope.filter
 			  })
 		.success(function(response){
 			console.log(response);

@@ -308,6 +308,17 @@ class Task
     	 
     	return false;
     }
+    
+    public function hasOneOfUsers($em, $usersIds)
+    {
+    	foreach ($usersIds as $userId)
+    	{
+    		$user = $em->getRepository('IntranetMainBundle:User')->find($userId);
+    		if ($this->hasUser($user)) return true;
+    	}
+    
+    	return false;
+    }
 
     /**
      * Add topic
@@ -392,6 +403,17 @@ class Task
     		if ($curTopic->getId() == $topic->getId()) return true;
     	}
     	
+    	return false;
+    }
+    
+    public function hasOneOfTopics($em, $topicsIds)
+    {
+    	foreach ($topicsIds as $topicId)
+    	{
+    		$topic = $em->getRepository('IntranetMainBundle:Topic')->find($topicId);
+    		if ($this->hasTopic($topic)) return true;
+    	}
+    
     	return false;
     }
 
