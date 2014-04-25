@@ -112,7 +112,7 @@ class OfficeController extends Controller
 		$em->persist($office);
 		$em->flush();
 		 
-		Notification::createNotification($em, $this->getUser(), "membership_user", $usersAdded, $office);
+		Notification::createNotification($em, $this->get('mailer'), $this->getUser(), "membership_user", $usersAdded, $office);
 		
 		return $this->redirect($this->generateUrl('intranet_show_office', array('office_id' => $office->getId())));
 	}
@@ -142,8 +142,8 @@ class OfficeController extends Controller
 		$em->persist($office);
 		$em->flush();
 		
-		Notification::createNotification($em, $this->getUser(), "membership_user", $resetUsers['added'], $office);
-		Notification::createNotification($em, $this->getUser(), "membership_user_out", $resetUsers['removed'], $office);
+		Notification::createNotification($em, $this->get('mailer'), $this->getUser(), "membership_user", $resetUsers['added'], $office);
+		Notification::createNotification($em, $this->get('mailer'), $this->getUser(), "membership_user_out", $resetUsers['removed'], $office);
 		$response = new Response(json_encode(array("result" => true,  "message" => 'Members changed!')));
 		$response->headers->set('Content-Type', 'application/json');
 		return $response;
@@ -156,7 +156,7 @@ class OfficeController extends Controller
 		if (($office == null) || ($office->getUserid() !== $this->getUser()->getId()))
 			return $this->redirect($this->generateUrl('intranet_main_homepage'));
 		
-		Notification::createNotification($em, $this->getUser(), "removed_office", $office, $office);
+		Notification::createNotification($em, $this->get('mailer'), $this->getUser(), "removed_office", $office, $office);
 		
 		$parent = $office->getOfficeid();
 		$office->deleteAllChildren($em);

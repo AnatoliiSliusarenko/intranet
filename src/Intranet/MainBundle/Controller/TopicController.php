@@ -107,7 +107,7 @@ class TopicController extends Controller
     	$em->persist($topic);
     	$em->flush();
     	
-    	Notification::createNotification($em, $this->getUser(), "topic_added", $topic, $topic);
+    	Notification::createNotification($em, $this->get('mailer'), $this->getUser(), "topic_added", $topic, $topic);
     	
     	return $this->redirect($this->generateUrl('intranet_show_topic', array('topic_id' => $topic->getId())));
     }
@@ -119,7 +119,7 @@ class TopicController extends Controller
     	if (($topic == null) || (($topic->getUserid() !== $this->getUser()->getId()) && (false === $this->get('security.context')->isGranted('ROLE_ADMIN'))) )
     		return $this->redirect($this->generateUrl('intranet_main_homepage'));
     
-    	Notification::createNotification($em, $this->getUser(), "removed_topic", $topic, $topic);
+    	Notification::createNotification($em, $this->get('mailer'), $this->getUser(), "removed_topic", $topic, $topic);
     	
     	$parent = $topic->getParentid();
     	$topic->deleteAllChildren($em);
