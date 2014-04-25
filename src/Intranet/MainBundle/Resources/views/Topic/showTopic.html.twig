@@ -44,7 +44,7 @@
 {% endblock %}
 
 {% block content %}
-<div class="row" ng-app="Intranet">
+<div class="row">
 	<div class="col-md-12">
 <div class="row chat-box" ng-controller="ChatController">
   							<div class="col-md-2">
@@ -287,29 +287,23 @@
 {% endblock %}
 {% block javascripts %}
 	{{ parent() }}
-	<script src="{{ asset('bundles/intranet/js/angular.min.js') }}"></script>
-	<script src="{{ asset('bundles/intranet/js/ui-bootstrap-tpls-0.10.0.min.js') }}"></script>
-	<script src="{{ asset('bundles/intranet/js/underscore-min.js') }}"></script>
-	<script src="{{ asset('bundles/intranet/js/custom/angular-core.js') }}"></script>
 	<script src="{{ asset('bundles/intranet/js/custom/chat.js') }}"></script>
 	<script src="{{ asset('bundles/intranet/js/custom/tasks.js') }}"></script>
 	
 	<script type="text/javascript">
 	var USERS = {{ users|json_encode|raw }};
 	var TOPICS = {{ topicsForTasks|json_encode|raw }};
-    var JSON_URLS = {
-        posts: "{{ path('intranet_post_topic_get_posts', {topic_id: topic.id}) }}",
-        post_add: "{{ path('intranet_post_topic_add_post', {topic_id: topic.id}) }}", 
-        avatar: "{{ asset('bundles/intranet/images/profiles/') }}",
-        members: "{{ path('intranet_topic_members', {topic_id: topic.id}) }}",
-        posts_new: "{{ path('intranet_post_topic_new', {topic_id: topic.id}) }}",
-        post_count: "{{ path('intranet_post_topic_count', {topic_id: topic.id}) }}",
-        	tasksAdd: "{{ url('intranet_task_add', {office_id: topic.officeid}) }}",
-	        tasksGet: "{{ path('intranet_task_get_for_topic', {topic_id: topic.id}) }}",
-	        tasksEdit: "{{ path('intranet_task_edit', {task_id: 0}) }}",
-	        tasksRemove: "{{ path('intranet_task_remove', {task_id: 0}) }}",
-	        topicsShow: "{{ path('intranet_show_topic', {topic_id: 0}) }}"
-    };
+    JSON_URLS.posts = "{{ path('intranet_post_topic_get_posts', {topic_id: topic.id}) }}";
+    JSON_URLS.post_add = "{{ path('intranet_post_topic_add_post', {topic_id: topic.id}) }}";
+    JSON_URLS.avatar = "{{ asset('bundles/intranet/images/profiles/') }}";
+    JSON_URLS.members = "{{ path('intranet_topic_members', {topic_id: topic.id}) }}";
+    JSON_URLS.posts_new = "{{ path('intranet_post_topic_new', {topic_id: topic.id}) }}";
+    JSON_URLS.post_count = "{{ path('intranet_post_topic_count', {topic_id: topic.id}) }}";
+    JSON_URLS.tasksAdd = "{{ url('intranet_task_add', {office_id: topic.officeid}) }}";
+    JSON_URLS.tasksGet = "{{ path('intranet_task_get_for_topic', {topic_id: topic.id}) }}";
+    JSON_URLS.tasksEdit = "{{ path('intranet_task_edit', {task_id: 0}) }}";
+    JSON_URLS.tasksRemove = "{{ path('intranet_task_remove', {task_id: 0}) }}";
+    JSON_URLS.topicsShow = "{{ path('intranet_show_topic', {topic_id: 0}) }}";
 
     var USER = {
     	    id: "{{ app.user.getId() }}"

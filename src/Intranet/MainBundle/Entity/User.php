@@ -510,7 +510,6 @@ class User implements UserInterface, \Serializable
     	return array(
     			'id' => $this->getId(),
     			'username' => $this->getUsername(),
-    			'password' => $this->getPassword(),
     			'email' => $this->getEmail(),
     			'name' => $this->getName(),
     			'surname' => $this->getSurname(),

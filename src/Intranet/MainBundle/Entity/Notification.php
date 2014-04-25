@@ -387,4 +387,21 @@ class Notification
     {
         return $this->activated;
     }
+    
+    /**
+     * Get inArray
+     *
+     * @return array
+     */
+    public function getInArray()
+    {
+    	return array(
+    			'id' => $this->getId(),
+    			'user' => $this->getUser()->getInArray(),
+    			'destinationid' => $this->getDestinationid(),
+    			'type' => $this->getType(),
+    			'message' => $this->getMessage(),
+    			'activated' => $this->getActivated()
+    	);
+    }
 }

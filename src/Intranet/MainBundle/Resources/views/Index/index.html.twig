@@ -12,10 +12,11 @@
 {% endblock %}
 
 {% block body %}
-<div class="site-holder">
+<div class="site-holder" ng-app="Intranet">
+
       <!-- this is a dummy text -->
       <!-- .navbar -->
-      <nav class="navbar" role="navigation">
+      <nav class="navbar" role="navigation" ng-controller="NavigationController">
 
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header">
@@ -35,57 +36,83 @@
                 <li class="divider"></li>
                 <li><a href="{{ path('intranet_security_logout') }}" class="text-danger"><i class="fa fa-lock"></i> Logout</a></li>
               </ul>
-              {% if app.user.notifications|length>0 %}
-              <li><a href="#" class="settings dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bell animated shake"></i><span class="badge bg-success">{{ app.user.notifications|length }}</span></a>
+              <li ng-show="notifications.length > 0"><a href="#" class="settings dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bell animated shake"></i><span class="badge bg-success">[[ notifications.length ]]</span></a>
                   <ul class="dropdown-menu notifications">
-                    {% for notification in app.user.notifications|slice(0, 10)%}
-                    <li>
-                      <a
-                        {% if notification.type=='membership_own' %}
-                        href="{{ url('intranet_show_office', {office_id: notification.destinationid}) }}"
+                    <li ng-repeat="notification in notifications">
+                      <a ng-click="goToDestination($event, notification.destinationid)" ng-show="notification.type == 'membership_own'""
+                        href="{{ url('intranet_show_office', {office_id: 0}) }}"
                         class="text-success">
                         <i class="fa noty-icon fa-user bg-success"></i> 
-                        {% elseif notification.type=='membership_own_out' %}
-                        href="{{ url('intranet_show_office', {office_id: notification.destinationid}) }}"
+                        <span class="description">[[ notification.message ]]</span>
+                        <span class="time"> <i class="fa fa-clock-o"></i>  [[ notification.activated.date ]]</span>
+                      </a>
+                      
+                      <a ng-click="goToDestination($event, notification.destinationid)" ng-show="notification.type == 'membership_own_out'""
+                        href="{{ url('intranet_show_office', {office_id: 0}) }}"
                         class="text-danger">
-                        <i class="fa noty-icon fa-user bg-danger"></i> 
-                        {% elseif notification.type=='membership_user' %}
-                        href="{{ url('intranet_show_office', {office_id: notification.destinationid}) }}"
+                        <i class="fa noty-icon fa-user bg-danger"></i>
+                        <span class="description">[[ notification.message ]]</span>
+                        <span class="time"> <i class="fa fa-clock-o"></i>  [[ notification.activated.date ]]</span>
+                      </a>
+                      
+                      <a ng-click="goToDestination($event, notification.destinationid)" ng-show="notification.type == 'membership_user'""
+                        href="{{ url('intranet_show_office', {office_id: 0}) }}"
                         class="text-warning">
-                        <i class="fa noty-icon fa-user bg-warning"></i> 
-                        {% elseif notification.type=='membership_user_out' %}
-                        href="{{ url('intranet_show_office', {office_id: notification.destinationid}) }}"
+                        <i class="fa noty-icon fa-user bg-warning"></i>
+                        <span class="description">[[ notification.message ]]</span>
+                        <span class="time"> <i class="fa fa-clock-o"></i>  [[ notification.activated.date ]]</span>
+                      </a>
+                      
+                      <a ng-click="goToDestination($event, notification.destinationid)" ng-show="notification.type == 'membership_user_out'""
+                        href="{{ url('intranet_show_office', {office_id: 0}) }}"
                         class="text-danger">
-                        <i class="fa noty-icon fa-user bg-danger"></i> 
-                        {% elseif notification.type=='message_office' %}
-                        href="{{ url('intranet_show_office', {office_id: notification.destinationid}) }}">
-                        <i class="fa noty-icon fa-comment bg-primary"></i> 
-						{% elseif notification.type=='message_topic' %}
-						href="{{ url('intranet_show_topic', {topic_id: notification.destinationid}) }}"
-						class="text-info">
-						<i class="fa noty-icon fa-comment bg-info"></i> 
-						{% elseif notification.type=='removed_office' %}
-						href="{{ url('intranet_show_office', {office_id: notification.destinationid}) }}" 
-						class="text-danger">
-						<i class="fa noty-icon fa-exclamation bg-danger"></i> 
-						{% elseif notification.type=='removed_topic' %}
-						href="{{ url('intranet_show_topic', {topic_id: notification.destinationid}) }}" 
-						class="text-danger">
-						<i class="fa noty-icon fa-exclamation bg-danger"></i> 
-						{% elseif notification.type=='topic_added' %}
-						href="{{ url('intranet_show_topic', {topic_id: notification.destinationid}) }}" 
-						class="text-success">
-						<i class="fa noty-icon fa-comment bg-success"></i>
-                        {% endif %}
-                        <span class="description">{{ notification.message }}</span>
-                        <span class="time"> <i class="fa fa-clock-o"></i>  {{ notification.activated|date('d/m/y H:i:s') }}</span>
+                        <i class="fa noty-icon fa-user bg-danger"></i>
+                        <span class="description">[[ notification.message ]]</span>
+                        <span class="time"> <i class="fa fa-clock-o"></i>  [[ notification.activated.date ]]</span>
+                      </a>
+                      
+                      <a ng-click="goToDestination($event, notification.destinationid)" ng-show="notification.type == 'message_office'""
+                        href="{{ url('intranet_show_office', {office_id: 0}) }}">
+                        <i class="fa noty-icon fa-comment bg-primary"></i>
+                        <span class="description">[[ notification.message ]]</span>
+                        <span class="time"> <i class="fa fa-clock-o"></i>  [[ notification.activated.date ]]</span>
+                      </a>
+                      
+                      <a ng-click="goToDestination($event, notification.destinationid)" ng-show="notification.type == 'message_topic'""
+                        href="{{ url('intranet_show_topic', {topic_id: 0}) }}"
+                        class="text-info">
+                        <i class="fa noty-icon fa-comment bg-info"></i>
+                        <span class="description">[[ notification.message ]]</span>
+                        <span class="time"> <i class="fa fa-clock-o"></i>  [[ notification.activated.date ]]</span>
+                      </a>
+                      
+                      <a ng-click="goToDestination($event, notification.destinationid)" ng-show="notification.type == 'removed_office'""
+                        href="{{ url('intranet_show_office', {office_id: 0}) }}"
+                        class="text-danger">
+                        <i class="fa noty-icon fa-exclamation bg-danger"></i>
+                        <span class="description">[[ notification.message ]]</span>
+                        <span class="time"> <i class="fa fa-clock-o"></i>  [[ notification.activated.date ]]</span>
+                      </a>
+                      
+                      <a ng-click="goToDestination($event, notification.destinationid)" ng-show="notification.type == 'removed_topic'""
+                        href="{{ url('intranet_show_topic', {topic_id: 0}) }}"
+                        class="text-danger">
+                        <i class="fa noty-icon fa-exclamation bg-danger"></i> 
+                        <span class="description">[[ notification.message ]]</span>
+                        <span class="time"> <i class="fa fa-clock-o"></i>  [[ notification.activated.date ]]</span>
+                      </a>
+                      
+                      <a ng-click="goToDestination($event, notification.destinationid)" ng-show="notification.type == 'topic_added'""
+                        href="{{ url('intranet_show_topic', {topic_id: 0}) }}"
+                        class="text-success">
+                        <i class="fa noty-icon fa-comment bg-success"></i> 
+                        <span class="description">[[ notification.message ]]</span>
+                        <span class="time"> <i class="fa fa-clock-o"></i>  [[ notification.activated.date ]]</span>
                       </a>
                     </li>
-                    {% endfor %}
                     <li><a href="{{ url('intranet_notifications_show') }}" class="btn bg-primary">View All</a></li>
                   </ul>
                 </li>
-                {% endif %}
                 </li>
               </ul>
             </div><!-- /.navbar-collapse -->
@@ -179,5 +206,18 @@
 <!-- Core Jquery File  =============================-->
 <script src="{{ asset('bundles/intranet/js/core.js') }}"></script>
 <script src="{{ asset('bundles/intranet/js/dashboard-custom.js') }}"></script>
+
+<!-- Angular and Underscore  -->
+<script src="{{ asset('bundles/intranet/js/angular.min.js') }}"></script>
+<script src="{{ asset('bundles/intranet/js/ui-bootstrap-tpls-0.10.0.min.js') }}"></script>
+<script src="{{ asset('bundles/intranet/js/underscore-min.js') }}"></script>
+<script src="{{ asset('bundles/intranet/js/custom/angular-core.js') }}"></script>
+<script src="{{ asset('bundles/intranet/js/custom/navigation.js') }}"></script>
+
+<script type="text/javascript">
+var JSON_URLS = {
+		notificationsGet: "{{ path('intranet_notifications_get') }}"
+};
+</script>
 {% endblock %}
 

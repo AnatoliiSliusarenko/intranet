@@ -88,6 +88,10 @@ intranet_notifications_show:
     pattern:  /notifications/
     defaults: { _controller: IntranetMainBundle:Notification:showNotifications }
     
+intranet_notifications_get:
+    pattern:  /notifications/get/
+    defaults: { _controller: IntranetMainBundle:Notification:getNotifications }
+    
 intranet_task_add:
     pattern:  /office/{office_id}/task/add/
     defaults: { _controller: IntranetMainBundle:Task:addTask }

@@ -56,3 +56,4 @@ var Intranet = angular.module('Intranet', ['ui.bootstrap'])
 	
 	return paginator;
  });
+console.log('Angular core is loaded...');
