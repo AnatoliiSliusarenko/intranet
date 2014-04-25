@@ -38,72 +38,72 @@
               </ul>
               <li ng-show="notifications.length > 0"><a href="#" class="settings dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bell animated shake"></i><span class="badge bg-success">[[ notifications.length ]]</span></a>
                   <ul class="dropdown-menu notifications">
-                    <li ng-repeat="notification in notifications">
-                      <a ng-click="goToDestination($event, notification.destinationid)" ng-show="notification.type == 'membership_own'""
-                        href="{{ url('intranet_show_office', {office_id: 0}) }}"
+                    <li ng-repeat="notification in notifications|limitTo: 20">
+                      <a ng-show="notification.type == 'membership_own'""
+                        href="[[notification.href]]"
                         class="text-success">
                         <i class="fa noty-icon fa-user bg-success"></i> 
                         <span class="description">[[ notification.message ]]</span>
                         <span class="time"> <i class="fa fa-clock-o"></i>  [[ notification.activated.date ]]</span>
                       </a>
                       
-                      <a ng-click="goToDestination($event, notification.destinationid)" ng-show="notification.type == 'membership_own_out'""
-                        href="{{ url('intranet_show_office', {office_id: 0}) }}"
+                      <a ng-show="notification.type == 'membership_own_out'""
+                        href="[[notification.href]]"
                         class="text-danger">
                         <i class="fa noty-icon fa-user bg-danger"></i>
                         <span class="description">[[ notification.message ]]</span>
                         <span class="time"> <i class="fa fa-clock-o"></i>  [[ notification.activated.date ]]</span>
                       </a>
                       
-                      <a ng-click="goToDestination($event, notification.destinationid)" ng-show="notification.type == 'membership_user'""
-                        href="{{ url('intranet_show_office', {office_id: 0}) }}"
+                      <a ng-show="notification.type == 'membership_user'""
+                        href="[[notification.href]]"
                         class="text-warning">
                         <i class="fa noty-icon fa-user bg-warning"></i>
                         <span class="description">[[ notification.message ]]</span>
                         <span class="time"> <i class="fa fa-clock-o"></i>  [[ notification.activated.date ]]</span>
                       </a>
                       
-                      <a ng-click="goToDestination($event, notification.destinationid)" ng-show="notification.type == 'membership_user_out'""
-                        href="{{ url('intranet_show_office', {office_id: 0}) }}"
+                      <a ng-show="notification.type == 'membership_user_out'""
+                        href="[[notification.href]]"
                         class="text-danger">
                         <i class="fa noty-icon fa-user bg-danger"></i>
                         <span class="description">[[ notification.message ]]</span>
                         <span class="time"> <i class="fa fa-clock-o"></i>  [[ notification.activated.date ]]</span>
                       </a>
                       
-                      <a ng-click="goToDestination($event, notification.destinationid)" ng-show="notification.type == 'message_office'""
-                        href="{{ url('intranet_show_office', {office_id: 0}) }}">
+                      <a ng-show="notification.type == 'message_office'""
+                        href="[[notification.href]]">
                         <i class="fa noty-icon fa-comment bg-primary"></i>
                         <span class="description">[[ notification.message ]]</span>
                         <span class="time"> <i class="fa fa-clock-o"></i>  [[ notification.activated.date ]]</span>
                       </a>
                       
-                      <a ng-click="goToDestination($event, notification.destinationid)" ng-show="notification.type == 'message_topic'""
-                        href="{{ url('intranet_show_topic', {topic_id: 0}) }}"
+                      <a ng-show="notification.type == 'message_topic'""
+                        href="[[notification.href]]"
                         class="text-info">
                         <i class="fa noty-icon fa-comment bg-info"></i>
                         <span class="description">[[ notification.message ]]</span>
                         <span class="time"> <i class="fa fa-clock-o"></i>  [[ notification.activated.date ]]</span>
                       </a>
                       
-                      <a ng-click="goToDestination($event, notification.destinationid)" ng-show="notification.type == 'removed_office'""
-                        href="{{ url('intranet_show_office', {office_id: 0}) }}"
+                      <a ng-show="notification.type == 'removed_office'""
+                        href="[[notification.href]]"
                         class="text-danger">
                         <i class="fa noty-icon fa-exclamation bg-danger"></i>
                         <span class="description">[[ notification.message ]]</span>
                         <span class="time"> <i class="fa fa-clock-o"></i>  [[ notification.activated.date ]]</span>
                       </a>
                       
-                      <a ng-click="goToDestination($event, notification.destinationid)" ng-show="notification.type == 'removed_topic'""
-                        href="{{ url('intranet_show_topic', {topic_id: 0}) }}"
+                      <a ng-show="notification.type == 'removed_topic'""
+                        href="[[notification.href]]"
                         class="text-danger">
                         <i class="fa noty-icon fa-exclamation bg-danger"></i> 
                         <span class="description">[[ notification.message ]]</span>
                         <span class="time"> <i class="fa fa-clock-o"></i>  [[ notification.activated.date ]]</span>
                       </a>
                       
-                      <a ng-click="goToDestination($event, notification.destinationid)" ng-show="notification.type == 'topic_added'""
-                        href="{{ url('intranet_show_topic', {topic_id: 0}) }}"
+                      <a ng-show="notification.type == 'topic_added'""
+                        href="[[notification.href]]"
                         class="text-success">
                         <i class="fa noty-icon fa-comment bg-success"></i> 
                         <span class="description">[[ notification.message ]]</span>
@@ -216,7 +216,9 @@
 
 <script type="text/javascript">
 var JSON_URLS = {
-		notificationsGet: "{{ path('intranet_notifications_get') }}"
+		notificationsGet: "{{ path('intranet_notifications_get') }}",
+		officeShow: "{{ url('intranet_show_office', {office_id: 0}) }}",
+		topicShow: "{{ url('intranet_show_topic', {topic_id: 0}) }}"
 };
 </script>
 {% endblock %}

@@ -3,6 +3,8 @@ Intranet.controller('NavigationController', ['$scope', '$http', function($scope,
 	title = $('title');
 	titleValue = $('title').text();
 	notificationsGetUrl = JSON_URLS.notificationsGet;
+	officeShowUrlBase = JSON_URLS.officeShow;
+	topicShowUrlBase = JSON_URLS.topicShow;
 	
 	$scope.notifications = [];
 	$scope.notifyHandler = null;
@@ -34,7 +36,7 @@ Intranet.controller('NavigationController', ['$scope', '$http', function($scope,
 			if (response.result.length > 0)
 			{
 				if ($scope.notifyHandler == null) StartNotify();
-				$scope.notifications = response.result;
+				$scope.notifications = prepareNotifications(response.result);
 			}else
 			{
 				StopNotify();
@@ -43,11 +45,31 @@ Intranet.controller('NavigationController', ['$scope', '$http', function($scope,
 		})
 	}
 	
-	$scope.goToDestination = function(event, destinationId)
+	function prepareNotifications(notifications)
 	{
-		event.preventDefault();
-		var url = event.currentTarget.href.replace('0', destinationId);
-		window.location.href = url;
+		notifications = _.map(notifications, function(n){
+			if (['membership_own', 'membership_own_out', 'membership_user', 'membership_user_out', 'message_office', 'removed_office'].indexOf(n.type) != -1)
+			{
+				n.href = officeShowUrlBase.replace('0', n.destinationid);
+			}else
+			{
+				n.href = topicShowUrlBase.replace('0', n.destinationid);
+			}
+			
+			return n;
+		});
+		
+		notifications = _.filter(notifications, function(n){
+			return n.href != window.location.href;
+		});
+		
+		$http({
+			method: "GET", 
+			url: window.location.href
+			  });
+		
+		
+		return notifications;
 	}
 	
 	setInterval(getNotifications, 2000);
