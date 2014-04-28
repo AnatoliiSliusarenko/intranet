@@ -338,7 +338,7 @@ class Notification
     {
     	$message = \Swift_Message::newInstance()
 			    	->setSubject('AmploIntranet notification!')
-			    	->setFrom('support@amplointranet.com')
+			    	->setFrom('dj.slyusar@gmail.com')
 			    	->setTo($user->getEmail())
 			    	->setBody($message);
     	$mailer->send($message);
