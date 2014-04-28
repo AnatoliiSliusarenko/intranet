@@ -8,7 +8,7 @@ parameters:
     database_password: %database.password%
     mailer_transport: gmail
     mailer_host: ~
-    mailer_user: %gmail.user%
-    mailer_password: %gmail.password%
+    mailer_user: dj.slyusar
+    mailer_password: 59715FORgoogle79
     locale: en
     secret: ThisTokenIsNotSoSecretChangeIt
