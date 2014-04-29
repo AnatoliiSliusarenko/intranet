@@ -42,19 +42,7 @@ Intranet.controller('ChatController', ['$scope', '$http', '$paginator', function
 	
 	function updateLastDate(posts)
 	{
-		return;
-		/*var minDate = new Date(Date.parse(posts[0].posted.date));
-		var now = new Date();
-		_.map(posts, function(p){
-			var postedTime = new Date(Date.parse(p.posted.date));
-			var editedTime = new Date(Date.parse(p.edited.date));
-			var utc = new Date(now.getTime() + now.getTimezoneOffset() * 60000);
-			
-			var mlcsAgo1 = Date.milisecondsBetween(postedTime, utc);
-			var mlcsAgo2 = Date.milisecondsBetween(editedTime, utc);
-			
-			if ()
-		});*/
+		
 	}
 	
 	function getPosts(offset, limit)
@@ -66,8 +54,13 @@ Intranet.controller('ChatController', ['$scope', '$http', '$paginator', function
 		.success(function(response){
 			console.log(response.result);
 			if (response.result)
+			{
 				$scope.posts = response.result.reverse();
-			$scope.lastDate = (_.last($scope.posts)).posted.date;
+			}
+			if (response.result.length>0)
+			{
+				$scope.lastDate = (_.last($scope.posts)).posted.date;
+			}
 			container.animate({ scrollTop: container.height()+1900 },1000);
 		})
 	}
