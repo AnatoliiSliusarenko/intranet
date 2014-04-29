@@ -110,7 +110,7 @@
 									</div>
 									
   									<div class="panel-body nopadding">
-  										<div class="list-group conversation">
+  										<div id="conversation" class="list-group conversation">
   											<a class="list-group-item" ng-repeat="post in posts">
   												<img src="[[avatarURL + post.user.avatar]]" class="chat-user-avatar" alt="" />
   												<span class="username" >[[post.user.name + ' ' + post.user.surname]] ([[post.user.username]])<span class="time">[[ post.posted.date ]]</span> </span>
@@ -355,7 +355,8 @@
 		            <td>
 		             <button type="button" class="btn btn-warning" ng-click="editTask(task)"><i class="fa fa-edit"></i></button>
 		             <button type="button" class="btn btn-danger" ng-click="removeTask(task)"><i class="fa fa-trash-o"></i></button>
-		             <button type="button" class="btn btn-info" ng-click="showTopic(task)"><i class="fa fa-comment"></i></button>
+		             <button type="button" class="btn btn-info" ng-click="showTopic(task)"><i class="fa fa-mail-forward"></i></button>
+		             <button type="button" class="btn btn-success" ng-click="showPosts(task)"><i class="fa fa-comment"></i></button>
 		            </td>
 	           </tr>
 			  </tbody>
@@ -390,7 +391,10 @@
 	JSON_URLS.tasksEdit = "{{ path('intranet_task_edit', {task_id: 0}) }}";
 	JSON_URLS.tasksRemove = "{{ path('intranet_task_remove', {task_id: 0}) }}";
 	JSON_URLS.topicsShow = "{{ path('intranet_show_topic', {topic_id: 0}) }}";
-
+	JSON_URLS.urlsPostsTaskShow = "{{ path('intranet_post_task_show', {task_id: 0}) }}";
+	JSON_URLS.urlsPostsTaskGet = "{{ path('intranet_post_task_get', {task_id: 0}) }}";
+	JSON_URLS.urlsPostsTaskAdd = "{{ path('intranet_post_task_add', {task_id: 0}) }}";
+	
     var USER = {
     	    id: "{{ app.user.getId() }}"
    	};

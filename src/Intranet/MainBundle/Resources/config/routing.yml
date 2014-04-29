@@ -111,3 +111,16 @@ intranet_task_get_for_office:
 intranet_task_get_for_topic:
     pattern:  /topic/{topic_id}/tasks/
     defaults: { _controller: IntranetMainBundle:Task:getTasksForTopic }
+    
+intranet_post_task_show:
+    pattern:  /posts/task/{task_id}/show/
+    defaults: { _controller: IntranetMainBundle:PostTask:showPosts }
+    
+intranet_post_task_get:
+    pattern:  /posts/task/{task_id}/get/
+    defaults: { _controller: IntranetMainBundle:PostTask:getPosts }
+    
+intranet_post_task_add:
+    pattern:  /posts/task/{task_id}/add/
+    defaults: { _controller: IntranetMainBundle:PostTask:addPost }
+    

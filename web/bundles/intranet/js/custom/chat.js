@@ -1,6 +1,6 @@
 Intranet.controller('ChatController', ['$scope', '$http', '$paginator', function($scope, $http, $paginator){
-	container = $('.conversation');
-	messageContainer = $('.write-message');
+	container = $('#conversation');
+	messageContainer = $('#write-message');
 	
 	$scope.paginator = $paginator;
 	$scope.postsPerPage = 10;
@@ -26,6 +26,8 @@ Intranet.controller('ChatController', ['$scope', '$http', '$paginator', function
 	$scope.members = [];
 	$scope.message = '';
 	$scope.editingPost = null;
+	$scope.lastDate = null;
+	
 		
 	$scope.postsGetURL = JSON_URLS.posts;
 	$scope.avatarURL = JSON_URLS.avatar;
@@ -38,6 +40,23 @@ Intranet.controller('ChatController', ['$scope', '$http', '$paginator', function
 	$scope.entityid = window.ENTITY.id;
 	$scope.userid = window.USER.id;
 	
+	function updateLastDate(posts)
+	{
+		return;
+		/*var minDate = new Date(Date.parse(posts[0].posted.date));
+		var now = new Date();
+		_.map(posts, function(p){
+			var postedTime = new Date(Date.parse(p.posted.date));
+			var editedTime = new Date(Date.parse(p.edited.date));
+			var utc = new Date(now.getTime() + now.getTimezoneOffset() * 60000);
+			
+			var mlcsAgo1 = Date.milisecondsBetween(postedTime, utc);
+			var mlcsAgo2 = Date.milisecondsBetween(editedTime, utc);
+			
+			if ()
+		});*/
+	}
+	
 	function getPosts(offset, limit)
 	{
 		$http({
@@ -48,7 +67,8 @@ Intranet.controller('ChatController', ['$scope', '$http', '$paginator', function
 			console.log(response.result);
 			if (response.result)
 				$scope.posts = response.result.reverse();
-			//container.animate({ scrollTop: container.height()+1900 },1000);
+			$scope.lastDate = (_.last($scope.posts)).posted.date;
+			container.animate({ scrollTop: container.height()+1900 },1000);
 		})
 	}
 	
@@ -59,7 +79,7 @@ Intranet.controller('ChatController', ['$scope', '$http', '$paginator', function
 			url: $scope.postsCountURL, 
 			})
 		.success(function(response){
-			console.log("posts count-->", response.result);
+			console.log("posts count: ", response.result);
 			if (response.result)
 				callback(response.result);
 		})
@@ -72,7 +92,7 @@ Intranet.controller('ChatController', ['$scope', '$http', '$paginator', function
 			url: $scope.membersURL, 
 			})
 		.success(function(response){
-			console.log("members-->", response.result);
+			console.log("members: ", response.result);
 			if (response.result)
 				$scope.members = response.result;
 		})
@@ -87,9 +107,10 @@ Intranet.controller('ChatController', ['$scope', '$http', '$paginator', function
 				url: $scope.postsNewURL, 
 				params: {last_posted: ($scope.posts.length > 0)? (_.last($scope.posts)).posted.date : null}})
 			.success(function(response){
-				console.log("new posts-->", response.result);
+				console.log("new posts: ", response.result);
 				if ((response.result) && (response.result.length > 0))
 				{
+					updateLastDate(response.result);
 					getPostsCount(function(postsCount){
 						$scope.paginator.init(postsCount, $scope.postsPerPage);
 						var offset = $scope.paginator.postsPerPage*($scope.paginator.curPageId - 1);
@@ -112,6 +133,15 @@ Intranet.controller('ChatController', ['$scope', '$http', '$paginator', function
 	
 	Date.minutesBetween = function( date1, date2 ) {
 		  var one_minute=1000*60;
+		  var date1_ms = date1.getTime();
+		  var date2_ms = date2.getTime();
+		  var difference_ms = date2_ms - date1_ms;
+		  
+		  return Math.ceil(difference_ms/one_minute); 
+	}
+	
+	Date.milisecondsBetween = function( date1, date2 ) {
+		  var one=1;
 		  var date1_ms = date1.getTime();
 		  var date2_ms = date2.getTime();
 		  var difference_ms = date2_ms - date1_ms;
@@ -147,7 +177,7 @@ Intranet.controller('ChatController', ['$scope', '$http', '$paginator', function
 			url: $scope.postAddURL, 
 			data: post })
 		.success(function(response){
-			console.log(response.result);
+			console.log("Created post: ", response.result);
 			if (response.result)
 			{
 				// maybe need to request for posts and init paginator!!!

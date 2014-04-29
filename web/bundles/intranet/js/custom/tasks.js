@@ -23,6 +23,7 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 	$scope.urlsTasksEdit = JSON_URLS.tasksEdit;
 	$scope.urlsTopicsShow = JSON_URLS.topicsShow;
 	$scope.urlsTasksAdd = JSON_URLS.tasksAdd;
+	$scope.urlsPostsTaskShow = JSON_URLS.urlsPostsTaskShow;
 	
 	function getTasks()
 	{	
@@ -125,6 +126,29 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 			}, function(){});
 		})
 	}
+	
+	$scope.showPosts = function(task)
+	{
+		var url = $scope.urlsPostsTaskShow.replace('0', task.id);
+		$http({
+			method: "GET", 
+			url: url
+			  })
+		.success(function(response){
+			var modalInstance = $modal.open({
+			      template: response,
+			      controller: 'ShowPostsController',
+			      resolve: {
+						task: function(){return task;}
+					}
+			    });
+			
+			modalInstance.result.then(function (currentTask) {
+				
+			
+			}, function(){});
+		});
+	}
 }])
 .controller('AddTasksController', ['$scope', '$http', '$modalInstance', 'users', 'topics', function($scope, $http, $modalInstance, users, topics){
 	console.log('AddTasksController was loaded!');
@@ -197,4 +221,104 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 		});
 	}
 	
+}])
+.controller('ShowPostsController', ['$scope', '$http', '$modalInstance', 'task', function($scope, $http, $modalInstance, task){
+	console.log('ShowPostsController was loaded!');
+	
+	
+	$scope.posts = [];
+	$scope.urlsPostsTaskAdd = JSON_URLS.urlsPostsTaskAdd;
+	$scope.urlsPostsTaskGet = JSON_URLS.urlsPostsTaskGet.replace('0', task.id);
+	$scope.avatarURL = JSON_URLS.avatar;
+	$scope.comment = "";
+	$scope.editingPost = null;
+	$scope.entityid = task.id;
+	$scope.userid = window.USER.id;
+	
+	$http({
+		method: "GET", 
+		url: $scope.urlsPostsTaskGet
+		  })
+	.success(function(response){
+		console.log(response);
+		if (response.result)
+		{
+			$scope.containerTask = $('#conversation-task');
+			$scope.messageContainerTask = $('#write-message-task');
+			$scope.posts = response.result;
+			$scope.containerTask.animate({ scrollTop: $scope.containerTask.height()+1900 },1000);
+		}
+			
+	})
+	
+	$scope.isEditable = function(post)
+	{
+		var postedTime = new Date(Date.parse(post.posted.date));
+		var now = new Date();
+		var utc = new Date(now.getTime() + now.getTimezoneOffset() * 60000);
+		
+		var minutesAgo = Date.minutesBetween(postedTime, utc);
+
+		return (minutesAgo <= 5 && post.userid == $scope.userid);
+	}
+	
+	$scope.editPost = function(post)
+	{
+		if ((!$scope.isEditable(post)) || ($scope.editingPost != null)) return;
+		console.log(post);
+		$scope.editingPost = post;
+		$scope.messageContainerTask.val(post.message);
+	}
+	
+	$scope.pressEnter = function(e)
+	{
+		if ((e.shiftKey == false) && ( e.keyCode == 13 ))
+		{
+			e.preventDefault();
+			$scope.addPost();
+		}
+	}
+	
+	$scope.addPost = function()
+	{
+		$scope.comment = $scope.messageContainerTask.val();
+		var post = {
+				entityid: $scope.entityid, 
+				userid: $scope.userid,
+				message: $scope.comment,
+				posted: new Date()
+		}
+		
+		if ($scope.editingPost)
+			post.postid = $scope.editingPost.id;
+		
+		$http({
+			method: "POST", 
+			url: $scope.urlsPostsTaskAdd, 
+			data: post })
+		.success(function(response){
+			console.log("Created post for task: ", response.result);
+			if (response.result)
+			{
+				// maybe need to request for posts and init paginator!!!
+				if ($scope.editingPost == null)
+				{
+					$scope.posts.push(response.result);
+					$scope.containerTask.animate({ scrollTop: $scope.containerTask.height()+1900 },1000);
+				}
+				else
+				{
+					_.map($scope.posts, function(p, i){
+						if (p.id == response.result.id)
+							$scope.posts[i] = response.result;
+					});
+				}
+			}
+			
+			$scope.editingPost = null;
+			$scope.comment = "";
+			$scope.messageContainerTask.val("");
+			$scope.messageContainerTask.focus();
+		})
+	}
 }]);

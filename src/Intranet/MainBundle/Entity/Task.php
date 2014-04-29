@@ -81,6 +81,12 @@ class Task
      * @var array
      */
     private $topics;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="PostTask", mappedBy="task")
+     * @var array
+     */
+    private $posts;
 
     /**
      * Get id
@@ -481,5 +487,38 @@ class Task
     			'users' => array_map(function($u){return $u->getInArray();}, $this->getUsers()->toArray()),
     			'topics' => array_map(function($t){return $t->getInArray();}, $this->getTopics()->toArray())
     	);
+    }
+
+    /**
+     * Add post
+     *
+     * @param \Intranet\MainBundle\Entity\PostTask $post
+     * @return Task
+     */
+    public function addPost(\Intranet\MainBundle\Entity\PostTask $post)
+    {
+        $this->posts[] = $post;
+
+        return $this;
+    }
+
+    /**
+     * Remove post
+     *
+     * @param \Intranet\MainBundle\Entity\PostTask $post
+     */
+    public function removePost(\Intranet\MainBundle\Entity\PostTask $post)
+    {
+        $this->posts->removeElement($post);
+    }
+
+    /**
+     * Get posts
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getPosts()
+    {
+        return $this->posts;
     }
 }

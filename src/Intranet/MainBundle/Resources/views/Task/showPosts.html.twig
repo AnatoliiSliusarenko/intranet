@@ -1,0 +1,22 @@
+<div class="modal-body">
+	<div class="row chat-box">
+		<div class="panel panel-cascade recipient-box">
+			<div class="panel-body nopadding">
+		  		<div id="conversation-task" class="list-group conversation" style="height: 300px;">
+		  			<a class="list-group-item" ng-repeat="post in posts">
+		  				<img src="[[avatarURL + post.user.avatar]]" class="chat-user-avatar" alt="" />
+		  				<span class="username" >[[post.user.name + ' ' + post.user.surname]] ([[post.user.username]])<span class="time">[[ post.posted.date ]]</span> </span>
+		  				<i class="fa fa-edit" ng-show="post.edited"></i>
+		  				<p style="white-space: pre-line;" ng-class="{editable:isEditable(post)}" ng-click="editPost(post)">[[post.message]]</p>
+		  			</a>
+		  		</div>
+		  		<div class="input-group">
+			  		<textarea id="write-message-task" ng-model="comment" style="resize:vertical;" class="form-control write-message" ng-class="{editing: editingPost}" placeholder="Type something here and hit enter" ng-keypress="pressEnter($event)">[[ message ]]</textarea>
+			  		<span class="input-group-btn">
+			  			<button class="btn text-white bg-primary send-message" type="button" ng-click="addPost()">Add</button>
+			  		</span>
+		  		</div><!-- /input-group -->
+		  	</div>
+		</div>
+	</div>
+</div>
