@@ -188,7 +188,7 @@ class Notification
         return $this->user;
     }
     
-    private static function postNotification($em, $mailer, $user, $type, $destinationid, $message)
+    private static function postNotification($em, $router, $mailer, $user, $type, $destinationid, $message)
     {
     	$notification = new Notification();
     	$notification->setUserid($user->getId());
@@ -200,10 +200,10 @@ class Notification
     	$em->persist($notification);
     	$em->flush();
     	
-    	self::sendNotificationEmail($mailer, $user, $message);
+    	self::sendNotificationEmail($router, $mailer, $user, $message, $type, $destinationid);
     }
     
-    public static function createNotification($em, $mailer, $creator, $type, $resource, $destination)
+    public static function createNotification($em, $router, $mailer, $creator, $type, $resource, $destination)
     {
     	$types = array(
     			"message_office", 
@@ -274,7 +274,7 @@ class Notification
     				$message = 'You was deleted from "'.$destination->getName().'"';
     				$type = "membership_own_out";
     			
-    				self::postNotification($em, $mailer, $userOffice, $type, $destination->getId(), $message);
+    				self::postNotification($em, $router, $mailer, $userOffice, $type, $destination->getId(), $message);
     				    				
     				foreach ($users as $user)
     				{
@@ -282,7 +282,7 @@ class Notification
     					$type = "membership_user_out";
     					$message = $userOffice->getName().' '.$userOffice->getSurname().' was deleted from "'.$destination->getName().'"';
     					
-    					self::postNotification($em, $mailer, $user, $type, $destination->getId(), $message);
+    					self::postNotification($em, $router, $mailer, $user, $type, $destination->getId(), $message);
     				}
     			}
     			return true;
@@ -297,7 +297,7 @@ class Notification
     				$message = 'You was added to "'.$destination->getName().'"';
     				$type = "membership_own";
     			
-    				self::postNotification($em, $mailer, $userOffice, $type, $destination->getId(), $message);
+    				self::postNotification($em, $router, $mailer, $userOffice, $type, $destination->getId(), $message);
     				    				
     				foreach ($users as $user)
     				{
@@ -305,7 +305,7 @@ class Notification
     					$type = "membership_user";
     					$message = $userOffice->getName().' '.$userOffice->getSurname().' was added to "'.$destination->getName().'"';
     					
-    					self::postNotification($em, $mailer, $user, $type, $destination->getId(), $message);
+    					self::postNotification($em, $router, $mailer, $user, $type, $destination->getId(), $message);
     				}
     			}
     			return true;
@@ -328,14 +328,25 @@ class Notification
     	{
     		if ($user->getId() == $creator->getId()) continue;
     		
-    		self::postNotification($em, $mailer, $user, $type, $destination->getId(), $message);
+    		self::postNotification($em, $router, $mailer, $user, $type, $destination->getId(), $message);
     	}
     	
     	return true;
     }
     
-    public static function sendNotificationEmail($mailer, $user, $message)
+    public static function sendNotificationEmail($router, $mailer, $user, $message, $type, $destinationid)
     {
+    	if (in_array($type, array("message_topic","removed_topic","topic_added")))
+    	{
+    		$link = $router->generate('intranet_show_topic', array('topic_id' => $destinationid), true);
+    	}else 
+    	{
+    		$link = $router->generate('intranet_show_office', array('office_id' => $destinationid), true);
+    	}
+    	
+    	$message = $message.
+    	"\n\nPlease go to the next link: \n".$link;
+    	
     	$message = \Swift_Message::newInstance()
 			    	->setSubject('AmploIntranet notification!')
 			    	->setFrom('dj.slyusar@gmail.com')

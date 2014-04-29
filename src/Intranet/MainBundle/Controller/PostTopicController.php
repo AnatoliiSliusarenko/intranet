@@ -57,7 +57,7 @@ class PostTopicController extends Controller
     	if (isset($post->postid))
     		$added = PostTopic::editPostByOfficeId($em, $post);
     	else
-    		$added = PostTopic::addPostByTopicId($em, $this->get('mailer'), $post);
+    		$added = PostTopic::addPostByTopicId($em, $this->get('router'), $this->get('mailer'), $post);
     	
     	$response = new Response(json_encode(array("result" => $added)));
     	$response->headers->set('Content-Type', 'application/json');
