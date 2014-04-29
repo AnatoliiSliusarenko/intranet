@@ -110,6 +110,13 @@ class User implements UserInterface, \Serializable
 	 * @var array
 	 */
 	private $notifications;
+	
+	/**
+	 * @ORM\OneToMany(targetEntity="Log", mappedBy="user")
+	 * @ORM\OrderBy({"loged" = "DESC"})
+	 * @var array
+	 */
+	private $logs;
     
 	/**
 	 * @var string
@@ -796,5 +803,38 @@ class User implements UserInterface, \Serializable
     public function getTasks()
     {
         return $this->tasks;
+    }
+
+    /**
+     * Add log
+     *
+     * @param \Intranet\MainBundle\Entity\Log $log
+     * @return User
+     */
+    public function addLog(\Intranet\MainBundle\Entity\Log $log)
+    {
+        $this->logs[] = $log;
+
+        return $this;
+    }
+
+    /**
+     * Remove log
+     *
+     * @param \Intranet\MainBundle\Entity\Log $log
+     */
+    public function removeLog(\Intranet\MainBundle\Entity\Log $log)
+    {
+        $this->logs->removeElement($log);
+    }
+
+    /**
+     * Get logs
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getLogs()
+    {
+        return $this->logs;
     }
 }

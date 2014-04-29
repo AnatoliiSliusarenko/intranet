@@ -124,3 +124,7 @@ intranet_post_task_add:
     pattern:  /posts/task/{task_id}/add/
     defaults: { _controller: IntranetMainBundle:PostTask:addPost }
     
+intranet_log_show:
+    pattern:  /logs/
+    defaults: { _controller: IntranetMainBundle:Log:showLogs }
+    

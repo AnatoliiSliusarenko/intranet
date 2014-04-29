@@ -1,0 +1,56 @@
+{% extends 'IntranetMainBundle:Index:index.html.twig' %}
+
+{% block title %}Logs{% endblock %}
+
+{% block breadcrumbs %}
+<ul class="breadcrumb">
+	<li class="active">Logs</li>
+</ul>
+{% endblock %}
+
+{% block pageheader %}
+<div ng-app="Intranet" class="row">
+	<div class="col-md-12">
+		<h3 class="page-header"><i class="fa fa-exclamation-triangle animated slide"></i> Logs (for testing...) <i class="fa fa-info-circle animated bounceInDown show-info"></i></h3>
+
+		<blockquote class="page-information hidden">
+		<p>
+			Here you can view all activity on Intranet...
+		</p>
+		</blockquote>
+	</div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="panel-body">
+	          <table class="table users-table table-condensed table-hover" >
+	           <thead>
+	           		<tr>
+			             <th  class="visible-lg">ID</th>
+			             <th  class="visible-lg">UserId</th>
+			             <th class="visible-lg">ResourceId</th>
+			             <th class="visible-lg">DestinationId</th>
+			             <th class="visible-lg">Type</th>
+			             <th class="visible-lg">Loged</th>
+	           		</tr>
+	           </thead>
+	           <tbody>
+	           {% for log in logs %}
+	           <tr>
+			   		<td class="visible-lg">{{ log.getId() }}</td>
+		            <td class="visible-lg">{{ log.getUserid() }}</td>
+		            <td class="visible-lg">{{ log.getResourceid() }}</td>
+		            <td class="visible-lg">{{ log.getDestinationid() }}</td>
+		            <td class="visible-lg">{{ log.getType() }}</td>
+		            <td class="visible-lg">{{ log.getLoged()|date('Y-m-d H:i:s') }}</td>
+	           </tr>
+	           {% endfor %}
+			  </tbody>
+			</table>
+		  </div>
+{% endblock %}
+{% block javascripts %}
+	{{ parent() }}
+	
+{% endblock %}
