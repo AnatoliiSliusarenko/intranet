@@ -5,6 +5,7 @@ namespace Intranet\MainBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Intranet\MainBundle\Entity\Notification;
 use Intranet\MainBundle\Entity\Topic;
+use Intranet\MainBundle\Entity\Task;
 use Intranet\MainBundle\Entity\Office;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -51,7 +52,8 @@ class TopicController extends Controller
     	array_unshift($topicsForTasks, $topic);
     	
     	$parameters = array("users" => array_map(function($e){return $e->getInArray();}, $users), 
-					    	"topic" => $topic, 
+					    	"topic" => $topic,
+					    	"availableStatus" => Task::getAvailableStatus(),
 					    	"breadcrumbs" => $breadcrumbs, 
 					    	'subtopics' => $subtopics, 
 					    	'topicsForTasks' => array_map(function($e){return $e->getInArray();}, $topicsForTasks),

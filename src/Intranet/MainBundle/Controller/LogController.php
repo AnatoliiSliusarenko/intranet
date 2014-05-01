@@ -11,7 +11,8 @@ class LogController extends Controller
     public function showLogsAction()
     {
     	$em = $this->getDoctrine()->getManager();
-    	$logs = Log::getAllLogs($em);
+    	$loger = $this->get('intranet.loger');
+    	$logs = $loger->getAllLogs();
         return $this->render('IntranetMainBundle:Log:showLogs.html.twig', array('logs' => $logs));
     }
 }

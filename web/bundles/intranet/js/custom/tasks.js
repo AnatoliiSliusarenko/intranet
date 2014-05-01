@@ -11,12 +11,10 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 	
 	$scope.$watch('filter', function(){
 		getTasks();
-		//console.log($scope.filter);
 	}, true);
 	
 	$scope.tasks = [];
 	$scope.users = USERS;
-	$scope.topics = TOPICS;
 	
 	$scope.urlsTasksGet = JSON_URLS.tasksGet;
 	$scope.urlsTasksRemove = JSON_URLS.tasksRemove;
@@ -24,6 +22,31 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 	$scope.urlsTopicsShow = JSON_URLS.topicsShow;
 	$scope.urlsTasksAdd = JSON_URLS.tasksAdd;
 	$scope.urlsPostsTaskShow = JSON_URLS.urlsPostsTaskShow;
+	
+	function prepareTasks(tasks)
+	{
+		_.map(tasks, function(task){
+			task.currentTopicId = (task.topics.length > 0) ? task.topics[0].id : 0;
+			if (task.parentid == null) task.subtasks = [];
+		});
+		var groupedList = _.groupBy(tasks, function(task){ return task.parentid; });
+		
+		var topList = groupedList[null];
+		delete groupedList[null];
+		_.map(topList, function(task){
+			if (typeof groupedList[task.id] != 'undefined') 
+			{
+				task.subtasks = groupedList[task.id]; 
+				delete groupedList[task.id];
+			}
+				
+		});
+		
+		for (key in groupedList)
+			topList = topList.concat(groupedList[key]);
+		
+		return topList;
+	}
 	
 	function getTasks()
 	{	
@@ -36,13 +59,18 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 			console.log(response);
 			if (response.result)
 			{
-				_.map(response.result, function(task){task.currentTopicId = (task.topics.length > 0) ? task.topics[0].id : 0});
-				$scope.tasks = response.result;
+				$scope.tasks = prepareTasks(response.result);
 			}
 		})
 	}
 	
 	getTasks();
+	
+	$scope.changeDrop = function(task)
+	{
+		if (task.subtasks.length == 0) return;
+		task.dropped = !task.dropped;
+	}
 	
 	$scope.removeTask = function(task)
 	{
@@ -71,11 +99,13 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 		window.location.href = url;
 	}
 	
-	$scope.addTask = function()
+	$scope.addTask = function(task)
 	{	
+		var parentid = (typeof task != 'undefined') ? task.id : null;
 		$http({
 			method: "GET", 
-			url: $scope.urlsTasksAdd
+			url: $scope.urlsTasksAdd,
+			params: {parentid: parentid}
 			  })
 		.success(function(response){
 			var modalInstance = $modal.open({
@@ -83,13 +113,23 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 			      controller: 'AddTasksController',
 			      resolve: {
 			    	  users: function(){return $scope.users;},
-			    	  topics: function(){return $scope.topics;}
+			    	  parentid: function(){return parentid;}
 			      }
 			    });
 			
 			modalInstance.result.then(function (addedTask) {
 				addedTask.currentTopicId = (addedTask.topics.length > 0) ? addedTask.topics[0].id : 0;
-				$scope.tasks.push(addedTask);
+				if (addedTask.parentid == null)
+				{
+					addedTask.subtasks = [];
+					$scope.tasks.push(addedTask);
+				}else
+				{
+					_.map($scope.tasks, function(task, i){
+						if (task.id == addedTask.parentid)
+							$scope.tasks[i].subtasks.push(addedTask);
+					});
+				}
 			}, function(){});
 		})
 	}
@@ -107,8 +147,7 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 			      controller: 'EditTasksController',
 			      resolve: {
 			    	  task: function(){return task;},
-			    	  users: function(){return $scope.users;},
-			    	  topics: function(){return $scope.topics;}
+			    	  users: function(){return $scope.users;}
 			      }
 			    });
 			
@@ -116,11 +155,20 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 				console.log(editedTask);
 				_.map($scope.tasks, function(task, i){
 					if (task.id == editedTask.id) {
-						$scope.tasks[i].users = [];
-						_.map(editedTask.users, function(u){$scope.tasks[i].users.push(u)});
 						$scope.tasks[i].topics = [];
 						_.map(editedTask.topics, function(t){$scope.tasks[i].topics.push(t)});
 						task.currentTopicId = (task.topics.length > 0) ? task.topics[0].id : 0;
+						$scope.tasks[i].user = editedTask.user;
+					}else
+					{
+						_.map(task.subtasks, function(subtask, j){
+							if (subtask.id == editedTask.id) {
+								$scope.tasks[i].subtasks[j].topics = [];
+								_.map(editedTask.topics, function(t){$scope.tasks[i].subtasks[j].topics.push(t)});
+								subtask.currentTopicId = (subtask.topics.length > 0) ? subtask.topics[0].id : 0;
+								$scope.tasks[i].subtasks[j].user = editedTask.user;
+							}
+						});
 					}
 				});
 			}, function(){});
@@ -150,16 +198,17 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 		});
 	}
 }])
-.controller('AddTasksController', ['$scope', '$http', '$modalInstance', 'users', 'topics', function($scope, $http, $modalInstance, users, topics){
+.controller('AddTasksController', ['$scope', '$http', '$modalInstance', 'users', 'parentid', function($scope, $http, $modalInstance, users, parentid){
 	console.log('AddTasksController was loaded!');
 	
 	$scope.urlsTasksAdd = JSON_URLS.tasksAdd;
 	
 	$scope.users = users;
-	$scope.topics = topics;
 	$scope.task = {
-			status: 'opened',
-			priority: 'high'
+			status: 'in-discussion',
+			priority: 'high',
+			userid: null,
+			parentid: parentid
 	};
 	
 	$scope.addTask = function(event)
@@ -178,19 +227,18 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 	}
 	
 }])
-.controller('EditTasksController', ['$scope', '$http', '$modalInstance', 'task', 'users', 'topics', function($scope, $http, $modalInstance, task, users, topics){
+.controller('EditTasksController', ['$scope', '$http', '$modalInstance', 'task', 'users', function($scope, $http, $modalInstance, task, users){
 	console.log('EditTasksController was loaded!');
 	
 	$scope.urlsTasksEdit = JSON_URLS.tasksEdit;
 	
 	$scope.users = users;
-	$scope.topics = topics;
 	$scope.task = task;
-	$scope.task.usersIds = _.map($scope.task.users, function($e){return $e.id});
-	$scope.task.topicsIds = _.map($scope.task.topics, function($e){return $e.id});
+	$scope.task.topicsIdsCurrent = _.map($scope.task.topics, function($e){return $e.id});
 	
+		
 	$scope.editTask = function(event)
-	{
+	{	
 		if ($scope.task.name != undefined)
 			event.preventDefault();
 		
@@ -207,25 +255,17 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 		})
 	}
 	
-	$scope.hasTopic = function(topic)
+	$scope.hasTopic = function(topicid)
 	{
-		return _.find($scope.task.topicsIds, function(t){
-			return t==topic.id;
+		return _.find($scope.task.topicsIdsCurrent, function(t){
+			return t==topicid;
 		});
 	}
-	
-	$scope.hasUser = function(user)
-	{
-		return _.find($scope.task.usersIds, function(u){
-			return u==user.id;
-		});
-	}
-	
 }])
 .controller('ShowPostsController', ['$scope', '$http', '$modalInstance', 'task', function($scope, $http, $modalInstance, task){
 	console.log('ShowPostsController was loaded!');
 	
-	
+	$scope.task = task;
 	$scope.posts = [];
 	$scope.urlsPostsTaskAdd = JSON_URLS.urlsPostsTaskAdd;
 	$scope.urlsPostsTaskGet = JSON_URLS.urlsPostsTaskGet.replace('0', task.id);

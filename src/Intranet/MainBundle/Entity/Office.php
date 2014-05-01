@@ -530,8 +530,6 @@ class Office
     		$tasks = $filteredTasks->toArray();
     	}
     	
-    	
-    	
     	return array_map(function($t){return $t->getInArray();}, $tasks);
     }
 }

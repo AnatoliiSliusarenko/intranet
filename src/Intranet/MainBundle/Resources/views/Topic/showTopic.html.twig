@@ -187,13 +187,9 @@
   					<label for="inputEmail1" class="col-lg-2 col-md-3 control-label">Status</label>
   					<div class="col-lg-10 col-md-9">
    						<select multiple ng-model="filter.status" class="form-control">
-						    <option value="pending">Pending</option>
-						    <option value="opened">Opened</option>
-						    <option value="re-opened">Re-opened</option>
-						    <option value="in-progress">In-progress</option>
-						    <option value="resolved">Resolved</option>
-						    <option value="testing">Testing</option>
-						    <option value="closed">Closed</option>
+						    {% for key,status in availableStatus %}
+						    <option value="{{ key }}">{{ status }}</option>
+						    {% endfor %}
 						</select>
 					</div>
 				</div>
@@ -234,48 +230,105 @@
 			             <th class="visible-lg">Priority</th>
 			             <th class="visible-lg">StartDate</th>
 			             <th class="visible-lg">EndDate</th>
-			             <th class="visible-lg">Users</th>
+			             <th class="visible-lg">Assigned</th>
 			             <th class="visible-lg">Topics</th>
 			             <th>&nbsp;</th>
 	           		</tr>
 	           </thead>
-	           <tbody>
-	           <tr ng-repeat="task in tasks">
-			   		<td class="visible-lg">[[$index+1]]</td>
-		            <td class="visible-lg">[[ task.name ]]</td>
-		            <td class="visible-lg">
-		            <label ng-show="task.status=='pending'" class="label label-default">Pending</label>
-		            <label ng-show="task.status=='opened'" class="label label-danger">Opened</label>
-		            <label ng-show="task.status=='re-opened'" class="label label-warning">Re-opened</label>
-		            <label ng-show="task.status=='in-progress'" class="label label-primary">In-progress</label>
-		            <label ng-show="task.status=='resolved'" class="label label-success">Resolved</label>
-		            <label ng-show="task.status=='testing'" class="label label-info">Testing</label>
-		            <label ng-show="task.status=='closed'" class="label label-dark">Closed</label>
-		            </td>
-		            <td class="visible-lg">
-		            <label ng-show="task.priority=='high'" class="label label-danger">High</label>
-		            <label ng-show="task.priority=='medium'" class="label label-warning">Medium</label>
-		            <label ng-show="task.priority=='low'" class="label label-success">Low</label>
-		            </td>
-		            <td class="visible-lg">[[ task.startdate.date ]]</td>
-		            <td class="visible-lg">[[ task.enddate.date ]]</td>
-		            <td class="visible-lg">
-		            <select class="form-control" ng-show="task.users.length>0">
-					    <option ng-repeat="user in task.users">[[ user.surname + " " + user.name ]]</option>
-					</select>
-		            </td>
-		            <td class="visible-lg">
-		            <select class="form-control" ng-show="task.topics.length>0" ng-model="task.currentTopicId">
-					    <option ng-repeat="topic in task.topics" value="[[ topic.id ]]">[[ topic.name ]]</option>
-					</select>
-		            </td>
-		            <td>
-		             <button type="button" class="btn btn-warning" ng-click="editTask(task)"><i class="fa fa-edit"></i></button>
-		             <button type="button" class="btn btn-danger" ng-click="removeTask(task)"><i class="fa fa-trash-o"></i></button>
-		             <button type="button" class="btn btn-info" ng-click="showTopic(task)"><i class="fa fa-mail-forward"></i></button>
-		             <button type="button" class="btn btn-success" ng-click="showPosts(task)"><i class="fa fa-comment"></i></button>
-		            </td>
-	           </tr>
+	           <tbody ng-repeat="(i, task) in tasks">
+		           		<tr>
+					   		<td class="visible-lg">[[i+1]]</td>
+				            <td class="visible-lg"><span class="clickable" ng-click="changeDrop(task)"><i ng-show="task.subtasks.length>0 && !task.dropped" class="fa fa-plus"></i><i ng-show="task.subtasks.length>0 && task.dropped" class="fa fa-minus"></i></span> [[ task.name ]]</td>
+				            <td class="visible-lg">
+				            <label ng-show="task.status=='pending'" class="label label-default">Pending</label>
+				            <label ng-show="task.status=='opened'" class="label label-danger">Opened</label>
+				            <label ng-show="task.status=='re-opened'" class="label label-warning">Re-opened</label>
+				            <label ng-show="task.status=='in-progress-coding'" class="label label-primary">In-progress: coding</label>
+				            <label ng-show="task.status=='in-progress-testing'" class="label label-primary">In-progress: testing</label>
+				            <label ng-show="task.status=='in-progress-research'" class="label label-primary">In-progress: research</label>
+				            <label ng-show="task.status=='resolved'" class="label label-success">Resolved: NOT approved</label>
+				            <label ng-show="task.status=='testing'" class="label label-info">Testing</label>
+				            <label ng-show="task.status=='closed'" class="label label-dark">Closed</label>
+				            <label ng-show="task.status=='in-discussion'" class="label label-dark">In-discussion</label>
+				            <label ng-show="task.status=='in-specification'" class="label label-primary">In-specification</label>
+				            <label ng-show="task.status=='specification-finished'" class="label label-primary">Specification: finished</label>
+				            <label ng-show="task.status=='specification-approved'" class="label label-primary">Specification: approved</label>
+				            <label ng-show="task.status=='on-hold-lunch'" class="label label-primary">On-hold: lunch</label>
+				            <label ng-show="task.status=='on-hold-home'" class="label label-primary">On-hold: home</label>
+				            <label ng-show="task.status=='on-hold-meeting'" class="label label-primary">On-hold: meeting</label>
+				            <label ng-show="task.status=='on-hold-suspended'" class="label label-primary">On-hold: suspended</label>
+				            <label ng-show="task.status=='resolved-approved'" class="label label-primary">Resolved: approved</label>
+				            </td>
+				            <td class="visible-lg">
+				            <label ng-show="task.priority=='high'" class="label label-danger">High</label>
+				            <label ng-show="task.priority=='medium'" class="label label-warning">Medium</label>
+				            <label ng-show="task.priority=='low'" class="label label-success">Low</label>
+				            </td>
+				            <td class="visible-lg">[[ task.startdate.date ]]</td>
+				            <td class="visible-lg">[[ task.enddate.date ]]</td>
+				            <td class="visible-lg">
+				            <span ng-show="task.user==null">-</span>
+				            <span ng-show="task.user!=null">[[task.user.surname + ' ' + task.user.name]]</span>
+				            </td>
+				            <td class="visible-lg">
+				            <select class="form-control" ng-show="task.topics.length>0" ng-model="task.currentTopicId">
+							    <option ng-repeat="topic in task.topics" value="[[ topic.id ]]">[[ topic.name ]]</option>
+							</select>
+				            </td>
+				            <td>
+				             <button type="button" class="btn btn-primary btn-xs" ng-click="addTask(task)"><i class="fa fa-code-fork"></i></button>
+				             <button type="button" class="btn btn-warning btn-xs" ng-click="editTask(task)"><i class="fa fa-edit"></i></button>
+				             <button type="button" class="btn btn-danger btn-xs" ng-click="removeTask(task)"><i class="fa fa-trash-o"></i></button>
+				             <button type="button" ng-show="task.currentTopicId != 0" class="btn btn-info btn-xs" ng-click="showTopic(task)"><i class="fa fa-mail-forward"></i></button>
+				             <button type="button" class="btn btn-success btn-xs" ng-click="showPosts(task)"><i class="fa fa-comment"></i></button>
+				            </td>
+	           			</tr>
+	           			<tr ng-show="task.dropped == true" class="success" ng-repeat="subtask in task.subtasks">
+				            <td class="visible-lg">&nbsp;&nbsp;[[i+1]].[[$index+1]]</td>
+				            <td class="visible-lg">[[ subtask.name ]]</td>
+				            <td class="visible-lg">
+				            <label ng-show="subtask.status=='pending'" class="label label-default">Pending</label>
+				            <label ng-show="subtask.status=='opened'" class="label label-danger">Opened</label>
+				            <label ng-show="subtask.status=='re-opened'" class="label label-warning">Re-opened</label>
+				            <label ng-show="subtask.status=='in-progress-coding'" class="label label-primary">In-progress: coding</label>
+				            <label ng-show="subtask.status=='in-progress-testing'" class="label label-primary">In-progress: testing</label>
+				            <label ng-show="subtask.status=='in-progress-research'" class="label label-primary">In-progress: research</label>
+				            <label ng-show="subtask.status=='resolved'" class="label label-success">Resolved: NOT approved</label>
+				            <label ng-show="subtask.status=='testing'" class="label label-info">Testing</label>
+				            <label ng-show="subtask.status=='closed'" class="label label-dark">Closed</label>
+				            <label ng-show="subtask.status=='in-discussion'" class="label label-dark">In-discussion</label>
+				            <label ng-show="subtask.status=='in-specification'" class="label label-primary">In-specification</label>
+				            <label ng-show="subtask.status=='specification-finished'" class="label label-primary">Specification: finished</label>
+				            <label ng-show="subtask.status=='specification-approved'" class="label label-primary">Specification: approved</label>
+				            <label ng-show="subtask.status=='on-hold-lunch'" class="label label-primary">On-hold: lunch</label>
+				            <label ng-show="subtask.status=='on-hold-home'" class="label label-primary">On-hold: home</label>
+				            <label ng-show="subtask.status=='on-hold-meeting'" class="label label-primary">On-hold: meeting</label>
+				            <label ng-show="subtask.status=='on-hold-suspended'" class="label label-primary">On-hold: suspended</label>
+				            <label ng-show="subtask.status=='resolved-approved'" class="label label-primary">Resolved: approved</label>
+				            </td>
+				            <td class="visible-lg">
+				            <label ng-show="subtask.priority=='high'" class="label label-danger">High</label>
+				            <label ng-show="subtask.priority=='medium'" class="label label-warning">Medium</label>
+				            <label ng-show="subtask.priority=='low'" class="label label-success">Low</label>
+				            </td>
+				            <td class="visible-lg">[[ subtask.startdate.date ]]</td>
+				            <td class="visible-lg">[[ subtask.enddate.date ]]</td>
+				            <td class="visible-lg">
+				            <span ng-show="subtask.user==null">-</span>
+				            <span ng-show="subtask.user!=null">[[subtask.user.surname + ' ' + subtask.user.name]]</span>
+				            </td>
+				            <td class="visible-lg">
+				            <select class="form-control" ng-show="subtask.topics.length>0" ng-model="subtask.currentTopicId">
+							    <option ng-repeat="topic in subtask.topics" value="[[ topic.id ]]">[[ topic.name ]]</option>
+							</select>
+				            </td>
+				            <td>
+				             <button type="button" class="btn btn-warning btn-xs" ng-click="editTask(subtask)"><i class="fa fa-edit"></i></button>
+				             <button type="button" class="btn btn-danger btn-xs" ng-click="removeTask(subtask)"><i class="fa fa-trash-o"></i></button>
+				             <button type="button" ng-show="task.currentTopicId != 0" class="btn btn-info btn-xs" ng-click="showTopic(subtask)"><i class="fa fa-mail-forward"></i></button>
+				             <button type="button" class="btn btn-success btn-xs" ng-click="showPosts(subtask)"><i class="fa fa-comment"></i></button>
+				            </td>
+		            	</tr>
 			  </tbody>
 			</table>
 		  </div>

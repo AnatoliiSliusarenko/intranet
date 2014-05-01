@@ -1,5 +1,7 @@
 <div class="modal-body">
             	<form action="#" class="form-horizontal" role="form" method="post">
+            		{% if parentTask is defined %}<h3>SubTusk for {{ parentTask.name }}</h3>{% endif %}
+            		
             		<div class="form-group">
                 		<label for="inputEmail1" class="col-lg-2 col-md-3 control-label">Name</label>
                 		<div class="col-lg-10 col-md-9">
@@ -21,33 +23,35 @@
 						  <div class="col-lg-10 col-md-9">
 						   <select ng-model="task.status" class="form-control">
 						    <option value="pending">Pending</option>
-						    <option value="opened" selected>Opened</option>
-						    <option value="re-opened">Re-opened</option>
-						    <option value="in-progress">In-progress</option>
-						    <option value="resolved">Resolved</option>
-						    <option value="testing">Testing</option>
-						    <option value="closed">Closed</option>
+						    <option value="opened">Opened</option>
+						    <option value="in-discussion">In-discussion</option>
+						    <option value="in-specification">In-specification</option>
 						   </select>
 						  </div>
 					</div>
              		<div class="form-group">
-  						<label for="inputEmail1" class="col-lg-2 col-md-3 control-label">Members</label>
+  						<label for="inputEmail1" class="col-lg-2 col-md-3 control-label">Assigned</label>
   						<div class="col-lg-10 col-md-9">
-   							<select ng-model="task.users" multiple class="form-control">
+   							<select ng-model="task.userid" class="form-control">
+   								<option value="null">--- No assigned ---</option>
    								<option ng-repeat="user in users" value="[[ user.id ]]">[[ user.surname + ' ' + user.name + ' (' + user.username + ')' ]]</option>
   							</select>
 						</div>
 					</div>
+					
 					<div class="form-group">
   						<label for="inputEmail1" class="col-lg-2 col-md-3 control-label">Topics</label>
   						<div class="col-lg-10 col-md-9">
    							<select ng-model="task.topics" multiple class="form-control">
-   								<option ng-repeat="topic in topics" value="[[ topic.id ]]">[[ topic.name ]]</option>
+   								{% for topic in topics %}
+   								<option value="{{ topic.id }}">{{ topic.name }}</option>
+   								{% endfor %}
   							</select>
 						</div>
 					</div>
+					
              		<div class="form-actions">
-             			<input type="submit" value="Save New Task" class="btn bg-primary btn-block text-white" ng-click="addTask($event)">
+             			<input type="submit" value="Save New {% if parentTask is defined %}{{ 'Sub' }}{% endif %}Task" class="btn bg-primary btn-block text-white" ng-click="addTask($event)">
              		</div>
             	</form>
 </div>

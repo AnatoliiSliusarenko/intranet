@@ -11,7 +11,27 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity
  */
 class Task 
-{
+{	
+	private static $availableStatus = array(
+		'pending' => 'Pending',
+		'opened' => 'Opened',
+		're-opened' => 'Re-opened',
+		'in-progress-coding' => 'In-progress: coding',
+		'in-progress-testing' => 'In-progress: testing',
+		'in-progress-research' => 'In-progress: research',
+		'in-discussion' => 'In-discussion',
+		'in-specification' => 'In-specification',
+		'specification-finished' => 'Specification: NOT approved',
+		'specification-approved' => 'Specification: approved',
+		'onhold-lunch' => 'On-hold: lunch',
+		'onhold-home' => 'On-hold: home',
+		'onhold-meeting' => 'On-hold: meeting',
+		'onhold-suspended' => 'On-hold: suspended',
+		'resolved-approved' => 'Resolved: approved',
+		'resolved' => 'Resolved: NOT approved',
+		'closed' => 'Closed'
+	);
+	
     /**
      * @var integer
      *
@@ -20,6 +40,13 @@ class Task
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
+    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="parentid", type="integer")
+     */
+    private $parentid;
 
     /**
      * @var integer
@@ -34,6 +61,20 @@ class Task
      * @var Office
      */
     private $office;
+    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="userid", type="integer")
+     */
+    private $userid;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="tasks")
+     * @ORM\JoinColumn(name="userid")
+     * @var User
+     */
+    private $user;
     
     /**
      * @var string
@@ -69,12 +110,6 @@ class Task
      * @ORM\Column(name="enddate", type="datetime")
      */
     private $enddate;
-
-    /**
-     * @ORM\ManyToMany(targetEntity="User", mappedBy="tasks")
-     * @var array
-     */
-    private $users;
     
     /**
      * @ORM\ManyToMany(targetEntity="Topic", mappedBy="tasks")
@@ -88,6 +123,21 @@ class Task
      */
     private $posts;
 
+    private $subTasks = null;
+    
+    public function getSubTasks($em)
+    {
+    	if ($this->subTasks == null)
+    		$this->subTasks = $em->createQueryBuilder()
+    						 ->select('t')
+    	   					 ->from('IntranetMainBundle:Task', 't')
+    	   					 ->where('t.parentid = :parentid')
+    						 ->setParameter('parentid', $this->getId())
+    						 ->getQuery()->getResult();
+    	
+    	return $this->subTasks;
+    }
+    
     /**
      * Get id
      *
@@ -225,105 +275,7 @@ class Task
      */
     public function __construct()
     {
-        $this->users = new \Doctrine\Common\Collections\ArrayCollection();
         $this->topics = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-
-    /**
-     * Add user
-     *
-     * @param \Intranet\MainBundle\Entity\User $user
-     * @return Task
-     */
-    public function addUser(\Intranet\MainBundle\Entity\User $user)
-    {
-        $this->users[] = $user;
-
-        return $this;
-    }
-    
-    public function addUsers($em, $users)
-    {
-    	$usersAdded = array();
-    	foreach ($users as $userid)
-    	{
-    		$user = $em->getRepository('IntranetMainBundle:User')->find($userid);
-    		if ($user == null)
-    			continue;
-    
-    		$usersAdded[] = $user;
-    		$this->addUser($user);
-    		$user->addTask($this);
-    		$em->persist($user);
-    	}
-    
-    	return $usersAdded;
-    }
-
-    /**
-     * Remove user
-     *
-     * @param \Intranet\MainBundle\Entity\User $user
-     */
-    public function removeUser(\Intranet\MainBundle\Entity\User $user)
-    {
-        $this->users->removeElement($user);
-    }
-
-    /**
-     * Get users
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getUsers()
-    {
-        return $this->users;
-    }
-    
-    public function resetUsers($em, $users)
-    {
-    	$existUsersIds = array_map(function($u){return $u->getId();}, $this->users->toArray());
-    	$usersToAdd = array();
-    	$usersToRemove = array();
-    	 
-    	foreach ($this->users as $user)
-    	{
-    		if (!in_array($user->getId(), $users)) $usersToRemove[] = $user;
-    	}
-    	foreach ($users as $userId)
-    	{
-    		if (!in_array($userId, $existUsersIds)) $usersToAdd[] = $userId;
-    	}
-    	 
-    	foreach ($usersToRemove as $user)
-    	{
-    		$user->removeTask($this);
-    		$this->removeUser($user);
-    		$em->persist($user);
-    	}
-    	 
-    	return  array("added" => $this->addUsers($em, $usersToAdd), "removed" => $usersToRemove);
-    }
-    
-    public function hasUser(\Intranet\MainBundle\Entity\User $user)
-    {
-    	foreach ($this->users as $curUser)
-    	{
-    		if ($curUser->getId() == $user->getId()) return true;
-    	}
-    	 
-    	return false;
-    }
-    
-    public function hasOneOfUsers($em, $usersIds)
-    {
-    	foreach ($usersIds as $userId)
-    	{
-    		$user = $em->getRepository('IntranetMainBundle:User')->find($userId);
-    		if ($this->hasUser($user)) return true;
-    	}
-    
-    	return false;
     }
 
     /**
@@ -478,13 +430,15 @@ class Task
     {
     	return array(
     			'id' => $this->getId(),
+    			'parentid' => $this->getParentid(),
     			'officeid' => $this->getOfficeid(),
+    			'userid' => $this->getUserid(),
+    			'user' => ($this->getUser() != null ) ? $this->getUser()->getInArray() : null,
     			'priority' => $this->getPriority(),
     			'name' => $this->getName(),
     			'status' => $this->getStatus(),
     			'startdate' => $this->getStartdate(),
     			'enddate' => $this->getEnddate(),
-    			'users' => array_map(function($u){return $u->getInArray();}, $this->getUsers()->toArray()),
     			'topics' => array_map(function($t){return $t->getInArray();}, $this->getTopics()->toArray())
     	);
     }
@@ -520,5 +474,94 @@ class Task
     public function getPosts()
     {
         return $this->posts;
+    }
+    
+    public function getVisibleAvailableStatus()
+    {
+    	return self::$availableStatus;
+    }
+    
+    public static function getAvailableStatus()
+    {
+    	return self::$availableStatus;
+    }
+
+    /**
+     * Set parentid
+     *
+     * @param integer $parentid
+     * @return Task
+     */
+    public function setParentid($parentid)
+    {
+        $this->parentid = $parentid;
+
+        return $this;
+    }
+
+    /**
+     * Get parentid
+     *
+     * @return integer 
+     */
+    public function getParentid()
+    {
+        return $this->parentid;
+    }
+
+    /**
+     * Set userid
+     *
+     * @param integer $userid
+     * @return Task
+     */
+    public function setUserid($userid)
+    {
+        $this->userid = $userid;
+
+        return $this;
+    }
+
+    /**
+     * Get userid
+     *
+     * @return integer 
+     */
+    public function getUserid()
+    {
+        return $this->userid;
+    }
+
+    /**
+     * Set user
+     *
+     * @param \Intranet\MainBundle\Entity\User $user
+     * @return Task
+     */
+    public function setUser(\Intranet\MainBundle\Entity\User $user = null)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return \Intranet\MainBundle\Entity\User 
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+    
+    public function hasOneOfUsers($em, $usersIds)
+    {
+    	foreach ($usersIds as $userId)
+    	{
+    		if ($this->getUserid() == $userId) return true;
+    	}
+    
+    	return false;
     }
 }

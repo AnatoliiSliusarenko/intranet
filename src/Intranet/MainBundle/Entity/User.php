@@ -87,7 +87,7 @@ class User implements UserInterface, \Serializable
 	private $roles;
 	
 	/**
-	 * @ORM\ManyToMany(targetEntity="Task", inversedBy="users")
+	 * @ORM\OneToMany(targetEntity="Task", mappedBy="user")
 	 * @var array
 	 */
 	private $tasks;

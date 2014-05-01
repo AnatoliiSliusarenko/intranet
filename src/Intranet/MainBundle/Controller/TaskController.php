@@ -71,16 +71,22 @@ class TaskController extends Controller
     		$name = $task->name;
     		$priority = $task->priority;
     		$status = $task->status;
-    		$users = (isset($task->users)) ? $task->users : array();
+    		$userid = (isset($task->userid)) ? $task->userid : null;
+    		$parentid = (isset($task->parentid)) ? $task->parentid : null;
     		$topics = (isset($task->topics)) ? $task->topics : array();
-    	
+    		
     		$task = new Task();
     		$task->setOfficeid($office_id);
+    		$task->setParentid($parentid);
+    		$task->setUserid($userid);
+    		
+    		$user = ($userid != null) ? $em->getRepository('IntranetMainBundle:User')->find($userid) : null;
+    		$task->setUser($user);
+    		
     		$task->setOffice($office);
     		$task->setName($name);
     		$task->setPriority($priority);
     		$task->setStatus($status);
-    		$usersAdded = $task->addUsers($em, $users);
     		$topicsAdded = $task->addTopics($em, $topics);
     		
     		$em->persist($task);
@@ -93,7 +99,24 @@ class TaskController extends Controller
 			return $response;
     	}
     	
-        return $this->render('IntranetMainBundle:Task:addTask.html.twig');
+    	$parameters = array();
+		$parameters['topics'] = $office->getTopics();
+    	
+    	$parentid = $request->query->get('parentid');
+    	if ($parentid != null)
+    	{
+    		$parentTask = $em->getRepository('IntranetMainBundle:Task')->find($parentid);
+    		if ($parentTask != null) 
+    		{
+    			$parameters['parentTask'] = $parentTask->getInArray();
+    			$parameters['topics'] = $parentTask->getTopics();
+    		}
+    			
+    	}
+    		 
+    		
+    	
+        return $this->render('IntranetMainBundle:Task:addTask.html.twig', $parameters);
     }
     
     public function editTaskAction(Request $request, $task_id)
@@ -116,13 +139,19 @@ class TaskController extends Controller
     		$name = $taskData->name;
     		$priority = $taskData->priority;
     		$status = $taskData->status;
-    		$users = (isset($taskData->usersIds)) ? $taskData->usersIds : array();
+    		$userid = (isset($taskData->userid)) ? $taskData->userid : null;
+    		$parentid = (isset($taskData->parentid)) ? $taskData->parentid : null;
     		$topics = (isset($taskData->topicsIds)) ? $taskData->topicsIds : array();
+    		
+    		$task->setUserid($userid);
+    		$user = ($userid != null) ? $em->getRepository('IntranetMainBundle:User')->find($userid) : null;
+    		$task->setUser($user);
+    		
     		
     		$task->setName($name);
     		$task->setPriority($priority);
     		$task->setStatus($status);
-    		$resetUsers = $task->resetUsers($em, $users);
+    		$task->setParentid($parentid);
     		$resetTopics = $task->resetTopics($em, $topics);
     		
     		$em->persist($task);
@@ -135,7 +164,21 @@ class TaskController extends Controller
 			return $response;
     	}
     	
-    	return $this->render('IntranetMainBundle:Task:editTask.html.twig');
+    	$availableStatus = $task->getVisibleAvailableStatus();
+    	$parameters = array(
+    			'availableStatus' => $availableStatus,
+    			'topics' => $task->getOffice()->getTopics()
+    	);
+    	if ($task->getParentid() != null)
+    	{
+    		$parentTask = $em->getRepository('IntranetMainBundle:Task')->find($task->getParentid());
+    		if ($parentTask!=null)
+    		{
+    			$parameters['topics'] = $parentTask->getTopics();
+    		}
+    	}
+    		
+    	return $this->render('IntranetMainBundle:Task:editTask.html.twig', $parameters);
     }
     
     public function removeTaskAction(Request $request, $task_id)

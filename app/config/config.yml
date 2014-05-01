@@ -67,3 +67,10 @@ swiftmailer:
     username:  "%mailer_user%"
     password:  "%mailer_password%"
     spool:     { type: memory }
+
+services:
+    intranet.loger:
+        class: Intranet\MainBundle\Services\Loger
+        arguments: 
+            - @security.context
+            - @doctrine.orm.entity_manager

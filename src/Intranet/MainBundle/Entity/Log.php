@@ -210,14 +210,4 @@ class Log
     {
         return $this->user;
     }
-    
-    public static function getAllLogs($em)
-    {
-    	return $em->getRepository('IntranetMainBundle:Log')
-    			  ->createQueryBuilder('l')
-    			  ->select()
-    			  ->orderBy('l.loged', 'DESC')
-    			  ->getQuery()
-    			  ->getResult();
-    }
 }
