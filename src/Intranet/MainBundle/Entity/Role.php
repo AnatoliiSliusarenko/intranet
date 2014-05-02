@@ -42,6 +42,12 @@ class Role implements RoleInterface
      * @var array
      */
     private $users;
+    
+    /**
+     * @ORM\ManyToMany(targetEntity="TaskStatus", mappedBy="roles")
+     * @var array
+     */
+    private $taskStatuses;
 
     public function __construct()
     {
@@ -117,5 +123,71 @@ class Role implements RoleInterface
     public static function getAdminRole($em)
     {
     	return $em->getRepository("IntranetMainBundle:Role")->find(1);
+    }
+
+    /**
+     * Add users
+     *
+     * @param \Intranet\MainBundle\Entity\User $users
+     * @return Role
+     */
+    public function addUser(\Intranet\MainBundle\Entity\User $users)
+    {
+        $this->users[] = $users;
+
+        return $this;
+    }
+
+    /**
+     * Remove users
+     *
+     * @param \Intranet\MainBundle\Entity\User $users
+     */
+    public function removeUser(\Intranet\MainBundle\Entity\User $users)
+    {
+        $this->users->removeElement($users);
+    }
+
+    /**
+     * Get users
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getUsers()
+    {
+        return $this->users;
+    }
+
+    /**
+     * Add taskStatuses
+     *
+     * @param \Intranet\MainBundle\Entity\TaskStatus $taskStatuses
+     * @return Role
+     */
+    public function addTaskStatus(\Intranet\MainBundle\Entity\TaskStatus $taskStatuses)
+    {
+        $this->taskStatuses[] = $taskStatuses;
+
+        return $this;
+    }
+
+    /**
+     * Remove taskStatuses
+     *
+     * @param \Intranet\MainBundle\Entity\TaskStatus $taskStatuses
+     */
+    public function removeTaskStatus(\Intranet\MainBundle\Entity\TaskStatus $taskStatuses)
+    {
+        $this->taskStatuses->removeElement($taskStatuses);
+    }
+
+    /**
+     * Get taskStatuses
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getTaskStatuses()
+    {
+        return $this->taskStatuses;
     }
 }

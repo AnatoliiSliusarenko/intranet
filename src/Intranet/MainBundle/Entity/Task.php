@@ -12,26 +12,6 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Task 
 {	
-	private static $availableStatus = array(
-		'pending' => 'Pending',
-		'opened' => 'Opened',
-		're-opened' => 'Re-opened',
-		'in-progress-coding' => 'In-progress: coding',
-		'in-progress-testing' => 'In-progress: testing',
-		'in-progress-research' => 'In-progress: research',
-		'in-discussion' => 'In-discussion',
-		'in-specification' => 'In-specification',
-		'specification-finished' => 'Specification: NOT approved',
-		'specification-approved' => 'Specification: approved',
-		'onhold-lunch' => 'On-hold: lunch',
-		'onhold-home' => 'On-hold: home',
-		'onhold-meeting' => 'On-hold: meeting',
-		'onhold-suspended' => 'On-hold: suspended',
-		'resolved-approved' => 'Resolved: approved',
-		'resolved' => 'Resolved: NOT approved',
-		'closed' => 'Closed'
-	);
-	
     /**
      * @var integer
      *
@@ -91,9 +71,16 @@ class Task
     private $name;
     
     /**
-     * @var string
+     * @var integer
      *
-     * @ORM\Column(name="status", type="text")
+     * @ORM\Column(name="statusid", type="integer")
+     */
+    private $statusid;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="TaskStatus", inversedBy="tasks")
+     * @ORM\JoinColumn(name="statusid")
+     * @var TaskStatus
      */
     private $status;
     
@@ -195,34 +182,26 @@ class Task
     }
 
     /**
-     * Set status
+     * Set statusid
      *
-     * @param string $status
+     * @param integer $statusid
      * @return Task
      */
-    public function setStatus($status)
+    public function setStatusid($statusid)
     {
-        $this->status = $status;
-        
-        if ($status == 'opened')
-        {
-        	if ($this->startdate == null)
-        		$this->startdate = new \DateTime();
-        }
-        elseif ($status == 'closed')
-        	$this->enddate = new \DateTime();
+        $this->statusid = $statusid;
 
         return $this;
     }
 
     /**
-     * Get status
+     * Get statusid
      *
-     * @return string 
+     * @return integer 
      */
-    public function getStatus()
+    public function getStatusid()
     {
-        return $this->status;
+        return $this->statusid;
     }
 
     /**
@@ -436,7 +415,7 @@ class Task
     			'user' => ($this->getUser() != null ) ? $this->getUser()->getInArray() : null,
     			'priority' => $this->getPriority(),
     			'name' => $this->getName(),
-    			'status' => $this->getStatus(),
+    			'status' => $this->getStatus()->getLabel(),
     			'startdate' => $this->getStartdate(),
     			'enddate' => $this->getEnddate(),
     			'topics' => array_map(function($t){return $t->getInArray();}, $this->getTopics()->toArray())
@@ -478,12 +457,12 @@ class Task
     
     public function getVisibleAvailableStatus()
     {
-    	return self::$availableStatus;
+    	return array();
     }
     
     public static function getAvailableStatus()
     {
-    	return self::$availableStatus;
+    	return array();
     }
 
     /**
@@ -563,5 +542,28 @@ class Task
     	}
     
     	return false;
+    }
+
+    /**
+     * Set status
+     *
+     * @param \Intranet\MainBundle\Entity\TaskStatus $status
+     * @return Task
+     */
+    public function setStatus(\Intranet\MainBundle\Entity\TaskStatus $status = null)
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * Get status
+     *
+     * @return \Intranet\MainBundle\Entity\TaskStatus 
+     */
+    public function getStatus()
+    {
+        return $this->status;
     }
 }

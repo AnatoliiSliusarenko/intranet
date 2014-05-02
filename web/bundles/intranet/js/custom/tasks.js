@@ -15,6 +15,7 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 	
 	$scope.tasks = [];
 	$scope.users = USERS;
+	$scope.topics = TOPICS;
 	
 	$scope.urlsTasksGet = JSON_URLS.tasksGet;
 	$scope.urlsTasksRemove = JSON_URLS.tasksRemove;
