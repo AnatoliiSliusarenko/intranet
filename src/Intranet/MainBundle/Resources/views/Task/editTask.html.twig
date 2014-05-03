@@ -19,14 +19,10 @@
 					<div class="form-group">
 						  <label for="inputEmail1" class="col-lg-2 col-md-3 control-label">Status</label>
 						  <div class="col-lg-10 col-md-9">
-						   <select ng-model="task.status" class="form-control">
-						    <option value="pending">Pending</option>
-						    <option value="opened">Opened</option>
-						    <option value="re-opened">Re-opened</option>
-						    <option value="in-progress">In-progress</option>
-						    <option value="resolved">Resolved</option>
-						    <option value="testing">Testing</option>
-						    <option value="closed">Closed</option>
+						   <select ng-model="task.statusid" class="form-control">
+						    {% for status in availableStatus %}
+						    <option value="{{ status.id }}">{{ status.label }}</option>
+						    {% endfor %}
 						   </select>
 						  </div>
 					</div>

@@ -160,6 +160,9 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 						_.map(editedTask.topics, function(t){$scope.tasks[i].topics.push(t)});
 						task.currentTopicId = (task.topics.length > 0) ? task.topics[0].id : 0;
 						$scope.tasks[i].user = editedTask.user;
+						$scope.tasks[i].startdate = editedTask.startdate;
+						$scope.tasks[i].enddate = editedTask.enddate;
+						$scope.tasks[i].status = editedTask.status;
 					}else
 					{
 						_.map(task.subtasks, function(subtask, j){
@@ -168,6 +171,9 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 								_.map(editedTask.topics, function(t){$scope.tasks[i].subtasks[j].topics.push(t)});
 								subtask.currentTopicId = (subtask.topics.length > 0) ? subtask.topics[0].id : 0;
 								$scope.tasks[i].subtasks[j].user = editedTask.user;
+								$scope.tasks[i].subtasks[j].startdate = editedTask.startdate;
+								$scope.tasks[i].subtasks[j].enddate = editedTask.enddate;
+								$scope.tasks[i].subtasks[j].status = editedTask.status;
 							}
 						});
 					}
@@ -193,8 +199,6 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 			    });
 			
 			modalInstance.result.then(function (currentTask) {
-				
-			
 			}, function(){});
 		});
 	}
@@ -206,11 +210,16 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 	
 	$scope.users = users;
 	$scope.task = {
-			status: 'in-discussion',
+			statusid: null,
 			priority: 'high',
 			userid: null,
 			parentid: parentid
 	};
+	
+	STATUSES.forEach(function(status){
+		if (status.initial && $scope.task.statusid == null)
+			$scope.task.statusid = status.id;
+	});
 	
 	$scope.addTask = function(event)
 	{
@@ -235,8 +244,7 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 	
 	$scope.users = users;
 	$scope.task = task;
-	$scope.task.topicsIdsCurrent = _.map($scope.task.topics, function($e){return $e.id});
-	
+	$scope.task.topicsIdsCurrent = _.map($scope.task.topics, function(t){return t.id;})
 		
 	$scope.editTask = function(event)
 	{	
@@ -244,6 +252,8 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 			event.preventDefault();
 		
 		var url = $scope.urlsTasksEdit.replace('0', task.id);
+		
+		if (typeof $scope.task.topicsIds == 'undefined') $scope.task.topicsIds = $scope.task.topicsIdsCurrent;
 		
 		$http({
 			method: "POST", 
@@ -259,7 +269,7 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 	$scope.hasTopic = function(topicid)
 	{
 		return _.find($scope.task.topicsIdsCurrent, function(t){
-			return t==topicid;
+			return t==topicid; 
 		});
 	}
 }])

@@ -61,6 +61,10 @@ class TaskStatus
 
     /**
      * @ORM\ManyToMany(targetEntity="Role", inversedBy="taskStatuses")
+     * @ORM\JoinTable(name="task_status_role",
+     *      joinColumns={@ORM\JoinColumn(name="statusid", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="roleid", referencedColumnName="id")}
+     *      )
      * @var array
      */
     private $roles;
@@ -368,5 +372,39 @@ class TaskStatus
     public function getTasks()
     {
         return $this->tasks;
+    }
+    
+    public function getInArray()
+    {
+    	return array(
+    		'id' => $this->getId(),
+    		'label' => $this->getLabel(),
+    		'color' => $this->getColor(),
+    		'initStartdate' => $this->getInitStartdate(),
+    		'updateEstimate' => $this->getUpdateEstimate(),
+    		'initial' => $this->getInitial()
+    	);
+    }
+    
+    public static function getInitialStatuses($em)
+    {
+    	return $em->getRepository('IntranetMainBundle:TaskStatus')
+    			  ->findBy(array('initial' => true));
+    }
+    
+    public static function getAllStatuses($em)
+    {
+    	$statuses =  $em->getRepository('IntranetMainBundle:TaskStatus')
+    			  ->findAll();
+    	return array_map(function($e){return $e->getInArray();}, $statuses);
+    }
+    
+    public function isAllowedFor($user)
+    {
+    	foreach ($this->getRoles() as $role)
+    	{
+    		if ($user->hasRole($role)) return true;
+    	}
+    	return false;
     }
 }

@@ -415,7 +415,8 @@ class Task
     			'user' => ($this->getUser() != null ) ? $this->getUser()->getInArray() : null,
     			'priority' => $this->getPriority(),
     			'name' => $this->getName(),
-    			'status' => $this->getStatus()->getLabel(),
+    			'statusid' => $this->getStatusid(),
+    			'status' => $this->getStatus()->getInArray(),
     			'startdate' => $this->getStartdate(),
     			'enddate' => $this->getEnddate(),
     			'topics' => array_map(function($t){return $t->getInArray();}, $this->getTopics()->toArray())
@@ -453,16 +454,6 @@ class Task
     public function getPosts()
     {
         return $this->posts;
-    }
-    
-    public function getVisibleAvailableStatus()
-    {
-    	return array();
-    }
-    
-    public static function getAvailableStatus()
-    {
-    	return array();
     }
 
     /**
@@ -553,7 +544,10 @@ class Task
     public function setStatus(\Intranet\MainBundle\Entity\TaskStatus $status = null)
     {
         $this->status = $status;
-
+        
+        if ($status->getInitStartdate() && $this->startdate == null) $this->startdate = new \DateTime();
+		if ($status->getUpdateEnddate()) $this->enddate = new \DateTime();
+        
         return $this;
     }
 
@@ -565,5 +559,18 @@ class Task
     public function getStatus()
     {
         return $this->status;
+    }
+    
+    public function getAvailableStatus($user)
+    {
+    	$transitions = $this->getStatus()->getFromTransitions();
+    	$statuses =  array_map(function($t){return $t->getToTaskStatus();}, $transitions->toArray());
+		
+    	$result = array($this->getStatus());
+    	foreach ($statuses as $status)
+    	{
+    		if ($status->isAllowedFor($user)) array_push($result, $status);
+    	}
+		return $result;
     }
 }

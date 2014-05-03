@@ -7,6 +7,7 @@ use Intranet\MainBundle\Entity\Notification;
 use Intranet\MainBundle\Entity\Office;
 use Intranet\MainBundle\Entity\Topic;
 use Intranet\MainBundle\Entity\Task;
+use Intranet\MainBundle\Entity\TaskStatus;
 use Intranet\MainBundle\Entity\User;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -40,7 +41,7 @@ class OfficeController extends Controller
 		$parentTopic = $topicTree[0];
 		
 		$parameters = array(
-				"availableStatus" => Task::getAvailableStatus(),
+				"availableStatus" => TaskStatus::getAllStatuses($em),
 				"em" => $em,
 				"office" => $office, 
 				"parentTopic" => $parentTopic,

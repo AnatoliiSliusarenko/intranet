@@ -345,6 +345,11 @@ class User implements UserInterface, \Serializable
     	return $this->roles->toArray();
     }
     
+    public function hasRole(\Intranet\MainBundle\Entity\Role $role)
+    {
+    	return $this->roles->contains($role);
+    }
+    
     /**
      * @inheritDoc
      */

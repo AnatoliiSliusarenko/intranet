@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Intranet\MainBundle\Entity\Task;
+use Intranet\MainBundle\Entity\TaskStatus;
 
 class TaskController extends Controller
 {
@@ -70,23 +71,27 @@ class TaskController extends Controller
     		
     		$name = $task->name;
     		$priority = $task->priority;
-    		$status = $task->status;
-    		$userid = (isset($task->userid)) ? $task->userid : null;
-    		$parentid = (isset($task->parentid)) ? $task->parentid : null;
+    		$statusid = (isset($task->statusid) && ($task->statusid != 0)) ? $task->statusid : null;
+    		$userid = (isset($task->userid) && ($task->userid != 0)) ? $task->userid : null;
+    		$parentid = (isset($task->parentid) && ($task->parentid != 0)) ? $task->parentid : null;
     		$topics = (isset($task->topics)) ? $task->topics : array();
     		
     		$task = new Task();
     		$task->setOfficeid($office_id);
     		$task->setParentid($parentid);
     		$task->setUserid($userid);
+    		$task->setStatusid($statusid);
     		
     		$user = ($userid != null) ? $em->getRepository('IntranetMainBundle:User')->find($userid) : null;
     		$task->setUser($user);
     		
+    		$status = ($statusid != null) ? $em->getRepository('IntranetMainBundle:TaskStatus')->find($statusid) : null;
+    		$task->setStatus($status);
+    		
     		$task->setOffice($office);
     		$task->setName($name);
     		$task->setPriority($priority);
-    		$task->setStatus($status);
+    		
     		$topicsAdded = $task->addTopics($em, $topics);
     		
     		$em->persist($task);
@@ -99,9 +104,11 @@ class TaskController extends Controller
 			return $response;
     	}
     	
-    	$parameters = array();
-		$parameters['topics'] = $office->getTopics();
-    	
+    	$parameters = array(
+    		'topics' => $office->getTopics(),
+    		'taskStatuses' => TaskStatus::getInitialStatuses($em)
+    	);
+		
     	$parentid = $request->query->get('parentid');
     	if ($parentid != null)
     	{
@@ -114,8 +121,6 @@ class TaskController extends Controller
     			
     	}
     		 
-    		
-    	
         return $this->render('IntranetMainBundle:Task:addTask.html.twig', $parameters);
     }
     
@@ -138,10 +143,18 @@ class TaskController extends Controller
     		
     		$name = $taskData->name;
     		$priority = $taskData->priority;
-    		$status = $taskData->status;
+    		$statusid = (isset($taskData->statusid) && ($taskData->statusid != 0)) ? $taskData->statusid : null;
     		$userid = (isset($taskData->userid)) ? $taskData->userid : null;
     		$parentid = (isset($taskData->parentid)) ? $taskData->parentid : null;
     		$topics = (isset($taskData->topicsIds)) ? $taskData->topicsIds : array();
+    		
+    		$status = ($statusid != null) ? $em->getRepository('IntranetMainBundle:TaskStatus')->find($statusid) : null;
+    		if ($status == null)
+    		{
+    			$response = new Response(json_encode(array("result" => null, "message" => 'Status not found!')));
+    			$response->headers->set('Content-Type', 'application/json');
+    			return $response;
+    		}
     		
     		$task->setUserid($userid);
     		$user = ($userid != null) ? $em->getRepository('IntranetMainBundle:User')->find($userid) : null;
@@ -150,6 +163,7 @@ class TaskController extends Controller
     		
     		$task->setName($name);
     		$task->setPriority($priority);
+    		$task->setStatusid($statusid);
     		$task->setStatus($status);
     		$task->setParentid($parentid);
     		$resetTopics = $task->resetTopics($em, $topics);
@@ -164,7 +178,7 @@ class TaskController extends Controller
 			return $response;
     	}
     	
-    	$availableStatus = $task->getVisibleAvailableStatus();
+    	$availableStatus = $task->getAvailableStatus($this->getUser());
     	$parameters = array(
     			'availableStatus' => $availableStatus,
     			'topics' => $task->getOffice()->getTopics()

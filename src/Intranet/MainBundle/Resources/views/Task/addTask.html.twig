@@ -11,21 +11,20 @@
              		<div class="form-group">
 						  <label for="inputEmail1" class="col-lg-2 col-md-3 control-label">Priority</label>
 						  <div class="col-lg-10 col-md-9">
-						   <select ng-model="task.priority" class="form-control">
+						   <select ng-model="task.priority" class="form-control" required>
 						    <option value="high">High</option>
 						    <option value="medium">Medium</option>
-						    <option value="low" selected>Low</option>
+						    <option value="low">Low</option>
 						   </select>
 						  </div>
 					</div>
 					<div class="form-group">
 						  <label for="inputEmail1" class="col-lg-2 col-md-3 control-label">Status</label>
 						  <div class="col-lg-10 col-md-9">
-						   <select ng-model="task.status" class="form-control">
-						    <option value="pending">Pending</option>
-						    <option value="opened">Opened</option>
-						    <option value="in-discussion">In-discussion</option>
-						    <option value="in-specification">In-specification</option>
+						   <select ng-model="task.statusid" class="form-control">
+						   	{% for taskStatus in taskStatuses %}
+						    <option value="{{ taskStatus.id }}" {% if loop.first %}selected{% endif %}>{{ taskStatus.label }}</option>
+						    {% endfor %}
 						   </select>
 						  </div>
 					</div>

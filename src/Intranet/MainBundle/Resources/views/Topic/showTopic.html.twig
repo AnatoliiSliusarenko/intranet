@@ -187,8 +187,8 @@
   					<label for="inputEmail1" class="col-lg-2 col-md-3 control-label">Status</label>
   					<div class="col-lg-10 col-md-9">
    						<select multiple ng-model="filter.status" class="form-control">
-						    {% for key,status in availableStatus %}
-						    <option value="{{ key }}">{{ status }}</option>
+						    {% for status in availableStatus %}
+						    <option value="{{ status.id }}">{{ status.label }}</option>
 						    {% endfor %}
 						</select>
 					</div>
@@ -240,25 +240,7 @@
 					   		<td class="visible-lg">[[i+1]]</td>
 				            <td class="visible-lg"><span class="clickable" ng-click="changeDrop(task)"><i ng-show="task.subtasks.length>0 && !task.dropped" class="fa fa-plus"></i><i ng-show="task.subtasks.length>0 && task.dropped" class="fa fa-minus"></i></span> [[ task.name ]]</td>
 				            <td class="visible-lg">
-				            [[task.status]]
-				            <label ng-show="task.status=='pending'" class="label label-default">Pending</label>
-				            <label ng-show="task.status=='opened'" class="label label-danger">Opened</label>
-				            <label ng-show="task.status=='re-opened'" class="label label-warning">Re-opened</label>
-				            <label ng-show="task.status=='in-progress-coding'" class="label label-primary">In-progress: coding</label>
-				            <label ng-show="task.status=='in-progress-testing'" class="label label-primary">In-progress: testing</label>
-				            <label ng-show="task.status=='in-progress-research'" class="label label-primary">In-progress: research</label>
-				            <label ng-show="task.status=='resolved'" class="label label-success">Resolved: NOT approved</label>
-				            <label ng-show="task.status=='testing'" class="label label-info">Testing</label>
-				            <label ng-show="task.status=='closed'" class="label label-dark">Closed</label>
-				            <label ng-show="task.status=='in-discussion'" class="label label-dark">In-discussion</label>
-				            <label ng-show="task.status=='in-specification'" class="label label-primary">In-specification</label>
-				            <label ng-show="task.status=='specification-finished'" class="label label-primary">Specification: finished</label>
-				            <label ng-show="task.status=='specification-approved'" class="label label-primary">Specification: approved</label>
-				            <label ng-show="task.status=='on-hold-lunch'" class="label label-primary">On-hold: lunch</label>
-				            <label ng-show="task.status=='on-hold-home'" class="label label-primary">On-hold: home</label>
-				            <label ng-show="task.status=='on-hold-meeting'" class="label label-primary">On-hold: meeting</label>
-				            <label ng-show="task.status=='on-hold-suspended'" class="label label-primary">On-hold: suspended</label>
-				            <label ng-show="task.status=='resolved-approved'" class="label label-primary">Resolved: approved</label>
+				            	<label class="label" style="background-color: [[task.status.color]];">[[task.status.label]]</label>
 				            </td>
 				            <td class="visible-lg">
 				            <label ng-show="task.priority=='high'" class="label label-danger">High</label>
@@ -288,25 +270,7 @@
 				            <td class="visible-lg">&nbsp;&nbsp;[[i+1]].[[$index+1]]</td>
 				            <td class="visible-lg">[[ subtask.name ]]</td>
 				            <td class="visible-lg">
-				            [[subtask.status]]
-				            <label ng-show="subtask.status=='pending'" class="label label-default">Pending</label>
-				            <label ng-show="subtask.status=='opened'" class="label label-danger">Opened</label>
-				            <label ng-show="subtask.status=='re-opened'" class="label label-warning">Re-opened</label>
-				            <label ng-show="subtask.status=='in-progress-coding'" class="label label-primary">In-progress: coding</label>
-				            <label ng-show="subtask.status=='in-progress-testing'" class="label label-primary">In-progress: testing</label>
-				            <label ng-show="subtask.status=='in-progress-research'" class="label label-primary">In-progress: research</label>
-				            <label ng-show="subtask.status=='resolved'" class="label label-success">Resolved: NOT approved</label>
-				            <label ng-show="subtask.status=='testing'" class="label label-info">Testing</label>
-				            <label ng-show="subtask.status=='closed'" class="label label-dark">Closed</label>
-				            <label ng-show="subtask.status=='in-discussion'" class="label label-dark">In-discussion</label>
-				            <label ng-show="subtask.status=='in-specification'" class="label label-primary">In-specification</label>
-				            <label ng-show="subtask.status=='specification-finished'" class="label label-primary">Specification: finished</label>
-				            <label ng-show="subtask.status=='specification-approved'" class="label label-primary">Specification: approved</label>
-				            <label ng-show="subtask.status=='on-hold-lunch'" class="label label-primary">On-hold: lunch</label>
-				            <label ng-show="subtask.status=='on-hold-home'" class="label label-primary">On-hold: home</label>
-				            <label ng-show="subtask.status=='on-hold-meeting'" class="label label-primary">On-hold: meeting</label>
-				            <label ng-show="subtask.status=='on-hold-suspended'" class="label label-primary">On-hold: suspended</label>
-				            <label ng-show="subtask.status=='resolved-approved'" class="label label-primary">Resolved: approved</label>
+				            	<label class="label" style="background-color: [[subtask.status.color]];">[[subtask.status.label]]</label>
 				            </td>
 				            <td class="visible-lg">
 				            <label ng-show="subtask.priority=='high'" class="label label-danger">High</label>
@@ -349,6 +313,7 @@
 	<script type="text/javascript">
 	var USERS = {{ users|json_encode|raw }};
 	var TOPICS = {{ topicsForTasks|json_encode|raw }};
+	var STATUSES = {{ availableStatus|json_encode|raw }};
     JSON_URLS.posts = "{{ path('intranet_post_topic_get_posts', {topic_id: topic.id}) }}";
     JSON_URLS.post_add = "{{ path('intranet_post_topic_add_post', {topic_id: topic.id}) }}";
     JSON_URLS.avatar = "{{ asset('bundles/intranet/images/profiles/') }}";
