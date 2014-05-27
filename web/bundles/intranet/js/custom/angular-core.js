@@ -55,5 +55,10 @@ var Intranet = angular.module('Intranet', ['ui.bootstrap'])
     }
 	
 	return paginator;
+ })
+ .filter('estimatedTime', function(){
+	 return function(minutes){
+		 return Math.floor(minutes/60) + ' h ' + minutes%60 + ' m';
+	 }
  });
 console.log('Angular core is loaded...');

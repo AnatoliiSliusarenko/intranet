@@ -71,6 +71,13 @@ class Task
     private $name;
     
     /**
+     * @var string
+     *
+     * @ORM\Column(name="description", type="text")
+     */
+    private $description;
+    
+    /**
      * @var integer
      *
      * @ORM\Column(name="statusid", type="integer")
@@ -87,9 +94,23 @@ class Task
     /**
      * @var \DateTime
      *
+     * @ORM\Column(name="statusupdated", type="datetime")
+     */
+    private $statusUpdated;
+    
+    /**
+     * @var \DateTime
+     *
      * @ORM\Column(name="startdate", type="datetime")
      */
     private $startdate;
+    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="estimated", type="integer")
+     */
+    private $estimated;
     
     /**
      * @var \DateTime
@@ -415,9 +436,12 @@ class Task
     			'user' => ($this->getUser() != null ) ? $this->getUser()->getInArray() : null,
     			'priority' => $this->getPriority(),
     			'name' => $this->getName(),
+    			'description' => $this->getDescription(),
     			'statusid' => $this->getStatusid(),
+    			'statusUpdated' => $this->getStatusUpdated(),
     			'status' => $this->getStatus()->getInArray(),
     			'startdate' => $this->getStartdate(),
+    			'estimated' => $this->getEstimated(),
     			'enddate' => $this->getEnddate(),
     			'topics' => array_map(function($t){return $t->getInArray();}, $this->getTopics()->toArray())
     	);
@@ -543,6 +567,7 @@ class Task
      */
     public function setStatus(\Intranet\MainBundle\Entity\TaskStatus $status = null)
     {
+    	if ($status !== $this->status) $this->statusUpdated = new \DateTime();
         $this->status = $status;
         
         if ($status->getInitStartdate() && $this->startdate == null) $this->startdate = new \DateTime();
@@ -572,5 +597,74 @@ class Task
     		if ($status->isAllowedFor($user)) array_push($result, $status);
     	}
 		return $result;
+    }
+
+    /**
+     * Set description
+     *
+     * @param string $description
+     * @return Task
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * Get description
+     *
+     * @return string 
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * Set estimated
+     *
+     * @param integer $estimated
+     * @return Task
+     */
+    public function setEstimated($estimated)
+    {
+        $this->estimated = $estimated;
+
+        return $this;
+    }
+
+    /**
+     * Get estimated
+     *
+     * @return integer 
+     */
+    public function getEstimated()
+    {
+        return $this->estimated;
+    }
+
+    /**
+     * Set statusUpdated
+     *
+     * @param \DateTime $statusUpdated
+     * @return Task
+     */
+    public function setStatusUpdated($statusUpdated)
+    {
+        $this->statusUpdated = $statusUpdated;
+
+        return $this;
+    }
+
+    /**
+     * Get statusUpdated
+     *
+     * @return \DateTime 
+     */
+    public function getStatusUpdated()
+    {
+        return $this->statusUpdated;
     }
 }

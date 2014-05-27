@@ -61,6 +61,7 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 			if (response.result)
 			{
 				$scope.tasks = prepareTasks(response.result);
+				setTimeout(addTooltips, 100);
 			}
 		})
 	}
@@ -98,6 +99,16 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 	{
 		var url = $scope.urlsTopicsShow.replace('0', task.currentTopicId);
 		window.location.href = url;
+	}
+	
+	function addTooltips()
+	{
+		$('.tooltips').tooltip({
+		      selector: "a",
+		      container: "body"
+		    });
+
+		$("[data-toggle=popover]").popover();
 	}
 	
 	$scope.addTask = function(task)
@@ -163,6 +174,7 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 						$scope.tasks[i].startdate = editedTask.startdate;
 						$scope.tasks[i].enddate = editedTask.enddate;
 						$scope.tasks[i].status = editedTask.status;
+						$scope.tasks[i].statusUpdated = editedTask.statusUpdated;
 					}else
 					{
 						_.map(task.subtasks, function(subtask, j){
@@ -174,6 +186,7 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 								$scope.tasks[i].subtasks[j].startdate = editedTask.startdate;
 								$scope.tasks[i].subtasks[j].enddate = editedTask.enddate;
 								$scope.tasks[i].subtasks[j].status = editedTask.status;
+								$scope.tasks[i].subtasks[j].statusUpdated = editedTask.statusUpdated;
 							}
 						});
 					}
@@ -208,23 +221,39 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 	
 	$scope.urlsTasksAdd = JSON_URLS.tasksAdd;
 	
+	$scope.estimated = false;
 	$scope.users = users;
 	$scope.task = {
 			statusid: null,
 			priority: 'high',
 			userid: null,
-			parentid: parentid
+			parentid: parentid,
+			esth: 0,															
+			estm: 0
 	};
 	
 	STATUSES.forEach(function(status){
 		if (status.initial && $scope.task.statusid == null)
 			$scope.task.statusid = status.id;
 	});
+	checkEstimated();
+	
+	$scope.checkEstimated = checkEstimated;
+	function checkEstimated()
+	{
+		_.map(STATUSES, function(s){
+			if (s.id == $scope.task.statusid)
+				$scope.estimated = s.updateEstimate;
+		});
+	}
 	
 	$scope.addTask = function(event)
 	{
 		if ($scope.task.name != undefined)
-			event.preventDefault();
+			event.preventDefault();				
+		
+		$scope.task.estimated = parseInt($scope.task.esth)*60 + parseInt($scope.task.estm);
+		
 		$http({
 			method: "POST", 
 			url: $scope.urlsTasksAdd,
@@ -242,8 +271,26 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 	
 	$scope.urlsTasksEdit = JSON_URLS.tasksEdit;
 	
-	$scope.users = users;
 	$scope.task = task;
+	
+	$scope.estimated = false;
+	checkEstimated();
+	
+	$scope.checkEstimated = checkEstimated;
+	function checkEstimated()
+	{
+		_.map(STATUSES, function(s){
+			if (s.id == $scope.task.statusid)
+				$scope.estimated = s.updateEstimate;
+		});
+	}
+	(function(){
+		$scope.task.esth = Math.floor($scope.task.estimated/60);
+		$scope.task.estm = $scope.task.estimated%60;
+	})();
+	
+	$scope.users = users;
+	
 	$scope.task.topicsIdsCurrent = _.map($scope.task.topics, function(t){return t.id;})
 		
 	$scope.editTask = function(event)
@@ -254,6 +301,11 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 		var url = $scope.urlsTasksEdit.replace('0', task.id);
 		
 		if (typeof $scope.task.topicsIds == 'undefined') $scope.task.topicsIds = $scope.task.topicsIdsCurrent;
+		
+		_.map(STATUSES, function(s){
+			if ((s.id == $scope.task.statusid) && (s.updateEstimate == true))
+				$scope.task.estimated = parseInt($scope.task.esth)*60 + parseInt($scope.task.estm);
+		});
 		
 		$http({
 			method: "POST", 

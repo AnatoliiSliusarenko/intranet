@@ -11,7 +11,7 @@
 </ul>
 {% endblock %}
 
-{% block pageheader %}
+{% block pageheader %}   
 <div class="row">
 	<div class="col-md-12">
 		<h3 class="page-header"><i class="fa fa-sitemap"></i> {{ office.name }} <i class="fa fa-info-circle animated bounceInDown show-info"></i> {% if (office.getUserid() != 0 and office.getUserid() == app.user.getId()) %}<i class="fa fa-times-circle animated bounceInDown show-danger"></i>{% endif %} </h3>
@@ -310,8 +310,10 @@
 			             <th  class="visible-lg">#</th>
 			             <th  class="visible-lg">Name</th>
 			             <th class="visible-lg">Status</th>
+			             <th class="visible-lg">StatusUpdated</th>
 			             <th class="visible-lg">Priority</th>
 			             <th class="visible-lg">StartDate</th>
+			             <th class="visible-lg">Estimated</th>
 			             <th class="visible-lg">EndDate</th>
 			             <th class="visible-lg">Assigned</th>
 			             <th class="visible-lg">Topics</th>
@@ -321,16 +323,18 @@
 	           <tbody ng-repeat="(i, task) in tasks">
 		           		<tr>
 					   		<td class="visible-lg">[[i+1]]</td>
-				            <td class="visible-lg"><span class="clickable" ng-click="changeDrop(task)"><i ng-show="task.subtasks.length>0 && !task.dropped" class="fa fa-plus"></i><i ng-show="task.subtasks.length>0 && task.dropped" class="fa fa-minus"></i></span> [[ task.name ]]</td>
+				            <td class="visible-lg"><div class="tooltips"><span class="clickable" ng-click="changeDrop(task)"><i ng-show="task.subtasks.length>0 && !task.dropped" class="fa fa-plus"></i><i ng-show="task.subtasks.length>0 && task.dropped" class="fa fa-minus"></i></span> <a data-original-title="[[task.description]]" data-placement="top" href="#">[[ task.name ]]</a></div></td>
 				            <td class="visible-lg">
 				            	<label class="label" style="background-color: [[task.status.color]];">[[task.status.label]]</label>
 				            </td>
+				            <td class="visible-lg">[[ task.statusUpdated.date ]]</td>
 				            <td class="visible-lg">
 				            <label ng-show="task.priority=='high'" class="label label-danger">High</label>
 				            <label ng-show="task.priority=='medium'" class="label label-warning">Medium</label>
 				            <label ng-show="task.priority=='low'" class="label label-success">Low</label>
 				            </td>
 				            <td class="visible-lg">[[ task.startdate.date ]]</td>
+				            <td class="visible-lg">[[ task.estimated | estimatedTime ]]</td>
 				            <td class="visible-lg">[[ task.enddate.date ]]</td>
 				            <td class="visible-lg">
 				            <span ng-show="task.user==null">-</span>
@@ -351,16 +355,18 @@
 	           			</tr>
 	           			<tr ng-show="task.dropped == true" class="success" ng-repeat="subtask in task.subtasks">
 				            <td class="visible-lg">&nbsp;&nbsp;[[i+1]].[[$index+1]]</td>
-				            <td class="visible-lg">[[ subtask.name ]]</td>
+				            <td class="visible-lg"><div class="tooltips"><a data-original-title="[[subtask.description]]" data-placement="top" href="#">[[ subtask.name ]]</a></div></td>
 				            <td class="visible-lg">
 				            	<label class="label" style="background-color: [[subtask.status.color]];">[[subtask.status.label]]</label>
 				            </td>
+				            <td class="visible-lg">[[ subtask.statusUpdated.date ]]</td>
 				            <td class="visible-lg">
 				            <label ng-show="subtask.priority=='high'" class="label label-danger">High</label>
 				            <label ng-show="subtask.priority=='medium'" class="label label-warning">Medium</label>
 				            <label ng-show="subtask.priority=='low'" class="label label-success">Low</label>
 				            </td>
 				            <td class="visible-lg">[[ subtask.startdate.date ]]</td>
+				            <td class="visible-lg">[[ subtask.estimated | estimatedTime]]</td>
 				            <td class="visible-lg">[[ subtask.enddate.date ]]</td>
 				            <td class="visible-lg">
 				            <span ng-show="subtask.user==null">-</span>

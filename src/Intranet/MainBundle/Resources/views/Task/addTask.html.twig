@@ -9,6 +9,12 @@
                			</div>
              		</div>
              		<div class="form-group">
+                		<label for="inputEmail1" class="col-lg-2 col-md-3 control-label">Description</label>
+                		<div class="col-lg-10 col-md-9">
+                 			<input type="text" ng-model="task.description" class="form-control form-cascade-control" id="inputEmail1" placeholder="Type task description here" required>
+               			</div>
+             		</div>
+             		<div class="form-group">
 						  <label for="inputEmail1" class="col-lg-2 col-md-3 control-label">Priority</label>
 						  <div class="col-lg-10 col-md-9">
 						   <select ng-model="task.priority" class="form-control" required>
@@ -21,12 +27,49 @@
 					<div class="form-group">
 						  <label for="inputEmail1" class="col-lg-2 col-md-3 control-label">Status</label>
 						  <div class="col-lg-10 col-md-9">
-						   <select ng-model="task.statusid" class="form-control">
+						   <select ng-change="checkEstimated()" ng-model="task.statusid" class="form-control">
 						   	{% for taskStatus in taskStatuses %}
 						    <option value="{{ taskStatus.id }}" {% if loop.first %}selected{% endif %}>{{ taskStatus.label }}</option>
 						    {% endfor %}
 						   </select>
 						  </div>
+					</div>
+					<div class="form-group" ng-show="estimated">
+					  <label for="inputEmail1" class="col-lg-2 col-md-3 control-label">Est: h</label>
+					  <div class="col-lg-10 col-md-9">
+					   <select ng-model="task.esth" class="form-control">
+					    <option value="0">0</option>
+					    <option value="1">1</option>
+					    <option value="2">2</option>
+					    <option value="3">3</option>
+					    <option value="4">4</option>
+					    <option value="5">5</option>
+					    <option value="6">6</option>
+					    <option value="7">7</option>
+					    <option value="8">8</option>
+					    <option value="9">9</option>
+					    <option value="10">10</option>
+					  </select>
+					</div>
+					</div>
+					<div class="form-group" ng-show="estimated">
+					  <label for="inputEmail1" class="col-lg-2 col-md-3 control-label">Est: m</label>
+					  <div class="col-lg-10 col-md-9">
+					   <select ng-model="task.estm" class="form-control">
+					    <option value="0">0</option>
+					    <option value="5">5</option>
+					    <option value="10">10</option>
+					    <option value="15">15</option>
+					    <option value="20">20</option>
+					    <option value="25">25</option>
+					    <option value="30">30</option>
+					    <option value="35">35</option>
+					    <option value="40">40</option>
+					    <option value="45">45</option>
+					    <option value="50">50</option>
+					    <option value="55">55</option>
+					   </select>
+					  </div>
 					</div>
              		<div class="form-group">
   						<label for="inputEmail1" class="col-lg-2 col-md-3 control-label">Assigned</label>

@@ -70,7 +70,9 @@ class TaskController extends Controller
     		$task = (object) $data;
     		
     		$name = $task->name;
+    		$description = $task->description;
     		$priority = $task->priority;
+    		$estimated = $task->estimated;
     		$statusid = (isset($task->statusid) && ($task->statusid != 0)) ? $task->statusid : null;
     		$userid = (isset($task->userid) && ($task->userid != 0)) ? $task->userid : null;
     		$parentid = (isset($task->parentid) && ($task->parentid != 0)) ? $task->parentid : null;
@@ -81,6 +83,7 @@ class TaskController extends Controller
     		$task->setParentid($parentid);
     		$task->setUserid($userid);
     		$task->setStatusid($statusid);
+    		$task->setEstimated($estimated);
     		
     		$user = ($userid != null) ? $em->getRepository('IntranetMainBundle:User')->find($userid) : null;
     		$task->setUser($user);
@@ -90,6 +93,7 @@ class TaskController extends Controller
     		
     		$task->setOffice($office);
     		$task->setName($name);
+    		$task->setDescription($description);
     		$task->setPriority($priority);
     		
     		$topicsAdded = $task->addTopics($em, $topics);
@@ -142,7 +146,9 @@ class TaskController extends Controller
     		$taskData = (object) $data;
     		
     		$name = $taskData->name;
+    		$description = $taskData->description;
     		$priority = $taskData->priority;
+    		$estimated = $taskData->estimated;
     		$statusid = (isset($taskData->statusid) && ($taskData->statusid != 0)) ? $taskData->statusid : null;
     		$userid = (isset($taskData->userid)) ? $taskData->userid : null;
     		$parentid = (isset($taskData->parentid)) ? $taskData->parentid : null;
@@ -162,10 +168,12 @@ class TaskController extends Controller
     		
     		
     		$task->setName($name);
+    		$task->setDescription($description);
     		$task->setPriority($priority);
     		$task->setStatusid($statusid);
     		$task->setStatus($status);
     		$task->setParentid($parentid);
+    		$task->setEstimated($estimated);
     		$resetTopics = $task->resetTopics($em, $topics);
     		
     		$em->persist($task);
