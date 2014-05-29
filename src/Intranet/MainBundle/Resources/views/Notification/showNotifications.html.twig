@@ -11,11 +11,16 @@
 {% block pageheader %}
 <div ng-app="Intranet" class="row">
 	<div class="col-md-12">
-		<h3 class="page-header"><i class="fa fa-exclamation-triangle animated slide"></i> Notifications <i class="fa fa-info-circle animated bounceInDown show-info"></i></h3>
+		<h3 class="page-header"><i class="fa fa-exclamation-triangle animated slide"></i> Notifications <i class="fa fa-info-circle animated bounceInDown show-info"></i>&nbsp;<i class="fa fa-trash-o animated bounceInDown show-danger"></i></h3>
 
 		<blockquote class="page-information hidden">
 		<p>
 			Here you can view all your notifications...
+		</p>
+		</blockquote>
+		<blockquote class="page-danger-zone hidden">
+		<p>
+			If you really want to delete all notifications please click <a href="{{ url('intranet_notifications_clear') }}">here</a> (can't be rollback!)
 		</p>
 		</blockquote>
 	</div>

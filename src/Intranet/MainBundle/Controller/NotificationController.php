@@ -18,4 +18,10 @@ class NotificationController extends Controller
     	$response->headers->set('Content-Type', 'application/json');
     	return $response;
     }
+    
+    public function clearNotificationsAction()
+    {
+    	$this->getUser()->clearNotifications($this->getDoctrine()->getManager());
+    	return $this->redirect($this->generateUrl('intranet_notifications_show'));
+    }
 }

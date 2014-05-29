@@ -84,7 +84,11 @@ intranet_change_office_members:
     pattern:  /office/{office_id}/members/change
     defaults: { _controller: IntranetMainBundle:Office:changeOfficeMembers }
     
-intranet_notifications_show:
+intranet_notifications_clear:     
+    pattern:  /notifications/clear/
+    defaults: { _controller: IntranetMainBundle:Notification:clearNotifications }
+    
+intranet_notifications_show:     
     pattern:  /notifications/
     defaults: { _controller: IntranetMainBundle:Notification:showNotifications }
     

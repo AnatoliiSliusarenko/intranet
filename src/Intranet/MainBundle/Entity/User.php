@@ -730,6 +730,17 @@ class User implements UserInterface, \Serializable
     {
         return $this->notifications;
     }
+    
+    public function clearNotifications($em)
+    {
+    	$qb = $em->createQueryBuilder();
+    	 
+    	$qb->delete('IntranetMainBundle:Notification', 'n')
+    	   ->where('n.userid = :userid')
+    	   ->setParameter('userid', $this->getId());
+    	 
+    	return $qb->getQuery()->getResult();
+    }
 
     /**
      * Add postsTopic
