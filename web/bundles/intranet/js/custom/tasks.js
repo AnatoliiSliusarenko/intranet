@@ -66,6 +66,13 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 		})
 	}
 	
+	////
+	_.map(STATUSES, function(s){
+		$scope.filter.status.push(s.id);
+	});
+	$scope.filter.status.splice(14, 1);
+	////
+	
 	getTasks();
 	
 	$scope.changeDrop = function(task)
