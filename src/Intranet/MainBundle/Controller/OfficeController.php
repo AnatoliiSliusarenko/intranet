@@ -26,7 +26,7 @@ class OfficeController extends Controller
 	public function showOfficeAction(Request $request, $office_id)
 	{
 		$em = $this->getDoctrine()->getManager();
-		Notification::clearNotificationsByOfficeId($em, $this->getUser(), $office_id);
+		$this->get('intranet.notifier')->clearNotificationsByOfficeId($office_id);
 		$office = $em->getRepository('IntranetMainBundle:Office')->find($office_id);
 		if (($office == null) || (!$office->hasUser($this->getUser())))
 			return $this->redirect($this->generateUrl('intranet_main_homepage'));
@@ -115,7 +115,7 @@ class OfficeController extends Controller
 		$em->persist($office);
 		$em->flush();
 		 
-		Notification::createNotification($em, $this->get('router'), $this->get('mailer'), $this->getUser(), "membership_user", $usersAdded, $office);
+		$this->get('intranet.notifier')->createNotification("membership_user", $usersAdded, $office);
 		
 		return $this->redirect($this->generateUrl('intranet_show_office', array('office_id' => $office->getId())));
 	}
@@ -145,8 +145,8 @@ class OfficeController extends Controller
 		$em->persist($office);
 		$em->flush();
 		
-		Notification::createNotification($em, $this->get('router'), $this->get('mailer'), $this->getUser(), "membership_user", $resetUsers['added'], $office);
-		Notification::createNotification($em, $this->get('router'), $this->get('mailer'), $this->getUser(), "membership_user_out", $resetUsers['removed'], $office);
+		$this->get('intranet.notifier')->createNotification("membership_user", $resetUsers['added'], $office);
+		$this->get('intranet.notifier')->createNotification("membership_user_out", $resetUsers['removed'], $office);
 		$response = new Response(json_encode(array("result" => true,  "message" => 'Members changed!')));
 		$response->headers->set('Content-Type', 'application/json');
 		return $response;
@@ -159,7 +159,7 @@ class OfficeController extends Controller
 		if (($office == null) || ($office->getUserid() !== $this->getUser()->getId()))
 			return $this->redirect($this->generateUrl('intranet_main_homepage'));
 		
-		Notification::createNotification($em, $this->get('router'), $this->get('mailer'), $this->getUser(), "removed_office", $office, $office);
+		$this->get('intranet.notifier')->createNotification("removed_office", $office, $office);
 		
 		$parent = $office->getOfficeid();
 		$office->deleteAllChildren($em);

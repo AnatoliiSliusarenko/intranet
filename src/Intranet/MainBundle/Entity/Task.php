@@ -3,7 +3,7 @@
 namespace Intranet\MainBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-
+use Intranet\MainBundle\Entity\Notification;
 /**
  * Task
  *
@@ -532,10 +532,14 @@ class Task
      * @param \Intranet\MainBundle\Entity\User $user
      * @return Task
      */
-    public function setUser(\Intranet\MainBundle\Entity\User $user = null)
+    public function setUser(\Intranet\MainBundle\Entity\User $user = null, $notifier)
     {
-        $this->user = $user;
-
+    	if ((($this->user == null)&&($user != null)) || (($user != null)&&($user->getId() != $this->user->getId())))
+    	{
+    		$this->user = $user;
+    		$notifier->createNotification("task_assigned", $this, $this->getOffice());
+    	}
+    	
         return $this;
     }
 

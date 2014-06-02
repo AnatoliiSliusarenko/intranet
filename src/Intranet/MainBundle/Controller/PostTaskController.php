@@ -40,7 +40,13 @@ class PostTaskController extends Controller
     public function addPostAction(Request $request, $task_id)
     {
     	$em = $this->getDoctrine()->getManager();
-    	
+    	$task = $this->getDoctrine()->getRepository('IntranetMainBundle:Task')->find($task_id);
+    	if ($task == null)
+    	{
+    		$response = new Response(json_encode(array("result" => null, "message" => 'Task not found!')));
+    		$response->headers->set('Content-Type', 'application/json');
+    		return $response;
+    	}
     	//$data = $request->request->all();
     	$data = json_decode(file_get_contents("php://input"));
     	$post = (object) $data;
@@ -48,7 +54,8 @@ class PostTaskController extends Controller
     	if (isset($post->postid))
     		$added = PostTask::editPostByTaskId($em, $post);
     	else
-    		$added = PostTask::addPostByTaskId($em, $this->get('mailer'), $post);
+    		$added = PostTask::addPostByTaskId($em, $this->get('intranet.notifier'), $post);
+    		
     	
     	$response = new Response(json_encode(array("result" => $added)));
     	$response->headers->set('Content-Type', 'application/json');

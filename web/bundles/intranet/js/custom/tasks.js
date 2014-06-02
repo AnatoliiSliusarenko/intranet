@@ -337,7 +337,7 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 	
 	$scope.task = task;
 	$scope.posts = [];
-	$scope.urlsPostsTaskAdd = JSON_URLS.urlsPostsTaskAdd;
+	$scope.urlsPostsTaskAdd = JSON_URLS.urlsPostsTaskAdd.replace('0', task.id);
 	$scope.urlsPostsTaskGet = JSON_URLS.urlsPostsTaskGet.replace('0', task.id);
 	$scope.avatarURL = JSON_URLS.avatar;
 	$scope.comment = "";

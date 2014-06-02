@@ -74,3 +74,10 @@ services:
         arguments: 
             - @security.context
             - @doctrine.orm.entity_manager
+    intranet.notifier:
+        class: Intranet\MainBundle\Services\Notifier
+        arguments: 
+            - @security.context
+            - @doctrine.orm.entity_manager
+            - @router
+            - @mailer

@@ -135,6 +135,11 @@ class User implements UserInterface, \Serializable
 	 */
 	private $postsOffice;
 	
+	/**
+	 * @ORM\OneToMany(targetEntity="PostTask", mappedBy="user")
+	 */
+	private $postsTask;
+	
 	public function __construct()
 	{
 		$this->active = true;
@@ -607,6 +612,25 @@ class User implements UserInterface, \Serializable
     	else return $result;
     }
     
+    public static function getTaskCommentsMembers($em, $task_id, $inArray = false)
+    {
+    	$query = $em->getRepository("IntranetMainBundle:User")
+    	->createQueryBuilder('u')
+    	->select('u')
+    	->innerJoin('u.postsTask', 'p', 'WITH', 'u.id = p.userid')
+    	->where('p.taskid = :taskid')
+    	->setParameter('taskid', $task_id)
+    	->getQuery();
+    
+    	$result = $query->getResult();
+    
+    	if ($inArray == true)
+    		return array_map(function($user){
+    		return $user->getInArray();
+    	}, $result);
+    	else return $result;
+    }
+    
     public function getAllUsers($em, $withOutMe = true)
     {
     	$qb = $em->getRepository("IntranetMainBundle:User")
@@ -852,5 +876,38 @@ class User implements UserInterface, \Serializable
     public function getLogs()
     {
         return $this->logs;
+    }
+
+    /**
+     * Add postsTask
+     *
+     * @param \Intranet\MainBundle\Entity\PostTask $postsTask
+     * @return User
+     */
+    public function addPostsTask(\Intranet\MainBundle\Entity\PostTask $postsTask)
+    {
+        $this->postsTask[] = $postsTask;
+
+        return $this;
+    }
+
+    /**
+     * Remove postsTask
+     *
+     * @param \Intranet\MainBundle\Entity\PostTask $postsTask
+     */
+    public function removePostsTask(\Intranet\MainBundle\Entity\PostTask $postsTask)
+    {
+        $this->postsTask->removeElement($postsTask);
+    }
+
+    /**
+     * Get postsTask
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getPostsTask()
+    {
+        return $this->postsTask;
     }
 }

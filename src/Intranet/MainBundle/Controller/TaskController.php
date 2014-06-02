@@ -86,7 +86,7 @@ class TaskController extends Controller
     		$task->setEstimated($estimated);
     		
     		$user = ($userid != null) ? $em->getRepository('IntranetMainBundle:User')->find($userid) : null;
-    		$task->setUser($user);
+    		$task->setUser($user, $this->get('intranet.notifier'));
     		
     		$status = ($statusid != null) ? $em->getRepository('IntranetMainBundle:TaskStatus')->find($statusid) : null;
     		$task->setStatus($status);
@@ -164,7 +164,7 @@ class TaskController extends Controller
     		
     		$task->setUserid($userid);
     		$user = ($userid != null) ? $em->getRepository('IntranetMainBundle:User')->find($userid) : null;
-    		$task->setUser($user);
+    		$task->setUser($user, $this->get('intranet.notifier'));
     		
     		
     		$task->setName($name);

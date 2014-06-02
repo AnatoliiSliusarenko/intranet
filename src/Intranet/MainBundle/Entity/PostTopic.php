@@ -163,7 +163,7 @@ class PostTopic
      * Add post by topic
      * @return PostTopic
      */
-    public static function addPostByTopicId($em, $router, $mailer, $p)
+    public static function addPostByTopicId($em, $notifier, $p)
     {
     	$user = $em->getRepository("IntranetMainBundle:User")->find(intval($p->userid));
     	$topic = $em->getRepository("IntranetMainBundle:Topic")->find(intval($p->entityid));
@@ -171,7 +171,7 @@ class PostTopic
     	if (($topic == null) || ($user == null) || (trim($p->message) === ''))
     		return null;
     	
-    	Notification::createNotification($em, $router, $mailer, $user, "message_topic", $user, $topic);
+    	$notifier->createNotification("message_topic", $user, $topic);
     	
     	$post = new PostTopic();
     	$post->setTopicid($topic->getId());

@@ -103,6 +103,21 @@
                         <span class="time"> <i class="fa fa-clock-o"></i>  [[ notification.activated.date ]]</span>
                       </a>
                       
+                      <a ng-show="notification.type == 'task_assigned'""
+                        href="[[notification.href]]"
+                        class="text-warning">
+                        <i class="fa noty-icon fa-tasks bg-warning"></i> 
+                        <span class="description">[[ notification.message ]]</span>
+                        <span class="time"> <i class="fa fa-clock-o"></i>  [[ notification.activated.date ]]</span>
+                      </a>
+                      
+                      <a ng-show="notification.type == 'task_comment'""
+                        href="[[notification.href]]">
+                        <i class="fa noty-icon fa-tasks bg-primary"></i> 
+                        <span class="description">[[ notification.message ]]</span>
+                        <span class="time"> <i class="fa fa-clock-o"></i>  [[ notification.activated.date ]]</span>
+                      </a>
+                      
                       <a ng-show="notification.type == 'topic_added'""
                         href="[[notification.href]]"
                         class="text-success">

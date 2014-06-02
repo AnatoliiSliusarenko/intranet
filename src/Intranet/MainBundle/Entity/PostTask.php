@@ -170,7 +170,7 @@ class PostTask
      * Add post by task
      * @return PostTask
      */
-    public static function addPostByTaskId($em, $mailer, $p)
+    public static function addPostByTaskId($em, $notifier, $p)
     {
     	$user = $em->getRepository("IntranetMainBundle:User")->find(intval($p->userid));
     	$task = $em->getRepository("IntranetMainBundle:Task")->find(intval($p->entityid));
@@ -178,7 +178,7 @@ class PostTask
     	if (($task == null) || ($user == null) || (trim($p->message) === ''))
     		return null;
     	
-    	//Notification::createNotification($em, $mailer, $user, "message_topic", $user, $topic);
+    	$notifier->createNotification("task_comment", $task, $task->getOffice());
     	
     	$post = new PostTask();
     	$post->setTaskid($task->getId());

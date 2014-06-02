@@ -48,7 +48,7 @@ Intranet.controller('NavigationController', ['$scope', '$http', function($scope,
 	function prepareNotifications(notifications)
 	{
 		notifications = _.map(notifications, function(n){
-			if (['membership_own', 'membership_own_out', 'membership_user', 'membership_user_out', 'message_office', 'removed_office'].indexOf(n.type) != -1)
+			if (['task_comment', 'task_assigned', 'membership_own', 'membership_own_out', 'membership_user', 'membership_user_out', 'message_office', 'removed_office'].indexOf(n.type) != -1)
 			{
 				n.href = officeShowUrlBase.replace('0', n.destinationid);
 			}else

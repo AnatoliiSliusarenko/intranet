@@ -49,6 +49,10 @@
 		<a href="{{ url('intranet_show_topic', {'topic_id': notification.destinationid }) }}" class="btn btn-danger btn-block"><i class="fa fa-exclamation aligned-left"></i> {{ notification.message }} <span class="time aligned-right"> <i class="fa fa-clock-o"></i>  {{ notification.activated|date('d/m/y H:i:s') }}</span></a>
 		{% elseif notification.type=='topic_added' %}
 		<a href="{{ url('intranet_show_topic', {'topic_id': notification.destinationid }) }}" class="btn btn-success btn-block"><i class="fa fa-comment aligned-left"></i> {{ notification.message }} <span class="time aligned-right"> <i class="fa fa-clock-o"></i>  {{ notification.activated|date('d/m/y H:i:s') }}</span></a>
+		{% elseif notification.type=='task_assigned' %}
+		<a href="{{ url('intranet_show_office', {'office_id': notification.destinationid }) }}" class="btn btn-warning btn-block"><i class="fa fa-tasks aligned-left"></i> {{ notification.message }} <span class="time aligned-right"> <i class="fa fa-clock-o"></i>  {{ notification.activated|date('d/m/y H:i:s') }}</span></a>
+		{% elseif notification.type=='task_comment' %}
+		<a href="{{ url('intranet_show_office', {'office_id': notification.destinationid }) }}" class="btn btn-primary btn-block"><i class="fa fa-tasks aligned-left"></i> {{ notification.message }} <span class="time aligned-right"> <i class="fa fa-clock-o"></i>  {{ notification.activated|date('d/m/y H:i:s') }}</span></a>
         {% endif %}		
 	{% endfor %}
 	</div>

@@ -25,7 +25,7 @@ class TopicController extends Controller
     public function showTopicAction(Request $request, $topic_id)
     {
     	$em = $this->getDoctrine()->getManager();
-    	Notification::clearNotificationsByTopicId($em, $this->getUser(), $topic_id);
+    	$this->get('intranet.notifier')->clearNotificationsByTopicId($topic_id);
     	$topic = $em->getRepository('IntranetMainBundle:Topic')->find($topic_id);
     	if (($topic == null) || (!$topic->getOffice()->hasUser($this->getUser())))
     		return $this->redirect($this->generateUrl('intranet_main_homepage'));
@@ -110,7 +110,7 @@ class TopicController extends Controller
     	$em->persist($topic);
     	$em->flush();
     	
-    	Notification::createNotification($em, $this->get('router'), $this->get('mailer'), $this->getUser(), "topic_added", $topic, $topic);
+    	$this->get('intranet.notifier')->createNotification("topic_added", $topic, $topic);
     	
     	return $this->redirect($this->generateUrl('intranet_show_topic', array('topic_id' => $topic->getId())));
     }
@@ -122,7 +122,7 @@ class TopicController extends Controller
     	if (($topic == null) || (($topic->getUserid() !== $this->getUser()->getId()) && (false === $this->get('security.context')->isGranted('ROLE_ADMIN'))) )
     		return $this->redirect($this->generateUrl('intranet_main_homepage'));
     
-    	Notification::createNotification($em, $this->get('router'), $this->get('mailer'), $this->getUser(), "removed_topic", $topic, $topic);
+    	$this->get('intranet.notifier')->createNotification("removed_topic", $topic, $topic);
     	
     	$parent = $topic->getParentid();
     	$topic->deleteAllChildren($em);
