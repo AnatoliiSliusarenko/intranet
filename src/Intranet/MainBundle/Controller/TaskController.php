@@ -85,16 +85,18 @@ class TaskController extends Controller
     		$task->setStatusid($statusid);
     		$task->setEstimated($estimated);
     		
-    		$user = ($userid != null) ? $em->getRepository('IntranetMainBundle:User')->find($userid) : null;
-    		$task->setUser($user, $this->get('intranet.notifier'));
     		
     		$status = ($statusid != null) ? $em->getRepository('IntranetMainBundle:TaskStatus')->find($statusid) : null;
     		$task->setStatus($status);
     		
     		$task->setOffice($office);
+    		
     		$task->setName($name);
     		$task->setDescription($description);
     		$task->setPriority($priority);
+    		
+    		$user = ($userid != null) ? $em->getRepository('IntranetMainBundle:User')->find($userid) : null;
+    		$task->setUser($user, $this->get('intranet.notifier'));
     		
     		$topicsAdded = $task->addTopics($em, $topics);
     		
