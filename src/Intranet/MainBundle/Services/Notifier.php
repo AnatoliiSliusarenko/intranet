@@ -117,10 +117,10 @@ class Notifier
     	{
     		case "topic_added":
     			{
-    				$topicTree = Topic::getTopicTree($em);
+    				$topicTree = Topic::getTopicTree($this->em);
     				$rootTopic = $topicTree[0];
     				 
-    				$officeTree = Office::getOfficeTree($em);
+    				$officeTree = Office::getOfficeTree($this->em);
     				$rootOffice = $officeTree[0];
     				 
     				if ($destination->getParentid() == $rootTopic->getId())
@@ -132,7 +132,7 @@ class Notifier
     				}
     				else
     				{
-    					$parent = $resource->getParent($em);
+    					$parent = $resource->getParent($this->em);
     					$message = 'New subtopic "'.$resource->getName().'" was added in "'.$parent->getName().'"';
     				}
     	
@@ -227,7 +227,8 @@ class Notifier
     			{
     				$message = 'New comment around the task "'.$resource->getName().'"';
     				$users = User::getTaskCommentsMembers($this->em, $resource->getId());
-    				$users[] = $resource->getUser();
+    				$userAsigned = $resource->getUser();
+    				if ($userAsigned != null) $users[] = $userAsigned;
     				break;
     			}
     	}

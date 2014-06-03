@@ -350,7 +350,7 @@
 				             <button type="button" class="btn btn-warning btn-xs" ng-click="editTask(task)"><i class="fa fa-edit"></i></button>
 				             <button type="button" class="btn btn-danger btn-xs" ng-click="removeTask(task)"><i class="fa fa-trash-o"></i></button>
 				             <button type="button" ng-show="task.currentTopicId != 0" class="btn btn-info btn-xs" ng-click="showTopic(task)"><i class="fa fa-mail-forward"></i></button>
-				             <button type="button" class="btn btn-success btn-xs" ng-click="showPosts(task)"><i class="fa fa-comment"></i></button>
+				             <button type="button" class="btn btn-success btn-xs" ng-click="showPosts(task)"><i class="fa fa-comment"></i><span class="badge bg-danger">3</span></button>
 				            </td>
 	           			</tr>
 	           			<tr ng-show="task.dropped == true" class="success" ng-repeat="subtask in task.subtasks">
@@ -381,7 +381,7 @@
 				             <button type="button" class="btn btn-warning btn-xs" ng-click="editTask(subtask)"><i class="fa fa-edit"></i></button>
 				             <button type="button" class="btn btn-danger btn-xs" ng-click="removeTask(subtask)"><i class="fa fa-trash-o"></i></button>
 				             <button type="button" ng-show="task.currentTopicId != 0" class="btn btn-info btn-xs" ng-click="showTopic(subtask)"><i class="fa fa-mail-forward"></i></button>
-				             <button type="button" class="btn btn-success btn-xs" ng-click="showPosts(subtask)"><i class="fa fa-comment"></i></button>
+				             <button type="button" class="btn btn-success btn-xs" ng-click="showPosts(subtask)"><i class="fa fa-comment"></i><span class="badge bg-success">3</span></button>
 				            </td>
 		            	</tr>
 			  </tbody>

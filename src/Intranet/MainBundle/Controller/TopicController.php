@@ -81,6 +81,8 @@ class TopicController extends Controller
     	$description = $request->request->get('description');
     	$officeid = $request->request->get('officeid');
     	
+    	//return new Response(var_dump($request->request));
+    	
     	$parentTopic = $em->getRepository('IntranetMainBundle:Topic')->find($topic_id);
     	if ($parentTopic == null)
     		return $this->redirect($this->generateUrl('intranet_main_homepage'));
