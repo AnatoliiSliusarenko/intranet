@@ -307,9 +307,9 @@
 	          <table class="table users-table table-condensed table-hover" >
 	           <thead>
 	           		<tr>
-			             <th  class="visible-lg">#</th>
-			             <th  class="visible-lg">Id</th>
-			             <th  class="visible-lg">Name</th>
+			             <th class="visible-lg">#</th>
+			             <th class="visible-lg">Id</th>
+			             <th class="visible-lg">Name</th>
 			             <th class="visible-lg">Status</th>
 			             <th class="visible-lg">StatusUpdated</th>
 			             <th class="visible-lg">Priority</th>
@@ -324,7 +324,7 @@
 	           <tbody ng-repeat="(i, task) in tasks">
 		           		<tr>
 					   		<td class="visible-lg">[[i+1]]</td>
-					   		<th  class="visible-lg">[[task.id]]</th>
+					   		<td class="visible-lg">[[task.id]]</td>
 				            <td class="visible-lg"><div class="tooltips"><span class="clickable" ng-click="changeDrop(task)"><i ng-show="task.subtasks.length>0 && !task.dropped" class="fa fa-plus"></i><i ng-show="task.subtasks.length>0 && task.dropped" class="fa fa-minus"></i></span> <a data-original-title="[[task.description]]" data-placement="top" href="#">[[ task.name ]]</a></div></td>
 				            <td class="visible-lg">
 				            	<label class="label" style="background-color: [[task.status.color]];">[[task.status.label]]</label>
