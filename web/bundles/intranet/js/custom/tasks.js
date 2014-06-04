@@ -28,6 +28,7 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 	{
 		_.map(tasks, function(task){
 			task.currentTopicId = (task.topics.length > 0) ? task.topics[0].id : 0;
+			$scope.changeHrefTopic(task);
 			if (task.parentid == null) task.subtasks = [];
 		});
 		var groupedList = _.groupBy(tasks, function(task){ return task.parentid; });
@@ -102,10 +103,11 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 		})
 	}
 	
-	$scope.showTopic = function(task)
+	$scope.changeHrefTopic = function(task)
 	{
-		var url = $scope.urlsTopicsShow.replace('0', task.currentTopicId);
-		window.location.href = url;
+		var url = '#';
+		if (task.currentTopicId != '0') url = $scope.urlsTopicsShow.replace('0', task.currentTopicId);
+		task.hrefTopic = url;
 	}
 	
 	function addTooltips()
@@ -138,6 +140,7 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 			
 			modalInstance.result.then(function (addedTask) {
 				addedTask.currentTopicId = (addedTask.topics.length > 0) ? addedTask.topics[0].id : 0;
+				$scope.changeHrefTopic(addedTask);
 				if (addedTask.parentid == null)
 				{
 					addedTask.subtasks = [];
@@ -182,6 +185,7 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 						$scope.tasks[i].enddate = editedTask.enddate;
 						$scope.tasks[i].status = editedTask.status;
 						$scope.tasks[i].statusUpdated = editedTask.statusUpdated;
+						$scope.changeHrefTopic($scope.tasks[i]);
 					}else
 					{
 						_.map(task.subtasks, function(subtask, j){
@@ -194,6 +198,7 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 								$scope.tasks[i].subtasks[j].enddate = editedTask.enddate;
 								$scope.tasks[i].subtasks[j].status = editedTask.status;
 								$scope.tasks[i].subtasks[j].statusUpdated = editedTask.statusUpdated;
+								$scope.changeHrefTopic($scope.tasks[i].subtasks[j]);
 							}
 						});
 					}
