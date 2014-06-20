@@ -194,7 +194,6 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 	
 	$scope.editTask = function(task)
 	{
-		
 		var url = $scope.urlsTasksEdit.replace('0', task.id);
 		$http({
 			method: "GET", 
@@ -259,16 +258,7 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 						task: function(){return task;}
 					}
 			    });
-			function routResetMessageCount()
-            {
-				$scope.urlsResetCommentsCount = JSON_URLS.urlsResetCommentsCount.replace('0', task.id);
-            	$http({
-            		method: "GET", 
-            		url: $scope.urlsResetCommentsCount
-            		  })
-            	.success(function(response){
-            	});
-            }
+			
             modalInstance.result.finally(function () {
             	console.log("========<<<<<<,,", modalInstance);
 				if (modalInstance.result.response.result != null)
@@ -279,10 +269,20 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 							t.newCommentsCount = 0;
 						}
 					});
-					clearInterval(intervalId);
 				}
+				clearInterval(refreshIntervalId);
 			});
-            var intervalId = setInterval(routResetMessageCount,2000);
+            var refreshIntervalId = setInterval(function(){
+            	if (modalInstance.result.response.result != null)
+			{
+            	console.log("========<<<<<<,,", modalInstance.result.response.result);
+				_.map($scope.tasks, function(t){
+					if(t.id = modalInstance.result.response.result)
+					{
+						t.newCommentsCount = 0;
+					}
+				});
+			} }, 2000);
 		});
 	}
 }])
@@ -395,7 +395,6 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 		});
 	}
 }])
-
 .controller('ShowPostsController', ['$scope', '$http', '$modalInstance', 'task', function($scope, $http, $modalInstance, task){
 	console.log('ShowPostsController was loaded!');
 	
@@ -424,14 +423,14 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 		}
 			
 	});
-
-		$http({
-			method: "GET", 
-			url: $scope.urlsResetCommentsCount
-			  })
-		.success(function(response){
-			$modalInstance.result.response = response;
-		});
+	
+	$http({
+		method: "GET", 
+		url: $scope.urlsResetCommentsCount
+		  })
+	.success(function(response){
+		$modalInstance.result.response = response;
+	});
 	
 	$scope.isEditable = function(post)
 	{
