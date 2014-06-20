@@ -269,7 +269,7 @@
 				             <button type="button" class="btn btn-warning btn-xs" ng-click="editTask(task)"><i class="fa fa-edit"></i></button>
 				             <button type="button" class="btn btn-danger btn-xs" ng-click="removeTask(task)"><i class="fa fa-trash-o"></i></button>
 				             <a href="[[ task.hrefTopic ]]" ng-show="task.currentTopicId != 0" class="btn btn-info btn-xs" ng-click="showTopic(task)"><i class="fa fa-mail-forward"></i></a>
-				             <button type="button" class="btn btn-success btn-xs" ng-click="showPosts(task)"><i class="fa fa-comment"></i></button>
+				             <button style="width:25px;" type="button" class="btn btn-success btn-xs" ng-click="showPosts(task)"><i class="fa fa-comment"></i><span ng-show="task.newCommentsCount>0" class="badge bg-danger">[[task.newCommentsCount]]</span></button>
 				            </td>
 	           			</tr>
 	           			<tr ng-show="task.dropped == true" class="success" ng-repeat="subtask in task.subtasks">
@@ -301,7 +301,7 @@
 				             <button type="button" class="btn btn-warning btn-xs" ng-click="editTask(subtask)"><i class="fa fa-edit"></i></button>
 				             <button type="button" class="btn btn-danger btn-xs" ng-click="removeTask(subtask)"><i class="fa fa-trash-o"></i></button>
 				             <a href="[[ subtask.hrefTopic ]]" ng-show="task.currentTopicId != 0" class="btn btn-info btn-xs" ng-click="showTopic(subtask)"><i class="fa fa-mail-forward"></i></a>
-				             <button type="button" class="btn btn-success btn-xs" ng-click="showPosts(subtask)"><i class="fa fa-comment"></i></button>
+				             <button type="button" class="btn btn-success btn-xs" ng-click="showPosts(subtask)"><i class="fa fa-comment"></i><span class="badge bg-danger">[[subtask.newCommentsCount]]</span></button>
 				            </td>
 		            	</tr>
 			  </tbody>
@@ -337,7 +337,8 @@
     JSON_URLS.urlsPostsTaskShow = "{{ path('intranet_post_task_show', {task_id: 0}) }}";
 	JSON_URLS.urlsPostsTaskGet = "{{ path('intranet_post_task_get', {task_id: 0}) }}";
 	JSON_URLS.urlsPostsTaskAdd = "{{ path('intranet_post_task_add', {task_id: 0}) }}";
-    
+	JSON_URLS.urlsResetCommentsCount = "{{ path('intranet_task_resetNewCommentsCount', {task_id: 0}) }}";
+	
     var USER = {
     	    id: "{{ app.user.getId() }}"
    	};
@@ -345,5 +346,7 @@
    	var ENTITY = {
    		   	id: "{{ topic.id }}"
     };
+   	
+   	var TASKS_NOTIFICATIONS = [];
 	</script>
 {% endblock %}
