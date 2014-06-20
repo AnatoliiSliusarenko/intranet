@@ -279,9 +279,10 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 							t.newCommentsCount = 0;
 						}
 					});
+					clearInterval(intervalId);
 				}
 			});
-            setInterval(routResetMessageCount,2000);
+            var intervalId = setInterval(routResetMessageCount,2000);
 		});
 	}
 }])
