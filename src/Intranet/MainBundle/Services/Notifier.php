@@ -38,11 +38,12 @@ class Notifier
     	$this->mailer = $mailer;
     }
     
-    private function postNotification($user, $type, $destinationid, $message)
+    private function postNotification($user, $type, $resourceid, $destinationid, $message)
     {
     	$notification = new Notification();
     	$notification->setUserid($user->getId());
     	$notification->setUser($user);
+    	$notification->setResourceid($resourceid);
     	$notification->setDestinationid($destinationid);
     	$notification->setType($type);
     	$notification->setMessage($message);
@@ -109,6 +110,19 @@ class Notifier
     	return $qb->getQuery()->getResult();
     }
     
+    public function clearNotificationsByTaskId($taskId)
+    {
+    	$qb = $this->em->createQueryBuilder();
+    	$qb->delete('IntranetMainBundle:Notification', 'n')
+    	->where("n.userid = :userid")
+    	->andWhere("n.resourceid = :resourceid")
+    	->andWhere("n.type = 'task_comment'")
+               ->setParameter("userid", $this->user->getId())
+               ->setParameter("resourceid", $taskId);
+    
+    	return $qb->getQuery()->getResult();
+    }
+    
     public function createNotification($type, $resource, $destination)
     {
     	if (!in_array($type, $this->types)) return false;
@@ -167,7 +181,7 @@ class Notifier
     					$message = 'You was deleted from "'.$destination->getName().'"';
     					$type = "membership_own_out";
     					 
-    					$this->postNotification($userOffice, $type, $destination->getId(), $message);
+    					$this->postNotification($userOffice, $type, $userOffice->getId(), $destination->getId(), $message);
     	
     					foreach ($users as $user)
     					{
@@ -175,7 +189,7 @@ class Notifier
     						$type = "membership_user_out";
     						$message = $userOffice->getName().' '.$userOffice->getSurname().' was deleted from "'.$destination->getName().'"';
     							
-    						$this->postNotification($user, $type, $destination->getId(), $message);
+    						$this->postNotification($user, $type, $userOffice->getId(), $destination->getId(), $message);
     					}
     				}
     				return true;
@@ -190,7 +204,7 @@ class Notifier
     					$message = 'You was added to "'.$destination->getName().'"';
     					$type = "membership_own";
     					 
-    					$this->postNotification($userOffice, $type, $destination->getId(), $message);
+    					$this->postNotification($userOffice, $type, $userOffice->getId(), $destination->getId(), $message);
     	
     					foreach ($users as $user)
     					{
@@ -198,7 +212,7 @@ class Notifier
     						$type = "membership_user";
     						$message = $userOffice->getName().' '.$userOffice->getSurname().' was added to "'.$destination->getName().'"';
     							
-    						$this->postNotification($user, $type, $destination->getId(), $message);
+    						$this->postNotification($user, $type, $userOffice->getId(), $destination->getId(), $message);
     					}
     				}
     				return true;
@@ -237,7 +251,7 @@ class Notifier
     	{
     		if ($user->getId() == $this->user->getId()) continue;
     	
-    		$this->postNotification($user, $type, $destination->getId(), $message);
+    		$this->postNotification($user, $type, $resource->getId(), $destination->getId(), $message);
     	}
     	 
     	return true;

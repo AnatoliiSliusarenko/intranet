@@ -64,6 +64,13 @@ class Notification
     private $activated;
 
     /**
+     * 
+     * @var integer
+     * 
+     * @ORM\Column(name="resourceid", type="integer")
+     */
+    private $resourceid;
+    /**
      * Get id
      *
      * @return integer 
@@ -221,10 +228,34 @@ class Notification
     	return array(
     			'id' => $this->getId(),
     			'user' => $this->getUser()->getInArray(),
+    			'resourceid' => $this->getResourceid(),
     			'destinationid' => $this->getDestinationid(),
     			'type' => $this->getType(),
     			'message' => $this->getMessage(),
     			'activated' => $this->getActivated()
     	);
+    }
+
+    /**
+     * Set resourceId
+     *
+     * @param integer $resourceId
+     * @return Notification
+     */
+    public function setResourceid($resourceid)
+    {
+        $this->resourceid = $resourceid;
+
+        return $this;
+    }
+
+    /**
+     * Get resourceId
+     *
+     * @return integer 
+     */
+    public function getResourceid()
+    {
+        return $this->resourceid;
     }
 }

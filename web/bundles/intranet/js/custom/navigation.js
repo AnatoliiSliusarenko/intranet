@@ -59,6 +59,10 @@ Intranet.controller('NavigationController', ['$scope', '$http', function($scope,
 			return n;
 		});
 		
+		TASKS_NOTIFICATIONS =_.map(notifications,function(n){
+			if(n.type=='task_comment')
+				return n;
+		});
 		notifications = _.filter(notifications, function(n){
 			return n.href != window.location.href;
 		});
@@ -67,7 +71,6 @@ Intranet.controller('NavigationController', ['$scope', '$http', function($scope,
 			method: "GET", 
 			url: window.location.href
 			  });
-		
 		
 		return notifications;
 	}

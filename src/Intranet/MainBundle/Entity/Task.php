@@ -130,7 +130,7 @@ class Task
      * @var array
      */
     private $posts;
-
+    
     private $subTasks = null;
     
     public function getSubTasks($em)
@@ -671,4 +671,5 @@ class Task
     {
         return $this->statusUpdated;
     }
+    
 }

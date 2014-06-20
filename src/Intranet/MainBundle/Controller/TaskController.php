@@ -218,6 +218,22 @@ class TaskController extends Controller
     	}
     	$em->remove($task);
     	$em->flush();
+    	$response = new Response(json_encode(array("result" => $task_id)));
+    	$response->headers->set('Content-Type', 'application/json');
+    	return $response;
+    }
+    
+    public function resetNewCommentsAction($task_id)
+    {
+    	$em = $this->getDoctrine()->getManager();
+    	$task = $em->getRepository('IntranetMainBundle:Task')->find($task_id);
+    	if ($task == null)
+    	{
+    		$response = new Response(json_encode(array("result" => null, "message" => 'Task not found!')));
+    		$response->headers->set('Content-Type', 'application/json');
+    		return $response;
+    	}
+    	$this->get('intranet.notifier')->clearNotificationsByTaskId($task_id);
     	
     	$response = new Response(json_encode(array("result" => $task_id)));
     	$response->headers->set('Content-Type', 'application/json');

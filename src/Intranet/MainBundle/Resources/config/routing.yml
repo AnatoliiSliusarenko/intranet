@@ -132,3 +132,6 @@ intranet_log_show:
     pattern:  /logs/
     defaults: { _controller: IntranetMainBundle:Log:showLogs }
     
+intranet_task_resetNewCommentsCount:
+    pattern:  /task/{task_id}/resetNewCommentsCount/
+    defaults: { _controller: IntranetMainBundle:Task:resetNewComments }

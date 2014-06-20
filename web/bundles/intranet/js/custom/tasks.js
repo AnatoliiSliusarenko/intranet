@@ -16,6 +16,7 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 	$scope.tasks = [];
 	$scope.users = USERS;
 	$scope.topics = TOPICS;
+	$scope.tasksNotification = TASKS_NOTIFICATIONS;
 	
 	$scope.urlsTasksGet = JSON_URLS.tasksGet;
 	$scope.urlsTasksRemove = JSON_URLS.tasksRemove;
@@ -23,6 +24,35 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 	$scope.urlsTopicsShow = JSON_URLS.topicsShow;
 	$scope.urlsTasksAdd = JSON_URLS.tasksAdd;
 	$scope.urlsPostsTaskShow = JSON_URLS.urlsPostsTaskShow;
+	
+	
+	
+	function calculateNotifications()
+	{
+		$scope.tasksNotification = TASKS_NOTIFICATIONS;
+		_.map($scope.tasks, function(task){
+			task.newCommentsCount = 0;
+			_.map($scope.tasksNotification, function(tn){
+				if(tn.resourceid == task.id && tn.type=='task_comment')
+				{
+					task.newCommentsCount++;
+				}
+			});
+			if (typeof task.subtasks != 'undefined')
+			{
+				_.map(task.subtasks, function(subtask){
+					subtask.newCommentsCount = 0;
+					_.map($scope.tasksNotification, function(stn){
+						if(stn.resourceid==subtask.id)
+							subtask.newCommentsCount++;
+					});
+				});
+			}
+		});
+	}
+	$scope.$watch(function(){return TASKS_NOTIFICATIONS;}, function(input) {
+		calculateNotifications();
+    });
 	
 	function prepareTasks(tasks)
 	{
@@ -41,13 +71,19 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 				task.subtasks = groupedList[task.id]; 
 				delete groupedList[task.id];
 			}
-				
 		});
 		
 		for (key in groupedList)
 			topList = topList.concat(groupedList[key]);
-		
 		return topList;
+	}
+	
+	function resetTasks(task)
+	{
+			_.map($scope.tasksNotification, function(tn){
+				if(tn.resourceid==task.id)
+					task.newCommentsCount=0;
+			});
 	}
 	
 	function getTasks()
@@ -223,8 +259,30 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 					}
 			    });
 			
-			modalInstance.result.then(function (currentTask) {
-			}, function(){});
+            modalInstance.result.finally(function () {
+            	console.log("========<<<<<<,,", modalInstance);
+				if (modalInstance.result.response.result != null)
+				{
+					_.map($scope.tasks, function(t){
+						if(t.id = modalInstance.result.response.result)
+						{
+							t.newCommentsCount = 0;
+						}
+					});
+				}
+				clearInterval(refreshIntervalId);
+			});
+            var refreshIntervalId = setInterval(function(){
+            	if (modalInstance.result.response.result != null)
+			{
+            	console.log("========<<<<<<,,", modalInstance.result.response.result);
+				_.map($scope.tasks, function(t){
+					if(t.id = modalInstance.result.response.result)
+					{
+						t.newCommentsCount = 0;
+					}
+				});
+			} }, 2000);
 		});
 	}
 }])
@@ -344,12 +402,12 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 	$scope.posts = [];
 	$scope.urlsPostsTaskAdd = JSON_URLS.urlsPostsTaskAdd.replace('0', task.id);
 	$scope.urlsPostsTaskGet = JSON_URLS.urlsPostsTaskGet.replace('0', task.id);
+	$scope.urlsResetCommentsCount = JSON_URLS.urlsResetCommentsCount.replace('0', task.id);
 	$scope.avatarURL = JSON_URLS.avatar;
 	$scope.comment = "";
 	$scope.editingPost = null;
 	$scope.entityid = task.id;
 	$scope.userid = window.USER.id;
-	
 	$http({
 		method: "GET", 
 		url: $scope.urlsPostsTaskGet
@@ -364,7 +422,15 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 			$scope.containerTask.animate({ scrollTop: $scope.containerTask.height()+1900 },1000);
 		}
 			
-	})
+	});
+	
+	$http({
+		method: "GET", 
+		url: $scope.urlsResetCommentsCount
+		  })
+	.success(function(response){
+		$modalInstance.result.response = response;
+	});
 	
 	$scope.isEditable = function(post)
 	{
