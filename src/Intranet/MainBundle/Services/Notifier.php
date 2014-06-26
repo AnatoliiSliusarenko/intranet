@@ -87,7 +87,6 @@ class Notifier
     	   		    OR n.type = 'membership_user'
     	   		    OR n.type = 'membership_user_out'
     	   		    OR n.type = 'removed_office'
-    	   			OR n.type = 'task_comment'
     	   			OR n.type = 'task_assigned'")
            ->setParameter("userid", $this->user->getId())
            ->setParameter("destinationid", $office_id);

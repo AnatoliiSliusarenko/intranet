@@ -260,7 +260,7 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 			    });
 			
             modalInstance.result.finally(function () {
-            	console.log("========<<<<<<,,", modalInstance);
+            	console.log("========<<<<<<,,", modalInstance.result.response.result);
 				if (modalInstance.result.response.result != null)
 				{
 					_.map($scope.tasks, function(t){
