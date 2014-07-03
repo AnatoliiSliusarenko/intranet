@@ -49,7 +49,8 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 				});
 			}
 		});
-	}
+    	
+	};
 	$scope.$watch(function(){return TASKS_NOTIFICATIONS;}, function(input) {
 		calculateNotifications();
     });
@@ -259,8 +260,7 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 					}
 			    });
 			
-            modalInstance.result.finally(function () {
-            	console.log("========<<<<<<,,", modalInstance.result.response.result);
+            modalInstance.result.finally(function () {;
 				if (modalInstance.result.response.result != null)
 				{
 					_.map($scope.tasks, function(t){
@@ -275,7 +275,6 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
             var refreshIntervalId = setInterval(function(){
             	if (modalInstance.result.response.result != null)
 			{
-            	console.log("========<<<<<<,,", modalInstance.result.response.result);
 				_.map($scope.tasks, function(t){
 					if(t.id = modalInstance.result.response.result)
 					{

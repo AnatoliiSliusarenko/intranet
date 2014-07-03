@@ -28,7 +28,20 @@
 		</p>
 		</blockquote>
 		{% endif %}
-		
+		<div id='menu-block'>
+            <ul class='vertical-menu btn-block'>
+            	<li class='drop-link'><a href="#">Topics</a>
+            		<ul class='drop-block'>
+            			{% for topic in office.getTopTopics(em) %}
+            				{{include(
+         						'IntranetMainBundle:Topic:showTopicMenuTree.html.twig',
+           						{ 'topic': topic }
+        					)}}
+            			{% endfor %}
+            		</ul>
+            	</li>
+        	</ul>
+        </div>
 		{% if office.getUserid() != 0 %}
 		<div class="row chat-box">
   							<div class="col-md-4" ng-controller="MembersController">
@@ -203,7 +216,7 @@
                     	<a href="#" class="panel-minimize">Topics of this office</a>
                     </span> 
                 </h3>
-            </div>
+            </div>            
             <div class="panel-body" style="display:block;">
             	{% for topic in office.getTopTopics(em) %}
             		<a href="{{ url('intranet_show_topic', {topic_id: topic.getId()}) }}" class="btn btn-primary btn-block">{{ topic.name }}</a>
@@ -303,6 +316,7 @@
 					</div>
 				</div>
             </div>
+            
             <div class="panel-body">
 	          <table class="table users-table table-condensed table-hover" >
 	           <thead>
@@ -428,12 +442,13 @@
     var USER = {
     	    id: "{{ app.user.getId() }}"
    	};
-
+	
    	var ENTITY = {
    		   	id: "{{ office.id }}"
     };
    	
    	var TASKS_NOTIFICATIONS = [];
+   	
 	</script>
 	{% endif %}
 	

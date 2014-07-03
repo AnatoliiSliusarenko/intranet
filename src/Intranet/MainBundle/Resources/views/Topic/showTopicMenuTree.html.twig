@@ -1,0 +1,14 @@
+{% if (topic.getChildrenForOffice(em, office)) %}
+	<li class='drop-link'><a href="{{ url('intranet_show_topic', {topic_id: topic.getId()}) }}">{{topic.name}}</a>
+		<ul class='drop-block'>
+        {% for children in topic.getChildrenForOffice(em, office) %}
+			{{include(
+         		'IntranetMainBundle:Topic:showTopicMenuTree.html.twig',
+           		{ 'topic': children }
+        	)}}
+        {% endfor %}
+        </ul>
+		</li>
+{% else %}
+	<li class='drop-link'><a href="{{ url('intranet_show_topic', {topic_id: topic.getId()}) }}">{{topic.name}}</a>
+{% endif %}

@@ -22,37 +22,40 @@
 -------------------------------------------------------------------------------------------------- */
 /*	 Panels variables
 -------------------------------------------------------------------------------------------------- */
-html,
-body {
-  height: 100%;
+html,body {
+	height: 100%;
 }
+
 body {
-  color: #ffffff;
-  font-family: 'Open Sans';
-  background: #54728c;
+	color: #ffffff;
+	font-family: 'Open Sans';
+	background: #54728c;
 }
+
 .widget-holder {
-  -webkit-border-radius: 6px;
-  -moz-border-radius: 6px;
-  -ms-border-radius: 6px;
-  -o-border-radius: 6px;
-  border-radius: 6px;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  display: block;
-  margin-top: -255px;
-  margin-left: -205px;
-  width: 420px;
-  height: 400px;
-  text-align: center;
-  color: #495b79;
+	-webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+	-ms-border-radius: 6px;
+	-o-border-radius: 6px;
+	border-radius: 6px;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	display: block;
+	margin-top: -255px;
+	margin-left: -205px;
+	width: 420px;
+	height: 400px;
+	text-align: center;
+	color: #495b79;
 }
+
 i.fa {
-  font-size: 150px;
+	font-size: 150px;
 }
+
 .nav-input-search {
-  margin-right: 0px;
-  margin-top: 10px;
-  float: none;
+	margin-right: 0px;
+	margin-top: 10px;
+	float: none;
 }

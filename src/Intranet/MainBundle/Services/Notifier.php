@@ -8,6 +8,7 @@ use Intranet\MainBundle\Entity\Topic;
 use Intranet\MainBundle\Entity\Office;
 use Intranet\MainBundle\Entity\User;
 
+
 class Notifier
 {
 	private $user = null;
@@ -252,7 +253,6 @@ class Notifier
     	
     		$this->postNotification($user, $type, $resource->getId(), $destination->getId(), $message);
     	}
-    	 
     	return true;
     }
 }
