@@ -54,6 +54,7 @@ class TopicController extends Controller
     	
     	$parameters = array("users" => array_map(function($e){return $e->getInArray();}, $users), 
 					    	"topic" => $topic,
+					    	"em" => $em,
 					    	"availableStatus" => TaskStatus::getAllStatuses($em),
 					    	"breadcrumbs" => $breadcrumbs, 
 					    	'subtopics' => $subtopics, 

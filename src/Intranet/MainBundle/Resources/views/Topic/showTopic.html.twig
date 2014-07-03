@@ -40,7 +40,20 @@
 		</blockquote>
 		{% endif %}
 	</div>
-
+<div id='menu-block' style="width:300px">
+            <ul class='vertical-menu btn-block'>
+            	<li class='drop-link'><a href="#">Topics</a>
+            		<ul class='drop-block'>
+            			{% for topic in office.getTopTopics(em) %}
+            				{{include(
+         						'IntranetMainBundle:Topic:showTopicMenuTree.html.twig',
+           						{ 'topic': topic }
+        					)}}
+            			{% endfor %}
+            		</ul>
+            	</li>
+        	</ul>
+</div>
 </div>
 {% endblock %}
 
