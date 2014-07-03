@@ -6505,6 +6505,7 @@ th.hidden-lg,td.hidden-lg {
 /*  	vertical menu block	  */
 #menu-block {
   padding: 0;
+  width: 300;
   margin: 0;
 }
 .vertical-menu {
@@ -6520,7 +6521,6 @@ th.hidden-lg,td.hidden-lg {
   list-style: none;
   outline: none;
   background: #357ebd;
-  
   border: solid 1px #D6C2FF;
   border-radius: 5px;
   padding: 0;
@@ -6546,6 +6546,8 @@ th.hidden-lg,td.hidden-lg {
 }
 .drop-link:hover {
   background: #ccf;
+  -webkit-transition: 5s ease-out;
+  transition: 5s ease-out;
 }
 .drop-link:before {
   border: solid 14px;
