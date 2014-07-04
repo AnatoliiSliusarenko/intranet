@@ -6571,6 +6571,7 @@ th.hidden-lg,td.hidden-lg {
   margin-right: 0;
 }
 .drop-block {
+  visibility: hidden;
   display: block;
   position: absolute;
   z-index: 1000;
@@ -6587,12 +6588,14 @@ th.hidden-lg,td.hidden-lg {
   width: auto;
 }
 .drop-link:hover > .drop-block {
+  visibility: visible;
   top: 0;
   opacity: 1;
+  transition: opacity 1.0s ease;
 }
 .drop-link:not(:hover) > .drop-block {
+  visibility: hidden;
   top: 0;
   opacity: 0;
-  transition: 3000ms;
-   display:none;
+  transition: opacity 1.0s ease, visibility 1.0s ease;
 }
