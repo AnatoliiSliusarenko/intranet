@@ -6503,6 +6503,9 @@ th.hidden-lg,td.hidden-lg {
 	}
 }
 /*  	vertical menu block	  */
+.right {
+	float: right;
+}
 #menu-block {
   padding: 0;
   width: 300;
@@ -6544,10 +6547,6 @@ th.hidden-lg,td.hidden-lg {
   margin: 0;
   transition: margin 0.5s ease;
 }
-.right {
-	float: right;
-}
-
 .drop-link:hover {
   background: #ccf;
 }
@@ -6592,7 +6591,8 @@ th.hidden-lg,td.hidden-lg {
   opacity: 1;
 }
 .drop-link:not(:hover) > .drop-block {
-	top: 0;
+  top: 0;
   opacity: 0;
   transition: 3000ms;
+   display:none;
 }
