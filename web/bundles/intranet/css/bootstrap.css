@@ -6544,10 +6544,12 @@ th.hidden-lg,td.hidden-lg {
   margin: 0;
   transition: margin 0.5s ease;
 }
+.right {
+	float: right;
+}
+
 .drop-link:hover {
   background: #ccf;
-  -webkit-transition: 5s ease-out;
-  transition: 5s ease-out;
 }
 .drop-link:before {
   border: solid 14px;
@@ -6588,4 +6590,9 @@ th.hidden-lg,td.hidden-lg {
 .drop-link:hover > .drop-block {
   top: 0;
   opacity: 1;
+}
+.drop-link:not(:hover) > .drop-block {
+	top: 0;
+  opacity: 0;
+  transition: 3000ms;
 }

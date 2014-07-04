@@ -39,20 +39,54 @@
 		</p>
 		</blockquote>
 		{% endif %}
+		<div id='menu-block' style="width:300px">
+       	<ul class='vertical-menu btn-block transition3'>
+           	<li class='drop-link'><a href="#">Topics </a>
+           		<ul class='drop-block'>
+           			{% for topic in office.getTopTopics(em) %}
+           				{{include(
+       						'IntranetMainBundle:Topic:showTopicMenuTree.html.twig',
+       						{ 'topic': topic }
+       					)}}
+           			{% endfor %}
+           		</ul>
+           	</li>
+    	</ul>
 	</div>
-<div id='menu-block' style="width:300px">
-            <ul class='vertical-menu btn-block'>
-            	<li class='drop-link'><a href="#">Topics</a>
-            		<ul class='drop-block'>
-            			{% for topic in office.getTopTopics(em) %}
-            				{{include(
-         						'IntranetMainBundle:Topic:showTopicMenuTree.html.twig',
-           						{ 'topic': topic }
-        					)}}
-            			{% endfor %}
-            		</ul>
-            	</li>
-        	</ul>
+	</div>
+	<div class="panel panel-cascade">
+		<div class="panel-heading">
+    	    <h3 class="panel-title">
+               	<span>
+                   	<a href="#" class="panel-minimize">Add New Subtopic</a>
+                </span>  
+            </h3>
+        </div>
+        <div class="panel-body" style="{% if errorTopic is defined %}{{ 'display:block;' }}{% else %}{{ 'display:none;' }}{% endif %}">
+        <form action="{{ url('intranet_add_topic', {topic_id: topic.getId()}) }}" class="form-horizontal" role="form" method="post">
+        <div class="form-group">
+        <label for="inputEmail1" class="col-lg-2 col-md-3 control-label">Topic Name</label>
+        <div class="col-lg-10 col-md-9">
+        	<input type="text" name="name" class="form-control form-cascade-control" id="inputEmail1" placeholder="Type topic name here" value="{% if nameTopic is defined %}{{ nameTopic }}{% endif %}" required>
+        </div>
+	</div>
+    <div class="form-group">
+    	<label for="inputEmail1" class="col-lg-2 col-md-3 control-label">Topic Description</label>
+    	<div class="col-lg-10 col-md-9">
+    		<input type="text" name="description" class="form-control form-cascade-control" id="inputEmail1" placeholder="Type topic description here" value="{% if descriptionTopic is defined %}{{ descriptionTopic }}{% endif %}" required>
+    	</div>
+    </div>
+	<input type="hidden" value="{{ topic.getOfficeid() }}" name="officeid" />
+	{% if errorTopic is defined %}
+   		<div class="alert alert-danger">
+			{{ errorTopic }}
+   		</div>
+    {% endif %}
+    <div class="form-actions">
+    	<input type="submit" value="Save New Topic" class="btn bg-primary btn-block text-white">
+	</div>
+   		</form>
+    </div>
 </div>
 </div>
 {% endblock %}
@@ -130,57 +164,8 @@
  <div class="row">
 	<div class="col-md-12">
 		{% if subtopics|length > 0 %}
-		<div class="panel panel-cascade">
-			<div class="panel-heading">
-                <h3 class="panel-title">
-                	<span>
-                    	<a href="#" class="panel-minimize">Subtopics</a>
-                    </span>  
-                </h3>
-            </div>
-            <div class="panel-body" style="display:none;">
-            	{% for topic in subtopics %}
-            		<a href="{{ url('intranet_show_topic', {topic_id: topic.id}) }}" class="btn btn-primary btn-block">{{ topic.name }} ({{ topic.getOffice().name }})</a>
-            	{% endfor %}
-            	
-            </div>
-		</div>
-		{% endif %}
-		<div class="panel panel-cascade">
-			<div class="panel-heading">
-                <h3 class="panel-title">
-                	<span>
-                    	<a href="#" class="panel-minimize">Add New Subtopic</a>
-                    </span>  
-                </h3>
-            </div>
-            <div class="panel-body" style="{% if errorTopic is defined %}{{ 'display:block;' }}{% else %}{{ 'display:none;' }}{% endif %}">
-            	<form action="{{ url('intranet_add_topic', {topic_id: topic.getId()}) }}" class="form-horizontal" role="form" method="post">
-            		<div class="form-group">
-                		<label for="inputEmail1" class="col-lg-2 col-md-3 control-label">Topic Name</label>
-                		<div class="col-lg-10 col-md-9">
-                 			<input type="text" name="name" class="form-control form-cascade-control" id="inputEmail1" placeholder="Type topic name here" value="{% if nameTopic is defined %}{{ nameTopic }}{% endif %}" required>
-               			</div>
-             		</div>
-             		<div class="form-group">
-                		<label for="inputEmail1" class="col-lg-2 col-md-3 control-label">Topic Description</label>
-                		<div class="col-lg-10 col-md-9">
-                 			<input type="text" name="description" class="form-control form-cascade-control" id="inputEmail1" placeholder="Type topic description here" value="{% if descriptionTopic is defined %}{{ descriptionTopic }}{% endif %}" required>
-               			</div>
-             		</div>
-             		<input type="hidden" value="{{ topic.getOfficeid() }}" name="officeid" />
-             		{% if errorTopic is defined %}
-             		<div class="alert alert-danger">
-               			{{ errorTopic }}
-             		</div>
-             		{% endif %}
-             		<div class="form-actions">
-             			<input type="submit" value="Save New Topic" class="btn bg-primary btn-block text-white">
-             		</div>
-            	</form>
-            </div>
-		</div>
 		
+		{% endif %}
 		<div class="panel panel-cascade" ng-controller="TasksController">
 			<div class="panel-heading">
                 <h3 class="panel-title">

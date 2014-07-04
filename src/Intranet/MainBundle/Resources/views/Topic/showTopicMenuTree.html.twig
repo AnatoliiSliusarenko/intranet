@@ -1,5 +1,6 @@
-{% if (topic.getChildrenForOffice(em, office)) %}
-	<li class='drop-link'><a href="{{ url('intranet_show_topic', {topic_id: topic.getId()}) }}">{{topic.name}} ></a>
+{% set children =  topic.getChildrenForOffice(em, office) %}
+<li class='drop-link'><a href="{{ url('intranet_show_topic', {topic_id: topic.getId()}) }}">{{topic.name}}{% if (children|length > 0 ) %} <i class="fa fa-share right"></i>{% endif %}</a>
+		{% if ( children|length > 0 ) %}
 		<ul class='drop-block'>
         {% for children in topic.getChildrenForOffice(em, office) %}
 			{{include(
@@ -8,7 +9,5 @@
         	)}}
         {% endfor %}
         </ul>
+        {% endif %}
 		</li>
-{% else %}
-	<li class='drop-link'><a href="{{ url('intranet_show_topic', {topic_id: topic.getId()}) }}">{{topic.name}}</a>
-{% endif %}
