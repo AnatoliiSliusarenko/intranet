@@ -3,7 +3,7 @@
 {% block title %}{{ office.name }}{% endblock %}
 
 {% block breadcrumbs %}
-<ul class="breadcrumb">
+<ul class="breadcrumb fix" style="width:1600px; margin-top:90px; z-index:9999">
 	{% for item in breadcrumbs %}
 		<li><a href="{{ url('intranet_show_office', {office_id: item.getId()}) }}">{{ item.name }}</a></li>
 	{% endfor %}
@@ -14,7 +14,8 @@
 {% block pageheader %}   
 <div class="row">
 	<div class="col-md-12">
-		<h3 class="page-header"><i class="fa fa-sitemap"></i> {{ office.name }} <i class="fa fa-info-circle animated bounceInDown show-info"></i> {% if (office.getUserid() != 0 and office.getUserid() == app.user.getId()) %}<i class="fa fa-times-circle animated bounceInDown show-danger"></i>{% endif %} </h3>
+	<div class="panel fix toppanel">
+		<h3 class="page-header "><i class="fa fa-sitemap"></i> {{ office.name }} <i class="fa fa-info-circle animated bounceInDown show-info"></i> {% if (office.getUserid() != 0 and office.getUserid() == app.user.getId()) %}<i class="fa fa-times-circle animated bounceInDown show-danger"></i>{% endif %} </h3>
 
 		<blockquote class="page-information hidden">
 		<p>
@@ -28,7 +29,7 @@
 		</p>
 		</blockquote>
 		{% endif %}
-		<div  id='menu-block' style="width:300px">
+				<div  id='menu-block'>
             <ul class='vertical-menu btn-block'>
             	<li class='drop-link'><a href="#">Topics</a>
             		<ul class='drop-block'>
@@ -42,6 +43,7 @@
             	</li>
         	</ul>
         </div>
+
         <div class="panel panel-cascade">
 			<div class="panel-heading">
                 <h3 class="panel-title">
@@ -75,9 +77,12 @@
              		</div>
             	</form>
             </div>
+            </div>
+		</div>
 		</div>
 		{% if office.getUserid() != 0 %}
-		<div class="row chat-box">
+		<div style="margin-top:300px">
+		<div class="row chat-box" style="display: table-row-group">
   							<div class="col-md-4" ng-controller="MembersController">
   								<div class="panel panel-cascade contacts-box" >
   									<div class="panel-heading">
@@ -175,6 +180,7 @@
   								</div>
   							</div>
   						</div>
+  					</div>
 		{% endif %}
 		
 		{% if (office.getUserid() == 0 or office.getUserid() == app.user.getId()) %}
@@ -221,6 +227,7 @@
              		</div>
             	</form>
             </div>
+		</div>
 		</div>
 		{% endif %}
 		{% if offices|length > 0 %}
@@ -394,7 +401,7 @@
 		</div>
 		{% endif %}
 	</div>
-</div>
+
 {% endblock %}
 {% block content %}
 {% endblock %}

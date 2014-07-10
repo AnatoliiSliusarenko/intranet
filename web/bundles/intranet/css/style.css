@@ -69,7 +69,7 @@
 	.left-sidebar {
 		height: 100%;
 		min-height: 100%;
-		position: absolute;
+		position: fixed;
 		left: -280px;
 	}
 	.content {
@@ -365,6 +365,7 @@ body {
 
 .navbar .user-menu {
 	margin-right: 50px !important;
+	margin-top: 10px !important;
 }
 
 .navbar .user-menu .open>a,.navbar .user-menu .open>a:hover,.navbar .user-menu .open>a:focus
@@ -659,6 +660,7 @@ body {
 
 .sidebar-holder {
 	padding: 25px 0px;
+	margin-top:90px;
 }
 
 .sidebar-holder .nav li.nav-toggle {

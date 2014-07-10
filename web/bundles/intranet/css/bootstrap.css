@@ -3887,11 +3887,12 @@ textarea.input-group-sm>.form-control,textarea.input-group-sm>.input-group-addon
 @media ( min-width : 768px) {
 	.navbar-header {
 		float: left;
+		heigth:70px !important;
 	}
 }
 
 .navbar-collapse {
-	max-height: 340px;
+	max-height: 100px;
 	padding-right: 15px;
 	padding-left: 15px;
 	overflow-x: visible;
@@ -4410,6 +4411,7 @@ textarea.input-group-sm>.form-control,textarea.input-group-sm>.input-group-addon
 }
 
 .breadcrumb {
+	margin-top: 90px;
 	padding: 8px 15px;
 	margin-bottom: 20px;
 	list-style: none;
@@ -5152,6 +5154,7 @@ a.list-group-item.active .list-group-item-text,a.list-group-item.active:hover .l
 
 .panel-body {
 	padding: 15px;
+	
 }
 
 .panel-body:before,.panel-body:after {
@@ -6507,6 +6510,7 @@ th.hidden-lg,td.hidden-lg {
 	float: right;
 }
 #menu-block {
+  margin-top:150px;	
   padding: 0;
   width: 300;
   margin: 0;
@@ -6598,4 +6602,13 @@ th.hidden-lg,td.hidden-lg {
   top: 0;
   opacity: 0;
   transition: opacity 3.0s ease, visibility 1.0s ease;
+}
+.fix{
+	position:fixed;
+}
+.toppanel{
+	width:1600px; 
+	margin-top:120px; 
+	height:150px;
+	z-index:9999
 }
