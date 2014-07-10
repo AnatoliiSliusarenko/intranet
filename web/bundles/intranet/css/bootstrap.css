@@ -6607,8 +6607,13 @@ th.hidden-lg,td.hidden-lg {
 	position:fixed;
 }
 .toppanel{
-	width:1600px; 
+	width:100%; 
 	margin-top:120px; 
 	height:150px;
+	z-index:9999
+}
+.topstyle{
+	width:100%; 
+	margin-top:90px; 
 	z-index:9999
 }

@@ -3,7 +3,7 @@
 {% block title %}{{ office.name }}{% endblock %}
 
 {% block breadcrumbs %}
-<ul class="breadcrumb fix" style="width:1600px; margin-top:90px; z-index:9999">
+<ul class="breadcrumb fix topstyle">
 	{% for item in breadcrumbs %}
 		<li><a href="{{ url('intranet_show_office', {office_id: item.getId()}) }}">{{ item.name }}</a></li>
 	{% endfor %}
