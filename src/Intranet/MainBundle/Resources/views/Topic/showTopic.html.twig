@@ -13,18 +13,20 @@
 	<li class="active">{{ topic.name }}</li>
 </ul>
 {% endblock %}
-
 {% block search %}
-<div class="form-group hiddn-minibar pull-right">
+<div class="panel">
+<div class="form-group hiddn-minibar pull-right" >
 	<input type="text" class="form-control form-cascade-control nav-input-search" size="20" placeholder="Search through discussion" />
 
 	<span class="input-icon fui-search"></span>
+</div>
 </div>
 {% endblock %}
 
 {% block pageheader %}
 <div class="row">
-	<div class="col-md-12">
+	<div class="col-md-12 ">
+	<div class="panel">
 		<h3 class="page-header"><i class="fa fa-comment"></i> {{ topic.name }} <i class="fa fa-info-circle animated bounceInDown show-info"></i> {% if (topic.getUserid() != 0 and (is_granted('ROLE_ADMIN') or topic.getUserid() == app.user.getId())) %}<i class="fa fa-times-circle animated bounceInDown show-danger"></i>{% endif %} </h3>
 
 		<blockquote class="page-information hidden">
@@ -39,7 +41,8 @@
 		</p>
 		</blockquote>
 		{% endif %}
-		<div id='menu-block' style="width:300px">
+		<div>
+				<div id='menu-block'>
        	<ul class='vertical-menu btn-block transition3'>
            	<li class='drop-link'><a href="#">Topics </a>
            		<ul class='drop-block'>
@@ -53,6 +56,8 @@
            	</li>
     	</ul>
 	</div>
+		</div>
+
 	</div>
 	<div class="panel panel-cascade">
 		<div class="panel-heading">
@@ -89,8 +94,8 @@
     </div>
 </div>
 </div>
+</div>
 {% endblock %}
-
 {% block content %}
 <div class="row">
 	<div class="col-md-12">
