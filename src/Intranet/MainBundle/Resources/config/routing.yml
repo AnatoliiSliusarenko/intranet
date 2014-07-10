@@ -128,10 +128,14 @@ intranet_post_task_add:
     pattern:  /posts/task/{task_id}/add/
     defaults: { _controller: IntranetMainBundle:PostTask:addPost }
     
-intranet_log_show:
-    pattern:  /logs/
-    defaults: { _controller: IntranetMainBundle:Log:showLogs }
+intranet_task_activity_logs_show:
+    pattern:  /taskActivityLogs/
+    defaults: { _controller: IntranetMainBundle:TaskActivityLog:showTaskActivityLogs }
     
 intranet_task_resetNewCommentsCount:
     pattern:  /task/{task_id}/resetNewCommentsCount/
     defaults: { _controller: IntranetMainBundle:Task:resetNewComments }
+    
+intranet_user_settings:
+    pattern:  /user/settings/
+    defaults: { _controller: IntranetMainBundle:UserSettings:index }

@@ -131,6 +131,13 @@ class Task
      */
     private $posts;
     
+    /**
+     * @ORM\OneToMany(targetEntity="TaskActivityLog", mappedBy="task")
+     * @ORM\OrderBy({"loged" = "DESC"})
+     * @var array
+     */
+    private $taskActivityLogs;
+    
     private $subTasks = null;
     
     public function getSubTasks($em)
@@ -672,4 +679,37 @@ class Task
         return $this->statusUpdated;
     }
     
+
+    /**
+     * Add taskActivityLogs
+     *
+     * @param \Intranet\MainBundle\Entity\TaskActivityLog $taskActivityLogs
+     * @return Task
+     */
+    public function addTaskActivityLog(\Intranet\MainBundle\Entity\TaskActivityLog $taskActivityLogs)
+    {
+        $this->taskActivityLogs[] = $taskActivityLogs;
+
+        return $this;
+    }
+
+    /**
+     * Remove taskActivityLogs
+     *
+     * @param \Intranet\MainBundle\Entity\TaskActivityLog $taskActivityLogs
+     */
+    public function removeTaskActivityLog(\Intranet\MainBundle\Entity\TaskActivityLog $taskActivityLogs)
+    {
+        $this->taskActivityLogs->removeElement($taskActivityLogs);
+    }
+
+    /**
+     * Get taskActivityLogs
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getTaskActivityLogs()
+    {
+        return $this->taskActivityLogs;
+    }
 }

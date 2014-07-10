@@ -69,8 +69,8 @@ swiftmailer:
     spool:     { type: memory }
 
 services:
-    intranet.loger:
-        class: Intranet\MainBundle\Services\Loger
+    intranet.taskActivityLoger:
+        class: Intranet\MainBundle\Services\TaskActivityLoger
         arguments: 
             - @security.context
             - @doctrine.orm.entity_manager
