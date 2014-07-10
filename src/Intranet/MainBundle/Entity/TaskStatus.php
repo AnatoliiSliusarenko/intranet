@@ -58,6 +58,18 @@ class TaskStatus
      * @ORM\Column(name="initial", type="boolean")
      */
     private $initial;
+    
+    /**
+     * @var boolean
+     * @ORM\Column(name="calc_time_start", type="boolean")
+     */
+    private $calcTimeStart;
+    
+    /**
+     * @var boolean
+     * @ORM\Column(name="calc_time_stop", type="boolean")
+     */
+    private $calcTimeStop;
 
     /**
      * @ORM\ManyToMany(targetEntity="Role", inversedBy="taskStatuses")
@@ -406,5 +418,51 @@ class TaskStatus
     		if ($user->hasRole($role)) return true;
     	}
     	return false;
+    }
+
+    /**
+     * Set calcTimeStart
+     *
+     * @param boolean $calcTimeStart
+     * @return TaskStatus
+     */
+    public function setCalcTimeStart($calcTimeStart)
+    {
+        $this->calcTimeStart = $calcTimeStart;
+
+        return $this;
+    }
+
+    /**
+     * Get calcTimeStart
+     *
+     * @return boolean 
+     */
+    public function getCalcTimeStart()
+    {
+        return $this->calcTimeStart;
+    }
+
+    /**
+     * Set calcTimeStop
+     *
+     * @param boolean $calcTimeStop
+     * @return TaskStatus
+     */
+    public function setCalcTimeStop($calcTimeStop)
+    {
+        $this->calcTimeStop = $calcTimeStop;
+
+        return $this;
+    }
+
+    /**
+     * Get calcTimeStop
+     *
+     * @return boolean 
+     */
+    public function getCalcTimeStop()
+    {
+        return $this->calcTimeStop;
     }
 }

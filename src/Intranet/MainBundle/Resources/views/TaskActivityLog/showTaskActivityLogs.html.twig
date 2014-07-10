@@ -1,21 +1,21 @@
 {% extends 'IntranetMainBundle:Index:index.html.twig' %}
 
-{% block title %}Logs{% endblock %}
+{% block title %}Task Activity Logs{% endblock %}
 
 {% block breadcrumbs %}
 <ul class="breadcrumb">
-	<li class="active">Logs</li>
+	<li class="active">Task Activity Logs</li>
 </ul>
 {% endblock %}
 
 {% block pageheader %}
 <div ng-app="Intranet" class="row">
 	<div class="col-md-12">
-		<h3 class="page-header"><i class="fa fa-exclamation-triangle animated slide"></i> Logs (for testing...) <i class="fa fa-info-circle animated bounceInDown show-info"></i></h3>
+		<h3 class="page-header"><i class="fa fa-exclamation-triangle animated slide"></i>Task Activity Logs (for testing...) <i class="fa fa-info-circle animated bounceInDown show-info"></i></h3>
 
 		<blockquote class="page-information hidden">
 		<p>
-			Here you can view all activity on Intranet...
+			Here you can view task activity on Intranet...
 		</p>
 		</blockquote>
 	</div>
@@ -29,8 +29,8 @@
 	           		<tr>
 			             <th  class="visible-lg">ID</th>
 			             <th  class="visible-lg">User</th>
-			             <th class="visible-lg">ResourceId</th>
-			             <th class="visible-lg">DestinationId</th>
+			             <th class="visible-lg">Task</th>
+			             <th class="visible-lg">Resource</th>
 			             <th class="visible-lg">Type</th>
 			             <th class="visible-lg">Loged</th>
 	           		</tr>
@@ -40,8 +40,8 @@
 	           <tr>
 			   		<td class="visible-lg">{{ log.getId() }}</td>
 		            <td class="visible-lg">{{ log.getUser().getSurname() ~ ' ' ~ log.getUser().getName() ~ ' (ID = ' ~ log.getUserid() ~ ')' }}</td>
-		            <td class="visible-lg">{{ log.getResourceid() }}</td>
-		            <td class="visible-lg">{{ log.getDestinationid() }}</td>
+		            <td class="visible-lg">{{ log.getTask().getName() ~ ' (ID = ' ~ log.getTaskid() ~ ')' }}</td>
+		            <td class="visible-lg">{% if log.resourceLabel is defined %}{{ log.resourceLabel }}{% endif %}{% if log.getResourceid() is not null %}{{ ' (ID = ' ~ log.getResourceid() ~ ')' }}{% endif %}</td>
 		            <td class="visible-lg">{{ log.getType() }}</td>
 		            <td class="visible-lg">{{ log.getLoged()|date('Y-m-d H:i:s') }}</td>
 	           </tr>

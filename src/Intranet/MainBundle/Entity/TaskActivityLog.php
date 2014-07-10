@@ -5,12 +5,12 @@ namespace Intranet\MainBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Log
+ * TaskActivityLog
  *
- * @ORM\Table(name="logs")
+ * @ORM\Table(name="task_activity_logs")
  * @ORM\Entity
  */
-class Log 
+class TaskActivityLog 
 {
     /**
      * @var integer
@@ -29,7 +29,7 @@ class Log
     private $userid;
     
     /**
-     * @ORM\ManyToOne(targetEntity="User", inversedBy="logs")
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="taskActivityLogs")
      * @ORM\JoinColumn(name="userid")
      * @var User
      */
@@ -38,16 +38,23 @@ class Log
     /**
      * @var integer
      *
-     * @ORM\Column(name="resourceid", type="integer")
+     * @ORM\Column(name="taskid", type="integer")
      */
-    private $resourceid;
+    private $taskid;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Task", inversedBy="taskActivityLogs")
+     * @ORM\JoinColumn(name="taskid")
+     * @var Task
+     */
+    private $task;
     
     /**
      * @var integer
      *
-     * @ORM\Column(name="destinationid", type="integer")
+     * @ORM\Column(name="resourceid", type="integer")
      */
-    private $destinationid;
+    private $resourceid;
     
     /**
      * @var string
@@ -77,7 +84,7 @@ class Log
      * Set userid
      *
      * @param integer $userid
-     * @return Log
+     * @return TaskActivityLog
      */
     public function setUserid($userid)
     {
@@ -100,7 +107,7 @@ class Log
      * Set resourceid
      *
      * @param integer $resourceid
-     * @return Log
+     * @return TaskActivityLog
      */
     public function setResourceid($resourceid)
     {
@@ -120,33 +127,10 @@ class Log
     }
 
     /**
-     * Set destinationid
-     *
-     * @param integer $destinationid
-     * @return Log
-     */
-    public function setDestinationid($destinationid)
-    {
-        $this->destinationid = $destinationid;
-
-        return $this;
-    }
-
-    /**
-     * Get destinationid
-     *
-     * @return integer 
-     */
-    public function getDestinationid()
-    {
-        return $this->destinationid;
-    }
-
-    /**
      * Set type
      *
      * @param string $type
-     * @return Log
+     * @return TaskActivityLog
      */
     public function setType($type)
     {
@@ -169,7 +153,7 @@ class Log
      * Set loged
      *
      * @param \DateTime $loged
-     * @return Log
+     * @return TaskActivityLog
      */
     public function setLoged($loged)
     {
@@ -192,7 +176,7 @@ class Log
      * Set user
      *
      * @param \Intranet\MainBundle\Entity\User $user
-     * @return Log
+     * @return TaskActivityLog
      */
     public function setUser(\Intranet\MainBundle\Entity\User $user = null)
     {
@@ -209,5 +193,51 @@ class Log
     public function getUser()
     {
         return $this->user;
+    }
+
+    /**
+     * Set taskid
+     *
+     * @param integer $taskid
+     * @return TaskActivityLog
+     */
+    public function setTaskid($taskid)
+    {
+        $this->taskid = $taskid;
+
+        return $this;
+    }
+
+    /**
+     * Get taskid
+     *
+     * @return integer 
+     */
+    public function getTaskid()
+    {
+        return $this->taskid;
+    }
+
+    /**
+     * Set task
+     *
+     * @param \Intranet\MainBundle\Entity\Task $task
+     * @return TaskActivityLog
+     */
+    public function setTask(\Intranet\MainBundle\Entity\Task $task = null)
+    {
+        $this->task = $task;
+
+        return $this;
+    }
+
+    /**
+     * Get task
+     *
+     * @return \Intranet\MainBundle\Entity\Task 
+     */
+    public function getTask()
+    {
+        return $this->task;
     }
 }

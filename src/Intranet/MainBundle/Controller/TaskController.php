@@ -87,6 +87,12 @@ class TaskController extends Controller
     		
     		
     		$status = ($statusid != null) ? $em->getRepository('IntranetMainBundle:TaskStatus')->find($statusid) : null;
+    		if ($status == null)
+    		{
+    			$response = new Response(json_encode(array("result" => null, "message" => 'Status not found!')));
+    			$response->headers->set('Content-Type', 'application/json');
+    			return $response;
+    		}
     		$task->setStatus($status);
     		
     		$task->setOffice($office);
@@ -103,7 +109,7 @@ class TaskController extends Controller
     		$em->persist($task);
     		$em->flush();
     		
-    		//fire notifications
+    		$this->get('intranet.taskActivityLoger')->addChangesLog($task);
     		
     		$response = new Response(json_encode(array("result" => $task->getInArray())));
 			$response->headers->set('Content-Type', 'application/json');
@@ -141,9 +147,11 @@ class TaskController extends Controller
 			$response->headers->set('Content-Type', 'application/json');
 			return $response;
 		}
-    	
+		
     	if ($request->getMethod() == 'POST')
     	{
+    		$this->get('intranet.taskActivityLoger')->setOldStateOfTask($task);
+    		
     		$data = json_decode(file_get_contents("php://input"));
     		$taskData = (object) $data;
     		
@@ -152,7 +160,7 @@ class TaskController extends Controller
     		$priority = $taskData->priority;
     		$estimated = $taskData->estimated;
     		$statusid = (isset($taskData->statusid) && ($taskData->statusid != 0)) ? $taskData->statusid : null;
-    		$userid = (isset($taskData->userid)) ? $taskData->userid : null;
+    		$userid = (isset($taskData->userid) && ($taskData->userid != 'null')) ? $taskData->userid : null;
     		$parentid = (isset($taskData->parentid)) ? $taskData->parentid : null;
     		$topics = (isset($taskData->topicsIds)) ? $taskData->topicsIds : array();
     		
@@ -181,7 +189,7 @@ class TaskController extends Controller
     		$em->persist($task);
     		$em->flush();
     		
-    		//fire notifications
+    		$this->get('intranet.taskActivityLoger')->addChangesLog($task);
     		
     		$response = new Response(json_encode(array("result" => $task->getInArray())));
 			$response->headers->set('Content-Type', 'application/json');

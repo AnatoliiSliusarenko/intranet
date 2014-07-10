@@ -112,11 +112,11 @@ class User implements UserInterface, \Serializable
 	private $notifications;
 	
 	/**
-	 * @ORM\OneToMany(targetEntity="Log", mappedBy="user")
+	 * @ORM\OneToMany(targetEntity="TaskActivityLog", mappedBy="user")
 	 * @ORM\OrderBy({"loged" = "DESC"})
 	 * @var array
 	 */
-	private $logs;
+	private $taskActivityLogs;
     
 	/**
 	 * @var string
@@ -139,6 +139,9 @@ class User implements UserInterface, \Serializable
 	 * @ORM\OneToMany(targetEntity="PostTask", mappedBy="user")
 	 */
 	private $postsTask;
+	
+	//variable for settings
+	private $globalSettings;
 	
 	public function __construct()
 	{
@@ -846,36 +849,36 @@ class User implements UserInterface, \Serializable
     }
 
     /**
-     * Add log
+     * Add taskActivityLog
      *
-     * @param \Intranet\MainBundle\Entity\Log $log
+     * @param \Intranet\MainBundle\Entity\TaskActivityLog $taskActivityLog
      * @return User
      */
-    public function addLog(\Intranet\MainBundle\Entity\Log $log)
+    public function addTaskActivityLog(\Intranet\MainBundle\Entity\TaskActivityLog $taskActivityLog)
     {
-        $this->logs[] = $log;
+        $this->taskActivityLogs[] = $taskActivityLog;
 
         return $this;
     }
 
     /**
-     * Remove log
+     * Remove $taskActivityLog
      *
-     * @param \Intranet\MainBundle\Entity\Log $log
+     * @param \Intranet\MainBundle\Entity\TaskActivityLog $taskActivityLog
      */
-    public function removeLog(\Intranet\MainBundle\Entity\Log $log)
+    public function removeTaskActivityLog(\Intranet\MainBundle\Entity\TaskActivityLog $taskActivityLog)
     {
-        $this->logs->removeElement($log);
+        $this->taskActivityLogs->removeElement($taskActivityLog);
     }
 
     /**
-     * Get logs
+     * Get taskActivityLogs
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getLogs()
+    public function getTaskActivityLogs()
     {
-        return $this->logs;
+        return $this->taskActivityLogs;
     }
 
     /**
