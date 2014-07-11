@@ -43,7 +43,7 @@ class TaskActivityLoger
     	$this->oldStateOfTask = clone $task;
     }
     
-    public function addChangesLog($newStateOfTask, $resource = null)
+    public function addChangesLog($newStateOfTask = null, $resource = null)
     {
     	if ($this->oldStateOfTask == null)
     		$this->postLog($newStateOfTask, 'task-created');

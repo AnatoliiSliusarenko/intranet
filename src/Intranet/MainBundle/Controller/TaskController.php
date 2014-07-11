@@ -226,6 +226,7 @@ class TaskController extends Controller
     	}
     	$em->remove($task);
     	$em->flush();
+    	
     	$response = new Response(json_encode(array("result" => $task_id)));
     	$response->headers->set('Content-Type', 'application/json');
     	return $response;
