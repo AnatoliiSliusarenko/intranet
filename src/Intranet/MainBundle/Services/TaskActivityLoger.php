@@ -53,7 +53,7 @@ class TaskActivityLoger
     			$this->postLog($newStateOfTask, 'status-changed', $newStateOfTask->getStatusid());
     	
     	if ((($this->oldStateOfTask == null) && ($newStateOfTask->getUserid() != null)) 
-    		|| ($this->oldStateOfTask->getUserid() != $newStateOfTask->getUserid()))
+    		|| (($this->oldStateOfTask != null) && ($this->oldStateOfTask->getUserid() != $newStateOfTask->getUserid())))
     			$this->postLog($newStateOfTask, 'user-changed', $newStateOfTask->getUserid());
     	
     	$this->oldStateOfTask = null;
