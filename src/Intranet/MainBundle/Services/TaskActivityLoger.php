@@ -8,9 +8,7 @@ use Intranet\MainBundle\Entity\TaskActivityLog;
 class TaskActivityLoger
 {
 	private $user = null;
-	
 	private $em = null;
-	
 	private $oldStateOfTask = null;
 	
     private $availableTypes = array(
@@ -19,7 +17,7 @@ class TaskActivityLoger
     	'task-created'
     );
     
-    private function postLog($task, $type, $resourceid = null)
+    private function postLog($task, $type, $resourceid = 0)
     {
     	$taskActivityLog = new TaskActivityLog();
     	$taskActivityLog->setUserid($this->user->getId());
@@ -65,35 +63,12 @@ class TaskActivityLoger
     
     public function getAllLogs()
     {
-    	$logs = $this->em->getRepository('IntranetMainBundle:TaskActivityLog')
+    	return $this->em->getRepository('IntranetMainBundle:TaskActivityLog')
     	->createQueryBuilder('l')
     	->select()
-    	->orderBy('l.loged', 'DESC')
+    	->orderBy('l.id', 'DESC')
     	->getQuery()
     	->getResult();
-    	
-    	array_map(function($log){
-    		switch ($log->getType())
-    		{
-    			case 'status-changed':{
-    				$status = $this->em->getRepository('IntranetMainBundle:TaskStatus')->find($log->getResourceid());
-    				if ($status != null)
-    					$log->resourceLabel = $status->getLabel();
-    				break;
-    			}
-    			case 'user-changed':{
-    				if ($log->getResourceid() != null)
-    				{
-    					$user = $this->em->getRepository('IntranetMainBundle:User')->find($log->getResourceid());
-    					if ($user != null)
-    						$log->resourceLabel = $user->getSurname().' '.$user->getName();
-    				}
-    				break;
-    			}
-    		}
-    	}, $logs);
-    	
-    	return $logs;
     }
     
     public function getMyLogs()
