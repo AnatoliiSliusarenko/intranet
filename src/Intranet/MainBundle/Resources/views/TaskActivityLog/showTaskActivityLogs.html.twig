@@ -30,7 +30,7 @@
 			             <th  class="visible-lg">ID</th>
 			             <th  class="visible-lg">User</th>
 			             <th class="visible-lg">Task</th>
-			             <th class="visible-lg">Resourceid</th>
+			             <th class="visible-lg">Resource</th>
 			             <th class="visible-lg">Type</th>
 			             <th class="visible-lg">Loged</th>
 	           		</tr>
@@ -39,9 +39,11 @@
 	           {% for log in logs %}
 	           <tr>
 			   		<td class="visible-lg">{{ log.getId() }}</td>
-		            <td class="visible-lg">{{ log.getUser().getSurname() ~ ' ' ~ log.getUser().getName() ~ ' (ID = ' ~ log.getUserid() ~ ')' }}</td>
-		            <td class="visible-lg">{{ log.getTask().getName() ~ ' (ID = ' ~ log.getTaskid() ~ ')' }}</td>
-		            <td class="visible-lg">{{ log.getResourceid() }}</td>
+		            <td class="visible-lg">{{ log.getUser().getSurname() ~ ' ' ~ log.getUser().getName() ~ ' (' ~ log.getUserid() ~ ')' }}</td>
+		            <td class="visible-lg">{{ log.getTask().getName() ~ ' (' ~ log.getTaskid() ~ ')' }}</td>
+		            
+		            <td class="visible-lg">{{ log.displayLabel ~ ' (' ~ log.getResourceid() ~ ')' }}</td>
+		            
 		            <td class="visible-lg">{{ log.getType() }}</td>
 		            <td class="visible-lg">{{ log.getLoged()|date('Y-m-d H:i:s') }}</td>
 	           </tr>

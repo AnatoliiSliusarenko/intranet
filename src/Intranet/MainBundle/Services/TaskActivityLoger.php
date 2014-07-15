@@ -14,7 +14,13 @@ class TaskActivityLoger
     private $availableTypes = array(
     	'status-changed',
     	'user-changed',
-    	'task-created'
+    	'task-created', 
+    	'task-topic-assigned',
+    		
+    	'task-topic-unassigned',
+    	
+    	'task-estimated',
+    	'task-commented'
     );
     
     private function postLog($task, $type, $resourceid = 0)
@@ -56,19 +62,60 @@ class TaskActivityLoger
     		|| (($this->oldStateOfTask != null) && ($this->oldStateOfTask->getUserid() != $newStateOfTask->getUserid())))
     			$this->postLog($newStateOfTask, 'user-changed', $newStateOfTask->getUserid());
     	
+    	if ((($this->oldStateOfTask == null) && ($newStateOfTask->getEstimated() != null))
+    	|| (($this->oldStateOfTask != null) && ($this->oldStateOfTask->getEstimated() != $newStateOfTask->getEstimated())))
+    		$this->postLog($newStateOfTask, 'task-estimated', $newStateOfTask->getEstimated());
+    	 	
+    	
     	$this->oldStateOfTask = null;
     	
     	return true;
     }
     
+    public function addCommentLog($task, $post)
+    {
+    	$this->postLog($task, 'task-commented', $post['id']);
+    }
+    
     public function getAllLogs()
     {
-    	return $this->em->getRepository('IntranetMainBundle:TaskActivityLog')
-    	->createQueryBuilder('l')
-    	->select()
-    	->orderBy('l.id', 'DESC')
-    	->getQuery()
-    	->getResult();
+    	$logs = $this->em->getRepository('IntranetMainBundle:TaskActivityLog')
+			    	 ->createQueryBuilder('l')
+			    	 ->select()
+			    	 ->orderBy('l.id', 'DESC')
+			    	 ->getQuery()
+			    	 ->getResult();
+    	
+    	foreach ($logs as $log)
+    	{
+    		switch ($log->getType())
+    		{
+    			case 'status-changed':{
+    				$status = $this->em->getRepository('IntranetMainBundle:TaskStatus')->find($log->getResourceid());
+    				$log->displayLabel = $status->getLabel();
+    				break;
+    			}
+    			case 'user-changed': {
+    				$user = $this->em->getRepository('IntranetMainBundle:User')->find($log->getResourceid());
+    				$log->displayLabel = $user->getSurname().' '.$user->getName();
+    				break;
+    			}
+    			case 'task-commented':{
+    				$post = $this->em->getRepository('IntranetMainBundle:PostTask')->find($log->getResourceid());
+    				$log->displayLabel = $post->getMessage();
+    				break;
+    			}
+    			case 'task-estimated':{
+    				$log->displayLabel = 'Minutes';
+    				break;
+    			}
+    			default: {
+    				$log->displayLabel = '';
+    			}
+    		}
+    	}
+    	
+    	return $logs;
     }
     
     public function getMyLogs()
