@@ -523,7 +523,7 @@ class Office
     		$filteredTasks = new \Doctrine\Common\Collections\ArrayCollection();
     		foreach ($tasks as $task)
     		{
-    			if ($task->hasOneOfTopics($em, $filter->topic))
+    			if ($task->oneOfTopics($em, $filter->topic))
     				$filteredTasks[] = $task;
     		}
     	

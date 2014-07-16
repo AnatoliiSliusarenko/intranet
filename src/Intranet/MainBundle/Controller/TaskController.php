@@ -76,12 +76,13 @@ class TaskController extends Controller
     		$statusid = (isset($task->statusid) && ($task->statusid != 0)) ? $task->statusid : null;
     		$userid = (isset($task->userid) && ($task->userid != 0)) ? $task->userid : null;
     		$parentid = (isset($task->parentid) && ($task->parentid != 0)) ? $task->parentid : null;
-    		$topics = (isset($task->topics)) ? $task->topics : array();
+    		$topicid = (isset($task->topicid) && ($task->topicid != 0)) ? $task->topicid : null;
     		
     		$task = new Task();
     		$task->setOfficeid($office_id);
     		$task->setParentid($parentid);
     		$task->setUserid($userid);
+    		$task->setTopicid($topicid);
     		$task->setStatusid($statusid);
     		$task->setEstimated($estimated);
     		
@@ -104,7 +105,14 @@ class TaskController extends Controller
     		$user = ($userid != null) ? $em->getRepository('IntranetMainBundle:User')->find($userid) : null;
     		$task->setUser($user, $this->get('intranet.notifier'));
     		
-    		$topicsAdded = $task->addTopics($em, $topics);
+    		$topic = ($topicid != null) ? $em->getRepository('IntranetMainBundle:Topic')->find($topicid): null;
+    		if ($topic == null)
+    		{
+    			$response = new Response(json_encode(array("result" => null, "message" => 'Topic not found!')));
+    			$response->headers->set('Content-Type', 'application/json');
+    			return $response;
+    		}
+    		$task->setTopic($topic);
     		
     		$em->persist($task);
     		$em->flush();
@@ -162,7 +170,7 @@ class TaskController extends Controller
     		$statusid = (isset($taskData->statusid) && ($taskData->statusid != 0)) ? $taskData->statusid : null;
     		$userid = (isset($taskData->userid) && ($taskData->userid != 'null')) ? $taskData->userid : null;
     		$parentid = (isset($taskData->parentid)) ? $taskData->parentid : null;
-    		$topics = (isset($taskData->topicsIds)) ? $taskData->topicsIds : array();
+    		$topicid = (isset($taskData->topicid) && ($taskData->topicid != 'null')) ? $taskData->topicid : null;
     		
     		$status = ($statusid != null) ? $em->getRepository('IntranetMainBundle:TaskStatus')->find($statusid) : null;
     		if ($status == null)
@@ -174,6 +182,7 @@ class TaskController extends Controller
     		
     		$task->setUserid($userid);
     		$user = ($userid != null) ? $em->getRepository('IntranetMainBundle:User')->find($userid) : null;
+    		$topic = ($topicid != null) ? $em->getRepository('IntranetMainBundle:Topic')->find($topicid) : null;
     		$task->setUser($user, $this->get('intranet.notifier'));
     		
     		
@@ -181,10 +190,11 @@ class TaskController extends Controller
     		$task->setDescription($description);
     		$task->setPriority($priority);
     		$task->setStatusid($statusid);
+    		$task->setTopicid($topicid);
     		$task->setStatus($status);
     		$task->setParentid($parentid);
     		$task->setEstimated($estimated);
-    		$resetTopics = $task->resetTopics($em, $topics);
+    		$task->setTopic($topic);
     		
     		$em->persist($task);
     		$em->flush();

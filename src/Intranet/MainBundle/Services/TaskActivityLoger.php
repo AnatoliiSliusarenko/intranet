@@ -15,10 +15,7 @@ class TaskActivityLoger
     	'status-changed',
     	'user-changed',
     	'task-created', 
-    	'task-topic-assigned',
-    		
-    	'task-topic-unassigned',
-    	
+    	'task-topic-assigned',    	
     	'task-estimated',
     	'task-commented'
     );
