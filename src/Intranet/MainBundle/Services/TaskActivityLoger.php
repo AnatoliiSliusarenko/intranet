@@ -62,7 +62,10 @@ class TaskActivityLoger
     	if ((($this->oldStateOfTask == null) && ($newStateOfTask->getEstimated() != null))
     	|| (($this->oldStateOfTask != null) && ($this->oldStateOfTask->getEstimated() != $newStateOfTask->getEstimated())))
     		$this->postLog($newStateOfTask, 'task-estimated', $newStateOfTask->getEstimated());
-    	 	
+
+    	if (($this->oldStateOfTask == null)
+    	|| ($this->oldStateOfTask->getTopicid() != $newStateOfTask->getTopicid()))
+    		$this->postLog($newStateOfTask, 'task-topic-assigned', $newStateOfTask->getTopicid());
     	
     	$this->oldStateOfTask = null;
     	
@@ -100,6 +103,11 @@ class TaskActivityLoger
     			case 'task-commented':{
     				$post = $this->em->getRepository('IntranetMainBundle:PostTask')->find($log->getResourceid());
     				$log->displayLabel = $post->getMessage();
+    				break;
+    			}
+    			case 'task-topic-assigned':{
+    				$topic = $this->em->getRepository('IntranetMainBundle:Topic')->find($log->getResourceid());
+    				$log->displayLabel = $topic->getName();
     				break;
     			}
     			case 'task-estimated':{
