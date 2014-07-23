@@ -289,8 +289,7 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 			userid: null,
 			parentid: parentid,
 			esth: 0,															
-			estm: 0,
-			topic: null
+			estm: 0
 	};
 	
 	setTimeout(function(){

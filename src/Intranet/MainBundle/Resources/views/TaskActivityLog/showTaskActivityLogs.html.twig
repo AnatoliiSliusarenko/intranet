@@ -40,7 +40,7 @@
 	           <tr>
 			   		<td class="visible-lg">{{ log.getId() }}</td>
 		            <td class="visible-lg">{{ log.getUser().getSurname() ~ ' ' ~ log.getUser().getName() ~ ' (' ~ log.getUserid() ~ ')' }}</td>
-		            <td class="visible-lg">{{ log.getTask().getName() ~ ' (' ~ log.getTaskid() ~ ')' }}</td>
+		            <td class="visible-lg">{% if log.task != null %}{{ log.task.getName() }}{% endif %}{{ ' (' ~ log.getTaskid() ~ ')' }}</td>
 		            
 		            <td class="visible-lg">{{ log.displayLabel ~ ' (' ~ log.getResourceid() ~ ')' }}</td>
 		            

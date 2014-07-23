@@ -26,7 +26,6 @@ class TaskActivityLoger
     	$taskActivityLog->setUserid($this->user->getId());
     	$taskActivityLog->setUser($this->user);
     	$taskActivityLog->setTaskid($task->getId());
-    	$taskActivityLog->setTask($task);
     	$taskActivityLog->setType($type);
     	$taskActivityLog->setResourceid($resourceid);
     	$taskActivityLog->setLoged(new \DateTime());
@@ -88,26 +87,28 @@ class TaskActivityLoger
     	
     	foreach ($logs as $log)
     	{
+    		$log->task = $this->em->getRepository('IntranetMainBundle:Task')->find($log->getTaskid());
+    		    		
     		switch ($log->getType())
     		{
     			case 'status-changed':{
     				$status = $this->em->getRepository('IntranetMainBundle:TaskStatus')->find($log->getResourceid());
-    				$log->displayLabel = $status->getLabel();
+    				$log->displayLabel = ($status != null) ? $status->getLabel() : '-';
     				break;
     			}
     			case 'user-changed': {
     				$user = $this->em->getRepository('IntranetMainBundle:User')->find($log->getResourceid());
-    				$log->displayLabel = $user->getSurname().' '.$user->getName();
+    				$log->displayLabel = ($user != null) ? $user->getSurname().' '.$user->getName() : '-';
     				break;
     			}
     			case 'task-commented':{
     				$post = $this->em->getRepository('IntranetMainBundle:PostTask')->find($log->getResourceid());
-    				$log->displayLabel = $post->getMessage();
+    				$log->displayLabel = ($post != null) ? $post->getMessage() : '-';
     				break;
     			}
     			case 'task-topic-assigned':{
     				$topic = $this->em->getRepository('IntranetMainBundle:Topic')->find($log->getResourceid());
-    				$log->displayLabel = $topic->getName();
+    				$log->displayLabel = ($topic != null) ? $topic->getName() : '-';
     				break;
     			}
     			case 'task-estimated':{

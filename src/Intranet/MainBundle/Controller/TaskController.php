@@ -136,7 +136,7 @@ class TaskController extends Controller
     		if ($parentTask != null) 
     		{
     			$parameters['parentTask'] = $parentTask->getInArray();
-    			$parameters['topics'] = $parentTask->getTopics();
+    			//$parameters['topics'] = ($parentTask->getTopic() != null) ? array($parentTask->getTopic()) : array();
     		}
     			
     	}
@@ -216,7 +216,7 @@ class TaskController extends Controller
     		$parentTask = $em->getRepository('IntranetMainBundle:Task')->find($task->getParentid());
     		if ($parentTask!=null)
     		{
-    			$parameters['topics'] = $parentTask->getTopics();
+    			//$parameters['topics'] = ($parentTask->getTopic() != null) ? array($parentTask->getTopic()) : array();
     		}
     	}
     		
