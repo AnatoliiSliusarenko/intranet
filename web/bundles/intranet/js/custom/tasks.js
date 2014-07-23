@@ -289,7 +289,8 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 			userid: null,
 			parentid: parentid,
 			esth: 0,															
-			estm: 0
+			estm: 0,
+			topicid: null
 	};
 	
 	setTimeout(function(){
@@ -297,6 +298,7 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 		if (topics[0].length>0)
 		{
 			$(topics[0][1]).attr('selected', true);
+			$scope.task.topicid = $(topics[0][1]).val();
 			topics[0][0] = null;
 		}
 	}, 500);
