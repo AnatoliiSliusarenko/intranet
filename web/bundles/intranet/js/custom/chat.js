@@ -115,7 +115,9 @@ Intranet.controller('ChatController', ['$scope', '$http', '$paginator', function
 				console.log("new posts: ", response.result);
 				if ((response.result) && (response.result.length > 0))
 				{	
-					if (updatePosts(response.result) == false)
+					var onlyUpdated = updatePosts(response.result);
+					if (onlyUpdated == false)
+					{
 						getPostsCount(function(postsCount){
 							$scope.paginator.init(postsCount, $scope.postsPerPage);
 							var offset = $scope.paginator.postsPerPage*($scope.paginator.curPageId - 1);
@@ -123,6 +125,8 @@ Intranet.controller('ChatController', ['$scope', '$http', '$paginator', function
 							getPosts(offset, limit);
 							getMembers();
 						});
+					}
+						
 				}
 			})
 		}
