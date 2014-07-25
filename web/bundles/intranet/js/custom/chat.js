@@ -40,9 +40,21 @@ Intranet.controller('ChatController', ['$scope', '$http', '$paginator', function
 	$scope.entityid = window.ENTITY.id;
 	$scope.userid = window.USER.id;
 	
-	function updateLastDate(posts)
+	function updatePosts(posts)
 	{
+		var editedMessages = _.filter(posts, function(p){return p.edited;});
+		if (editedMessages.length == posts.length)
+		{
+			_.map(posts, function(post){
+				_.map($scope.posts, function(p, i){
+					if (p.id == post.id)
+						$scope.posts[i] = post;
+				});
+			});
+			return true;
+		}
 		
+		return false;
 	}
 	
 	function getPosts(offset, limit)
@@ -98,19 +110,19 @@ Intranet.controller('ChatController', ['$scope', '$http', '$paginator', function
 			$http({
 				method: "GET", 
 				url: $scope.postsNewURL, 
-				params: {last_posted: ($scope.posts.length > 0)? (_.last($scope.posts)).posted.date : null}})
+				params: {last_posted: $scope.lastDate}})
 			.success(function(response){
 				console.log("new posts: ", response.result);
 				if ((response.result) && (response.result.length > 0))
-				{
-					updateLastDate(response.result);
-					getPostsCount(function(postsCount){
-						$scope.paginator.init(postsCount, $scope.postsPerPage);
-						var offset = $scope.paginator.postsPerPage*($scope.paginator.curPageId - 1);
-						var limit = $scope.paginator.postsPerPage;
-						getPosts(offset, limit);
-						getMembers();
-					});
+				{	
+					if (updatePosts(response.result) == false)
+						getPostsCount(function(postsCount){
+							$scope.paginator.init(postsCount, $scope.postsPerPage);
+							var offset = $scope.paginator.postsPerPage*($scope.paginator.curPageId - 1);
+							var limit = $scope.paginator.postsPerPage;
+							getPosts(offset, limit);
+							getMembers();
+						});
 				}
 			})
 		}
@@ -134,12 +146,16 @@ Intranet.controller('ChatController', ['$scope', '$http', '$paginator', function
 	}
 	
 	Date.milisecondsBetween = function( date1, date2 ) {
-		  var one=1;
 		  var date1_ms = date1.getTime();
 		  var date2_ms = date2.getTime();
 		  var difference_ms = date2_ms - date1_ms;
 		  
-		  return Math.ceil(difference_ms/one_minute); 
+		  return difference_ms; 
+	}
+	
+	Date.inMyString = function(date)
+	{
+		return date.getFullYear()+"-"+date.getMonth()+1+"-"+date.getDate()+" "+date.getHours()+":"+date.getMinutes()+":"+date.getSeconds();
 	}
 	
 	$scope.isEditable = function(post)
