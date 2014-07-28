@@ -81,3 +81,8 @@ services:
             - @doctrine.orm.entity_manager
             - @router
             - @mailer
+    intranet.taskReporter:
+        class: Intranet\MainBundle\Services\TaskReporter
+        arguments: 
+            - @security.context
+            - @doctrine.orm.entity_manager

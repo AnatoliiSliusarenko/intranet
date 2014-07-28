@@ -23,7 +23,7 @@
 {% endblock %}
 
 {% block content %}
-<div class="panel-body">
+<div class="panel-body" ng-controller="LogsController">
 	          <table class="table users-table table-condensed table-hover" >
 	           <thead>
 	           		<tr>
@@ -54,5 +54,5 @@
 {% endblock %}
 {% block javascripts %}
 	{{ parent() }}
-	
+	<script src="{{ asset('bundles/intranet/js/custom/logs.js') }}"></script>
 {% endblock %}

@@ -1,0 +1,34 @@
+{% extends 'IntranetMainBundle:Index:index.html.twig' %}
+
+{% block title %}Task Reporter{% endblock %}
+
+{% block breadcrumbs %}
+<ul class="breadcrumb">
+	<li class="active">Task Reporter</li>
+</ul>
+{% endblock %}
+
+{% block pageheader %}   
+<div class="row">
+	<div class="col-md-12">
+		<h3 class="page-header"><i class="fa fa-puzzle-piece"></i> Task Reporter <i class="fa fa-info-circle animated bounceInDown show-info"></i> </h3>
+
+		<blockquote class="page-information hidden">
+		<p>
+			On this page you can manage task reporter...
+		</p>
+		</blockquote>
+	</div>
+</div>
+{% endblock %}
+{% block content %}
+<div class="row">
+	<div class="col-md-12">
+		<h1>Manage panel will be here...</h1>
+	</div>
+</div>
+{% endblock %}
+{% block javascripts %}
+	{{ parent() }}
+	
+{% endblock %}
