@@ -210,4 +210,19 @@ class TaskActivityLog
     {
         return $this->taskid;
     }
+    
+    public function getInArray()
+    {
+    	return array(
+    			'id' => $this->getId(),
+    			'userid' => $this->getUserid(),
+    			'user' => $this->getUser()->getInArray(),
+    			'taskid' => $this->getTaskid(),
+    			'task' => ($this->task != null) ? $this->task->getInArray() : null,
+    			'resourceid' => $this->getResourceid(),
+    			'type' => $this->getType(),
+    			'loged' => $this->getLoged(),
+    			'displayLabel' => ($this->displayLabel != null) ? $this->displayLabel : null
+    	);
+    }
 }

@@ -76,14 +76,30 @@ class TaskActivityLoger
     	$this->postLog($task, 'task-commented', $post['id']);
     }
     
-    public function getAllLogs()
+    public function getAllLogs($filter, $inArray=false)
     {
-    	$logs = $this->em->getRepository('IntranetMainBundle:TaskActivityLog')
-			    	 ->createQueryBuilder('l')
-			    	 ->select()
-			    	 ->orderBy('l.id', 'DESC')
-			    	 ->getQuery()
-			    	 ->getResult();
+    	$qb = $this->em->createQueryBuilder();
+    	
+    	$qb->select('l')
+    	   ->from('IntranetMainBundle:TaskActivityLog', 'l')
+    	   ->orderBy('l.id', 'DESC');
+    	    	
+    	if (isset($filter->tasks) && ($filter->tasks != array()))
+    	{
+    		$qb->andWhere($qb->expr()->in('l.taskid', $filter->tasks));
+    	}
+    	
+    	if (isset($filter->users) && ($filter->users != array()))
+    	{
+    		$qb->andWhere($qb->expr()->in('l.userid', $filter->users));
+    	}
+    	
+    	if (isset($filter->types) && ($filter->types != array()))
+    	{
+    		$qb->andWhere($qb->expr()->in('l.type', $filter->types));
+    	}
+    	
+    	$logs = $qb->getQuery()->getResult();
     	
     	foreach ($logs as $log)
     	{
@@ -121,7 +137,11 @@ class TaskActivityLoger
     		}
     	}
     	
-    	return $logs;
+    	if ($inArray == true)
+    		return array_map(function($log){
+    			return $log->getInArray();
+    		}, $logs);
+    	else return $logs;
     }
     
     public function getMyLogs()

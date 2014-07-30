@@ -2,24 +2,32 @@ Intranet.controller('LogsController', ['$scope', '$http', '$modal', function($sc
 	console.log('LogsController was loaded!');
 	
 	$scope.filter = {
-			task: [],
-			user: [],
-			type: [],
-			from: null,
-			to: null
 	}
+	$scope.timeoutHandler = null;
 	
 	$scope.$watch('filter', function(){
-		getLogs();
+		if ($scope.timeoutHandler != null) clearTimeout($scope.timeoutHandler);
+		$scope.timeoutHandler = setTimeout(getLogs, 2000);
 	}, true);
 	
 	$scope.logs = [];
-	$scope.tasks = []//from global
-	$scope.users = []//from global
+	$scope.tasks = TASKS;
+	$scope.users = USERS;
+	$scope.urlsLogsGet = JSON_URLS.logsGet;
 	
 	function getLogs()
 	{
-		return true;
+		$http({
+			method: "POST", 
+			url: $scope.urlsLogsGet,
+			data: $scope.filter
+			  })
+		.success(function(response){
+			console.log(response);
+			if (response.result)
+			{
+				$scope.logs = response.result;
+			}
+		})
 	}
-
 }]);

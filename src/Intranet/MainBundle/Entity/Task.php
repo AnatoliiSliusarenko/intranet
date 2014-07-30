@@ -637,4 +637,19 @@ class Task
     
     	return false;
     }
+    
+    public static function getAllTasks($em, $inArray=false)
+    {
+    	$tasks = $em->createQueryBuilder()
+    			  ->select('t')
+    			  ->from('IntranetMainBundle:Task', 't')
+    			  ->orderBy('t.name', 'ASC')
+    			  ->getQuery()->getResult();
+    	
+    	if ($inArray == true)
+    		return array_map(function($task){
+    			return $task->getInArray();
+    		}, $tasks);
+    	else return $tasks;
+    }
 }

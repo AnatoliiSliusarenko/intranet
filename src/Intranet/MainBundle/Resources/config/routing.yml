@@ -132,6 +132,10 @@ intranet_task_activity_logs_show:
     pattern:  /taskActivityLogs/
     defaults: { _controller: IntranetMainBundle:TaskActivityLog:showTaskActivityLogs }
     
+intranet_task_activity_logs_get:
+    pattern:  /taskActivityLogs/get/
+    defaults: { _controller: IntranetMainBundle:TaskActivityLog:getTaskActivityLogs }
+    
 intranet_task_reporter:
     pattern:  /taskReporter/
     defaults: { _controller: IntranetMainBundle:TaskReporter:showTaskReporter }
