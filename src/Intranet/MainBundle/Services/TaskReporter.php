@@ -17,4 +17,31 @@ class TaskReporter
     	$this->user = $securityContext->getToken()->getUser();
     	$this->em = $em;
     }
+    
+    public function queryReport($filter)
+    {
+    	switch ($filter->query)
+    	{
+    		case 'type1':
+    			{
+    				return 'type1';
+    			}
+    		case 'type2':
+    			{
+    				return 'type2';
+    			}
+    		case 'type3':
+    			{
+    				return 'type3';
+   				}
+   			case 'type4':
+   				{
+   					return 'type4';
+   				}
+    		default: 
+    			{
+    				return false;
+    			}
+    	}
+    }
 }

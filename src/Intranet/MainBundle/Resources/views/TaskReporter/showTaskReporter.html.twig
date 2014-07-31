@@ -22,13 +22,101 @@
 </div>
 {% endblock %}
 {% block content %}
-<div class="row">
-	<div class="col-md-12">
-		<h1>Manage panel will be here...</h1>
+<div class="panel panel-cascade" ng-controller="ReporterController">
+			<div class="panel-heading">
+                <h3 class="panel-title">
+                	<span>
+                    	<a href="#" class="panel-minimize"><i class="fa fa-file-text-o"></i> Generate Reports</a>
+                    </span>
+                </h3>
+            </div>
+			<div class="panel-body" style="display:none;">
+            	<div class="form-group">
+  					<label for="inputEmail1" class="col-lg-2 col-md-3 control-label">Tasks</label>
+  					<div class="col-lg-10 col-md-9">
+   						<select multiple ng-model="filter.tasks" class="form-control">
+   							{% for task in tasks %}
+						    <option value="{{ task.id }}">{{ task.name }}</option>
+						    {% endfor %}
+						</select>
+					</div>
+				</div>
+				<div class="form-group">
+  					<label for="inputEmail1" class="col-lg-2 col-md-3 control-label">Task Statuses</label>
+  					<div class="col-lg-10 col-md-9">
+   						<select multiple ng-model="filter.statuses" class="form-control">
+						    {% for status in statuses %}
+						    <option value="{{ status.id }}">{{ status.label }}</option>
+						    {% endfor %}
+						</select>
+					</div>
+				</div>
+				<div class="form-group">
+  					<label for="inputEmail1" class="col-lg-2 col-md-3 control-label">Users</label>
+  					<div class="col-lg-10 col-md-9">
+   						<select multiple ng-model="filter.users" class="form-control">
+						    {% for user in users %}
+						    <option value="{{ user.id }}">{{ user.surname ~ ' ' ~ user.name }}</option>
+						    {% endfor %}
+						</select>
+					</div>
+				</div>				
+				
+				<div class="form-group">
+  					<label for="inputEmail1" class="col-lg-2 col-md-3 control-label">From</label>
+  					<div class="col-lg-10 col-md-9">
+   						<input type="text" ng-model="filter.from" class="form-control form-cascade-control" value="" id="datetimepicker_mask"/>
+					</div>
+				</div>
+				
+				<div class="form-group">
+  					<label for="inputEmail1" class="col-lg-2 col-md-3 control-label">To</label>
+  					<div class="col-lg-10 col-md-9">
+   						<input type="text" ng-model="filter.to" class="form-control form-cascade-control" value="" id="datetimepicker_mask2"/>
+					</div>
+				</div>
+				
+				<div class="form-group">
+  					<label for="inputEmail1" class="col-lg-2 col-md-3 control-label">Query Type</label>
+  					<div class="col-lg-10 col-md-9">
+   						<select ng-model="filter.query" class="form-control">
+						    <option value="type1">The average value of the efficiency of the developer ?</option>
+						    <option value="type2">How much time is spent on tasks ?</option>
+						    <option value="type3">What did the developer on certain days ?</option>
+						    <option value="type4">How much time is left until the task is completed ?</option>
+						</select>
+					</div>
+				</div>
+            </div>
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                	<span>
+                    	<a href="#" class="panel-minimize"><i class="fa fa-table"></i> Query Results</a>
+                    </span>
+                </h3>
+            </div>
+			<div class="panel-body" style="display:none;">
+	          
+		  	</div>
 	</div>
-</div>
 {% endblock %}
 {% block javascripts %}
 	{{ parent() }}
-	
+	<script src="{{ asset('bundles/intranet/js/custom/reporter.js') }}"></script>
+	<script>
+	var USERS = {{ users|json_encode|raw }};
+	var TASKS = {{ tasks|json_encode|raw }};
+	var STATUSES = {{ statuses|json_encode|raw }};
+	JSON_URLS.queryReport = "{{ path('intranet_task_reporter_query') }}";
+
+	$('#datetimepicker_mask').datetimepicker({
+		format:'Y-m-d H:i',
+		step:30
+	});
+
+	$('#datetimepicker_mask2').datetimepicker({
+		format:'Y-m-d H:i',
+		step:30
+	});
+	</script>
 {% endblock %}
