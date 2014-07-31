@@ -69,28 +69,14 @@
 				<div class="form-group">
   					<label for="inputEmail1" class="col-lg-2 col-md-3 control-label">From</label>
   					<div class="col-lg-10 col-md-9">
-   						
-   						<div id="datetimepicker1" class="input-append date">
-						    <input type="text" ng-model="filter.from"></input>
-						    <span class="add-on">
-						      <i data-time-icon="icon-time" data-date-icon="icon-calendar">
-						      </i>
-						    </span>
-						  </div>
-						  
+   						<input type="text" ng-model="filter.from" class="form-control form-cascade-control" value="" id="datetimepicker_mask"/>
 					</div>
 				</div>
 				
 				<div class="form-group">
   					<label for="inputEmail1" class="col-lg-2 col-md-3 control-label">To</label>
   					<div class="col-lg-10 col-md-9">
-   						<div id="datetimepicker2" class="input-append date">
-						    <input type="text" ng-model="filter.to"></input>
-						    <span class="add-on">
-						      <i data-time-icon="icon-time" data-date-icon="icon-calendar">
-						      </i>
-						    </span>
-						  </div>
+   						<input type="text" ng-model="filter.to" class="form-control form-cascade-control" value="" id="datetimepicker_mask2"/>
 					</div>
 				</div>
             </div>
@@ -98,8 +84,8 @@
 	          <table class="table users-table table-condensed table-hover" >
 	           <thead>
 	           		<tr>
-			             <th  class="visible-lg">ID</th>
-			             <th  class="visible-lg">User</th>
+			             <th class="visible-lg">ID</th>
+			             <th class="visible-lg">User</th>
 			             <th class="visible-lg">Task</th>
 			             <th class="visible-lg">Resource</th>
 			             <th class="visible-lg">Type</th>
@@ -130,19 +116,15 @@
 	var TASKS = {{ tasks|json_encode|raw }};
 	JSON_URLS.logsGet = "{{ path('intranet_task_activity_logs_get') }}";
 
-	$(function() {
-	    $('#datetimepicker1').datetimepicker({
-	      format: 'dd-MM-yyyy hh:mm:ss',
-	      language: 'pt-BR'
-	    });
-	  });
+	$('#datetimepicker_mask').datetimepicker({
+		format:'Y-m-d H:i',
+		step:30
+	});
 
-	$(function() {
-	    $('#datetimepicker2').datetimepicker({
-	      format: 'dd-MM-yyyy hh:mm:ss',
-	      language: 'pt-BR'
-	    });
-	  });
+	$('#datetimepicker_mask2').datetimepicker({
+		format:'Y-m-d H:i',
+		step:30
+	});
 	</script>
 	
 {% endblock %}

@@ -84,6 +84,18 @@ class TaskActivityLoger
     	   ->from('IntranetMainBundle:TaskActivityLog', 'l')
     	   ->orderBy('l.id', 'DESC');
     	    	
+    	if (isset($filter->from) && (trim($filter->from) != ''))
+    	{
+    		$qb->andWhere('l.loged > :from')
+    		   ->setParameter('from', $filter->from);
+    	}
+    	
+    	if (isset($filter->to) && (trim($filter->to) != ''))
+    	{
+    		$qb->andWhere('l.loged < :to')
+    		->setParameter('to', $filter->to);
+    	}
+    	
     	if (isset($filter->tasks) && ($filter->tasks != array()))
     	{
     		$qb->andWhere($qb->expr()->in('l.taskid', $filter->tasks));
