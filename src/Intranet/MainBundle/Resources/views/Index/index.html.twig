@@ -31,6 +31,12 @@
             <li><a href="#" class="user dropdown-toggle" data-toggle="dropdown"><span class="username"><img src="{{ asset('bundles/intranet/images/profiles/' ~ app.user.avatar) }}" class="user-avatar" alt="">  {{ app.user.name ~ ' ' ~ app.user.surname }} </span></a>
               <ul class="dropdown-menu">
                 <li><a href="#"><i class="fa fa-user"></i> My Profile</a></li>
+                <li>
+                      <a href="{{ url('intranet_show_personal_page') }}">
+                        <i class="fa fa-user"></i> 
+                        <span class="description">Personal page</span>
+                      </a>
+                    </li>
                 <li><a href="#"><i class="fa fa-envelope"></i> Inbox</a></li>
                 <li><a href="{{ path('intranet_user_settings') }}"><i class="fa fa-cogs"></i> Settings</a></li>
                 <li><a href="{{ path('intranet_task_activity_logs_show') }}"><i class="fa fa-book"></i> Show logs</a></li>
@@ -158,7 +164,7 @@
             <!-- .content -->
             <div class="content">
   						<div class="row">
-  							<div class="col-mod-12">
+  							<div class="col-mod-12" style="z-index:9">
   								{% block breadcrumbs %}
   								{% endblock %}
   								{% block search %}

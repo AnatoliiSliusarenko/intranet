@@ -929,10 +929,12 @@ body {
 	{
 	color: #555555;
 	cursor: default;
-	background-color: #ffffff;
+	background-color: 	#285e8e;
 	border: 1px solid #b9c4d5;
 	border-top: 2px solid #495b79;
 	border-bottom-color: transparent;
+	border-radius: 7px 7px 0 0;;
+	color: white;
 }
 
 .panel>.panel-heading .dropdown-menu>.active>a,.panel>.panel-heading .dropdown-menu>.active>a:hover,.panel>.panel-heading .dropdown-menu>.active>a:focus

@@ -3,7 +3,7 @@
 {% block title %}{{ office.name }}{% endblock %}
 
 {% block breadcrumbs %}
-<ul class="breadcrumb fix topstyle">
+<ul class="breadcrumb fix topstyle" style="z-index:9">
 	{% for item in breadcrumbs %}
 		<li><a href="{{ url('intranet_show_office', {office_id: item.getId()}) }}">{{ item.name }}</a></li>
 	{% endfor %}
@@ -14,7 +14,7 @@
 {% block pageheader %}   
 <div class="row">
 	<div class="col-md-12">
-	<div class="panel fix toppanel">
+	<div class="panel fix toppanel" style="z-index:9">
 		<h3 class="page-header "><i class="fa fa-sitemap"></i> {{ office.name }} <i class="fa fa-info-circle animated bounceInDown show-info"></i> {% if (office.getUserid() != 0 and office.getUserid() == app.user.getId()) %}<i class="fa fa-times-circle animated bounceInDown show-danger"></i>{% endif %} </h3>
 
 		<blockquote class="page-information hidden">
@@ -150,6 +150,17 @@
 											</div>
 											
 											<div class="col-md-5" style="margin: 20px 0;">
+											<div class="btn-group">
+												  	<button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" style="height: 30px; background-color:#495b79">
+                                                            <span class="caret"></span>
+                                                            <i class="fa fa-fw fa-qrcode"></i>
+                                                        </button>
+                                                        <ul class="dropdown-menu adddropmenu">
+                                                            <li><a href="{{ url('intranet_add_office_to_personal_page', {office_id: office.getId()} ) }}"><i class="fa fa-fw fa-windows" ></i>Add to new window </a></li>
+                                                            <li><a href="#"><i class="fa fa-fw fa-plus-square"></i>Add new Tab to existing window</a></li>
+                                                            <li><a href="#"><i class="fa fa-fw fa-list-alt"></i>Add new drop downdown to existing Tab</a></li>
+                                                        </ul>
+												</div>
 												  <label for="inputEmail1" class="col-lg-5 col-md-3 control-label" style="margin-top: 7px;">Messages/Page</label>
 												  <div class="col-lg-5 col-md-9">
 												   <select class="form-control" ng-model="postsPerPage" ng-change="changePostsPerPage()">
@@ -186,7 +197,7 @@
 		{% if (office.getUserid() == 0 or office.getUserid() == app.user.getId()) %}
 		<div class="panel panel-cascade">
 			<div class="panel-heading">
-                <h3 class="panel-title">
+                <h3 class="panel-title" style="margin-top:300px">
                 	<span>
                     	<a href="#" class="panel-minimize">Add New Local Office</a>
                     </span>

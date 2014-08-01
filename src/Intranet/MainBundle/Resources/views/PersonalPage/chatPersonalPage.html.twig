@@ -1,0 +1,144 @@
+ 		
+<div class="col-md-6 personalchat line" ng-controller="PersonalChatController" style="margin-top:2px;margin-right: 2px;">
+	<div class="panel text-primary panel-cascade">
+		<div class="panel-heading">
+  			<h3 class="panel-title">
+  			<i class="fa fa-comments"></i>
+  			{{office.getName()}}
+  			<ul id="myTab" class="nav nav-tabs pull-right">
+  				<li class="active in"><a href="#{{ office.getName() }}" data-toggle="tab">{{ office.getName() }} </a></li>
+  					{% for topic in windowtopics  %}
+       	        		{% if topic.getOfficeid()== office.getId()  %}
+        	        		<li ><a href="#{{ topic.name }}" data-toggle="tab">{{ topic.name }}</a></li>
+              			{% endif %}
+            		{% endfor %}
+			</ul>
+			</h3>
+		</div>
+
+	<div class="panel-body nopadding line" style="margin-bottom: 5px">
+		<div id="myTabContent" class="tab-content">
+  		{% for topic in windowtopics  %}
+           	{% if topic.getOfficeid()== office.getId()  %}
+    	        <div class="tab-pane fade " id="{{ topic.name }}">
+  						<div class="row">
+  							<div class="col-md-7" style="margin: 20px 0; width:320px">
+								<ul class="pagination" style="margin-left: 5px;">
+									<li ng-class="{disabled: paginator.curPageId == 1}"><a href="#" ng-click="paginator.firstPage($event)">first</a></li>
+									<li ng-class="{disabled: paginator.curPageId == 1}"><a href="#" ng-click="paginator.prevPage($event)">«</a></li>
+									<li ng-class="{active: paginator.curPageId == item }" ng-repeat="item in paginator.pages"><a href="#" ng-click="paginator.toPage($event, item)">[[item]]</a></li>
+									<li ng-class="{disabled: paginator.curPageId == paginator.countPages}"><a href="#" ng-click="paginator.nextPage($event)">&raquo;</a>
+									<li ng-class="{disabled: paginator.curPageId == paginator.countPages}"><a href="#" ng-click="paginator.lastPage($event)">last</a></li></li>
+								</ul>
+							</div>
+							<div class="col-md-5" style="margin: 20px 0; width:370px">
+								<label for="inputEmail1" class="col-lg-5 col-md-3 control-label" style="margin-top: 7px;">Messages/Page</label>
+								<div class="col-lg-5 col-md-9">
+					   			<select class="form-control" ng-model="postsPerPage" ng-change="changePostsPerPage()">
+						   			<option ng-repeat="item in paginator.postsPerPageValues">[[item]]</option>		
+					  			</select>
+								</div>											
+							</div>
+						</div>
+					<div class="line"></div>
+					<div class="panel-body nopadding">
+						<div id="conversation" class="list-group conversation" style="height:300px">
+  							<a class="list-group-item" ng-repeat="post in posts">
+  								<img src="[[avatarURL + post.user.avatar]]" class="chat-user-avatar" alt="" />
+  								<span class="username" >[[post.user.name + ' ' + post.user.surname]] ([[post.user.username]])<span class="time">[[ post.posted.date ]]</span> </span>
+  								<i class="fa fa-edit" ng-show="post.edited"></i>
+  								<p style="white-space: pre-line;" ng-class="{editable:isEditable(post)}" ng-click="editPost(post)">[[post.message]]</p>
+  							</a>
+						</div>
+						<div class="input-group" style="margin-bottom: 3px;margin-left: 1px;">
+							<textarea style="resize:vertical;" class="form-control write-message" ng-class="{editing: editingPost}" id="write-message" placeholder="Type something here and hit enter" ng-model="message" ng-keypress="pressEnter($event)"></textarea>
+							<span class="input-group-btn">
+								<button class="btn text-white bg-primary send-message" type="button" id="send-message" ng-click="sendPost()" style="height: 130%; margin: 1px">Send</button>
+							</span>
+  						</div>
+					</div>
+					</div>
+    	    
+            {% endif %}
+        {% endfor %}
+        	<div class="tab-pane fade active in" id="{{ office.getName() }}">
+  				<div class="row">
+  					<div class="col-md-7" style= "width: 370px;">
+						<ul class="pagination" style="margin-left: 5px;">
+							<li ng-class="{disabled: paginator.curPageId == 1}"><a href="#" ng-click="paginator.firstPage($event)">first</a></li>
+							<li ng-class="{disabled: paginator.curPageId == 1}"><a href="#" ng-click="paginator.prevPage($event)">«</a></li>
+							<li ng-class="{active: paginator.curPageId == item }" ng-repeat="item in paginator.pages"><a href="#" ng-click="paginator.toPage($event, item)">[[item]]</a></li>
+							<li ng-class="{disabled: paginator.curPageId == paginator.countPages}"><a href="#" ng-click="paginator.nextPage($event)">&raquo;</a>
+							<li ng-class="{disabled: paginator.curPageId == paginator.countPages}"><a href="#" ng-click="paginator.lastPage($event)">last</a></li></li>
+						</ul>
+					</div>
+					<div class="col-md-5" style="margin: 20px 0; width:370px">
+						<label for="inputEmail1" class="col-lg-5 col-md-3 control-label" style="margin-top: 7px;">Messages/Page</label>
+						<div class="col-lg-5 col-md-9">
+					   	<select class="form-control" ng-model="postsPerPage" ng-change="changePostsPerPage()">
+						   	<option ng-repeat="item in paginator.postsPerPageValues">[[item]]</option>		
+					  	</select>
+						</div>											
+					</div>
+				</div>
+				<div class="line"></div>
+			<div class="panel-body nopadding">
+				<div id="conversation" class="list-group conversation"style="height:300px">
+  					<a class="list-group-item" ng-repeat="post in posts">
+  					<img src="[[avatarURL + post.user.avatar]]" class="chat-user-avatar" alt="" />
+  					<span class="username" >[[post.user.name + ' ' + post.user.surname]] ([[post.user.username]])<span class="time">[[ post.posted.date ]]</span> </span>
+  					<i class="fa fa-edit" ng-show="post.edited"></i>
+  					<p style="white-space: pre-line;" ng-class="{editable:isEditable(post)}" ng-click="editPost(post)">[[post.message]]</p>
+  					</a>
+				</div>
+				<div class="input-group" style="margin-bottom: 3px;">
+					<textarea style="resize:vertical;" class="form-control write-message" ng-class="{editing: editingPost}" id="write-message" placeholder="Type something here and hit enter" ng-model="message" ng-keypress="pressEnter($event)"></textarea>
+					<span class="input-group-btn">
+						<button class="btn text-white bg-primary send-message" type="button" id="send-message" ng-click="sendPost()"style="height: 130%; margin: 1px">Send</button>
+					</span>
+  				</div>
+			</div>
+
+			</div>
+			</div>
+  		</div>
+  		</div>
+</div>
+
+
+  	{% block javascripts %}
+  	
+	<script type="text/javascript">	
+	var USERS = {{ users|json_encode|raw }};
+	var MEMBERS = {{ officeUsers|json_encode|raw }};
+	var TOPICS = {{ windowtopics|json_encode|raw }};
+	var STATUSES = {{ availableStatus|json_encode|raw }};
+	var JSON_URLS_FOR_PERSONAL_PAGE = [];
+	JSON_URLS_FOR_PERSONAL_PAGE.posts = "{{ path('intranet_post_office_get_posts', {office_id: office.id}) }}";
+	JSON_URLS_FOR_PERSONAL_PAGE.post_add = "{{ path('intranet_post_office_add_post', {office_id: office.id}) }}"; 
+	JSON_URLS_FOR_PERSONAL_PAGE.avatar = "{{ asset('bundles/intranet/images/profiles/') }}";
+	JSON_URLS_FOR_PERSONAL_PAGE.members = "{{ path('intranet_office_members', {office_id: office.id}) }}";
+	JSON_URLS_FOR_PERSONAL_PAGE.editMembers = "{{ url('intranet_change_office_members', {office_id: office.getId()}) }}";
+	JSON_URLS_FOR_PERSONAL_PAGE.posts_new = "{{ path('intranet_post_office_new', {office_id: office.id}) }}";
+	JSON_URLS_FOR_PERSONAL_PAGE.post_count = "{{ path('intranet_post_office_count', {office_id: office.id}) }}";
+	
+	
+	
+	JSON_URLS_FOR_PERSONAL_PAGE.urlsPostsTaskShow = "{{ path('intranet_post_task_show', {task_id: 0}) }}";
+	JSON_URLS_FOR_PERSONAL_PAGE.urlsPostsTaskGet = "{{ path('intranet_post_task_get', {task_id: 0}) }}";
+	JSON_URLS_FOR_PERSONAL_PAGE.urlsPostsTaskAdd = "{{ path('intranet_post_task_add', {task_id: 0}) }}";
+	JSON_URLS_FOR_PERSONAL_PAGE.urlsResetCommentsCount = "{{ path('intranet_task_resetNewCommentsCount', {task_id: 0}) }}";
+	
+    var USER = {
+    	    id: "{{ app.user.getId() }}"
+   	};
+	
+   	var ENTITY = {
+   		   	id: "{{ office.id }}"
+    };
+   	
+   	var TASKS_NOTIFICATIONS = [];
+   	
+	</script>
+	
+{% endblock %}
