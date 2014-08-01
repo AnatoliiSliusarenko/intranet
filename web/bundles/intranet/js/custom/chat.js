@@ -34,8 +34,7 @@ Intranet.controller('ChatController', ['$scope', '$http', '$paginator', function
 	$scope.postAddURL = JSON_URLS.post_add;
 	$scope.membersURL = JSON_URLS.members;
 	$scope.postsNewURL = JSON_URLS.posts_new;
-	$scope.postsCountURL = JSON_URLS.post_count;
-	
+	$scope.postsCountURL = JSON_URLS.post_count;	
 	
 	$scope.entityid = window.ENTITY.id;
 	$scope.userid = window.USER.id;
@@ -52,7 +51,7 @@ Intranet.controller('ChatController', ['$scope', '$http', '$paginator', function
 			url: $scope.postsGetURL, 
 			params: {offset: offset, limit: limit}})
 		.success(function(response){
-			console.log(response.result);
+			console.log("posts: ",response.result);
 			if (response.result)
 			{
 				$scope.posts = response.result.reverse();
@@ -91,10 +90,11 @@ Intranet.controller('ChatController', ['$scope', '$http', '$paginator', function
 		})
 	}
 	
+
 	function getNewPosts()
 	{
 		if ($scope.paginator.curPageId == 1)
-		{
+		{setInterval(getNewPosts, 3000);
 			$http({
 				method: "GET", 
 				url: $scope.postsNewURL, 
@@ -212,7 +212,7 @@ Intranet.controller('ChatController', ['$scope', '$http', '$paginator', function
 			$scope.paginator.init(postsCount, $scope.postsPerPage);
 			
 		});
-		
+		console.log('==========');
 		setInterval(getNewPosts, 3000);
 	}
 	
