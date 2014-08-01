@@ -634,7 +634,7 @@ class User implements UserInterface, \Serializable
     	else return $result;
     }
     
-    public function getAllUsers($em, $withOutMe = true)
+    public function getAllUsers($em, $withOutMe = true, $inArray=false)
     {
     	$qb = $em->getRepository("IntranetMainBundle:User")
 			     ->createQueryBuilder('u')
@@ -647,9 +647,13 @@ class User implements UserInterface, \Serializable
     		   ->setParameter('userid', $this->id);
     	}
     	
-    	$result = $qb->getQuery()->getResult();
+    	$users = $qb->getQuery()->getResult();
     
-    	return $result;
+    	if ($inArray == true)
+    		return array_map(function($user){
+    			return $user->getInArray();
+    		}, $users);
+    	else return $users;
     }
 
     /**

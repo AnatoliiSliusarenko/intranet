@@ -54,8 +54,10 @@ class PostTaskController extends Controller
     	if (isset($post->postid))
     		$added = PostTask::editPostByTaskId($em, $post);
     	else
+    	{
     		$added = PostTask::addPostByTaskId($em, $this->get('intranet.notifier'), $post);
-    		
+    		$this->get('intranet.taskActivityLoger')->addCommentLog($task, $added);
+    	}	
     	
     	$response = new Response(json_encode(array("result" => $added)));
     	$response->headers->set('Content-Type', 'application/json');

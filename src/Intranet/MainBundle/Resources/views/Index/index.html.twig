@@ -4,7 +4,7 @@
 
 {% block styles %}
 	{{ parent() }}
-	<link href="{{ asset('bundles/intranet/css/bootstrap-datetimepicker.min.css') }}" rel="stylesheet">
+	<link href="{{ asset('bundles/intranet/css/jquery.datetimepicker.css') }}" rel="stylesheet">
   	<!-- Loading Stylesheets -->    
   	<link href="{{ asset('bundles/intranet/css/font-awesome.css') }}" rel="stylesheet">
 	<!-- Loading Less -->
@@ -40,6 +40,7 @@
                 <li><a href="#"><i class="fa fa-envelope"></i> Inbox</a></li>
                 <li><a href="{{ path('intranet_user_settings') }}"><i class="fa fa-cogs"></i> Settings</a></li>
                 <li><a href="{{ path('intranet_task_activity_logs_show') }}"><i class="fa fa-book"></i> Show logs</a></li>
+                <li><a href="{{ path('intranet_task_reporter') }}"><i class="fa fa-puzzle-piece"></i> Task Reporter</a></li>
                 <li class="divider"></li>
                 <li><a href="{{ path('intranet_security_logout') }}" class="text-danger"><i class="fa fa-lock"></i> Logout</a></li>
               </ul>
@@ -199,7 +200,7 @@
 {% block javascripts %}
 {{ parent() }}
 
-<script src="{{ asset('bundles/intranet/js/bootstrap-datetimepicker.min.js') }}"></script>
+<script src="{{ asset('bundles/intranet/js/jquery.datetimepicker.js') }}"></script>
 <script src="{{ asset('bundles/intranet/js/less-1.5.0.min.js') }}"></script>
 
 <script src="{{ asset('bundles/intranet/js/bic_calendar.js') }}"></script>

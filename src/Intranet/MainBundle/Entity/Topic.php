@@ -71,7 +71,7 @@ class Topic
     private $user;
     
     /**
-     * @ORM\ManyToMany(targetEntity="Task", inversedBy="topics")
+     * @ORM\OneToMany(targetEntity="Task", mappedBy="topic")
      * @var array
      */
     private $tasks;
@@ -440,8 +440,8 @@ class Topic
     {
     	if ($topic == null) $topic = $this;
     	
-    	$qb->orWhere('tt = :topic'.$topic->getId())
-    	   ->setParameter('topic'.$topic->getId(), $topic->getId());
+    	$qb->orWhere('t.topicid = :topicid'.$topic->getId())
+    	   ->setParameter('topicid'.$topic->getId(), $topic->getId());
     	   
     	foreach ($topic->getChildrenForOffice($em) as $subtopic)
     	{
@@ -472,7 +472,8 @@ class Topic
     
     	$qb->select('t')
     	   ->from('IntranetMainBundle:Task', 't')
-    	   ->innerJoin('t.topics', 'tt');
+    	   ->where('t.topicid = :topicid')
+    	   ->setParameter('topicid', $this->getId());
     	
     	$this->getQBforAllChildren($em, $qb);
     	
@@ -512,7 +513,7 @@ class Topic
     		$filteredTasks = new \Doctrine\Common\Collections\ArrayCollection();
     		foreach ($tasks as $task)
     		{
-    			if ($task->hasOneOfTopics($em, $filter->topic))
+    			if ($task->oneOfTopics($em, $filter->topic))
     				$filteredTasks[] = $task;
     		}
     		 

@@ -250,7 +250,7 @@
 			             <th class="visible-lg">Estimated</th>
 			             <th class="visible-lg">EndDate</th>
 			             <th class="visible-lg">Assigned</th>
-			             <th class="visible-lg">Topics</th>
+			             <th class="visible-lg">Topic</th>
 			             <th>&nbsp;</th>
 	           		</tr>
 	           </thead>
@@ -276,15 +276,14 @@
 				            <span ng-show="task.user!=null">[[task.user.surname + ' ' + task.user.name]]</span>
 				            </td>
 				            <td class="visible-lg">
-				            <select class="form-control" ng-show="task.topics.length>0" ng-model="task.currentTopicId" ng-change="changeHrefTopic(task)">
-							    <option ng-repeat="topic in task.topics" value="[[ topic.id ]]">[[ topic.name ]]</option>
-							</select>
+				            <span ng-show="task.topic==null">-</span>
+				            <span ng-show="task.topic!=null">[[task.topic.name]]</span>
 				            </td>
 				            <td>
 				             <button type="button" class="btn btn-primary btn-xs" ng-click="addTask(task)"><i class="fa fa-code-fork"></i></button>
 				             <button type="button" class="btn btn-warning btn-xs" ng-click="editTask(task)"><i class="fa fa-edit"></i></button>
 				             <button type="button" class="btn btn-danger btn-xs" ng-click="removeTask(task)"><i class="fa fa-trash-o"></i></button>
-				             <a href="[[ task.hrefTopic ]]" ng-show="task.currentTopicId != 0" class="btn btn-info btn-xs" ng-click="showTopic(task)"><i class="fa fa-mail-forward"></i></a>
+				             <a href="[[ task.hrefTopic ]]" ng-show="task.topicid != 0" class="btn btn-info btn-xs" ><i class="fa fa-mail-forward"></i></a>
 				             <button style="width:25px;" type="button" class="btn btn-success btn-xs" ng-click="showPosts(task)"><i class="fa fa-comment"></i><span ng-show="task.newCommentsCount>0" class="badge bg-danger">[[task.newCommentsCount]]</span></button>
 				            </td>
 	           			</tr>
@@ -309,14 +308,13 @@
 				            <span ng-show="subtask.user!=null">[[subtask.user.surname + ' ' + subtask.user.name]]</span>
 				            </td>
 				            <td class="visible-lg">
-				            <select class="form-control" ng-show="subtask.topics.length>0" ng-model="subtask.currentTopicId" ng-change="changeHrefTopic(subtask)">
-							    <option ng-repeat="topic in subtask.topics" value="[[ topic.id ]]">[[ topic.name ]]</option>
-							</select>
+				            <span ng-show="subtask.topic==null">-</span>
+				            <span ng-show="subtask.topic!=null">[[subtask.topic.name]]</span>
 				            </td>
 				            <td>
 				             <button type="button" class="btn btn-warning btn-xs" ng-click="editTask(subtask)"><i class="fa fa-edit"></i></button>
 				             <button type="button" class="btn btn-danger btn-xs" ng-click="removeTask(subtask)"><i class="fa fa-trash-o"></i></button>
-				             <a href="[[ subtask.hrefTopic ]]" ng-show="task.currentTopicId != 0" class="btn btn-info btn-xs" ng-click="showTopic(subtask)"><i class="fa fa-mail-forward"></i></a>
+				             <a href="[[ subtask.hrefTopic ]]" ng-show="subtask.topicid != null" class="btn btn-info btn-xs"><i class="fa fa-mail-forward"></i></a>
 				             <button type="button" class="btn btn-success btn-xs" ng-click="showPosts(subtask)"><i class="fa fa-comment"></i><span class="badge bg-danger">[[subtask.newCommentsCount]]</span></button>
 				            </td>
 		            	</tr>

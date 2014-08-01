@@ -43,13 +43,6 @@ class TaskActivityLog
     private $taskid;
     
     /**
-     * @ORM\ManyToOne(targetEntity="Task", inversedBy="taskActivityLogs")
-     * @ORM\JoinColumn(name="taskid")
-     * @var Task
-     */
-    private $task;
-    
-    /**
      * @var integer
      *
      * @ORM\Column(name="resourceid", type="integer")
@@ -217,27 +210,19 @@ class TaskActivityLog
     {
         return $this->taskid;
     }
-
-    /**
-     * Set task
-     *
-     * @param \Intranet\MainBundle\Entity\Task $task
-     * @return TaskActivityLog
-     */
-    public function setTask(\Intranet\MainBundle\Entity\Task $task = null)
+    
+    public function getInArray()
     {
-        $this->task = $task;
-
-        return $this;
-    }
-
-    /**
-     * Get task
-     *
-     * @return \Intranet\MainBundle\Entity\Task 
-     */
-    public function getTask()
-    {
-        return $this->task;
+    	return array(
+    			'id' => $this->getId(),
+    			'userid' => $this->getUserid(),
+    			'user' => $this->getUser()->getInArray(),
+    			'taskid' => $this->getTaskid(),
+    			'task' => ($this->task != null) ? $this->task->getInArray() : null,
+    			'resourceid' => $this->getResourceid(),
+    			'type' => $this->getType(),
+    			'loged' => $this->getLoged(),
+    			'displayLabel' => ($this->displayLabel != null) ? $this->displayLabel : null
+    	);
     }
 }

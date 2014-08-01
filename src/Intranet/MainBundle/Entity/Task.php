@@ -57,6 +57,20 @@ class Task
     private $user;
     
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="topicid", type="integer")
+     */
+    private $topicid;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Topic", inversedBy="tasks")
+     * @ORM\JoinColumn(name="topicid")
+     * @var Topic
+     */
+    private $topic;
+    
+    /**
      * @var string
      *
      * @ORM\Column(name="priority", type="text")
@@ -120,23 +134,10 @@ class Task
     private $enddate;
     
     /**
-     * @ORM\ManyToMany(targetEntity="Topic", mappedBy="tasks")
-     * @var array
-     */
-    private $topics;
-    
-    /**
      * @ORM\OneToMany(targetEntity="PostTask", mappedBy="task")
      * @var array
      */
     private $posts;
-    
-    /**
-     * @ORM\OneToMany(targetEntity="TaskActivityLog", mappedBy="task")
-     * @ORM\OrderBy({"loged" = "DESC"})
-     * @var array
-     */
-    private $taskActivityLogs;
     
     private $subTasks = null;
     
@@ -286,103 +287,6 @@ class Task
     }
 
     /**
-     * Add topic
-     *
-     * @param \Intranet\MainBundle\Entity\Topic $topic
-     * @return Task
-     */
-    public function addTopic(\Intranet\MainBundle\Entity\Topic $topic)
-    {
-        $this->topics[] = $topic;
-
-        return $this;
-    }
-
-    public function addTopics($em, $topics)
-    {
-    	$topicsAdded = array();
-    	foreach ($topics as $topicid)
-    	{
-    		$topic = $em->getRepository('IntranetMainBundle:Topic')->find($topicid);
-    		if ($topic == null)
-    			continue;
-    
-    		$topicsAdded[] = $topic;
-    		$this->addTopic($topic);
-    		$topic->addTask($this);
-    		$em->persist($topic);
-    	}
-    
-    	return $topicsAdded;
-    }
-    
-    /**
-     * Remove topic
-     *
-     * @param \Intranet\MainBundle\Entity\Topic $topic
-     */
-    public function removeTopic(\Intranet\MainBundle\Entity\Topic $topic)
-    {
-        $this->topics->removeElement($topic);
-    }
-
-    /**
-     * Get topics
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getTopics()
-    {
-        return $this->topics;
-    }
-    
-    public function resetTopics($em, $topics)
-    {
-    	$existTopicsIds = array_map(function($t){return $t->getId();}, $this->topics->toArray());
-    	$topicsToAdd = array();
-    	$topicsToRemove = array();
-    
-    	foreach ($this->topics as $topic)
-    	{
-    		if (!in_array($topic->getId(), $topics)) $topicsToRemove[] = $topic;
-    	}
-    	foreach ($topics as $topicId)
-    	{
-    		if (!in_array($topicId, $existTopicsIds)) $topicsToAdd[] = $topicId;
-    	}
-    
-    	foreach ($topicsToRemove as $topic)
-    	{
-    		$topic->removeTask($this);
-    		$this->removeTopic($topic);
-    		$em->persist($topic);
-    	}
-    
-    	return  array("added" => $this->addTopics($em, $topicsToAdd), "removed" => $topicsToRemove);
-    }
-    
-    public function hasTopic(\Intranet\MainBundle\Entity\Topic $topic)
-    {
-    	foreach ($this->topics as $curTopic)
-    	{
-    		if ($curTopic->getId() == $topic->getId()) return true;
-    	}
-    	
-    	return false;
-    }
-    
-    public function hasOneOfTopics($em, $topicsIds)
-    {
-    	foreach ($topicsIds as $topicId)
-    	{
-    		$topic = $em->getRepository('IntranetMainBundle:Topic')->find($topicId);
-    		if ($this->hasTopic($topic)) return true;
-    	}
-    
-    	return false;
-    }
-
-    /**
      * Set priority
      *
      * @param string $priority
@@ -441,6 +345,8 @@ class Task
     			'officeid' => $this->getOfficeid(),
     			'userid' => $this->getUserid(),
     			'user' => ($this->getUser() != null ) ? $this->getUser()->getInArray() : null,
+    			'topicid' => $this->getTopicid(),
+    			'topic' => ($this->getTopic() != null ) ? $this->getTopic()->getInArray() : null,
     			'priority' => $this->getPriority(),
     			'name' => $this->getName(),
     			'description' => $this->getDescription(),
@@ -449,8 +355,7 @@ class Task
     			'status' => $this->getStatus()->getInArray(),
     			'startdate' => $this->getStartdate(),
     			'estimated' => $this->getEstimated(),
-    			'enddate' => $this->getEnddate(),
-    			'topics' => array_map(function($t){return $t->getInArray();}, $this->getTopics()->toArray())
+    			'enddate' => $this->getEnddate()
     	);
     }
 
@@ -679,37 +584,72 @@ class Task
         return $this->statusUpdated;
     }
     
-
     /**
-     * Add taskActivityLogs
+     * Set topicid
      *
-     * @param \Intranet\MainBundle\Entity\TaskActivityLog $taskActivityLogs
+     * @param integer $topicid
      * @return Task
      */
-    public function addTaskActivityLog(\Intranet\MainBundle\Entity\TaskActivityLog $taskActivityLogs)
+    public function setTopicid($topicid)
     {
-        $this->taskActivityLogs[] = $taskActivityLogs;
+        $this->topicid = $topicid;
 
         return $this;
     }
 
     /**
-     * Remove taskActivityLogs
+     * Get topicid
      *
-     * @param \Intranet\MainBundle\Entity\TaskActivityLog $taskActivityLogs
+     * @return integer 
      */
-    public function removeTaskActivityLog(\Intranet\MainBundle\Entity\TaskActivityLog $taskActivityLogs)
+    public function getTopicid()
     {
-        $this->taskActivityLogs->removeElement($taskActivityLogs);
+        return $this->topicid;
     }
 
     /**
-     * Get taskActivityLogs
+     * Set topic
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @param \Intranet\MainBundle\Entity\Topic $topic
+     * @return Task
      */
-    public function getTaskActivityLogs()
+    public function setTopic(\Intranet\MainBundle\Entity\Topic $topic = null)
     {
-        return $this->taskActivityLogs;
+        $this->topic = $topic;
+
+        return $this;
+    }
+
+    /**
+     * Get topic
+     *
+     * @return \Intranet\MainBundle\Entity\Topic 
+     */
+    public function getTopic()
+    {
+        return $this->topic;
+    }
+    
+    public function oneOfTopics($em, $topicsIds)
+    {
+    	foreach ($topicsIds as $topicId)
+    		if ($this->getTopicid() == $topicId) return true;
+    
+    	return false;
+    }
+    
+    public static function getAllTasks($em, $inArray=false)
+    {
+    	$tasks = $em->createQueryBuilder()
+    			  ->select('t')
+    			  ->from('IntranetMainBundle:Task', 't')
+    			  ->orderBy('t.name', 'ASC')
+    			  ->getQuery()->getResult();
+    	
+    	if ($inArray == true)
+    		return array_map(function($task){
+    			return $task->getInArray();
+    		}, $tasks);
+    	else return $tasks;
     }
 }

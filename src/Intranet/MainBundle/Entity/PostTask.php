@@ -186,7 +186,7 @@ class PostTask
     	$post->setUserid($user->getId());
     	$post->setUser($user);
     	$post->setMessage($p->message);
-    	$post->setPosted(new \DateTime($p->posted));
+    	$post->setPosted(new \DateTime());
     	
     	$em->persist($post);
     	$em->flush();

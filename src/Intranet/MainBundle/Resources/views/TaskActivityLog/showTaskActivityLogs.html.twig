@@ -23,12 +23,69 @@
 {% endblock %}
 
 {% block content %}
-<div class="panel-body">
+	<div class="panel panel-cascade" ng-controller="LogsController">
+			<div class="panel-heading">
+                <h3 class="panel-title">
+                	<span>
+                    	<a href="#" class="panel-minimize"><i class="fa fa-filter"></i> Filter</a>
+                    </span>
+                </h3>
+            </div>
+			<div class="panel-body" style="display:none;">
+            	<div class="form-group">
+  					<label for="inputEmail1" class="col-lg-2 col-md-3 control-label">Tasks</label>
+  					<div class="col-lg-10 col-md-9">
+   						<select multiple ng-model="filter.tasks" class="form-control">
+   							{% for task in tasks %}
+						    <option value="{{ task.id }}">{{ task.name }}</option>
+						    {% endfor %}
+						</select>
+					</div>
+				</div>
+				<div class="form-group">
+  					<label for="inputEmail1" class="col-lg-2 col-md-3 control-label">Users</label>
+  					<div class="col-lg-10 col-md-9">
+   						<select multiple ng-model="filter.users" class="form-control">
+						    {% for user in users %}
+						    <option value="{{ user.id }}">{{ user.surname ~ ' ' ~ user.name }}</option>
+						    {% endfor %}
+						</select>
+					</div>
+				</div>
+				<div class="form-group">
+  					<label for="inputEmail1" class="col-lg-2 col-md-3 control-label">Types</label>
+  					<div class="col-lg-10 col-md-9">
+   						<select multiple ng-model="filter.types" class="form-control">
+						    <option value="status-changed">status-changed</option>
+						    <option value="user-changed">user-changed</option>
+						    <option value="task-created">task-created</option>
+						    <option value="task-topic-assigned">task-topic-assigned</option>
+						    <option value="task-estimated">task-estimated</option>
+						    <option value="task-commented">task-commented</option>
+						</select>
+					</div>
+				</div>
+				
+				<div class="form-group">
+  					<label for="inputEmail1" class="col-lg-2 col-md-3 control-label">From</label>
+  					<div class="col-lg-10 col-md-9">
+   						<input type="text" ng-model="filter.from" class="form-control form-cascade-control" value="" id="datetimepicker_mask"/>
+					</div>
+				</div>
+				
+				<div class="form-group">
+  					<label for="inputEmail1" class="col-lg-2 col-md-3 control-label">To</label>
+  					<div class="col-lg-10 col-md-9">
+   						<input type="text" ng-model="filter.to" class="form-control form-cascade-control" value="" id="datetimepicker_mask2"/>
+					</div>
+				</div>
+            </div>
+			<div class="panel-body">
 	          <table class="table users-table table-condensed table-hover" >
 	           <thead>
 	           		<tr>
-			             <th  class="visible-lg">ID</th>
-			             <th  class="visible-lg">User</th>
+			             <th class="visible-lg">ID</th>
+			             <th class="visible-lg">User</th>
 			             <th class="visible-lg">Task</th>
 			             <th class="visible-lg">Resource</th>
 			             <th class="visible-lg">Type</th>
@@ -36,21 +93,38 @@
 	           		</tr>
 	           </thead>
 	           <tbody>
-	           {% for log in logs %}
-	           <tr>
-			   		<td class="visible-lg">{{ log.getId() }}</td>
-		            <td class="visible-lg">{{ log.getUser().getSurname() ~ ' ' ~ log.getUser().getName() ~ ' (ID = ' ~ log.getUserid() ~ ')' }}</td>
-		            <td class="visible-lg">{{ log.getTask().getName() ~ ' (ID = ' ~ log.getTaskid() ~ ')' }}</td>
-		            <td class="visible-lg">{% if log.resourceLabel is defined %}{{ log.resourceLabel }}{% endif %}{% if log.getResourceid() is not null %}{{ ' (ID = ' ~ log.getResourceid() ~ ')' }}{% endif %}</td>
-		            <td class="visible-lg">{{ log.getType() }}</td>
-		            <td class="visible-lg">{{ log.getLoged()|date('Y-m-d H:i:s') }}</td>
+	           <tr ng-repeat="log in logs">
+			   		<td class="visible-lg">[[ log.id ]]</td>
+		            <td class="visible-lg">[[ log.user.surname + ' ' + log.user.name + ' (' + log.userid + ')' ]]</td>
+		            <td class="visible-lg">[[ log.task.name + ' (' + log.taskid + ')']]</td>
+		            
+		            <td class="visible-lg">[[ log.displayLabel + ' (' + log.resourceid + ')' ]]</td>
+		            
+		            <td class="visible-lg">[[ log.type ]]</td>
+		            <td class="visible-lg">[[ log.loged.date ]]</td>
 	           </tr>
-	           {% endfor %}
 			  </tbody>
 			</table>
 		  </div>
+	</div>
 {% endblock %}
 {% block javascripts %}
 	{{ parent() }}
+	<script src="{{ asset('bundles/intranet/js/custom/logs.js') }}"></script>
+	<script>
+	var USERS = {{ users|json_encode|raw }};
+	var TASKS = {{ tasks|json_encode|raw }};
+	JSON_URLS.logsGet = "{{ path('intranet_task_activity_logs_get') }}";
+
+	$('#datetimepicker_mask').datetimepicker({
+		format:'Y-m-d H:i',
+		step:30
+	});
+
+	$('#datetimepicker_mask2').datetimepicker({
+		format:'Y-m-d H:i',
+		step:30
+	});
+	</script>
 	
 {% endblock %}
