@@ -65,51 +65,50 @@ var Intranet = angular.module('Intranet', ['ui.bootstrap'])
 
 .factory('$personalPageChat', function() {
 	personalPageChat = {};
+	personalPageChat.ui = 0;
 	
-	
-
-		
-	personalPageChat.pressEnter = function(e)
+	personalPageChat.updatePosts = function(posts)
 	{
-		if ((e.shiftKey == false) && ( e.keyCode == 13 ))
+		var editedMessages = _.filter(posts, function(p){return p.edited;});
+		if (editedMessages.length == posts.length)
 		{
-			e.preventDefault();
-			personalPageChat.sendPost();
+			_.map(posts, function(post){
+				_.map(personalPageChat.scope.posts, function(p, i){
+					if (p.id == post.id)
+						personalPageChat.scope.posts[i] = post;
+				});
+			});
+			return true;
 		}
-	}
-	
-	
-	
-	function updateLastDate(posts)
-	{
 		
+		return false;
 	}
 	
-	function getPosts(offset, limit)
+	personalPageChat.getPosts = function (offset, limit)
 	{
 		personalPageChat.http({
 			method: "GET", 
-			url: personalPageChat.postsGetURL, 
+			url: personalPageChat.scope.postsGetURL, 
 			params: {offset: offset, limit: limit}})
 		.success(function(response){
 			console.log("posts: ",response.result);
 			if (response.result)
 			{
-				personalPageChat.posts = response.result.reverse();
+				personalPageChat.scope.posts = response.result.reverse();
 			}
 			if (response.result.length>0)
 			{
-				personalPageChat.lastDate = (_.last(personalPageChat.posts)).posted.date;
+				personalPageChat.scope.lastDate = (_.last(personalPageChat.scope.posts)).posted.date;
 			}
-			container.animate({ scrollTop: container.height()+1900 },1000);
+			personalPageChat.container.animate({ scrollTop: container.height()+1900 },1000);
 		})
 	}
 	
-	function getPostsCount(callback)
+	personalPageChat.getPostsCount = function (callback)
 	{
 		personalPageChat.http({
 			method: "GET", 
-			url: personalPageChat.postsCountURL, 
+			url: personalPageChat.scope.postsCountURL, 
 			})
 		.success(function(response){
 			console.log("posts count: ", response.result);
@@ -118,51 +117,61 @@ var Intranet = angular.module('Intranet', ['ui.bootstrap'])
 		})
 	}
 	
-	function getMembers()
+	personalPageChat.getMembers = function ()
 	{
 		personalPageChat.http({
 			method: "GET", 
-			url: personalPageChat.membersURL, 
+			url: personalPageChat.scope.membersURL, 
 			})
 		.success(function(response){
 			console.log("members: ", response.result);
 			if (response.result)
-				personalPageChat.members = response.result;
+				personalPageChat.scope.members = response.result;
 		})
 	}
-	
 
-	function getNewPosts()
+	personalPageChat.getNewPosts = function ()
 	{
-		if (personalPageChat.paginator.curPageId == 1)
-		{setInterval(getNewPosts, 3000);
+		if (personalPageChat.scope.paginator.curPageId == 1)
+		{setInterval(personalPageChat.getNewPosts, 3000);
 		personalPageChat.http({
 				method: "GET", 
-				url: personalPageChat.postsNewURL, 
-				params: {last_posted: (personalPageChat.posts.length > 0)? (_.last(personalPageChat.posts)).posted.date : null}})
+				url: personalPageChat.scope.postsNewURL, 
+				params: {last_posted: personalPageChat.scope.lastDate}})
 			.success(function(response){
 				console.log("new posts: ", response.result);
 				if ((response.result) && (response.result.length > 0))
-				{
-					updateLastDate(response.result);
-					getPostsCount(function(postsCount){
-						personalPageChat.paginator.init(postsCount, personalPageChat.postsPerPage);
-						var offset = personalPageChat.paginator.postsPerPage*(personalPageChat.paginator.curPageId - 1);
-						var limit = personalPageChat.paginator.postsPerPage;
-						getPosts(offset, limit);
-						getMembers();
-					});
+				{	
+					var onlyUpdated = personalPageChat.updatePosts(response.result);
+					if (onlyUpdated == false)
+					{
+						personalPageChat.getPostsCount(function(postsCount){
+							personalPageChat.scope.paginator.init(postsCount, personalPageChat.scope.postsPerPage);
+							var offset = personalPageChat.scope.paginator.postsPerPage*(personalPageChat.scope.paginator.curPageId - 1);
+							var limit = personalPageChat.scope.paginator.postsPerPage;
+							personalPageChat.getPosts(offset, limit);
+							personalPageChat.getMembers();
+						});
+					}
+						
 				}
 			})
 		}
 	}
 	
-	personalPageChat.editPost = function(post)
+	personalPageChat.init = function($http, $scope)
 	{
-		if ((!personalPageChat.isEditable(post)) || (personalPageChat.editingPost != null)) return;
-		console.log(post);
-		personalPageChat.editingPost = post;
-		messageContainer.val(post.message);
+		personalPageChat.entityid = window.ENTITY.id;
+		personalPageChat.userid = window.USER.id;
+		personalPageChat.scope = $scope;
+		personalPageChat.http = $http;
+		personalPageChat.container = $('#conversation');
+		personalPageChat.messageContainer = $('#write-message');
+		
+		console.log('------> init ', this);
+		personalPageChat.ui++;
+		return this;
+		
 	}
 	
 	Date.minutesBetween = function( date1, date2 ) {
@@ -175,116 +184,28 @@ var Intranet = angular.module('Intranet', ['ui.bootstrap'])
 	}
 	
 	Date.milisecondsBetween = function( date1, date2 ) {
-		  var one=1;
 		  var date1_ms = date1.getTime();
 		  var date2_ms = date2.getTime();
 		  var difference_ms = date2_ms - date1_ms;
 		  
-		  return Math.ceil(difference_ms/one_minute); 
+		  return difference_ms; 
 	}
 	
-	personalPageChat.isEditable = function(post)
+	Date.inMyString = function(date)
 	{
-		var postedTime = new Date(Date.parse(post.posted.date));
-		var now = new Date();
-		var utc = new Date(now.getTime() + now.getTimezoneOffset() * 60000);
-		
-		var minutesAgo = Date.minutesBetween(postedTime, utc);
-
-		return (minutesAgo <= 5 && post.userid == personalPageChat.userid);
+		return date.getFullYear()+"-"+date.getMonth()+1+"-"+date.getDate()+" "+date.getHours()+":"+date.getMinutes()+":"+date.getSeconds();
 	}
 	
-	personalPageChat.sendPost = function()
+	personalPageChat.startChat = function()
 	{
-		var post = {
-				entityid: personalPageChat.entityid, 
-				userid: personalPageChat.userid,
-				message: personalPageChat.message,
-				posted: new Date()
-		}
-		
-		if (personalPageChat.editingPost)
-			post.postid = personalPageChat.editingPost.id;
-				
-		personalPageChat.http({
-			method: "POST", 
-			url: personalPageChat.postAddURL, 
-			data: post })
-		.success(function(response){
-			console.log("Created post: ", response.result);
-			if (response.result)
-			{
-				// maybe need to request for posts and init paginator!!!
-				if (personalPageChat.editingPost == null)
-				{
-					personalPageChat.posts.push(response.result);
-					container.animate({ scrollTop: container.height()+1900 },1000);
-				}
-				else
-				{
-					_.map(personalPageChat.posts, function(p, i){
-						if (p.id == response.result.id)
-							personalPageChat.posts[i] = response.result;
-					});
-				}
-			}
-			
-			personalPageChat.editingPost = null;
-			personalPageChat.message = "";
-			messageContainer.val("");
-			messageContainer.focus();
-			getMembers();
-		})
-	}
-	
-	personalPageChat.changePostsPerPage = function(){
-		getPostsCount(function(postsCount){
-			personalPageChat.paginator.init(postsCount, personalPageChat.postsPerPage);
-			var offset = $personalPageChat.paginator.postsPerPage*(personalPageChat.paginator.curPageId - 1);
-			var limit = personalPageChat.paginator.postsPerPage;
-			getPosts(offset, limit);
-		});
-	}
-	
-	function startChat()
-	{
-		getMembers();
-		getPostsCount(function(postsCount){
-			personalPageChat.paginator.init(postsCount, personalPageChat.postsPerPage);
+		personalPageChat.getMembers();
+		personalPageChat.getPostsCount(function(postsCount){
+			personalPageChat.scope.paginator.init(postsCount, personalPageChat.scope.postsPerPage);
 			
 		});
 		console.log('==========');
-		setInterval(getNewPosts, 3000);
+		setInterval(personalPageChat.getNewPosts, 3000);
 	}
-	
-	personalPageChat.init = function($paginator , $http)
-	{
-		personalPageChat.paginator = $paginator;
-		personalPageChat.postsPerPage = 10;
-		personalPageChat.paginator.postsPerPage = $personalPageChat.postsPerPage;
-		personalPageChat.posts = [];
-		personalPageChat.members = [];
-		personalPageChat.message = '';
-		personalPageChat.editingPost = null;
-		personalPageChat.lastDate = null;
-		personalPageChat.http = $http;
-			
-		personalPageChat.postsGetURL = JSON_URLS.posts;
-		personalPageChat.avatarURL = JSON_URLS.avatar;
-		personalPageChat.postAddURL = JSON_URLS.post_add;
-		personalPageChat.membersURL = JSON_URLS.members;
-		personalPageChat.postsNewURL = JSON_URLS.posts_new;
-		personalPageChat.postsCountURL = JSON_URLS.post_count;	
-		
-		personalPageChat.entityid = window.ENTITY.id;
-		personalPageChat.userid = window.USER.id;
-		
-		console.log('------> init ', this);
-		return this;
-	}
-	
-	startChat();
-	
 
 	return personalPageChat;
 })
