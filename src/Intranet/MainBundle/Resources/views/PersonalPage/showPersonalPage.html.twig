@@ -2,7 +2,7 @@
 {% block title %}{{ app.user.getUsername() }} Personal Page {% endblock %}
 {% block content %}
 <div style="margin-top:100px">
-<div class="row " style="display: table-row-group">
+<div class="row " style="display: table-row-group" >
 	{% for window in windows %}
 	
   		{{ render( controller('IntranetMainBundle:PersonalPage:showChatPersonalPage', {
