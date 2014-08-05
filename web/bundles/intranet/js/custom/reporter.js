@@ -11,6 +11,7 @@ Intranet.controller('ReporterController', ['$scope', '$http', '$modal', function
 		$scope.timeoutHandler = setTimeout(queryReport, 2000);
 	}, true);
 	
+	$scope.table = null;
 	$scope.tasks = TASKS;
 	$scope.users = USERS;
 	$scope.statuses = STATUSES;
@@ -26,6 +27,10 @@ Intranet.controller('ReporterController', ['$scope', '$http', '$modal', function
 			  })
 		.success(function(response){
 			console.log(response);
+			if (response.result)
+			{
+				$scope.table = response.result;
+			}
 		})
 	}
 }]);
