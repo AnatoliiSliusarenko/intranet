@@ -51,6 +51,29 @@
 						</select>
 					</div>
 				</div>
+				
+				<div class="form-group">
+  					<label for="inputEmail1" class="col-lg-2 col-md-3 control-label">Task Status From</label>
+  					<div class="col-lg-10 col-md-9">
+   						<select ng-model="filter.statusFrom" class="form-control">
+						    {% for status in statuses %}
+						    <option value="{{ status.id }}">{{ status.label }}</option>
+						    {% endfor %}
+						</select>
+					</div>
+				</div>
+				
+				<div class="form-group">
+  					<label for="inputEmail1" class="col-lg-2 col-md-3 control-label">Task Status To</label>
+  					<div class="col-lg-10 col-md-9">
+   						<select ng-model="filter.statusTo" class="form-control">
+						    {% for status in statuses %}
+						    <option value="{{ status.id }}">{{ status.label }}</option>
+						    {% endfor %}
+						</select>
+					</div>
+				</div>
+				
 				<div class="form-group">
   					<label for="inputEmail1" class="col-lg-2 col-md-3 control-label">Users</label>
   					<div class="col-lg-10 col-md-9">
@@ -80,7 +103,7 @@
   					<label for="inputEmail1" class="col-lg-2 col-md-3 control-label">Query Type</label>
   					<div class="col-lg-10 col-md-9">
    						<select ng-model="filter.query" class="form-control">
-						    <option value="type1">The average value of the efficiency of the developer ?</option>
+						    <option value="type1">The average value the task goes from one state to another ?</option>
 						    <option value="type2">How much time is spent on tasks ?</option>
 						    <option value="type3">What did the developer on certain days ?</option>
 						    <option value="type4">How much time is left until the task is completed ?</option>
@@ -95,8 +118,19 @@
                     </span>
                 </h3>
             </div>
-			<div class="panel-body" style="display:none;">
-	          
+			<div class="panel-body">
+	        	<table ng-show="table != null" class="table users-table table-condensed table-hover" >
+	           		<thead>
+	           			<tr>
+				             <th ng-repeat="column in table.cols" class="visible-lg">[[column.label]]</th>
+	           			</tr>
+	           		</thead>
+	           		<tbody>
+			           <tr ng-repeat="row in table.rows">
+					   		<td ng-repeat="column in row" class="visible-lg">[[ column.value ]]</td>
+			           </tr>
+			  		</tbody>
+				</table>
 		  	</div>
 	</div>
 {% endblock %}

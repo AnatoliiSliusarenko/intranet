@@ -70,6 +70,12 @@ class TaskStatus
      * @ORM\Column(name="calc_time_stop", type="boolean")
      */
     private $calcTimeStop;
+    
+    /**
+     * @var boolean
+     * @ORM\Column(name="ready_to_implement", type="boolean")
+     */
+    private $readyToImplement;
 
     /**
      * @ORM\ManyToMany(targetEntity="Role", inversedBy="taskStatuses")
@@ -464,5 +470,28 @@ class TaskStatus
     public function getCalcTimeStop()
     {
         return $this->calcTimeStop;
+    }
+
+    /**
+     * Set readyToImplement
+     *
+     * @param boolean $readyToImplement
+     * @return TaskStatus
+     */
+    public function setReadyToImplement($readyToImplement)
+    {
+        $this->readyToImplement = $readyToImplement;
+
+        return $this;
+    }
+
+    /**
+     * Get readyToImplement
+     *
+     * @return boolean 
+     */
+    public function getReadyToImplement()
+    {
+        return $this->readyToImplement;
     }
 }
