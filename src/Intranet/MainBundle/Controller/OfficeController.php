@@ -9,6 +9,7 @@ use Intranet\MainBundle\Entity\Topic;
 use Intranet\MainBundle\Entity\Task;
 use Intranet\MainBundle\Entity\TaskStatus;
 use Intranet\MainBundle\Entity\User;
+use Intranet\MainBundle\Entity\PersonalPage;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -167,4 +168,38 @@ class OfficeController extends Controller
 		
 		return $this->redirect($this->generateUrl('intranet_show_office', array('office_id' => $parent)));
 	}
+	
+    public function addOfficeChatToPersonalAction($office_id)
+    {
+    	$em = $this->getDoctrine()->getManager();
+    	$office = $em->getRepository('IntranetMainBundle:Office')->find($office_id);
+    	$personal_office = $em->getRepository('IntranetMainBundle:PersonalPage')->findByOfficeid($office_id);
+    	$personal_data = $em->getRepository('IntranetMainBundle:PersonalPage')->findAll($this->getUser()->getId());
+    	$count_window = count($personal_data)+1;
+    	if( $personal_office != null)
+    	{
+    		return $this->render('IntranetMainBundle:Office:messageOfficeIsAllredyAdded.html.twig');
+    		//die("bla-bla-bla");
+    	}
+    	else 
+    	{
+    		$personal = new PersonalPage();
+    		$personal->setOfficeid($office_id);
+    		$personal->setTopicid(NULL);
+    		$personal->setUserid($this->getUser()->getId());
+    		$personal->setNamewindow($office->getName());
+    		if(!$count_window)
+    			$personal->setWindowid(0);
+    		else
+    			$personal->setWindowid($count_window);
+    		$em = $this->getDoctrine()->getEntityManager();
+    		$em->persist($personal);
+    		$em->flush();
+    		$parameters = array (
+    				"office" => $office,
+    				"topic" => 0);
+    		return $this->redirect($this->generateUrl('intranet_show_office',array('office_id' => $office_id)));
+    	}
+    	
+    }
 }

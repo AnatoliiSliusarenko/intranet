@@ -10,7 +10,7 @@ use Intranet\MainBundle\Entity\TaskStatus;
 use Intranet\MainBundle\Entity\Office;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-
+use Intranet\MainBundle\Entity\PersonalPage;
 class TopicController extends Controller
 {
 	public function getTopicMenuTreeAction()
@@ -132,5 +132,73 @@ class TopicController extends Controller
     	$em->flush();
     
     	return $this->redirect($this->generateUrl('intranet_show_topic', array('topic_id' => $parent)));
+    }
+    
+    public function addTopicChatToNewWindowPersonalAction($topic_id)
+    {
+    	$em = $this->getDoctrine()->getManager();
+    	$topic = $em->getRepository('IntranetMainBundle:Topic')->find($topic_id);
+    	$personal_topic = $em->getRepository('IntranetMainBundle:PersonalPage')->findByTopicid($topic_id);
+    	$personal_data = $em->getRepository('IntranetMainBundle:PersonalPage')->findAll($this->getUser()->getId());
+    	$count_window = count($personal_data)+1;
+    	
+    	if( $personal_topic != null )
+    	{
+    		return $this->render('IntranetMainBundle:Topic:messageTopicIsAllredyAdded.html.twig');
+    	}
+    	else
+    	{
+    		$office = $topic->getOffice();
+    		$personal = new PersonalPage();
+    		$personal->setOfficeid($office->getId());
+    		$personal->setTopicid($topic->getId());
+    		$personal->setUserid($this->getUser()->getId());
+    		$personal->setNamewindow($office->getName());
+    		if(!$count_window)
+    			$personal->setWindowid(0);
+    		else 
+    			$personal->setWindowid($count_window);
+    		$em = $this->getDoctrine()->getEntityManager();
+    		$em->persist($personal);
+    		$em->flush();
+    		$parameters = array (
+    				"office" => $office,
+    				"topic" => $topic);
+    		return $this->redirect($this->generateUrl('intranet_show_topic', array('topic_id' => $topic_id)));
+    	}
+    }
+    
+    public function addTopicToExistWindowPersonalPageAction($topic_id)
+    {
+    	$em = $this->getDoctrine()->getManager();
+    	$topic = $em->getRepository('IntranetMainBundle:Topic')->find($topic_id);
+    	
+    	$personal_topic = $em->getRepository('IntranetMainBundle:PersonalPage')->findByTopicid($topic_id);
+//    	$res = $personal_topic->getId();
+//    	die("$res ");
+    	if( $personal_topic != null )
+    	{
+    		return $this->render('IntranetMainBundle:Topic:messageTopicIsAllredyAdded.html.twig');
+    	}
+    	else
+    	{
+    		$office = $topic->getOffice();
+    		$window = $em->getRepository('IntranetMainBundle:PersonalPage')->findOneByOfficeid($office->getId());
+    		if($window == null)
+    			return $this->render('IntranetMainBundle:Topic:messageTopicIsAllredyAdded.html.twig');
+    		$personal = new PersonalPage();
+    		$personal->setOfficeid($office->getId());
+    		$personal->setTopicid($topic->getId());
+    		$personal->setUserid($this->getUser()->getId());
+    		$personal->setNamewindow($office->getName());
+    		$personal->setWindowid($window->getWindowid());
+    		$em = $this->getDoctrine()->getEntityManager();
+    		$em->persist($personal);
+    		$em->flush();
+    		$parameters = array (
+    				"office" => $office,
+    				"topic" => $topic);
+    		return $this->redirect($this->generateUrl('intranet_show_topic', array('topic_id' => $topic_id)));
+    	}
     }
 }

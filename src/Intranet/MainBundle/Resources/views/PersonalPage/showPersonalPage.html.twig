@@ -1,0 +1,21 @@
+{% extends 'IntranetMainBundle:Index:index.html.twig' %}
+{% block title %}{{ app.user.getUsername() }} Personal Page {% endblock %}
+{% block content %}
+<div style="margin-top:100px">
+<div class="row " style="display: table-row-group">
+	{% for window in windows %}
+	
+  		{{ render( controller('IntranetMainBundle:PersonalPage:showChatPersonalPage', {
+        'office_id': window.getOfficeid() , 'topics': topics, 'window': window
+    })) }}	
+    {% endfor %}
+</div>
+</div>
+{% endblock %}
+{% block javascripts %}
+{{ parent() }}
+	<script src="{{ asset('bundles/intranet/js/custom/tasks.js') }}"></script>
+	<script src="{{ asset('bundles/intranet/js/custom/chat.js') }}"></script>
+	<script src="{{ asset('bundles/intranet/js/custom/members.js') }}"></script>
+  	<script src="{{ asset('bundles/intranet/js/custom/personal_page_chat.js') }}"></script>
+{% endblock %}
