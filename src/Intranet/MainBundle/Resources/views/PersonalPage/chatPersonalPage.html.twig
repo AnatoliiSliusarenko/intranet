@@ -1,5 +1,5 @@
  		
-<div class="col-md-6 personalchat line"  style="margin-top:2px;margin-right: 2px;" ng-controller="PersonalChatController">
+<div class="col-md-6 personalchat line"  style="margin-top:2px;margin-right: 2px;">
 	<div class="panel text-primary panel-cascade">
 		<div class="panel-heading">
   			<h3 class="panel-title">
@@ -17,10 +17,10 @@
 		</div>
 
 	<div class="panel-body nopadding line" style="margin-bottom: 5px">
-		<div id="myTabContent" class="tab-content">
+		<div id="myTabContent" class="tab-content chat-box">
   		{% for topic in windowtopics  %}
            	{% if topic.getOfficeid()== office.getId()  %}
-    	        <div class="tab-pane fade " id="{{ topic.name }}">
+    	        <div class="tab-pane fade " id="{{ topic.name }}"  ng-controller="PersonalChatController">
   						<div class="row">
   							<div class="col-md-7" style=" width:320px">
 								<ul class="pagination" style="margin-left: 5px;">
@@ -41,7 +41,8 @@
 							</div>
 						</div>
 					<div class="line"></div>
-					<div id="conversation" class="list-group conversation" style="height:400px">
+					<div class="panel-body nopadding">
+					<div id="conversation" class="list-group conversation" style="height:400px; overflow: scroll;">
   						<a class="list-group-item" ng-repeat="post in posts">
   							<img src="[[avatarURL + post.user.avatar]]" class="chat-user-avatar" alt="" />
   							<span class="username" >[[post.user.name + ' ' + post.user.surname]] ([[post.user.username]])<span class="time">[[ post.posted.date ]]</span> </span>
@@ -49,7 +50,6 @@
   							<p style="white-space: pre-line;" ng-class="{editable:isEditable(post)}" ng-click="editPost(post)">[[post.message]]</p>
   						</a>
 					</div>
-					<div class="panel-body nopadding">
 						<div class="input-group" style="margin-bottom: 3px;margin-left: 1px;">
 							<textarea style="resize:vertical;" class="form-control write-message" ng-class="{editing: editingPost}" id="write-message" placeholder="Type something here and hit enter" ng-model="message" ng-keypress="pressEnter($event)"></textarea>
 							<span class="input-group-btn">
@@ -61,7 +61,7 @@
     	    
             {% endif %}
         {% endfor %}
-        	<div class="tab-pane fade active in" id="{{ office.getName() }}">
+        	<div class="tab-pane fade active in" id="{{ office.getName() }}" ng-controller="PersonalChatController">
   				<div class="row">
   					<div class="col-md-7" style= "width: 370px;">
 						<ul class="pagination" style="margin-left: 5px;">
@@ -82,7 +82,8 @@
 					</div>
 				</div>
 				<div class="line"></div>
-				<div id="conversation" class="list-group conversation" style="height:400px">
+				<div class="panel-body nopadding">
+				<div id="conversation" class="list-group conversation" style="height:400px; overflow: scroll;">
   					<a class="list-group-item ng-scope" ng-repeat="post in posts"">
   					<img src="[[avatarURL + post.user.avatar]]" class="chat-user-avatar" alt="" />
   					<span class="username" >[[post.user.name + ' ' + post.user.surname]] ([[post.user.username]])<span class="time">[[ post.posted.date ]]</span> </span>
@@ -90,7 +91,7 @@
   					<p style="white-space: pre-line;" ng-class="{editable:isEditable(post)}" ng-click="editPost(post)">[[post.message]]</p>
   					</a>
 				</div>
-			<div class="panel-body nopadding">
+			
 				<div class="input-group" style="margin-bottom: 3px;">
 					<textarea style="resize:vertical;" class="form-control write-message" ng-class="{editing: editingPost}" id="write-message" placeholder="Type something here and hit enter" ng-model="message" ng-keypress="pressEnter($event)"></textarea>
 					<span class="input-group-btn">
@@ -122,11 +123,6 @@
 	JSON_URLS_FOR_PERSONAL_PAGE.editMembers = "{{ url('intranet_change_office_members', {office_id: office.getId()}) }}";
 	JSON_URLS_FOR_PERSONAL_PAGE.posts_new = "{{ path('intranet_post_office_new', {office_id: office.id}) }}";
 	JSON_URLS_FOR_PERSONAL_PAGE.post_count = "{{ path('intranet_post_office_count', {office_id: office.id}) }}";
-	
-	JSON_URLS_FOR_PERSONAL_PAGE.urlsPostsTaskShow = "{{ path('intranet_post_task_show', {task_id: 0}) }}";
-	JSON_URLS_FOR_PERSONAL_PAGE.urlsPostsTaskGet = "{{ path('intranet_post_task_get', {task_id: 0}) }}";
-	JSON_URLS_FOR_PERSONAL_PAGE.urlsPostsTaskAdd = "{{ path('intranet_post_task_add', {task_id: 0}) }}";
-	JSON_URLS_FOR_PERSONAL_PAGE.urlsResetCommentsCount = "{{ path('intranet_task_resetNewCommentsCount', {task_id: 0}) }}";
 	
     var USER = {
     	    id: "{{ app.user.getId() }}"

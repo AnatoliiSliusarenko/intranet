@@ -64,42 +64,32 @@ var Intranet = angular.module('Intranet', ['ui.bootstrap'])
  })
 
 .factory('$personalPageChat', function() {
-	
-	var personalPageChat = function($http, $scope, $paginator)
-	{
-		this.entityid = $scope.entityid;
-		this.userid = window.USER.id;
-		this.scope = $scope;
-		this.http = $http;
-		this.container = $('#conversation');
-		this.messageContainer = $('#write-message');	
-		this.members = $scope.members;
-		this.posts = $scope.posts;
-		this.paginator = $paginator;
-	};
-	
-	personalPageChat.prototype.pressEnter = function(e)
+	personalPageChat = {};
+	personalPageChat.id = 0;
+	personalPageChat.ScopeArray = new Array();
+		
+	personalPageChat.pressEnter = function(e)
 	{
 		if ((e.shiftKey == false) && ( e.keyCode == 13 ))
 		{
 			e.preventDefault();
-			this.sendPost();
+			personalPageChat.sendPost();
 		}
 	}
 	
-	personalPageChat.prototype.sendPost = function()
+	personalPageChat.sendPost = function()
 	{
 		var post = {
-				entityid: this.scope.entityid, 
-				userid: this.scope.userid,
-				message: this.scope.message,
+				entityid: personalPageChat.scope.entityid, 
+				userid: personalPageChat.scope.userid,
+				message: personalPageChat.scope.message,
 				posted: new Date()
 		}
 		if (personalPageChat.scope.editingPost)
-			post.postid = this.scope.editingPost.id;
-		this.http({
+			post.postid = personalPageChat.scope.editingPost.id;
+		personalPageChat.http({
 			method: "POST", 
-			url: this.scope.postAddURL, 
+			url: personalPageChat.scope.postAddURL, 
 			data: post })
 		.success(function(response){
 			console.log("Created post: ", response.result);
@@ -108,34 +98,34 @@ var Intranet = angular.module('Intranet', ['ui.bootstrap'])
 				// maybe need to request for posts and init paginator!!!
 				if (personalPageChat.scope.editingPost == null)
 				{
-					this.scope.posts.push(response.result);
-					this.container.animate({ scrollTop: this.container.height()+1900 },1000);
+					personalPageChat.scope.posts.push(response.result);
+					personalPageChat.container.animate({ scrollTop: personalPageChat.container.height()+1900 },1000);
 				}
 				else
 				{
-					_.map(this.scope.posts, function(p, i){
+					_.map(personalPageChat.scope.posts, function(p, i){
 						if (p.id == response.result.id)
-							this.scope.posts[i] = response.result;
+							personalPageChat.scope.posts[i] = response.result;
 					});
 				}
 			}
-			this.scope.editingPost = null;
-			this.scope.message = "";
+			personalPageChat.scope.editingPost = null;
+			personalPageChat.scope.message = "";
 			messageContainer.val("");
 			messageContainer.focus();
-			this.getMembers();
+			personalPageChat.getMembers();
 		})
 	}
 	
-	personalPageChat.prototype.updatePosts = function(posts)
+	personalPageChat.updatePosts = function(posts)
 	{
 		var editedMessages = _.filter(posts, function(p){return p.edited;});
 		if (editedMessages.length == posts.length)
 		{
 			_.map(posts, function(post){
-				_.map(this.scope.posts, function(p, i){
+				_.map(personalPageChat.scope.posts, function(p, i){
 					if (p.id == post.id)
-						this.scope.posts[i] = post;
+						personalPageChat.scope.posts[i] = post;
 				});
 			});
 			return true;
@@ -143,31 +133,31 @@ var Intranet = angular.module('Intranet', ['ui.bootstrap'])
 		return false;
 	}
 	
-	personalPageChat.prototype.getPosts = function (offset, limit)
+	personalPageChat.getPosts = function (offset, limit)
 	{
-		this.http({
+		personalPageChat.http({
 			method: "GET", 
-			url: this.scope.postsGetURL, 
+			url: personalPageChat.scope.postsGetURL, 
 			params: {offset: offset, limit: limit}})
 		.success(function(response){
 			console.log("posts: ",response.result);
 			if (response.result)
 			{
-				this.posts = response.result.reverse();
+				personalPageChat.scope.posts = response.result.reverse();
 			}
 			if (response.result.length>0)
 			{
-				this.lastDate = (_.last(this.posts)).posted.date;
+				personalPageChat.scope.lastDate = (_.last(personalPageChat.scope.posts)).posted.date;
 			}
-			this.container.animate({ scrollTop: this.container.height()+10 },1000);
+			personalPageChat.container.animate({ scrollTop: personalPageChat.container.height()+10 },1000);
 		})
 	}
 	
-	personalPageChat.prototype.getPostsCount = function (callback)
+	personalPageChat.getPostsCount = function (callback)
 	{
-		this.http({
+		personalPageChat.http({
 			method: "GET", 
-			url: this.scope.postsCountURL, 
+			url: personalPageChat.scope.postsCountURL, 
 			})
 		.success(function(response){
 			console.log("posts count: ", response.result);
@@ -176,39 +166,39 @@ var Intranet = angular.module('Intranet', ['ui.bootstrap'])
 		})
 	}
 	
-	personalPageChat.prototype.getMembers = function ()
+	personalPageChat.getMembers = function ()
 	{
-		this.http({
+		personalPageChat.http({
 			method: "GET", 
-			url: this.scope.membersURL, 
+			url: personalPageChat.scope.membersURL, 
 			})
 		.success(function(response){
 			console.log("members: ", response.result);
 			if (response.result)
-				this.members = response.result;
+				personalPageChat.scope.members = response.result;
 		})
 	}
 
-	personalPageChat.prototype.getNewPosts = function ()
+	personalPageChat.getNewPosts = function ()
 	{
-		if (this.scope.paginator.curPageId == 1)
-		{setInterval(this.getNewPosts, 3000);
-		this.http({
+		if (personalPageChat.scope.paginator.curPageId == 1)
+		{setInterval(personalPageChat.getNewPosts, 3000);
+		personalPageChat.http({
 				method: "GET", 
-				url: this.scope.postsNewURL, 
-				params: {last_posted: this.scope.lastDate}})
+				url: personalPageChat.scope.postsNewURL, 
+				params: {last_posted: personalPageChat.scope.lastDate}})
 			.success(function(response){
 				if ((response.result) && (response.result.length > 0))
 				{	
-					var onlyUpdated = this.updatePosts(response.result);
+					var onlyUpdated = personalPageChat.updatePosts(response.result);
 					if (onlyUpdated == false)
 					{
 						personalPageChat.getPostsCount(function(postsCount){
-							this.scope.paginator.init(postsCount, this.scope.postsPerPage);
-							var offset = this.scope.paginator.postsPerPage*(this.scope.paginator.curPageId - 1);
-							var limit = this.scope.paginator.postsPerPage;
-							this.getPosts(offset, limit);
-							this.getMembers();
+							personalPageChat.scope.paginator.init(postsCount, personalPageChat.scope.postsPerPage);
+							var offset = personalPageChat.scope.paginator.postsPerPage*(personalPageChat.scope.paginator.curPageId - 1);
+							var limit = personalPageChat.scope.paginator.postsPerPage;
+							personalPageChat.getPosts(offset, limit);
+							personalPageChat.getMembers();
 						});
 					}
 				}
@@ -216,7 +206,7 @@ var Intranet = angular.module('Intranet', ['ui.bootstrap'])
 		}
 	}
 	
-	personalPageChat.prototype.isEditable = function(post)
+	personalPageChat.isEditable = function(post)
 	{
 		var postedTime = new Date(Date.parse(post.posted.date));
 		var now = new Date();
@@ -227,24 +217,24 @@ var Intranet = angular.module('Intranet', ['ui.bootstrap'])
 		return (minutesAgo <= 5 && post.userid == $scope.userid);
 	}
 	
-	personalPageChat.prototype.changePostsPerPage = function(){
+	personalPageChat.changePostsPerPage = function(){
 		getPostsCount(function(postsCount){
-			this.scope.paginator.init(postsCount, this.scope.postsPerPage);
-			var offset = this.scope.paginator.postsPerPage*(this.scope.paginator.curPageId - 1);
-			var limit = this.scope.paginator.postsPerPage;
-			this.getPosts(offset, limit);
+			personalPageChat.scope.paginator.init(postsCount, personalPageChat.scope.postsPerPage);
+			var offset = personalPageChat.scope.paginator.postsPerPage*(personalPageChat.scope.paginator.curPageId - 1);
+			var limit = personalPageChat.scope.paginator.postsPerPage;
+			personalPageChat.getPosts(offset, limit);
 		});
 	}
 	
-	personalPageChat.prototype.editPost = function(post)
+	personalPageChat.editPost = function(post)
 	{
-		if ((!this.isEditable(post)) || (this.editingPost != null)) return;
+		if ((!personalPageChat.isEditable(post)) || (personalPageChat.editingPost != null)) return;
 		console.log(post);
-		this.scope.editingPost = post;
-		this.messageContainer.val(post.message);
+		personalPageChat.scope.editingPost = post;
+		personalPageChat.messageContainer.val(post.message);
 	}
 	
-	/*personalPageChat.init = function($http, $scope)
+	personalPageChat.init = function($http, $scope)
 	{
 		personalPageChat.entityid = $scope.entityid;
 		personalPageChat.userid = window.USER.id;
@@ -252,10 +242,11 @@ var Intranet = angular.module('Intranet', ['ui.bootstrap'])
 		personalPageChat.http = $http;
 		personalPageChat.container = $('#conversation');
 		personalPageChat.messageContainer = $('#write-message');
+		console.log('------> init Personal chat #',personalPageChat.id, this);
 		personalPageChat.id++;
-		console.log('Personal factory # ',this.id,'---> ',this);
 		return this;
-	}*/
+		
+	}
 	
 	Date.minutesBetween = function( date1, date2 ) {
 		  var one_minute=1000*60;
@@ -279,14 +270,13 @@ var Intranet = angular.module('Intranet', ['ui.bootstrap'])
 		return date.getFullYear()+"-"+date.getMonth()+1+"-"+date.getDate()+" "+date.getHours()+":"+date.getMinutes()+":"+date.getSeconds();
 	}
 	
-	personalPageChat.prototype.startChat = function()
+	personalPageChat.startChat = function()
 	{
-		this.getMembers();
-		this.getPostsCount(function(postsCount){
-			debugger
-			this.paginator.init(postsCount, this.scope.postsPerPage);
+		personalPageChat.getMembers();
+		personalPageChat.getPostsCount(function(postsCount){
+			personalPageChat.scope.paginator.init(postsCount, personalPageChat.scope.postsPerPage);
+			
 		});
-		console.log('personalpagechat ----> ', this)
 		setInterval(personalPageChat.getNewPosts, 3000);
 	}
 
