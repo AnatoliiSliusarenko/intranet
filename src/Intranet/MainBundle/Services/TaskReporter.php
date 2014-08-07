@@ -17,7 +17,8 @@ class TaskReporter
     	$this->user = $securityContext->getToken()->getUser();
     	$this->em = $em;
     }
-   
+    
+    //time spend from one status to another
     private function calculateTS($user, $task, $statusFrom, $statusTo, $from, $to)
     {
     	$qb = $this->em->createQueryBuilder();
@@ -86,6 +87,12 @@ class TaskReporter
     	return (count($values)>0) ? $suma/count($values) : null;
     }
     
+    //spend time on task in status by user
+    private function spendTime($task, $status, $user)
+    {
+    	return '-';
+    }
+    
     private function getTimeString($seconds)
     {
     	if ($seconds == null) return '-';
@@ -107,59 +114,75 @@ class TaskReporter
     		'rows' => array()
     	);	
     	
+    	if (isset($filter->from) && (trim($filter->from) != ''))
+    	{
+    		$from = $filter->from;
+    	}else $from = null;
+    	
+    	if (isset($filter->to) && (trim($filter->to) != ''))
+    	{
+    		$to = $filter->to;
+    	}else $to = null;
+    	
+    	$statusFrom = (isset($filter->statusFrom)) ? $this->em->getRepository('IntranetMainBundle:TaskStatus')->find($filter->statusFrom) : null;
+    	$statusTo = (isset($filter->statusTo)) ? $this->em->getRepository('IntranetMainBundle:TaskStatus')->find($filter->statusTo) : null;
+    	
+    	$users = array();
+    	if (isset($filter->users) && ($filter->users != array()))
+    	{
+    		foreach ($filter->users as $userId)
+    		{
+    			$user = $this->em->getRepository('IntranetMainBundle:User')->find($userId);
+    			if ($user != null) $users[] = $user;
+    		}
+    	}else
+    	{
+    		$users = $this->em->getRepository('IntranetMainBundle:User')->findAll();
+    	}
+    	
+    	$tasks = array();
+    	$tasksAll = false;
+    	if (isset($filter->tasks) && ($filter->tasks != array()))
+    	{
+    		foreach ($filter->tasks as $taskId)
+    		{
+    			$task = $this->em->getRepository('IntranetMainBundle:Task')->find($taskId);
+    			if ($task != null) $tasks[] = $task;
+    		}
+    	}else
+    	{
+    		$tasks = Task::getAllTasks($this->em);
+    		$tasksAll = true;
+    	}
+    	
+    	$statuses = array();
+    	if (isset($filter->statuses) && ($filter->statuses != array()))
+    	{
+    		foreach ($filter->statuses as $statusId)
+    		{
+    			$status = $this->em->getRepository('IntranetMainBundle:TaskStatus')->find($statusId);
+    			if ($status != null) $statuses[] = $status;
+    		}
+    	}else
+    	{
+    		$statuses = $this->em->getRepository('IntranetMainBundle:TaskStatus')->findAll();
+    	}
+    	
     	switch ($filter->query)
     	{
     		case 'type1':
     			{
-    				$users = array();
-    				$statusFrom = $this->em->getRepository('IntranetMainBundle:TaskStatus')->find($filter->statusFrom);
-    				$statusTo = $this->em->getRepository('IntranetMainBundle:TaskStatus')->find($filter->statusTo);
-    				
     				if (($statusFrom == null) || ($statusTo == null)) return;
     				
-    				if (isset($filter->from) && (trim($filter->from) != ''))
-    				{
-    					$from = $filter->from;
-    				}else $from = null;
-    				
-    				if (isset($filter->to) && (trim($filter->to) != ''))
-    				{
-    					$to = $filter->to;
-    				}else $to = null;
-    				
-    				
-    				if (isset($filter->users) && ($filter->users != array()))
-    				{
-    					foreach ($filter->users as $userId)
-    					{
-    						$user = $this->em->getRepository('IntranetMainBundle:User')->find($userId);
-    						if ($user != null) $users[] = $user;
-    					}
-    				}else 
-    				{
-    					$users = $this->em->getRepository('IntranetMainBundle:User')->findAll();
-    				}
-    				
     				$result['cols'][] = array('label' => 'User');
-    				$tasks = array();
-    				$tasksAll = false;
-    				if (isset($filter->tasks) && ($filter->tasks != array()))
+    				if (!$tasksAll)
     				{
-    					foreach ($filter->tasks as $taskId)
+    					foreach ($tasks as $task)
     					{
-    						$task = $this->em->getRepository('IntranetMainBundle:Task')->find($taskId);
-    						if ($task != null)
-    						{
-    							$tasks[] = $task;
-    							$result['cols'][] = array(
+    						$result['cols'][] = array(
     								'label' => $task->getName()
-    							);
-    						}
+    						);
     					}
-    				}else 
-    				{
-    					$tasks = Task::getAllTasks($this->em);
-    					$tasksAll = true;
     				}
     				$result['cols'][] = array('label' => 'Average');
     				
@@ -198,7 +221,40 @@ class TaskReporter
     			}
     		case 'type2':
     			{
-    				return 'type2';
+    				$result['cols'][] = array('label' => 'ID');
+    				$result['cols'][] = array('label' => 'Task');
+    				$result['cols'][] = array('label' => 'Status');
+    				
+    				foreach ($users as $user)
+    				{
+    					$result['cols'][] = array('label' => $user->getName());
+    				}
+    				
+    				foreach ($tasks as $task)
+    				{
+    					foreach ($statuses as $status)
+    					{
+    						$newRow = array();
+    						$newRow[] = array(
+    								'value' => $task->getId()
+    						);
+    						$newRow[] = array(
+    								'value' => $task->getName()
+    						);
+    						$newRow[] = array(
+    								'value' => $status->getLabel()
+    						);
+	    					foreach ($users as $user)
+	    					{
+	    						$newRow[] = array(
+	    								'value' => $this->spendTime($task, $status, $user)
+	    						);
+	    					}
+	    					$result['rows'][] = $newRow;
+    					}
+    				}
+    				
+    				return $result;
     			}
     		case 'type3':
     			{
