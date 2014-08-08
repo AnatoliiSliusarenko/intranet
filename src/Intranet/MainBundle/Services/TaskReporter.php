@@ -18,8 +18,8 @@ class TaskReporter
     	$this->em = $em;
     }
     
-    //time spend from one status to another
-    private function calculateTS($user, $task, $statusFrom, $statusTo, $from, $to)
+    //time period from one status to another
+    private function timePeriod($user, $task, $statusFrom, $statusTo, $from, $to)
     {
     	$qb = $this->em->createQueryBuilder();
     	$qb->select('l')
@@ -53,8 +53,6 @@ class TaskReporter
     		
     	foreach ($logs as $log)
     	{
-    		if ($log->getTaskid() == $task->getId())
-    		{
     			if (($log->getType() == 'status-changed') && ($log->getResourceid() == $statusFrom->getId()))
     			{
     				$statusFromFinded = true;
@@ -68,6 +66,7 @@ class TaskReporter
     					$differenceInSeconds = $log->getLoged()->format('U') - $statusFromDatetime->format('U');
     					
     					$values[] = $differenceInSeconds;
+    					$statusFromFinded = false;
     				}
     			}
     				
@@ -75,8 +74,11 @@ class TaskReporter
     			{
     				$assigned = true;
     				if ($statusFromFinded) $statusFromDatetime = $log->getLoged();
+    			}else
+    			if (($log->getType() == 'user-changed') && ($log->getResourceid() != $user->getId()))
+    			{
+    				$assigned = false;
     			}
-    		}
     	}
     		
     	$suma = 0;
@@ -87,10 +89,81 @@ class TaskReporter
     	return (count($values)>0) ? $suma/count($values) : null;
     }
     
-    //spend time on task in status by user
-    private function spendTime($task, $status, $user)
+    //spent time on task in status by user
+    private function spentTime($task, $status, $user, $from, $to)
     {
-    	return '-';
+    	$qb = $this->em->createQueryBuilder();
+    	$qb->select('l')
+    	->from('IntranetMainBundle:TaskActivityLog', 'l')
+    	->andWhere('l.taskid = :taskid')
+    	->setParameter('taskid', $task->getId())
+    	->orderBy('l.loged', 'ASC');
+    	
+    	if ($from != null)
+    	{
+    		$qb->andWhere('l.loged > :from')
+    		->setParameter('from', $from);
+    	}
+    	
+    	if ($to != null)
+    	{
+    		$qb->andWhere('l.loged < :to')
+    		->setParameter('to', $to);
+    	}
+    	 
+    	$logs = $qb->getQuery()->getResult();
+    	
+    	$assigned = false;
+    	$value = 0;
+    	$statusFinded = false;
+    	$statusFindedDatetime = null;
+    	
+    	foreach ($logs as $log)
+    	{
+    			if (($log->getType() == 'status-changed') && ($log->getResourceid() == $status->getId()))
+    			{
+    				$statusFinded = true;
+    				$statusFindedDatetime = $log->getLoged();
+    			} else
+    			if (($log->getType() == 'status-changed') && ($log->getResourceid() != $status->getId()))
+    			{
+    				if (($statusFinded) && ($assigned))
+    				{
+    						
+    					$differenceInSeconds = $log->getLoged()->format('U') - $statusFindedDatetime->format('U');
+    					
+    					$value = $value + $differenceInSeconds;
+    				}
+    				$statusFinded = false;
+    			}
+    				
+    			if (($log->getType() == 'user-changed') && ($log->getResourceid() == $user->getId()))
+    			{
+    				$assigned = true;
+    				if ($statusFinded) $statusFindedDatetime = $log->getLoged();
+    			}else 
+    			if (($log->getType() == 'user-changed') && ($log->getResourceid() != $user->getId()))
+    			{
+    				if (($statusFinded) && ($assigned))
+    				{
+    				
+    					$differenceInSeconds = $log->getLoged()->format('U') - $statusFindedDatetime->format('U');
+    						
+    					$value = $value + $differenceInSeconds;
+    				}
+    				$assigned = false;
+    			}
+    	}
+    	
+    	if (($statusFinded) && ($assigned))
+    	{
+    		$now = new \DateTime();
+    		$differenceInSeconds = $now->format('U') - $statusFindedDatetime->format('U');
+    		
+    		$value = $value + $differenceInSeconds;
+    	}
+    	
+    	return $value;
     }
     
     private function getTimeString($seconds)
@@ -195,7 +268,7 @@ class TaskReporter
     					$values = array();
     					foreach ($tasks as $task)
     					{
-    						$valueInSeconds = $this->calculateTS($user, $task, $statusFrom, $statusTo, $from, $to);
+    						$valueInSeconds = $this->timePeriod($user, $task, $statusFrom, $statusTo, $from, $to);
     						if ($valueInSeconds != null) $values[] = $valueInSeconds;
     						if (!$tasksAll)
     						$newRow[] = array(
@@ -247,7 +320,7 @@ class TaskReporter
 	    					foreach ($users as $user)
 	    					{
 	    						$newRow[] = array(
-	    								'value' => $this->spendTime($task, $status, $user)
+	    								'value' => $this->getTimeString($this->spentTime($task, $status, $user, $from, $to))
 	    						);
 	    					}
 	    					$result['rows'][] = $newRow;
