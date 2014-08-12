@@ -1,4 +1,4 @@
- 		
+
 <div class="col-md-6 personalchat line"  style="margin-top:2px;margin-right: 2px;">
 	<div class="panel text-primary panel-cascade">
 		<div class="panel-heading">
@@ -9,7 +9,9 @@
   				<li class="active in"><a href="#{{ office.getName() }}" data-toggle="tab">{{ office.getName() }} </a></li>
   					{% for topic in windowtopics  %}
        	        		{% if topic.getOfficeid()== office.getId()  %}
-        	        		<li ><a href="#{{ topic.name }}" data-toggle="tab">{{ topic.name }}</a></li>
+        	        		<li >
+        	        			<a href="#{{ topic.name }}" data-toggle="tab" >{{ topic.name }}</a>
+        	        		</li>
               			{% endif %}
             		{% endfor %}
 			</ul>
@@ -20,8 +22,9 @@
 		<div id="myTabContent" class="tab-content chat-box">
   		{% for topic in windowtopics  %}
            	{% if topic.getOfficeid()== office.getId()  %}
-    	        <div class="tab-pane fade " id="{{ topic.name }}"  ng-controller="PersonalChatController">
+    	        <div class="tab-pane fade " id="{{ topic.name }}" ng-controller="PersonalTopicChatController" ng-init="init('{{ topic.Id }}')" >
   						<div class="row">
+  						
   							<div class="col-md-7" style=" width:320px">
 								<ul class="pagination" style="margin-left: 5px;">
 									<li ng-class="{disabled: paginator.curPageId == 1}"><a href="#" ng-click="paginator.firstPage($event)">first</a></li>
@@ -34,7 +37,7 @@
 							<div class="col-md-5" style="margin: 20px 0; width:370px">
 								<label for="inputEmail1" class="col-lg-5 col-md-3 control-label" style="margin-top: 7px;">Messages/Page</label>
 								<div class="col-lg-5 col-md-9">
-					   			<select class="form-control" ng-model="postsPerPage" ng-change="changePostsPerPage()">
+					   			<select class="form-control" ng-model="postsPerPage" ng-change="changePostsPerPageTopic()">
 						   			<option ng-repeat="item in paginator.postsPerPageValues">[[item]]</option>		
 					  			</select>
 								</div>											
@@ -53,7 +56,7 @@
 						<div class="input-group" style="margin-bottom: 3px;margin-left: 1px;">
 							<textarea style="resize:vertical;" class="form-control write-message" ng-class="{editing: editingPost}" id="write-message" placeholder="Type something here and hit enter" ng-model="message" ng-keypress="pressEnter($event)"></textarea>
 							<span class="input-group-btn">
-								<button class="btn text-white bg-primary send-message" type="button" id="send-message" ng-click="personalPageChat.sendPost()" style="height: 130%; margin: 1px">Send</button>
+								<button class="btn text-white bg-primary send-message" type="button" id="send-message" ng-click="sendPost()" style="height: 130%; margin: 1px">Send</button>
 							</span>
   						</div>
 					</div>
@@ -61,7 +64,7 @@
     	    
             {% endif %}
         {% endfor %}
-        	<div class="tab-pane fade active in" id="{{ office.getName() }}" ng-controller="PersonalChatController">
+        	<div class="tab-pane fade active in" id="{{ office.getName() }}" ng-controller="PersonalOfficeChatController" ng-init="init('{{ curent }}')">
   				<div class="row">
   					<div class="col-md-7" style= "width: 370px;">
 						<ul class="pagination" style="margin-left: 5px;">
@@ -75,7 +78,7 @@
 					<div class="col-md-5" style="margin: 20px 0; width:370px">
 						<label for="inputEmail1" class="col-lg-5 col-md-3 control-label" style="margin-top: 7px;">Messages/Page</label>
 						<div class="col-lg-5 col-md-9">
-					   	<select class="form-control" ng-model="postsPerPage" ng-change="changePostsPerPage()">
+					   	<select class="form-control" ng-model="postsPerPage" ng-change="changePostsPerPageOffice()">
 						   	<option ng-repeat="item in paginator.postsPerPageValues">[[item]]</option>		
 					  	</select>
 						</div>											
@@ -95,7 +98,7 @@
 				<div class="input-group" style="margin-bottom: 3px;">
 					<textarea style="resize:vertical;" class="form-control write-message" ng-class="{editing: editingPost}" id="write-message" placeholder="Type something here and hit enter" ng-model="message" ng-keypress="pressEnter($event)"></textarea>
 					<span class="input-group-btn">
-						<button class="btn text-white bg-primary send-message" type="button" id="send-message" ng-click="sendPost()"style="height: 130%; margin: 1px">Send</button>
+						<button class="btn text-white bg-primary send-message" type="button" id="send-message" ng-click="sendPostOffice()"style="height: 130%; margin: 1px">Send</button>
 					</span>
   				</div>
 			</div>
@@ -114,15 +117,28 @@
 	var MEMBERS = {{ officeUsers|json_encode|raw }};
 	var TOPICS = {{ windowtopics|json_encode|raw }};
 	var STATUSES = {{ availableStatus|json_encode|raw }};
-	var OFICE_ID = {{ office.id|json_encode|raw }}
+	var OFICE_ID = {{ office.id|json_encode|raw }};
+	var DATA_ID = {{ dataid|json_encode|raw }};
+
 	var JSON_URLS_FOR_PERSONAL_PAGE = [];
-	JSON_URLS_FOR_PERSONAL_PAGE.posts = "{{ path('intranet_post_office_get_posts', {office_id: office.id}) }}";
-	JSON_URLS_FOR_PERSONAL_PAGE.post_add = "{{ path('intranet_post_office_add_post', {office_id: office.id}) }}"; 
+	
+	setTimeout(function(){},3000);
+	console.log('OFFICE ID ', DATA_ID);
+
 	JSON_URLS_FOR_PERSONAL_PAGE.avatar = "{{ asset('bundles/intranet/images/profiles/') }}";
-	JSON_URLS_FOR_PERSONAL_PAGE.members = "{{ path('intranet_office_members', {office_id: office.id}) }}";
-	JSON_URLS_FOR_PERSONAL_PAGE.editMembers = "{{ url('intranet_change_office_members', {office_id: office.getId()}) }}";
-	JSON_URLS_FOR_PERSONAL_PAGE.posts_new = "{{ path('intranet_post_office_new', {office_id: office.id}) }}";
-	JSON_URLS_FOR_PERSONAL_PAGE.post_count = "{{ path('intranet_post_office_count', {office_id: office.id}) }}";
+
+	JSON_URLS_FOR_PERSONAL_PAGE.postsOffice = "{{ path('intranet_post_office_get_posts', {office_id: 0}) }}";
+	JSON_URLS_FOR_PERSONAL_PAGE.post_addOffice = "{{ path('intranet_post_office_add_post', {office_id: 0}) }}"; 
+	JSON_URLS_FOR_PERSONAL_PAGE.membersOffice = "{{ path('intranet_office_members', {office_id: 0}) }}";
+	JSON_URLS_FOR_PERSONAL_PAGE.editMembersOffice = "{{ url('intranet_change_office_members', {office_id: 0}) }}";
+	JSON_URLS_FOR_PERSONAL_PAGE.posts_newOffice = "{{ path('intranet_post_office_new', {office_id: 0}) }}";
+	JSON_URLS_FOR_PERSONAL_PAGE.post_countOffice = "{{ path('intranet_post_office_count', {office_id: 0}) }}";
+	
+	JSON_URLS_FOR_PERSONAL_PAGE.postsTopic = "{{ path('intranet_post_topic_get_posts', {topic_id: 0}) }}";
+	JSON_URLS_FOR_PERSONAL_PAGE.post_addTopic = "{{ path('intranet_post_topic_add_post', {topic_id: 0}) }}"; 
+	JSON_URLS_FOR_PERSONAL_PAGE.membersTopic = "{{ path('intranet_topic_members', {topic_id: 0}) }}";
+	JSON_URLS_FOR_PERSONAL_PAGE.posts_newTopic = "{{ path('intranet_post_topic_new', {topic_id: 0}) }}";
+	JSON_URLS_FOR_PERSONAL_PAGE.post_countTopic = "{{ path('intranet_post_topic_count', {topic_id: 0}) }}";
 	
     var USER = {
     	    id: "{{ app.user.getId() }}"
@@ -130,10 +146,7 @@
 	
    	var ENTITY = {
    		   	id: "{{ office.id }}"
-    };
-   	
-   	var TASKS_NOTIFICATIONS = [];
-   	
+    };   	
 	</script>
 	
 {% endblock %}

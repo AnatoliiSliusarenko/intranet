@@ -228,8 +228,8 @@ class PersonalPage
     			"topics" => $topics,
     			"em" => $em,
     			"offices" => $offices,
-    			"windows" => $windows);
-    	
+    			"windows" => $windows
+    	);
     	return $parameters;
     }
     
@@ -248,5 +248,34 @@ class PersonalPage
     		}
     	}
     	return $window_topics;
+    }
+    
+    public static function getAllIdForUser($em, $userid)
+    {
+    	$office_id_arr = array();
+    	$topic_id_arr = array();
+    	$windows = array();
+    	$windows_id_arr = array();
+    	$personal_data = $em->getRepository('IntranetMainBundle:PersonalPage')->findAll($userid);
+    	if ($personal_data == null)
+    		return $this->redirect($this->generateUrl('intranet_main_homepage'));
+    	foreach ($personal_data as $personal_record)
+    	{
+    		array_push($windows_id_arr, $personal_record->getWindowid());
+    		if(array_search($personal_record->getTopicId(), $office_id_arr) == false)
+    		if($personal_record->getTopicId()!= null)
+    			array_push($topic_id_arr,$personal_record->getTopicId());
+    		 
+    	}
+    	$windows_id_arr = array_unique($windows_id_arr);
+    	foreach ($windows_id_arr as $window_id)
+    		array_push($windows, $window = $em->getRepository('IntranetMainBundle:PersonalPage')->findOneByWindowid($window_id));
+    	foreach ($windows as $window)
+    		array_push($office_id_arr, $window->getOfficeid());
+    	$result_array = array(
+    		"officesid" => $office_id_arr,
+    		"topicsid" => $topic_id_arr
+    	);
+    	return $result_array;
     }
 }

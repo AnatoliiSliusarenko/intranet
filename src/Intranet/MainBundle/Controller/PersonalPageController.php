@@ -6,7 +6,7 @@ use Intranet\MainBundle\Entity\TaskStatus;
 use Intranet\MainBundle\Entity\Topic;
 use Intranet\MainBundle\Entity\PersonalPage;
 class PersonalPageController extends Controller
-{
+{	
 	public  function showPersonalPageAction()
 	{
 		$em = $this->getDoctrine()->getManager();
@@ -15,7 +15,7 @@ class PersonalPageController extends Controller
 		return $this->render('IntranetMainBundle:PersonalPage:showPersonalPage.html.twig', $parameters);
 	}
 	
-	public function showChatPersonalPageAction($office_id , $topics, $window)
+	public function showChatPersonalPageAction($office_id , $topics, $window, $curent)
 	{
 		
 		$em = $this->getDoctrine()->getManager();
@@ -41,11 +41,13 @@ class PersonalPageController extends Controller
 				'officeUsers' => array_map(function($e){return $e->getInArray();}, $officeUsers->toArray()),
 				'users' => array_map(function($e){return $e->getInArray();}, $users),
 				'offices' => $childrenOfficesForUser,
-				'windowtopics' => PersonalPage::getTopicsForWindow($window->getWindowid(),$em, $topics));
+				'windowtopics' => PersonalPage::getTopicsForWindow($window->getWindowid(),$em, $topics),
+				'dataid' => PersonalPage::getAllIdForUser($em, $this->getUser()),
+				"curent" => $curent
+		);
 		
 		return $this->render("IntranetMainBundle:PersonalPage:chatPersonalPage.html.twig", $parameters);
 		
 	}
-	
 
 }

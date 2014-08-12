@@ -6,7 +6,7 @@
 	{% for window in windows %}
 	
   		{{ render( controller('IntranetMainBundle:PersonalPage:showChatPersonalPage', {
-        'office_id': window.getOfficeid() , 'topics': topics, 'window': window
+        'office_id': window.getOfficeid() , 'topics': topics, 'window': window, 'curent': loop.index0
     })) }}	
     {% endfor %}
 </div>
@@ -15,5 +15,4 @@
 {% block javascripts %}
 {{ parent() }}
   	<script src="{{ asset('bundles/intranet/js/custom/personal_page_chat.js') }}"></script>
-	var ARRAY_SCOPE = [];
 {% endblock %}
