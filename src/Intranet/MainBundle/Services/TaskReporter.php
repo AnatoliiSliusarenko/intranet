@@ -183,26 +183,6 @@ class TaskReporter
     	
     	if (($statusFinded) && ($assigned))
     	{
-    		$qb = $this->em->createQueryBuilder();
-    		$qb->select('l')
-    		->from('IntranetMainBundle:TaskActivityLog', 'l')
-    		->andWhere('l.taskid = :taskid')
-    		->setParameter('taskid', $task->getId())
-    		->andWhere('l.type = :type')
-    		->setParameter('type', 'status-changed')
-    		->andWhere($qb->expr()->in('l.resourceid', $notCalculatingStatusesIds))
-    		->andWhere('l.loged > :loged')
-    		->setParameter('loged', $to->format('Y-m-d H:i:s'))
-    		->orderBy('l.loged', 'ASC');
-    		 
-    		$statusLogs = $qb->getQuery()->getResult();
-    		
-    		
-    		
-    		
-    		
-    		
-    		
     		
     		$now = new \DateTime();
     		$differenceInSeconds = $now->format('U') - $statusFindedDatetime->format('U');
