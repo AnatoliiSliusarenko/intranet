@@ -106,13 +106,13 @@ Intranet.controller('ChatController', ['$scope', '$http', '$paginator', function
 	function getNewPosts()
 	{
 		if ($scope.paginator.curPageId == 1)
-		{setInterval(getNewPosts, 3000);
+		{
 			$http({
 				method: "GET", 
 				url: $scope.postsNewURL, 
 				params: {last_posted: $scope.lastDate}})
 			.success(function(response){
-				//console.log("new posts: ", response.result);
+				console.log("new posts: ", response.result);
 				if ((response.result) && (response.result.length > 0))
 				{	
 					var onlyUpdated = updatePosts(response.result);

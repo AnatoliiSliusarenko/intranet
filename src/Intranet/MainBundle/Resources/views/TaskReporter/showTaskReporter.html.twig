@@ -31,7 +31,7 @@
                 </h3>
             </div>
 			<div class="panel-body" style="display:none;">
-            	<div class="form-group">
+            	<div class="form-group" ng-show="filter.query != 'type3'">
   					<label for="inputEmail1" class="col-lg-2 col-md-3 control-label">Tasks</label>
   					<div class="col-lg-10 col-md-9">
    						<select multiple ng-model="filter.tasks" class="form-control">
@@ -41,7 +41,7 @@
 						</select>
 					</div>
 				</div>
-				<div class="form-group">
+				<div class="form-group" ng-show="(filter.query != 'type1') && (filter.query != 'type3')">
   					<label for="inputEmail1" class="col-lg-2 col-md-3 control-label">Task Statuses</label>
   					<div class="col-lg-10 col-md-9">
    						<select multiple ng-model="filter.statuses" class="form-control">
@@ -52,7 +52,7 @@
 					</div>
 				</div>
 				
-				<div class="form-group">
+				<div class="form-group" ng-show="filter.query == 'type1'">
   					<label for="inputEmail1" class="col-lg-2 col-md-3 control-label">Task Status From</label>
   					<div class="col-lg-10 col-md-9">
    						<select ng-model="filter.statusFrom" class="form-control">
@@ -63,7 +63,7 @@
 					</div>
 				</div>
 				
-				<div class="form-group">
+				<div class="form-group" ng-show="filter.query == 'type1'">
   					<label for="inputEmail1" class="col-lg-2 col-md-3 control-label">Task Status To</label>
   					<div class="col-lg-10 col-md-9">
    						<select ng-model="filter.statusTo" class="form-control">
@@ -105,9 +105,19 @@
    						<select ng-model="filter.query" class="form-control">
 						    <option value="type1">The average value the task goes from one state to another ?</option>
 						    <option value="type2">How much time is spent on tasks ?</option>
-						    <option value="type3">What did the developer on certain days ?</option>
+						    <option value="type3">What did developers on certain days ?</option>
 						    <option value="type4">How much time is left until the task is completed ?</option>
 						</select>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+						&nbsp;
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+						<a href="#" ng-click="queryReport()" class="btn btn-info btn-block">Generate Report</a>
 					</div>
 				</div>
             </div>
@@ -127,6 +137,7 @@
 	           		</thead>
 	           		<tbody>
 			           <tr ng-repeat="row in table.rows">
+			           		<!-- <td ng-show="false" colspan="[[table.cols.length]]" style="font-weight:bold; font-style:italic; text-align: center; background-color: #CCFFFF;" class="visible-lg">[[ row[table.groupByColumn].value ]]</td> -->
 					   		<td ng-repeat="column in row" class="visible-lg">[[ column.value ]]</td>
 			           </tr>
 			  		</tbody>
