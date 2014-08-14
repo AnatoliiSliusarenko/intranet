@@ -29,6 +29,7 @@ class OfficeController extends Controller
 		$em = $this->getDoctrine()->getManager();
 		$this->get('intranet.notifier')->clearNotificationsByOfficeId($office_id);
 		$office = $em->getRepository('IntranetMainBundle:Office')->find($office_id);
+		
 		if (($office == null) || (!$office->hasUser($this->getUser())))
 			return $this->redirect($this->generateUrl('intranet_main_homepage'));
 		 
@@ -40,7 +41,8 @@ class OfficeController extends Controller
 		
 		$topicTree = Topic::getTopicTree($em);
 		$parentTopic = $topicTree[0];
-		
+		$windows = array();
+		$windows = PersonalPage::getWindowsName($em);
 		$parameters = array(
 				"availableStatus" => TaskStatus::getAllStatuses($em),
 				"em" => $em,
@@ -50,7 +52,8 @@ class OfficeController extends Controller
 				"topics" => array_map(function($e){return $e->getInArray();}, $office->getTopics()->toArray()), 
 				'officeUsers' => array_map(function($e){return $e->getInArray();}, $officeUsers->toArray()),
 				'users' => array_map(function($e){return $e->getInArray();}, $users), 
-				'offices' => $childrenOfficesForUser);
+				'offices' => $childrenOfficesForUser,
+				"windows" => $windows);
 		
 		
 		if ($request->getSession()->has('errorOffice'))
@@ -173,7 +176,7 @@ class OfficeController extends Controller
     {
     	$em = $this->getDoctrine()->getManager();
     	$office = $em->getRepository('IntranetMainBundle:Office')->find($office_id);
-    	$personal_office = $em->getRepository('IntranetMainBundle:PersonalPage')->findByOfficeid($office_id);
+    	$personal_office = $em->getRepository('IntranetMainBundle:PersonalPage')->find($office_id);
     	$personal_data = $em->getRepository('IntranetMainBundle:PersonalPage')->findAll($this->getUser()->getId());
     	$count_window = count($personal_data)+1;
     	if( $personal_office != null)
@@ -201,5 +204,31 @@ class OfficeController extends Controller
     		return $this->redirect($this->generateUrl('intranet_show_office',array('office_id' => $office_id)));
     	}
     	
+    }
+    
+    public function addOfficeToExistWindowPersonalPageAction($office_id, $window_id)
+    {
+    	$em = $this->getDoctrine()->getManager();
+    	$office = $em->getRepository('IntranetMainBundle:Office')->find($office_id);
+    	$personal_office = $em->getRepository('IntranetMainBundle:PersonalPage')->findByOfficeid($office_id);
+    	if( $personal_office != null )
+    	{
+    		return $this->render('IntranetMainBundle:Office:messageOfficesAllredyAdded.html.twig');
+    	}
+    	else
+    	{
+    		$personal = new PersonalPage();
+    		$personal->setOfficeid($office_id);
+    		$personal->setTopicid(NULL);
+    		$personal->setUserid($this->getUser()->getId());
+    		$personal->setNamewindow($office->getName());
+    		$personal->setWindowid($window_id);
+    		$em = $this->getDoctrine()->getEntityManager();
+    		$em->persist($personal);
+    		$em->flush();
+    		$parameters = array (
+    				"office" => $office);
+    		return $this->redirect($this->generateUrl('intranet_show_office',array('office_id' => $office_id)));
+    	}
     }
 }

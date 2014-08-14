@@ -152,10 +152,6 @@ intranet_user_settings:
     pattern:  /user/settings/
     defaults: { _controller: IntranetMainBundle:UserSettings:index }
     
-intranet_show_personalPage:
-    pattern:  /personal/{user_id}
-    defaults: { _controller: IntranetMainBundle:PersonalPage:showPersonalPage }
-    
 intranet_add_topic_to_personal_page:
   pattern: /topic/{topic_id}/addTopicChatToNewWindowPersonalPage/
   defaults: { _controller: IntranetMainBundle:Topic:addTopicChatToNewWindowPersonal }
@@ -171,3 +167,7 @@ intranet_show_personal_page:
 intranet_add_topic_to_exist_window_personal_page:
   pattern: /topic/{topic_id}/addTopicChatToExistWindowPersonalPage/
   defaults: { _controller: IntranetMainBundle:Topic:addTopicToExistWindowPersonalPage }
+  
+intranet_add_office_to_exist_window_personal_page:
+  pattern: /office/{office_id}/{window_id}/addOfficeChatToExistWindowPersonalPage/
+  defaults: { _controller: IntranetMainBundle:Office:addOfficeToExistWindowPersonalPage }

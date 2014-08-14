@@ -250,6 +250,12 @@ class PersonalPage
     	return $window_topics;
     }
     
+    public static function getOfficeForWindow($em, $window)
+    {
+    	$office = $em->getRepository('IntranetMainBundle:PersonalPage')->findByTopicid(NULL);
+    	return $office;
+    }
+    
     public static function getAllIdForUser($em, $userid)
     {
     	$office_id_arr = array();
@@ -271,11 +277,28 @@ class PersonalPage
     	foreach ($windows_id_arr as $window_id)
     		array_push($windows, $window = $em->getRepository('IntranetMainBundle:PersonalPage')->findOneByWindowid($window_id));
     	foreach ($windows as $window)
-    		array_push($office_id_arr, $window->getOfficeid());
+    		if($window->getTopicid() == NULL)
+    			array_push($office_id_arr, $window->getOfficeid());
     	$result_array = array(
     		"officesid" => $office_id_arr,
     		"topicsid" => $topic_id_arr
     	);
     	return $result_array;
+    }
+    
+    public static function getWindowsName($em)
+    {
+    	$arrayWindows = array();
+    	$variable = 
+    	$records = $em->getRepository('IntranetMainBundle:PersonalPage')->findAll();
+    	foreach ($records as $record) {
+    		$variable = array(
+    			"windowName" =>  $record->getNamewindow(),
+    			"windowId" => $record->getWindowid()
+    		);
+    		$var = (object) $variable;
+    		array_push($arrayWindows, $variable);
+    	}
+    	return  $arrayWindows;
     }
 }

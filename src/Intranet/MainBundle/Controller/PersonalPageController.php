@@ -43,7 +43,9 @@ class PersonalPageController extends Controller
 				'offices' => $childrenOfficesForUser,
 				'windowtopics' => PersonalPage::getTopicsForWindow($window->getWindowid(),$em, $topics),
 				'dataid' => PersonalPage::getAllIdForUser($em, $this->getUser()),
-				"curent" => $curent
+				"curent" => $curent,
+				"officeForWindow" => PersonalPage::getOfficeForWindow($em, $window),
+				"window" => $window
 		);
 		
 		return $this->render("IntranetMainBundle:PersonalPage:chatPersonalPage.html.twig", $parameters);

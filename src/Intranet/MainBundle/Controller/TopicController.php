@@ -51,7 +51,8 @@ class TopicController extends Controller
     	$users = $this->getUser()->getAllUsers($em, false);
     	$topicsForTasks = $topic->getAllChildrenForOffice($em);
     	array_unshift($topicsForTasks, $topic);
-    	
+    	$windows = array();
+    	$windows = PersonalPage::getWindowsName($em);
     	$parameters = array("users" => array_map(function($e){return $e->getInArray();}, $users), 
 					    	"topic" => $topic,
 					    	"em" => $em,
@@ -60,7 +61,8 @@ class TopicController extends Controller
 					    	'subtopics' => $subtopics, 
 					    	'topicsForTasks' => array_map(function($e){return $e->getInArray();}, $topicsForTasks),
 					    	'office' => $office, 
-					    	"tasks" => $tasks);
+					    	"tasks" => $tasks,
+    						"windows" => $windows);
     	
     	if ($request->getSession()->has('errorTopic'))
     	{

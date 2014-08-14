@@ -32,7 +32,7 @@ Intranet.controller('PersonalOfficeChatController',['$http', '$scope', '$paginat
 		var offset = $scope.paginator.postsPerPage*($scope.paginator.curPageId - 1);
 		var limit = $scope.paginator.postsPerPage;
 		getOfficesPosts(offset, limit, $scope.officesIdArray);
-		//console.log("curPageId: paginator--->", $scope.paginator);
+		console.log("curPageId: paginator--->", $scope.paginator);
 	});
 	
 	$scope.pressEnter = function(e)
@@ -75,7 +75,7 @@ Intranet.controller('PersonalOfficeChatController',['$http', '$scope', '$paginat
 				url: url, 
 				params: {offset: offset, limit: limit}})
 			.success(function(response){
-				//console.log("posts: ",response.result);
+				console.log("posts: ",response.result);
 				if (response.result)
 				{
 					$scope.posts = response.result.reverse();
@@ -111,7 +111,7 @@ Intranet.controller('PersonalOfficeChatController',['$http', '$scope', '$paginat
 					url: url, 
 					})
 				.success(function(response){
-					//console.log("posts count: ", response.result);
+					console.log("posts count: ", response.result);
 					if (response.result)
 						callback(response.result);
 				})
@@ -247,6 +247,7 @@ Intranet.controller('PersonalOfficeChatController',['$http', '$scope', '$paginat
 	
 	function startChat()
 	{
+		console.log('start');
 		getMembersForOffices();
 		getPostsCountForOffice(function(postsCount){
 			$scope.paginator.init(postsCount, 100);
@@ -367,7 +368,7 @@ Intranet.controller('PersonalTopicChatController',['$http', '$scope', '$paginato
 				url: url, 
 				})
 			.success(function(response){
-				//console.log("posts count: ", response.result);
+				console.log("posts count: ", response.result);
 				if (response.result)
 					callback(response.result);
 			})
@@ -511,4 +512,10 @@ Intranet.controller('PersonalTopicChatController',['$http', '$scope', '$paginato
 		setInterval(getNewPostsForTopic, 3000);
 	}
 	console.log('Topic chat init!!!');
+	
+	console.log('chat topic started 1');
+	getMembersForTopics();
+	getPostsCountForTopic(function(postsCount){
+		$scope.paginator.init(postsCount, $scope.postsPerPage);
+	});
   }]);

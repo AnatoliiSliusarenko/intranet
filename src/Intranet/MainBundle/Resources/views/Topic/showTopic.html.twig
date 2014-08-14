@@ -134,17 +134,23 @@
 											</div>
 											
 											<div class="col-md-4" style="margin: 20px 0;">
-												<div class="btn-group">
-												  	<button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" style="height: 30px; background-color:#495b79">
-                                                            <span class="caret"></span>
-                                                            <i class="fa fa-fw fa-qrcode"></i>
-                                                        </button>
-                                                        <ul class="dropdown-menu adddropmenu">
-                                                            <li><a href="{{ url('intranet_add_topic_to_personal_page', {topic_id: topic.getId()} ) }}"><i class="fa fa-fw fa-windows" ></i>Add to new window </a></li>
-                                                            <li><a href="{{ url('intranet_add_topic_to_exist_window_personal_page', {topic_id: topic.getId()} ) }}"><i class="fa fa-fw fa-plus-square"></i>Add new Tab to existing window</a></li>
-                                                            <li><a href="#"><i class="fa fa-fw fa-list-alt"></i>Add new drop downdown to existing Tab</a></li>
-                                                        </ul>
-												</div>
+											<div  id='menu-block' style="position: absolute;left: 80%;">
+            								<ul class='vertical-menu btn-block'style="width:40px">
+            								<li class='drop-link' style="width:35px"><a href="#"><i class="fa fa-fw fa-qrcode"></i></a>
+            								<ul class='drop-block1'>
+            									<li  style="width:200px"><a href="{{ url('intranet_add_topic_to_personal_page', {topic_id: topic.getId()} ) }}"><i class="fa fa-fw fa-windows" ></i>Add to new window </a></li>
+                                                <li class="drop-link"style="width:200px"><a href="#"><i class="fa fa-fw fa-plus-square"></i>Add new Tab to existing window</a>
+            									<ul class='drop-block1'>
+            									{% for window in windows %}
+            										<li class='drop-link' style="width:90px"><a href="{{ url('intranet_add_topic_to_exist_window_personal_page', {topic_id: topic.getId(), window_id: window['windowId']} ) }}">{{window['windowName']}}</a></li>
+            									{% endfor %}
+            									</ul>
+            									</li>
+                                                <li style="width:200px"><a href="#"><i class="fa fa-fw fa-list-alt"></i>Add new drop downdown to existing Tab</a></li>
+            								</ul>
+            								</li>
+        									</ul>
+        									</div>
 												  <label for="inputEmail1" class="col-lg-5 col-md-3 control-label" style="margin-top: 7px;">Messages/Page</label>
 												  <div class="col-lg-5 col-md-9">
 												   <select class="form-control" ng-model="postsPerPage" ng-change="changePostsPerPage()">

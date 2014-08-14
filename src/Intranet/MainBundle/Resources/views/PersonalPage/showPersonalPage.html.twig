@@ -1,8 +1,10 @@
+
 {% extends 'IntranetMainBundle:Index:index.html.twig' %}
 {% block title %}{{ app.user.getUsername() }} Personal Page {% endblock %}
 {% block content %}
 <div style="margin-top:100px">
 <div class="row " style="display: table-row-group">
+​
 	{% for window in windows %}
 	
   		{{ render( controller('IntranetMainBundle:PersonalPage:showChatPersonalPage', {
@@ -15,4 +17,5 @@
 {% block javascripts %}
 {{ parent() }}
   	<script src="{{ asset('bundles/intranet/js/custom/personal_page_chat.js') }}"></script>
+  
 {% endblock %}
