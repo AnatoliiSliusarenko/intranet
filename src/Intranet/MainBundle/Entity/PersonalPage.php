@@ -253,7 +253,9 @@ class PersonalPage
     public static function getOfficeForWindow($em, $window)
     {
     	$office = $em->getRepository('IntranetMainBundle:PersonalPage')->findByTopicid(NULL);
-    	return $office;
+    	if($office[0]->getWindowid()==$window->getWindowid())
+    		return $office;
+    	else return NULL;
     }
     
     public static function getAllIdForUser($em, $userid)
