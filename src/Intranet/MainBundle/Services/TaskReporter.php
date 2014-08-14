@@ -340,7 +340,7 @@ class TaskReporter
     	$interval[] = $fromDatetime;
     	$buf = $fromDatetime;
     	
-    	for ($i = 0; $i < $daysBetween; $i++) {
+    	for ($i = 0; $i <= $daysBetween; $i++) {
     		$buf = clone $buf;
     		$interval[] = $buf->modify('+1 day');
     	}
