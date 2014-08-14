@@ -457,7 +457,7 @@ Intranet.controller('PersonalTopicChatController',['$http', '$scope', '$paginato
 		
 		if ($scope.editingPost)
 			post.postid = $scope.editingPost.id;
-		var url = $scope.postOfficeAddURL.replace('0', $scope.topicId);
+		var url = $scope.postTopicAddURL.replace('0', $scope.topicId);
 		debugger
 		$http({
 			method: "POST", 
