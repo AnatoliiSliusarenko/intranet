@@ -299,7 +299,7 @@ Intranet.controller('PersonalTopicChatController',['$http', '$scope', '$paginato
 		if ((e.shiftKey == false) && ( e.keyCode == 13 ))
 		{
 			e.preventDefault();
-			$scope.sendPost();
+			$scope.sendPostTopic();
 		}
 	}
 	
