@@ -488,12 +488,12 @@ Intranet.controller('PersonalTopicChatController',['$http', '$scope', '$paginato
 			$scope.message = "";
 			messageContainer.val("");
 			messageContainer.focus();
-			getMembersForOffices();
+			getMembersForTopic();
 		})
 	}
 	
 	$scope.changePostsPerPageTopic = function(){
-		getPostsCountForOffice(function(postsCount){
+		getPostsCountForTopic(function(postsCount){
 			$scope.paginator.init(postsCount, $scope.postsPerPage);
 			var offset = $scope.paginator.postsPerPage*($scope.paginator.curPageId - 1);
 			var limit = $scope.paginator.postsPerPage;
