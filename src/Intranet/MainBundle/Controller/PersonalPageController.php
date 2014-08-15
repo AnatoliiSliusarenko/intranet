@@ -9,9 +9,11 @@ class PersonalPageController extends Controller
 {	
 	public  function showPersonalPageAction()
 	{
+		
 		$em = $this->getDoctrine()->getManager();
-		$parameters = PersonalPage::getDataForUser($em, $this->getUser()->getId());		
 		$users = $this->getUser()->getAllUsers($em, false);
+		$parameters = PersonalPage::getDataForUser($em, $this->getUser()->getId());
+
 		return $this->render('IntranetMainBundle:PersonalPage:showPersonalPage.html.twig', $parameters);
 	}
 	
@@ -41,15 +43,36 @@ class PersonalPageController extends Controller
 				'officeUsers' => array_map(function($e){return $e->getInArray();}, $officeUsers->toArray()),
 				'users' => array_map(function($e){return $e->getInArray();}, $users),
 				'offices' => $childrenOfficesForUser,
-				'windowtopics' => PersonalPage::getTopicsForWindow($window->getWindowid(),$em, $topics),
+				'windowtopics' => PersonalPage::getTopicsForWindow($window->getWindowid(),$em, $topics, $this->getUser()->getId()),
 				'dataid' => PersonalPage::getAllIdForUser($em, $this->getUser()),
 				"curent" => $curent,
-				"officeForWindow" => PersonalPage::getOfficeForWindow($em, $window),
+				"officeForWindow" => PersonalPage::getOfficeForWindow($em, $window,$this->getUser()->getId()),
 				"window" => $window
 		);
-		
 		return $this->render("IntranetMainBundle:PersonalPage:chatPersonalPage.html.twig", $parameters);
+	}
+	
+	public function deleteWindowFromPersonalPageAction($windowsId)
+	{
+		$em = $this->getDoctrine()->getManager();
+		$window = $em->getRepository('IntranetMainBundle:PersonalPage')->findByWindowid($windowsId);
+		var_dump($window);
+		die();
 		
+		$em->remove($window);
+		$em->flush();
+		$parameters = PersonalPage::getDataForUser($em, $this->getUser()->getId());
+		return $this->render('IntranetMainBundle:PersonalPage:showPersonalPage.html.twig', $parameters);
+	}
+	
+	public function deleteTabFromPersonalPageAction($id = 0)
+	{
+		$em = $this->getDoctrine()->getManager();
+		$tab = $em->getRepository('IntranetMainBundle:PersonalPage')->find($id);
+		$em->remove($tab);
+		$em->flush();
+		$parameters = PersonalPage::getDataForUser($em, $this->getUser()->getId());
+		return $this->render('IntranetMainBundle:PersonalPage:showPersonalPage.html.twig', $parameters);
 	}
 
 }

@@ -233,19 +233,22 @@ class PersonalPage
     	return $parameters;
     }
     
-    public static function getTopicsForWindow($officeid, $em, $topics)
+    public static function getTopicsForWindow($officeid, $em, $topics, $userId)
     {
-    	$topics_id = $em->getRepository('IntranetMainBundle:PersonalPage')->findByWindowid($officeid);
+    	$topicsPersonal = $em->getRepository('IntranetMainBundle:PersonalPage')->findByWindowid($officeid);
     	$window_topics = array();
     	foreach ($topics as $topic)
     	{
-    		foreach ($topics_id as $window_topic_id)
+    		foreach ($topicsPersonal as $window_topic)
     		{
-    			if($topic->getId() == $window_topic_id->getTopicid())
+    			if($topic->getId() == $window_topic->getTopicid() 
+    					&& $window_topic->getTopicid() != NULL )
+    					//&& $window_topic->getUserid == $userId)
     				array_push($window_topics, $topic);
-    			else
-    				continue;
+    			
     		}
+    		//var_dump("topic",$window_topics);
+    		//die();
     	}
     	return $window_topics;
     }
@@ -253,8 +256,9 @@ class PersonalPage
     public static function getOfficeForWindow($em, $window)
     {
     	$office = $em->getRepository('IntranetMainBundle:PersonalPage')->findByTopicid(NULL);
+    	if(sizeof($office)>0)
     	if($office[0]->getWindowid()==$window->getWindowid())
-    		return $office;
+    		return $office[0];
     	else return NULL;
     }
     
@@ -264,7 +268,7 @@ class PersonalPage
     	$topic_id_arr = array();
     	$windows = array();
     	$windows_id_arr = array();
-    	$personal_data = $em->getRepository('IntranetMainBundle:PersonalPage')->findAll($userid);
+    	$personal_data = $em->getRepository('IntranetMainBundle:PersonalPage')->findByUserid($userid);
     	if ($personal_data == null)
     		return $this->redirect($this->generateUrl('intranet_main_homepage'));
     	foreach ($personal_data as $personal_record)
