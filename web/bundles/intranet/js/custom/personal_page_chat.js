@@ -202,7 +202,6 @@ Intranet.controller('PersonalOfficeChatController',['$http', '$scope', '$paginat
 		if ($scope.editingPost)
 			post.postid = $scope.editingPost.id;
 		var url = $scope.postOfficeAddURL.replace('0', $scope.officesIdArray[$scope.count]);
-		debugger
 		$http({
 			method: "POST", 
 			url: url, 
@@ -211,7 +210,6 @@ Intranet.controller('PersonalOfficeChatController',['$http', '$scope', '$paginat
 			console.log("Created post: ", response.result);
 			if (response.result)
 			{
-				debugger
 				// maybe need to request for posts and init paginator!!!
 				if ($scope.editingPost == null)
 				{
@@ -227,7 +225,6 @@ Intranet.controller('PersonalOfficeChatController',['$http', '$scope', '$paginat
 					});
 				}
 			}
-			debugger
 			$scope.editingPost = null;
 			$scope.message = "";
 			messageContainer.val("");
@@ -458,7 +455,6 @@ Intranet.controller('PersonalTopicChatController',['$http', '$scope', '$paginato
 		if ($scope.editingPost)
 			post.postid = $scope.editingPost.id;
 		var url = $scope.postTopicAddURL.replace('0', $scope.topicId);
-		debugger
 		$http({
 			method: "POST", 
 			url: url, 
@@ -476,14 +472,12 @@ Intranet.controller('PersonalTopicChatController',['$http', '$scope', '$paginato
 				}
 				else
 				{
-					debugger
 					_.map($scope.posts, function(p, i){
 						if (p.id == response.result.id)
 							$scope.posts[i] = response.result;
 					});
 				}
 			}
-			debugger
 			$scope.editingPost = null;
 			$scope.message = "";
 			messageContainer.val("");

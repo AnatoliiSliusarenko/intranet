@@ -239,6 +239,8 @@ class PersonalPage
     	$window_topics = array();
     	foreach ($topics as $topic)
     	{
+    		if($topic == NULL)
+    			continue;
     		foreach ($topicsPersonal as $window_topic)
     		{
     			if($topic->getId() == $window_topic->getTopicid() 
