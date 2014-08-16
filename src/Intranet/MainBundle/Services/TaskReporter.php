@@ -366,8 +366,7 @@ class TaskReporter
     {	
     	$result = array(
     		'cols' => array(),
-    		'rows' => array(),
-    		'groupByColumn' => null
+    		'rows' => array()
     	);	
     	
     	if (isset($filter->from) && (trim($filter->from) != ''))
@@ -547,7 +546,6 @@ class TaskReporter
     					}
     				}
     				
-    				$result['groupByColumn'] = 0;
     				return $result;
    				}
    			case 'type4':
