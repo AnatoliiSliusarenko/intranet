@@ -42,7 +42,7 @@ class PersonalPageController extends Controller
 				'users' => array_map(function($e){return $e->getInArray();}, $users),
 				'offices' => $childrenOfficesForUser,
 				'windowtopics' => PersonalPage::getTopicsForWindow($window->getWindowid(),$em, $topics, $this->getUser()->getId()),
-				'dataid' => PersonalPage::getAllIdForUser($em, $this->getUser()),
+				'dataid' => PersonalPage::getAllIdForUser($em, $this->getUser()->getId()),
 				"curent" => $curent,
 				"officeForWindow" => PersonalPage::getOfficeForWindow($em, $window,$this->getUser()->getId()),
 				"window" => $window

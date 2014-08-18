@@ -286,9 +286,15 @@ class PersonalPage
     	}
     	$windows_id_arr = array_unique($windows_id_arr);
     	foreach ($windows_id_arr as $window_id)
-    		array_push($windows, $window = $em->getRepository('IntranetMainBundle:PersonalPage')->findOneByWindowid($window_id));
+    	{
+    		$windowAll = $em->getRepository('IntranetMainBundle:PersonalPage')->findByWindowid($window_id);
+    		foreach($windowAll as $value)
+    			array_push($windows, $value);
+    	}
+    		
     	foreach ($windows as $window)
-    		if($window->getTopicid() == NULL)
+    		if($window->getTopicid() == NULL 
+    				&& $window->getUserid() == $userid)
     			array_push($office_id_arr, $window->getOfficeid());
     	$result_array = array(
     		"officesid" => $office_id_arr,

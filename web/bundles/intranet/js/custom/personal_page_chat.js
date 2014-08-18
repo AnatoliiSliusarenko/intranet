@@ -191,7 +191,6 @@ Intranet.controller('PersonalOfficeChatController',['$http', '$scope', '$paginat
 	
 	$scope.sendPostOffice = function()
 	{
-		debugger
 		var post = {
 				entityid: $scope.officesIdArray[$scope.count], 
 				userid: window.USER.id,
@@ -443,7 +442,6 @@ Intranet.controller('PersonalTopicChatController',['$http', '$scope', '$paginato
 	
 	$scope.sendPostTopic = function()
 	{
-		debugger
 		var post = {
 				entityid: $scope.topicId, 
 				userid: window.USER.id,
@@ -462,7 +460,6 @@ Intranet.controller('PersonalTopicChatController',['$http', '$scope', '$paginato
 			console.log("Created post: ", response.result);
 			if (response.result)
 			{
-				debugger
 				// maybe need to request for posts and init paginator!!!
 				if ($scope.editingPost == null)
 				{
@@ -496,7 +493,6 @@ Intranet.controller('PersonalTopicChatController',['$http', '$scope', '$paginato
 	
 	function startChatTopic()
 	{
-		//debugger
 		console.log('chat topic started');
 		getMembersForTopics();
 		getPostsCountForTopic(function(postsCount){
