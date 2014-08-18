@@ -172,7 +172,7 @@ intranet_add_office_to_exist_window_personal_page:
   pattern: /office/{office_id}/{window_id}/addOfficeChatToExistWindowPersonalPage/
   defaults: { _controller: IntranetMainBundle:Office:addOfficeToExistWindowPersonalPage }
   
-intranet_delete_windows_from_personal_page:
+intranet_delete_window_from_personal_page:
   pattern: /{windowid}/deleteWindow/
   defaults: { _controller: IntranetMainBundle:PersonalPage:deleteWindowFromPersonalPage }
 

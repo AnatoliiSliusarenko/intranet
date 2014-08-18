@@ -206,9 +206,7 @@ class PersonalPage
     	foreach ($personal_data as $personal_record)
     	{
     		array_push($windows_id_arr, $personal_record->getWindowid());
-    		if(array_search($personal_record->getOfficeId(), $office_id_arr) == false)
-    			array_push($office_id_arr,$personal_record->getOfficeId());
-    		if(array_search($personal_record->getTopicId(), $office_id_arr) == false)
+    		array_push($office_id_arr,$personal_record->getOfficeId());
     		if($personal_record->getTopicId()!= null)
     			array_push($topic_id_arr,$personal_record->getTopicId());
     			
@@ -220,9 +218,13 @@ class PersonalPage
     		array_push($topics, $topic = $em->getRepository('IntranetMainBundle:Topic')->find($topic_id));
     	foreach ($office_id_arr as $id)
     		array_push($offices, $office = $em->getRepository('IntranetMainBundle:Office')->find($id));
+    	
     	foreach ($windows_id_arr as $window_id)
     	{
-    		array_push($windows, $window = $em->getRepository('IntranetMainBundle:PersonalPage')->findOneByWindowid($window_id));
+    		$allWindows = $em->getRepository('IntranetMainBundle:PersonalPage')->findByWindowid($window_id);
+    		foreach ($allWindows as $window)
+    			if($window->getUserid()==$userid)
+    				array_push($windows, $window);
     	}
     	$parameters = array (
     			"topics" => $topics,
@@ -244,24 +246,25 @@ class PersonalPage
     		foreach ($topicsPersonal as $window_topic)
     		{
     			if($topic->getId() == $window_topic->getTopicid() 
-    					&& $window_topic->getTopicid() != NULL )
-    					//&& $window_topic->getUserid == $userId)
+    					&& $window_topic->getTopicid() != NULL 
+    					&& $window_topic->getUserid() == $userId)
     				array_push($window_topics, $topic);
     			
     		}
-    		//var_dump("topic",$window_topics);
-    		//die();
     	}
     	return $window_topics;
     }
     
-    public static function getOfficeForWindow($em, $window)
+    public static function getOfficeForWindow($em, $window, $userId)
     {
-    	$office = $em->getRepository('IntranetMainBundle:PersonalPage')->findByTopicid(NULL);
-    	if(sizeof($office)>0)
-    	if($office[0]->getWindowid()==$window->getWindowid())
-    		return $office[0];
-    	else return NULL;
+    	$offices = $em->getRepository('IntranetMainBundle:PersonalPage')->findByTopicid(NULL);
+    	foreach ($offices as $office)
+    	{
+    		if($office->getWindowid()==$window->getWindowid()
+    	&& $office->getUserid() == $userId)
+    			return $office;
+    	}
+    	return NULL;
     }
     
     public static function getAllIdForUser($em, $userid)
@@ -294,18 +297,22 @@ class PersonalPage
     	return $result_array;
     }
     
-    public static function getWindowsName($em)
+    public static function getWindowsName($em, $userId)
     {
     	$arrayWindows = array();
     	$variable = 
     	$records = $em->getRepository('IntranetMainBundle:PersonalPage')->findAll();
-    	foreach ($records as $record) {
-    		$variable = array(
-    			"windowName" =>  $record->getNamewindow(),
-    			"windowId" => $record->getWindowid()
-    		);
-    		$var = (object) $variable;
-    		array_push($arrayWindows, $variable);
+    	foreach ($records as $record) 
+    	{
+    		if ($record->getUserid() == $userId)
+    		{
+    			$variable = array(
+    				"windowName" =>  $record->getNamewindow(),
+    				"windowId" => $record->getWindowid()
+    			);
+    			$var = (object) $variable;
+    			array_push($arrayWindows, $variable);
+    		}
     	}
     	return  $arrayWindows;
     }

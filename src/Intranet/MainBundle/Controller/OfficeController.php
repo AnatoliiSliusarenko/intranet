@@ -42,7 +42,7 @@ class OfficeController extends Controller
 		$topicTree = Topic::getTopicTree($em);
 		$parentTopic = $topicTree[0];
 		$windows = array();
-		$windows = PersonalPage::getWindowsName($em);
+		$windows = PersonalPage::getWindowsName($em, $this->getUser()->getId());
 		$parameters = array(
 				"availableStatus" => TaskStatus::getAllStatuses($em),
 				"em" => $em,

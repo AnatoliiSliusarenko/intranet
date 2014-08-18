@@ -13,13 +13,11 @@ class PersonalPageController extends Controller
 		$em = $this->getDoctrine()->getManager();
 		$users = $this->getUser()->getAllUsers($em, false);
 		$parameters = PersonalPage::getDataForUser($em, $this->getUser()->getId());
-
 		return $this->render('IntranetMainBundle:PersonalPage:showPersonalPage.html.twig', $parameters);
 	}
 	
 	public function showChatPersonalPageAction($office_id , $topics, $window, $curent)
 	{
-		
 		$em = $this->getDoctrine()->getManager();
 		$office = $em->getRepository('IntranetMainBundle:Office')->find($office_id);
 		if (($office == null) || (!$office->hasUser($this->getUser())))
@@ -52,15 +50,15 @@ class PersonalPageController extends Controller
 		return $this->render("IntranetMainBundle:PersonalPage:chatPersonalPage.html.twig", $parameters);
 	}
 	
-	public function deleteWindowFromPersonalPageAction($windowsId)
+	public function deleteWindowFromPersonalPageAction($windowid)
 	{
 		$em = $this->getDoctrine()->getManager();
-		$window = $em->getRepository('IntranetMainBundle:PersonalPage')->findByWindowid($windowsId);
-		var_dump($window);
-		die();
-		
-		$em->remove($window);
-		$em->flush();
+		$windows = $em->getRepository('IntranetMainBundle:PersonalPage')->findByWindowid($windowid);
+		foreach ($windows as $window)
+		{
+			$em->remove($window);
+			$em->flush();
+		}
 		$parameters = PersonalPage::getDataForUser($em, $this->getUser()->getId());
 		return $this->render('IntranetMainBundle:PersonalPage:showPersonalPage.html.twig', $parameters);
 	}

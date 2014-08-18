@@ -7,16 +7,32 @@
   			{{office.getName()}}
   			<ul id="myTab" class="nav nav-tabs pull-right">
   			{% if officeForWindow != NULL %}
-  				<li class="active in"><a href="#{{ office.getName() }}" data-toggle="tab">{{ office.getName() }} </a></li>
-  			{% endif %}
-  					{% for topic in windowtopics  %}
+  				<li class="active in">
+  					<a href="#{{ office.getName() }}" data-toggle="tab">{{ office.getName() }} </a>
+  				</li>
+  				{% for topic in windowtopics  %}
        	        		{% if topic.getOfficeid()== office.getId()  %}
         	        		<li >
         	        			<a href="#{{ topic.name }}" data-toggle="tab" >{{ topic.name }}</a>
         	        		</li>
               			{% endif %}
             		{% endfor %}
-			</ul>
+  			{% else %}
+  				{% for topic in windowtopics  %}
+  				{% if loop.first %}
+  					<li class="active in">
+        	        	<a href="#{{ topic.name }}" data-toggle="tab" >{{ topic.name }}</a>
+        	        </li>
+        	    {% else %}
+       	        	{% if topic.getOfficeid()== office.getId()  %}
+        	        	<li >
+        	       			<a href="#{{ topic.name }}" data-toggle="tab" >{{ topic.name }}</a>
+        	       		</li>
+              		{% endif %}
+              	{% endif %}
+            	{% endfor %}
+  			{% endif %}
+  			</ul>
 			</h3>
 		</div>
 
@@ -26,9 +42,9 @@
            	{% if topic.getOfficeid()== office.getId()  %}
            	{% if loop.first %}
            	{% if officeForWindow == NULL %}
-           		<div class="tab-pane fade active in" id="{{ loop.index }}" ng-controller="PersonalTopicChatController" ng-init="init('{{ topic.Id }}')" >
-  						<button class="btn btn-primary btn-sm"><a href="{{ url('intranet_delete_windows_from_personal_page', { windowid: window.getWindowid()} ) }}">Delete window</a></button>
-  						<button class="btn btn-primary btn-sm"><a href="{{ url('intranet_delete_tab_from_personal_page', {id: topic.getId()} ) }}">Delete tab</button>
+           		<div class="tab-pane fade active in" id="{{ loop.index }}" ng-controller="PersonalTopicChatController" ng-init="init('{{ topic.Id }}')" > 
+  						<button class="btn btn-primary btn-sm"><a href="{{ url('intranet_delete_window_from_personal_page', { windowid: window.getWindowid() } ) }}">Delete window</a></button>
+  						<button class="btn btn-primary btn-sm"><a href="{{ url('intranet_delete_tab_from_personal_page', { id: topic.getId() } ) }}">Delete tab</button>
   						<div class="row">
   						
   							<div class="col-md-7" style=" width:320px">
@@ -70,8 +86,8 @@
            	{% endif %}
            	{% else %}
     	        <div class="tab-pane fade " id="{{ loop.index }}" ng-controller="PersonalTopicChatController" ng-init="init('{{ topic.Id }}')" >
-  						<button class="btn btn-primary btn-sm"><a href="{{ url('intranet_delete_windows_from_personal_page', {windowid: window.getWindowid()} ) }}">Delete window</button>
-  						<button class="btn btn-primary btn-sm"><a href="{{ url('intranet_delete_tab_from_personal_page', {id: topic.getId()} ) }}">Delete tab</button>
+  						<button class="btn btn-primary btn-sm"><a href="{{ url('intranet_delete_window_from_personal_page', { windowid: window.getWindowid() } ) }}">Delete window</button>
+  						<button class="btn btn-primary btn-sm"><a href="{{ url('intranet_delete_tab_from_personal_page', { id: topic.getId() } ) }}">Delete tab</button>
   						<div class="row">
   							<div class="col-md-7" style=" width:320px">
 								<ul class="pagination" style="margin-left: 5px;">
@@ -114,7 +130,7 @@
         {% endfor %}
         {% if officeForWindow != NULL %}
         	<div class="tab-pane fade active in" id="0" ng-controller="PersonalOfficeChatController" ng-init="init('{{ curent }}')">
-  				<button class="btn btn-primary btn-sm"><a href="{{ url('intranet_delete_windows_from_personal_page', { windowid: window.getWindowid() } ) }}">Delete window </button>
+  				<button class="btn btn-primary btn-sm"><a href="{{ url('intranet_delete_window_from_personal_page', { windowid: window.getWindowid() } ) }}">Delete window </button>
   				<button class="btn btn-primary btn-sm"><a href="{{ url('intranet_delete_tab_from_personal_page', { id: officeForWindow.getId() } ) }}">Delete tab</button>
   				<div class="row">
   					<div class="col-md-7" style= "width: 370px;">

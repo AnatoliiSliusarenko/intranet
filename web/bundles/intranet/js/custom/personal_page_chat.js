@@ -218,7 +218,6 @@ Intranet.controller('PersonalOfficeChatController',['$http', '$scope', '$paginat
 				}
 				else
 				{
-					debugger
 					_.map($scope.posts, function(p, i){
 						if (p.id == response.result.id)
 							$scope.posts[i] = response.result;
