@@ -69,7 +69,7 @@ Intranet.controller('PersonalOfficeChatController',['$http', '$scope', '$paginat
 	
 	function getOfficesPosts(offset, limit)
 	{
-			var url = $scope.postsOfficeGetURL.replace('0', $scope.officesIdArray[$scope.count]);
+			var url = $scope.postsOfficeGetURL.replace('0', $scope.count);
 			$http({
 				method: "GET", 
 				url: url, 
@@ -91,7 +91,7 @@ Intranet.controller('PersonalOfficeChatController',['$http', '$scope', '$paginat
 	function getMembersForOffices()
 	{
 		_.map($scope.officesIdArray, function(officeId){
-			var url = $scope.membersOfficeURL.replace('0', officeId);
+			var url = $scope.membersOfficeURL.replace('0', $scope.count);
 			$http({
 				method: "GET", 
 				url: url, 
@@ -105,7 +105,7 @@ Intranet.controller('PersonalOfficeChatController',['$http', '$scope', '$paginat
 	
 	function getPostsCountForOffice(callback)
 	{
-		var url = $scope.postsOfficeCountURL.replace('0', $scope.officesIdArray[$scope.count]);
+		var url = $scope.postsOfficeCountURL.replace('0', $scope.count);
 				$http({
 					method: "GET", 
 					url: url, 
@@ -119,7 +119,7 @@ Intranet.controller('PersonalOfficeChatController',['$http', '$scope', '$paginat
 
 	function getNewPostsForOffice()
 	{
-		var url = $scope.postsOfficeNewURL.replace('0',$scope.officesIdArray[$scope.count]);
+		var url = $scope.postsOfficeNewURL.replace('0',$scope.count);
 			if ($scope.paginator.curPageId == 1)
 			{
 				$http({
@@ -192,7 +192,7 @@ Intranet.controller('PersonalOfficeChatController',['$http', '$scope', '$paginat
 	$scope.sendPostOffice = function()
 	{
 		var post = {
-				entityid: $scope.officesIdArray[$scope.count], 
+				entityid: $scope.count, 
 				userid: window.USER.id,
 				message: $scope.message,
 				posted: new Date()
@@ -200,7 +200,7 @@ Intranet.controller('PersonalOfficeChatController',['$http', '$scope', '$paginat
 		
 		if ($scope.editingPost)
 			post.postid = $scope.editingPost.id;
-		var url = $scope.postOfficeAddURL.replace('0', $scope.officesIdArray[$scope.count]);
+		var url = $scope.postOfficeAddURL.replace('0', $scope.count);
 		$http({
 			method: "POST", 
 			url: url, 

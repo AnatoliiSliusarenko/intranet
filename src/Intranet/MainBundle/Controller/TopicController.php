@@ -52,7 +52,7 @@ class TopicController extends Controller
     	$topicsForTasks = $topic->getAllChildrenForOffice($em);
     	array_unshift($topicsForTasks, $topic);
     	$windows = array();
-    	$windows = PersonalPage::getWindowsName($em);
+    	$windows = PersonalPage::getWindowsName($em, $this->getUser()->getId());
     	$parameters = array("users" => array_map(function($e){return $e->getInArray();}, $users), 
 					    	"topic" => $topic,
 					    	"em" => $em,

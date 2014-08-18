@@ -129,7 +129,7 @@
             {% endif %}
         {% endfor %}
         {% if officeForWindow != NULL %}
-        	<div class="tab-pane fade active in" id="0" ng-controller="PersonalOfficeChatController" ng-init="init('{{ curent }}')">
+        	<div class="tab-pane fade active in" id="0" ng-controller="PersonalOfficeChatController" ng-init="init('{{ office.getId() }}')">
   				<button class="btn btn-primary btn-sm"><a href="{{ url('intranet_delete_window_from_personal_page', { windowid: window.getWindowid() } ) }}">Delete window </button>
   				<button class="btn btn-primary btn-sm"><a href="{{ url('intranet_delete_tab_from_personal_page', { id: officeForWindow.getId() } ) }}">Delete tab</button>
   				<div class="row">
