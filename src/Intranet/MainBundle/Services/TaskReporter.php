@@ -148,8 +148,11 @@ class TaskReporter
     	{
     		if (($log->getType() == 'status-changed') && (in_array($log->getResourceid(), $calculatingStatusesIds)))
     		{
-    			$statusFinded = true;
-    			$statusFindedDatetime = $log->getLoged();
+    			if ($statusFinded == false)
+    			{
+    				$statusFinded = true;
+    				$statusFindedDatetime = $log->getLoged();
+    			}
     		} else
     		if (($log->getType() == 'status-changed') && (in_array($log->getResourceid(), $notCalculatingStatusesIds)))
     		{
@@ -314,6 +317,49 @@ class TaskReporter
     	return $tasks;
     }
     
+    private function leftTimeOnTask($task)
+    {
+    	if ($task->getEstimated() == null) return 0;
+    	
+    	$qb = $this->em->createQueryBuilder();
+    	$qb->select('l')
+    	->from('IntranetMainBundle:TaskActivityLog', 'l')
+    	->andWhere('l.taskid = :taskid')
+    	->setParameter('taskid', $task->getId())
+    	->orderBy('l.loged', 'ASC');
+    	
+    	$logs = $qb->getQuery()->getResult();
+    	
+    	$calculatingStatuses = $this->em->getRepository('IntranetMainBundle:TaskStatus')->findByCalcTimeStart(true);
+    	$calculatingStatusesIds = array_map(function($status){return $status->getId();}, $calculatingStatuses);
+    	
+    	$spentTimeInSeconds = 0;
+    	$statusFinded = false;
+    	$statusFindedDatetime = null;
+    	
+    	foreach ($logs as $log)
+    	{
+    		if (($log->getType() == 'status-changed') && (in_array($log->getResourceid(), $calculatingStatusesIds)))
+    		{
+    			if ($statusFinded == false)
+    			{
+    				$statusFinded = true;
+    				$statusFindedDatetime = $log->getLoged();
+    			}
+    		}else 
+    		if (($log->getType() == 'status-changed') && (!in_array($log->getResourceid(), $calculatingStatusesIds)) && ($statusFinded))
+    		{
+    			$differenceInSeconds = $log->getLoged()->format('U') - $statusFindedDatetime->format('U');	
+    			$spentTimeInSeconds = $spentTimeInSeconds + $differenceInSeconds;
+    			$statusFinded = false;
+    		}
+    	}
+    	
+    	$leftTime = $task->getEstimated()*60 - $spentTimeInSeconds;
+    	
+    	return $leftTime;
+    }
+    
     private function generateDatetimeInterval($from, $to)
     {
     	if ($from == null)
@@ -348,7 +394,7 @@ class TaskReporter
     	return $interval;
     }
     
-    private function getTimeString($seconds)
+    private function getLongTimeString($seconds)
     {
     	if ($seconds == null) return '-';
     	$differenceDays = floor($seconds/(60*60*24));
@@ -360,6 +406,29 @@ class TaskReporter
     	$differenceSeconds = $seconds%60;
     	
     	return $differenceDays.' days '.$differenceHrs.' hrs '.$differenceMinutes.' m '.$differenceSeconds.' s';
+    }
+    
+    private function getShortTimeString($seconds)
+    {
+    	if ($seconds == null) return '-';
+    
+    	$differenceHrs =  floor($seconds/(60*60));
+    
+    	$differenceMinutes = floor(($seconds%(60*60))/60);
+    
+    	$differenceSeconds = $seconds%60;
+    	 
+    	return $differenceHrs.' hrs '.$differenceMinutes.' m '.$differenceSeconds.' s';
+    }
+    
+    private function getEstimatedTimeString($minutes)
+    {
+    	if ($minutes == null) return '-';
+    
+    	$differenceHrs =  floor($minutes/60);
+    	$differenceMinutes = $minutes%60;
+    
+    	return $differenceHrs.' hrs '.$differenceMinutes.' m ';
     }
     
     public function queryReport($filter)
@@ -435,11 +504,12 @@ class TaskReporter
     					foreach ($tasks as $task)
     					{
     						$result['cols'][] = array(
-    								'label' => $task->getName()
+    								'label' => $task->getName(),
+    								'type' => 'datetime'
     						);
     					}
     				}
-    				$result['cols'][] = array('label' => 'Average');
+    				$result['cols'][] = array('label' => 'Average', 'type' => 'datetime');
     				
     				foreach ($users as $user)
     				{
@@ -454,7 +524,7 @@ class TaskReporter
     						if ($valueInSeconds != null) $values[] = $valueInSeconds;
     						if (!$tasksAll)
     						$newRow[] = array(
-    							'value' =>$this->getTimeString($valueInSeconds)
+    							'value' => $valueInSeconds
     						);
     					}
     					$suma = 0;
@@ -466,7 +536,7 @@ class TaskReporter
     					
     					
     					$newRow[] = array(
-    							'value' => $this->getTimeString($average)
+    							'value' => $average
     					);
     					
     					$result['rows'][] = $newRow;
@@ -482,7 +552,7 @@ class TaskReporter
     				
     				foreach ($users as $user)
     				{
-    					$result['cols'][] = array('label' => $user->getName());
+    					$result['cols'][] = array('label' => $user->getName(), 'type' => 'datetime');
     				}
     				
     				foreach ($tasks as $task)
@@ -502,7 +572,7 @@ class TaskReporter
 	    					foreach ($users as $user)
 	    					{
 	    						$newRow[] = array(
-	    								'value' => $this->getTimeString($this->spentTime($task, $status, $user, $from, $to))
+	    								'value' => $this->spentTime($task, $status, $user, $from, $to)
 	    						);
 	    					}
 	    					$result['rows'][] = $newRow;
@@ -517,7 +587,7 @@ class TaskReporter
     				$result['cols'][] = array('label' => 'Task');
     				foreach ($users as $user)
     				{
-    					$result['cols'][] = array('label' => $user->getName());
+    					$result['cols'][] = array('label' => $user->getName(), 'type' => 'datetime');
     				}
     				
     				$datetimeInterval = $this->generateDatetimeInterval($from, $to);
@@ -539,7 +609,7 @@ class TaskReporter
     						foreach ($users as $user)
     						{
     							$newRow[] = array(
-    									'value' => $this->getTimeString($this->spentTimeForDay($task, $user, $date))
+    									'value' => $this->spentTimeForDay($task, $user, $date)
     							);
     						}
     						$result['rows'][] = $newRow;
@@ -550,7 +620,26 @@ class TaskReporter
    				}
    			case 'type4':
    				{
-   					return 'type4';
+   					$result['cols'][] = array('label' => 'Task');
+   					$result['cols'][] = array('label' => 'Estimated');
+   					$result['cols'][] = array('label' => 'Left time', 'type' => 'datetime');
+   					
+   					foreach ($tasks as $task)
+   					{
+   						$newRow = array();
+   						$newRow[] = array(
+   								'value' => $task->getName()
+   						);
+   						$newRow[] = array(
+   								'value' => $this->getEstimatedTimeString($task->getEstimated())
+   						);
+   						$newRow[] = array(
+   								'value' => $this->leftTimeOnTask($task)
+   						);
+   						$result['rows'][] = $newRow;
+   					}
+   					
+   					return $result;
    				}
     		default: 
     			{
