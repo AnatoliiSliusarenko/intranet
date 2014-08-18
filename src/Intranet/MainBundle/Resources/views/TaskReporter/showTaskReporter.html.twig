@@ -41,7 +41,7 @@
 						</select>
 					</div>
 				</div>
-				<div class="form-group" ng-show="(filter.query != 'type1') && (filter.query != 'type3')">
+				<div class="form-group" ng-show="(filter.query != 'type1') && (filter.query != 'type3') && (filter.query != 'type4')">
   					<label for="inputEmail1" class="col-lg-2 col-md-3 control-label">Task Statuses</label>
   					<div class="col-lg-10 col-md-9">
    						<select multiple ng-model="filter.statuses" class="form-control">
@@ -74,7 +74,7 @@
 					</div>
 				</div>
 				
-				<div class="form-group">
+				<div class="form-group" ng-show="filter.query != 'type4'">
   					<label for="inputEmail1" class="col-lg-2 col-md-3 control-label">Users</label>
   					<div class="col-lg-10 col-md-9">
    						<select multiple ng-model="filter.users" class="form-control">
@@ -85,14 +85,14 @@
 					</div>
 				</div>				
 				
-				<div class="form-group">
+				<div class="form-group" ng-show="filter.query != 'type4'">
   					<label for="inputEmail1" class="col-lg-2 col-md-3 control-label">From</label>
   					<div class="col-lg-10 col-md-9">
    						<input type="text" ng-model="filter.from" class="form-control form-cascade-control" value="" id="datetimepicker_mask"/>
 					</div>
 				</div>
 				
-				<div class="form-group">
+				<div class="form-group" ng-show="filter.query != 'type4'">
   					<label for="inputEmail1" class="col-lg-2 col-md-3 control-label">To</label>
   					<div class="col-lg-10 col-md-9">
    						<input type="text" ng-model="filter.to" class="form-control form-cascade-control" value="" id="datetimepicker_mask2"/>
@@ -110,6 +110,18 @@
 						</select>
 					</div>
 				</div>
+				
+				<div class="form-group" ng-show="table != null">
+  					<label for="inputEmail1" class="col-lg-2 col-md-3 control-label">Group By</label>
+  					<div class="col-lg-10 col-md-9">
+   						<select ng-model="groupBy" ng-change="groupByChanged()" class="form-control">
+						    <option value="-1">--- Without grouping ---</option>
+						    <option ng-repeat="column in table.cols" value="[[$index]]">[[column.label]]</option>
+						</select>
+					</div>
+				</div>
+				
+				
 				<div class="row">
 					<div class="col-md-12">
 						&nbsp;
@@ -132,13 +144,13 @@
 	        	<table ng-show="table != null" class="table users-table table-condensed table-hover" >
 	           		<thead>
 	           			<tr>
-				             <th ng-repeat="column in table.cols" class="visible-lg">[[column.label]]</th>
+				             <th ng-repeat="column in table.cols" class="visible-lg" ng-if="$index != groupBy">[[column.label]]</th>
 	           			</tr>
 	           		</thead>
 	           		<tbody>
 			           <tr ng-repeat="row in table.rows">
-			           		<!-- <td ng-show="false" colspan="[[table.cols.length]]" style="font-weight:bold; font-style:italic; text-align: center; background-color: #CCFFFF;" class="visible-lg">[[ row[table.groupByColumn].value ]]</td> -->
-					   		<td ng-repeat="column in row" class="visible-lg">[[ column.value ]]</td>
+			           		<td ng-if="(groupBy != -1) && (row.spaned)" colspan="[[table.cols.length]]" style="font-weight:bold; font-style:italic; text-align: center; background-color: #CCFFFF;" class="visible-lg"><span ng-show="table.cols[groupBy].type == null">[[ row[0].value ]]</span><span ng-show="table.cols[groupBy].type == 'datetime'"><datetime datetime="[[row[0].value]]"></datetime></span></td>
+					   		<td ng-repeat="column in row" class="visible-lg" ng-if="(row.spaned == false) && ($index != groupBy)"><span ng-show="table.cols[$index].type == null">[[ column.value ]]</span><span ng-show="table.cols[$index].type == 'datetime'"><datetime datetime="[[column.value]]"></datetime></span></td>
 			           </tr>
 			  		</tbody>
 				</table>

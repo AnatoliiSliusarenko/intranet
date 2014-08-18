@@ -62,7 +62,20 @@ var Intranet = angular.module('Intranet', ['ui.bootstrap'])
 		 return Math.floor(minutes/60) + ' h ' + minutes%60 + ' m';
 	 }
  })
+.directive('datetime', function(){
+	var directive = {};
+	directive.restrict = 'E';
+	directive.template = "<label class='label' style='background-color: [[color]];'>[[dateTimeString]]</label>";
 
+	directive.link = function (scope, element, attr) {
+		scope.color = (attr.datetime > 0) ? 'green' : 'red';
+		var sign = (attr.datetime >= 0) ? '' : '- ';
+		attr.datetime = Math.abs(attr.datetime);
+        scope.dateTimeString = sign + Math.floor(attr.datetime/(60*60)) + ' h ' + Math.floor(attr.datetime%(60*60)/60) + ' m ' + attr.datetime%60 + ' s';
+    }
+
+	return directive;
+})
 .factory('$personalPageChat', function() {
 	personalPageChat = {};
 	personalPageChat.id = 0;
