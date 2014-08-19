@@ -314,8 +314,6 @@ class PersonalPage
     		foreach ($arrayWindows as $value)
     			if ($value->getWindowid() != $record->getWindowid()) 
     				array_push($arrayWindows, $record);
-    	var_dump($arrayWindows);
-    	die();
-    	return  $mas;
+    	return  $arrayWindows;
     }
 }

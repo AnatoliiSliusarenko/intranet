@@ -142,7 +142,7 @@
                                                 <li class="drop-link"style="width:200px"><a href="#"><i class="fa fa-fw fa-plus-square"></i>Add new Tab to existing window</a>
             									<ul class='drop-block1'>
             									{% for window in windows %}
-            										<li class='drop-link' style="width:90px"><a href="{{ url('intranet_add_topic_to_exist_window_personal_page', {topic_id: topic.getId(), window_id: window['windowId']} ) }}">{{window['windowName']}}</a></li>
+            										<li class='drop-link' style="width:90px"><a href="{{ url('intranet_add_topic_to_exist_window_personal_page', {topic_id: topic.getId(), window_id: window.getWindowid()} ) }}">{{window.getNamewindow()}}</a></li>
             									{% endfor %}
             									</ul>
             									</li>
