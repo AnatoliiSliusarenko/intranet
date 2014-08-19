@@ -213,6 +213,7 @@ class OfficeController extends Controller
     	$personal_office = $em->getRepository('IntranetMainBundle:PersonalPage')->findByOfficeid($office_id);
     	if( $personal_office != null )
     	{
+
     		return $this->render('IntranetMainBundle:Office:messageOfficesAllredyAdded.html.twig');
     	}
     	else

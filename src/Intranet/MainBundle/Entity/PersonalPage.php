@@ -202,7 +202,7 @@ class PersonalPage
     	$windows = array();
     	$personal_data = $em->getRepository('IntranetMainBundle:PersonalPage')->findAll($userid);
     	if ($personal_data == null)
-			return $this->redirect($this->generateUrl('intranet_main_homepage'));
+			return;
     	foreach ($personal_data as $personal_record)
     	{
     		array_push($windows_id_arr, $personal_record->getWindowid());
@@ -226,12 +226,18 @@ class PersonalPage
     			if($window->getUserid()==$userid)
     				array_push($windows, $window);
     	}
+    	
     	$parameters = array (
     			"topics" => $topics,
     			"em" => $em,
     			"offices" => $offices,
-    			"windows" => $windows
+    			"windows" => []
     	);
+    	$parameters["windows"][0] = $windows[0];
+    	foreach ($windows as $wind)
+    		foreach ($parameters["windows"] as $w)
+    			if($w->getWindowid() != $wind->getWindowid())
+    				array_push($parameters["windows"], $wind);
     	return $parameters;
     }
     
@@ -244,13 +250,10 @@ class PersonalPage
     		if($topic == NULL)
     			continue;
     		foreach ($topicsPersonal as $window_topic)
-    		{
     			if($topic->getId() == $window_topic->getTopicid() 
     					&& $window_topic->getTopicid() != NULL 
     					&& $window_topic->getUserid() == $userId)
     				array_push($window_topics, $topic);
-    			
-    		}
     	}
     	return $window_topics;
     }
@@ -259,11 +262,9 @@ class PersonalPage
     {
     	$offices = $em->getRepository('IntranetMainBundle:PersonalPage')->findByTopicid(NULL);
     	foreach ($offices as $office)
-    	{
     		if($office->getWindowid()==$window->getWindowid()
     	&& $office->getUserid() == $userId)
     			return $office;
-    	}
     	return NULL;
     }
     
@@ -275,7 +276,7 @@ class PersonalPage
     	$windows_id_arr = array();
     	$personal_data = $em->getRepository('IntranetMainBundle:PersonalPage')->findByUserid($userid);
     	if ($personal_data == null)
-    		return $this->redirect($this->generateUrl('intranet_main_homepage'));
+    		return ;
     	foreach ($personal_data as $personal_record)
     	{
     		array_push($windows_id_arr, $personal_record->getWindowid());
@@ -306,20 +307,15 @@ class PersonalPage
     public static function getWindowsName($em, $userId)
     {
     	$arrayWindows = array();
-    	$variable = 
-    	$records = $em->getRepository('IntranetMainBundle:PersonalPage')->findAll();
+    	$result = array();
+    	$records = $em->getRepository('IntranetMainBundle:PersonalPage')->findByUserid($userId);
+    	$arrayWindows[0] = $records[0];
     	foreach ($records as $record) 
-    	{
-    		if ($record->getUserid() == $userId)
-    		{
-    			$variable = array(
-    				"windowName" =>  $record->getNamewindow(),
-    				"windowId" => $record->getWindowid()
-    			);
-    			$var = (object) $variable;
-    			array_push($arrayWindows, $variable);
-    		}
-    	}
-    	return  $arrayWindows;
+    		foreach ($arrayWindows as $value)
+    			if ($value->getWindowid() != $record->getWindowid()) 
+    				array_push($arrayWindows, $record);
+    	var_dump($arrayWindows);
+    	die();
+    	return  $mas;
     }
 }

@@ -141,7 +141,7 @@ class TopicController extends Controller
     	$em = $this->getDoctrine()->getManager();
     	$topic = $em->getRepository('IntranetMainBundle:Topic')->find($topic_id);
     	$personal_topic = $em->getRepository('IntranetMainBundle:PersonalPage')->findByTopicid($topic_id);
-    	$personal_data = $em->getRepository('IntranetMainBundle:PersonalPage')->findAll($this->getUser()->getId());
+    	$personal_data = $em->getRepository('IntranetMainBundle:PersonalPage')->findAll();
     	$count_window = count($personal_data)+1;
     	
     	if( $personal_topic != null )

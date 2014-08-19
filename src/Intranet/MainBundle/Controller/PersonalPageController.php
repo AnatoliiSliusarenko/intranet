@@ -13,6 +13,8 @@ class PersonalPageController extends Controller
 		$em = $this->getDoctrine()->getManager();
 		$users = $this->getUser()->getAllUsers($em, false);
 		$parameters = PersonalPage::getDataForUser($em, $this->getUser()->getId());
+		if($parameters == null)
+			return $this->redirect($this->generateUrl('intranet_main_homepage'));
 		return $this->render('IntranetMainBundle:PersonalPage:showPersonalPage.html.twig', $parameters);
 	}
 	
@@ -47,7 +49,10 @@ class PersonalPageController extends Controller
 				"officeForWindow" => PersonalPage::getOfficeForWindow($em, $window,$this->getUser()->getId()),
 				"window" => $window
 		);
-		return $this->render("IntranetMainBundle:PersonalPage:chatPersonalPage.html.twig", $parameters);
+		if($parameters["dataid"])
+			return $this->render("IntranetMainBundle:PersonalPage:chatPersonalPage.html.twig", $parameters);
+		else 
+			return;
 	}
 	
 	public function deleteWindowFromPersonalPageAction($windowid)
