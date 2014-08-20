@@ -163,7 +163,13 @@
             									{% endfor %}
             									</ul>
             									</li>
-                                                <li style="width:200px"><a href="#"><i class="fa fa-fw fa-list-alt"></i>Add new drop downdown to existing Tab</a></li>
+                                                <li class="drop-link" style="width:200px"><a href="#"><i class="fa fa-fw fa-list-alt"></i>Add new drop downdown to existing Tab</a>
+                                                <ul class='drop-block1'>
+            									{% for window in windows %}
+            										<li class='drop-link' style="width:90px"><a href="{{ url('intranet_add_topic_to_dropdown', {topicId: office.getId(), windowId: window.getWindowid()} ) }}">{{window.getNamewindow()}}</a></li>
+            									{% endfor %}
+            									</ul>
+                                                </li>
             								</ul>
             								</li>
         									</ul>

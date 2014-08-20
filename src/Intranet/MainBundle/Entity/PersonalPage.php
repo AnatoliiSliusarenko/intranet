@@ -59,9 +59,8 @@ class PersonalPage
 	/**
 	 *@var integer
 	 *
-	 * @@ORM\Column(name="dropdown", type="integer")
+	 * @ORM\Column(name="dropdown", type="integer")
 	 */
-	
 	private $dropdown;
 	
     /**
@@ -276,12 +275,18 @@ class PersonalPage
     			if($topic->getId() == $window_topic->getTopicid() 
     					&& $window_topic->getTopicid() != NULL 
     					&& $window_topic->getUserid() == $userId)
-    		{
-    				array_push($window_topics, $topic);
+    			{
+    				array_push($window_topics,  $window_topic);
     				array_push($mas,$window_topic->getId());
-    		}
+    			}
     	}
     	return array("topics" => $window_topics, "tabId" => $mas);
+    }
+    
+    public static function getTopicName($em ,$topicId)
+    {
+    	$topic = $em->getRepository('IntranetMainBundle:Topic')->find($topicId);
+    	return $topic->getName();
     }
     
     public static function getOfficeForWindow($em, $window, $userId)
@@ -330,16 +335,49 @@ class PersonalPage
     	return $result_array;
     }
     
-    public static function getWindowsName($em, $userId)
+    public static function getWindowsName($em, $userId, $officeName)
     {
     	$arrayWindows = array();
     	$result = array();
     	$records = $em->getRepository('IntranetMainBundle:PersonalPage')->findByUserid($userId);
     	$arrayWindows[0] = $records[0];
-    	foreach ($records as $record) 
+    	foreach ($records as $record)
+    	{
+    		$flag = false;
     		foreach ($arrayWindows as $value)
-    			if ($value->getWindowid() != $record->getWindowid()) 
+    			if ($value->getWindowid() == $record->getWindowid())
+    				$flag = true;
+    			if(!$flag)
     				array_push($arrayWindows, $record);
-    	return  $arrayWindows;
+    	}
+    	foreach ($arrayWindows as $value) {
+    		if ($value->getNamewindow() == $officeName) {
+    			array_push($result, $value);
+    		};
+    	}
+    	return  $result;
+    }
+
+    /**
+     * Set dropdown
+     *
+     * @param integer $dropdown
+     * @return PersonalPage
+     */
+    public function setDropdown($dropdown)
+    {
+        $this->dropdown = $dropdown;
+		
+        return $this;
+    }
+
+    /**
+     * Get dropdown
+     *
+     * @return integer 
+     */
+    public function getDropdown()
+    {
+        return $this->dropdown;
     }
 }

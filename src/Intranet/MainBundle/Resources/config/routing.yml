@@ -165,7 +165,7 @@ intranet_show_personal_page:
     defaults: { _controller: IntranetMainBundle:PersonalPage:showPersonalPage }
     
 intranet_add_topic_to_exist_window_personal_page:
-  pattern: /topic/{topic_id}/addTopicChatToExistWindowPersonalPage/
+  pattern: /topic/{topic_id}/{window_id}/addTopicChatToExistWindowPersonalPage/
   defaults: { _controller: IntranetMainBundle:Topic:addTopicToExistWindowPersonalPage }
   
 intranet_add_office_to_exist_window_personal_page:
@@ -179,3 +179,11 @@ intranet_delete_window_from_personal_page:
 intranet_delete_tab_from_personal_page:
   pattern: /{id}/deleteTab/
   defaults: { _controller: IntranetMainBundle:PersonalPage:deleteTabFromPersonalPage }
+  
+intranet_add_office_to_dropdown:
+  pattern: /office/{officeId}/{windowId}/addOfficeToDropdown/
+  defaults: { _controller: IntranetMainBundle:Office:addOfficeToDropdown }
+  
+intranet_add_topic_to_dropdown:
+  pattern: /topic/{topicId}/{windowId}/addTopicToDropdown/
+  defaults: { _controller: IntranetMainBundle:Topic:addTopicToDropdown }

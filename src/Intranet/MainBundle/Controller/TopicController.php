@@ -52,7 +52,7 @@ class TopicController extends Controller
     	$topicsForTasks = $topic->getAllChildrenForOffice($em);
     	array_unshift($topicsForTasks, $topic);
     	$windows = array();
-    	$windows = PersonalPage::getWindowsName($em, $this->getUser()->getId());
+    	$windows = PersonalPage::getWindowsName($em, $this->getUser()->getId(), $office->getName());
     	$parameters = array("users" => array_map(function($e){return $e->getInArray();}, $users), 
 					    	"topic" => $topic,
 					    	"em" => $em,
@@ -158,6 +158,7 @@ class TopicController extends Controller
     			$personal->setWindowid(0);
     		else 
     			$personal->setWindowid($count_window);
+    		$personal->setDropdown(null);
     		$em = $this->getDoctrine()->getEntityManager();
     		$em->persist($personal);
     		$em->flush();
@@ -168,25 +169,27 @@ class TopicController extends Controller
     	}
     }
     
-    public function addTopicToExistWindowPersonalPageAction($topic_id)
+    public function addTopicToExistWindowPersonalPageAction($topic_id, $window_id)
     {
     	$em = $this->getDoctrine()->getManager();
     	$topic = $em->getRepository('IntranetMainBundle:Topic')->find($topic_id);
     	
     	$personal_topic = $em->getRepository('IntranetMainBundle:PersonalPage')->findByTopicid($topic_id);
     	foreach ($personal_topic as $topic)
-    		if( $topic != null )
+    		if( $topic != null && $topic->getWindowid() == $window_id)
     			return $this->render('IntranetMainBundle:Topic:messageTopicIsAllredyAdded.html.twig');
     	$office = $topic->getOffice();
     	$window = $em->getRepository('IntranetMainBundle:PersonalPage')->findOneByOfficeid($office->getId());
     	if($window == null)
     		return $this->render('IntranetMainBundle:Topic:messageTopicIsAllredyAdded.html.twig');
+    	
     	$personal = new PersonalPage();
     	$personal->setOfficeid($office->getId());
     	$personal->setTopicid($topic->getId());
     	$personal->setUserid($this->getUser()->getId());
     	$personal->setNamewindow($office->getName());
-    	$personal->setWindowid($window->getWindowid());
+    	$personal->setWindowid($window_id);
+    	$personal->setDropdown(null);
     	$em = $this->getDoctrine()->getEntityManager();
     	$em->persist($personal);
     	$em->flush();
@@ -194,5 +197,33 @@ class TopicController extends Controller
     		"office" => $office,
     		"topic" => $topic);
     		return $this->redirect($this->generateUrl('intranet_show_topic', array('topic_id' => $topic_id)));
+    }
+    
+    public function addTopicToDropdownAction($topicId, $windowId)
+    {
+    	$em = $this->getDoctrine()->getManager();
+    	$topic = $em->getRepository('IntranetMainBundle:Topic')->find($topicId);
+    	$personal_topic = $em->getRepository('IntranetMainBundle:PersonalPage')->findByTopicid($topicId);
+    	foreach ($personal_topic as $topic)
+    		if( $topic != null && $topic->getWindowid() == $windowId)
+    			return $this->render('IntranetMainBundle:Topic:messageTopicIsAllredyAdded.html.twig');
+    	$office = $topic->getOffice();
+    	$window = $em->getRepository('IntranetMainBundle:PersonalPage')->findOneByWindowid($windowId);
+   		if($window == null)
+   			return $this->render('IntranetMainBundle:Topic:messageTopicIsAllredyAdded.html.twig');
+   		$personal = new PersonalPage();
+   		$personal->setOfficeid($office->getId());
+   		$personal->setTopicid($topic->getId());
+   		$personal->setUserid($this->getUser()->getId());
+   		$personal->setNamewindow($office->getName());
+   		$personal->setWindowid($windowId);
+   		$personal->setDropdown(1);
+   		$em = $this->getDoctrine()->getEntityManager();
+   		$em->persist($personal);
+   		$em->flush();
+   		$parameters = array (
+   				"office" => $office,
+   				"topic" => $topic);
+   		return $this->redirect($this->generateUrl('intranet_show_topic', array('topic_id' => $topicId)));
     }
 }

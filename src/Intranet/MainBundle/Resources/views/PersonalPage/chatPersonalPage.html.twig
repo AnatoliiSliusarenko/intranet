@@ -6,14 +6,14 @@
   			<i class="fa fa-comments"></i>
   			{{office.getName()}}
   			<ul id="myTab" class="nav nav-tabs pull-right">
-  			{% if officeForWindow != NULL %}
+  			{% if officeForWindow != NULL and officeForWindow.getDropdown() == NULL %}
   				<li ng-class="{active:panel.isSelected(0) }">
   					<a href ng-click="panel.selectTab(0)" data-toggle="tab">{{ office.getName() }} </a>
   				</li>
   				{% for topic in windowtopics  %}
-       	        		{% if topic.getOfficeid()== office.getId()  %}
+       	        		{% if topic.getOfficeid()== office.getId() and topic.getDropdown() == NULL %}
         	        		<li ng-class="{active:panel.isSelected({{loop.index}}) }">
-        	        			<a href ng-click="panel.selectTab({{ loop.index }})" data-toggle="tab" >{{ topic.name }}</a>
+        	        			<a href ng-click="panel.selectTab({{ loop.index }})" data-toggle="tab" >{{ topic.getTopicName(em, topic.getTopicid) }}</a>
         	        		</li>
               			{% endif %}
             		{% endfor %}
@@ -21,12 +21,12 @@
   				{% for topic in windowtopics  %}
   				{% if loop.first %}
   					<li ng-class="{active:panel.isSelected({{loop.index}}) }">
-        	        	<a href ng-click="panel.selectTab({{ loop.index }})" data-toggle="tab" >{{ topic.name }}</a>
+        	        	<a href ng-click="panel.selectTab({{ loop.index }})" data-toggle="tab" >{{ topic.getTopicName(em, topic.getTopicid) }}</a>
         	        </li>
         	    {% else %}
-       	        	{% if topic.getOfficeid()== office.getId()  %}
+       	        	{% if topic.getOfficeid()== office.getId() and topic.getDropdown() == NULL %}
         	        	<li ng-class="{active:panel.isSelected({{loop.index}}) }">
-        	       			<a href ng-click="panel.selectTab({{ loop.index }})" data-toggle="tab" >{{ topic.name }}</a>
+        	       			<a href ng-click="panel.selectTab({{ loop.index }})" data-toggle="tab" >{{ topic.getTopicName(em, topic.getTopicid) }}</a>
         	       		</li>
               		{% endif %}
               	{% endif %}
@@ -37,11 +37,16 @@
                                             Dropdown <span class="caret"></span>
                                         </a>
                                         <ul class="dropdown-menu">
-                                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Action</a></li>
-                                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Another action</a></li>
-                                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Something else here</a></li>
-                                            <li role="presentation" class="divider"></li>
-                                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Separated link</a></li>
+                                        {% if officeForWindow != NULL and officeForWindow.getDropdown() != NULL %}
+                                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">{{office.getName()}}</a></li>
+                                        {% endif %}
+                                        {% for topic in windowtopics  %}
+                                        {% if topic.getOfficeid()== office.getId() and topic.getDropdown() != NULL %}
+                                        	 <li role="presentation">
+                                        	 	<a role="menuitem" tabindex="-1" href ng-click="panel.selectTab({{ loop.index }})" data-toggle="tab" >{{ topic.getTopicName(em, topic.getTopicid) }}</a>
+                                        	 </li>
+                                        {% endif %}
+                                        {% endfor %}
                                         </ul>
                                     </li>
   			</ul>
@@ -53,7 +58,7 @@
   		{% for topic in windowtopics  %}
            	{% if topic.getOfficeid()== office.getId()  %}
            	
-    	        <div  ng-show="panel.isSelected({{loop.index}})" ng-controller="PersonalTopicChatController" ng-init="init('{{ topic.Id }}')" >
+    	        <div  ng-show="panel.isSelected({{loop.index}})" ng-controller="PersonalTopicChatController" ng-init="init('{{ topic.getTopicid() }}')" >
   						<button class="btn btn-primary btn-sm"><a href="{{ url('intranet_delete_window_from_personal_page', { windowid: window.getWindowid() } ) }}">Delete window</button>
   						<button class="btn btn-primary btn-sm"><a href="{{ url('intranet_delete_tab_from_personal_page', { id: tabsId[loop.index0] } ) }}">Delete tab</button>
   						<div class="row">

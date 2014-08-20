@@ -4,9 +4,7 @@
 {% block content %}
 <div style="margin-top:100px">
 <div class="row ">
-​
 	{% for window in windows %}
-	
   		{{ render( controller('IntranetMainBundle:PersonalPage:showChatPersonalPage', {
         'office_id': window.getOfficeid() , 'topics': topics, 'window': window, 'curent': loop.index0
     })) }}	
