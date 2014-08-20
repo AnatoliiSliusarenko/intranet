@@ -56,6 +56,14 @@ class PersonalPage
 
 	private $windowid;
 	
+	/**
+	 *@var integer
+	 *
+	 * @@ORM\Column(name="dropdown", type="integer")
+	 */
+	
+	private $dropdown;
+	
     /**
      * Get userid
      *
@@ -192,6 +200,12 @@ class PersonalPage
         return $this->windowid;
     }
     
+    /**
+     * Set dropdown
+     * @param integer $dropdown
+     * @return PersonalPage
+     */
+    
     public static function getDataForUser($em , $userid)
     {
     	$office_id_arr = array();
@@ -201,6 +215,7 @@ class PersonalPage
     	$offices = array();
     	$windows = array();
     	$personal_data = $em->getRepository('IntranetMainBundle:PersonalPage')->findAll($userid);
+    	//$personal_data[0]->getDropdown();
     	if ($personal_data == null)
 			return;
     	foreach ($personal_data as $personal_record)
@@ -233,18 +248,26 @@ class PersonalPage
     			"offices" => $offices,
     			"windows" => []
     	);
+    	
     	$parameters["windows"][0] = $windows[0];
     	foreach ($windows as $wind)
+    	{
+    		$flag = false;
     		foreach ($parameters["windows"] as $w)
-    			if($w->getWindowid() != $wind->getWindowid())
-    				array_push($parameters["windows"], $wind);
+    			if($w->getWindowid() == $wind->getWindowid())
+    				$flag = true;
+    		if(!$flag) 
+    			array_push($parameters["windows"], $wind);
+    	}
     	return $parameters;
     }
     
     public static function getTopicsForWindow($officeid, $em, $topics, $userId)
     {
     	$topicsPersonal = $em->getRepository('IntranetMainBundle:PersonalPage')->findByWindowid($officeid);
+    	
     	$window_topics = array();
+    	$mas = array();
     	foreach ($topics as $topic)
     	{
     		if($topic == NULL)
@@ -253,9 +276,12 @@ class PersonalPage
     			if($topic->getId() == $window_topic->getTopicid() 
     					&& $window_topic->getTopicid() != NULL 
     					&& $window_topic->getUserid() == $userId)
+    		{
     				array_push($window_topics, $topic);
+    				array_push($mas,$window_topic->getId());
+    		}
     	}
-    	return $window_topics;
+    	return array("topics" => $window_topics, "tabId" => $mas);
     }
     
     public static function getOfficeForWindow($em, $window, $userId)

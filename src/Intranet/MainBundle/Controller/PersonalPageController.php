@@ -33,7 +33,7 @@ class PersonalPageController extends Controller
 		
 		$topicTree = Topic::getTopicTree($em);
 		$parentTopic = $topicTree[0];
-		
+		$data = PersonalPage::getTopicsForWindow($window->getWindowid(),$em, $topics, $this->getUser()->getId());
 		$parameters = array(
 				"availableStatus" => TaskStatus::getAllStatuses($em),
 				"em" => $em,
@@ -43,7 +43,8 @@ class PersonalPageController extends Controller
 				'officeUsers' => array_map(function($e){return $e->getInArray();}, $officeUsers->toArray()),
 				'users' => array_map(function($e){return $e->getInArray();}, $users),
 				'offices' => $childrenOfficesForUser,
-				'windowtopics' => PersonalPage::getTopicsForWindow($window->getWindowid(),$em, $topics, $this->getUser()->getId()),
+				'windowtopics' => $data["topics"],
+				'tabsId' => $data["tabId"],
 				'dataid' => PersonalPage::getAllIdForUser($em, $this->getUser()->getId()),
 				"curent" => $curent,
 				"officeForWindow" => PersonalPage::getOfficeForWindow($em, $window,$this->getUser()->getId()),
@@ -68,7 +69,7 @@ class PersonalPageController extends Controller
 		return $this->render('IntranetMainBundle:PersonalPage:showPersonalPage.html.twig', $parameters);
 	}
 	
-	public function deleteTabFromPersonalPageAction($id = 0)
+	public function deleteTabFromPersonalPageAction($id)
 	{
 		$em = $this->getDoctrine()->getManager();
 		$tab = $em->getRepository('IntranetMainBundle:PersonalPage')->find($id);

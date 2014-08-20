@@ -32,6 +32,18 @@
               	{% endif %}
             	{% endfor %}
   			{% endif %}
+  			<li class="dropdown open">
+                                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                            Dropdown <span class="caret"></span>
+                                        </a>
+                                        <ul class="dropdown-menu">
+                                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Action</a></li>
+                                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Another action</a></li>
+                                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Something else here</a></li>
+                                            <li role="presentation" class="divider"></li>
+                                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Separated link</a></li>
+                                        </ul>
+                                    </li>
   			</ul>
 			</h3>
 		</div>
@@ -43,7 +55,7 @@
            	
     	        <div  ng-show="panel.isSelected({{loop.index}})" ng-controller="PersonalTopicChatController" ng-init="init('{{ topic.Id }}')" >
   						<button class="btn btn-primary btn-sm"><a href="{{ url('intranet_delete_window_from_personal_page', { windowid: window.getWindowid() } ) }}">Delete window</button>
-  						<button class="btn btn-primary btn-sm"><a href="{{ url('intranet_delete_tab_from_personal_page', { id: topic.getId() } ) }}">Delete tab</button>
+  						<button class="btn btn-primary btn-sm"><a href="{{ url('intranet_delete_tab_from_personal_page', { id: tabsId[loop.index0] } ) }}">Delete tab</button>
   						<div class="row">
   							<div class="col-md-7" style=" width:320px">
 								<ul class="pagination" style="margin-left: 5px;">

@@ -174,31 +174,25 @@ class TopicController extends Controller
     	$topic = $em->getRepository('IntranetMainBundle:Topic')->find($topic_id);
     	
     	$personal_topic = $em->getRepository('IntranetMainBundle:PersonalPage')->findByTopicid($topic_id);
-//    	$res = $personal_topic->getId();
-//    	die("$res ");
-    	if( $personal_topic != null )
-    	{
-    		return $this->render('IntranetMainBundle:Topic:messageTopicIsAllredyAdded.html.twig');
-    	}
-    	else
-    	{
-    		$office = $topic->getOffice();
-    		$window = $em->getRepository('IntranetMainBundle:PersonalPage')->findOneByOfficeid($office->getId());
-    		if($window == null)
+    	foreach ($personal_topic as $topic)
+    		if( $topic != null )
     			return $this->render('IntranetMainBundle:Topic:messageTopicIsAllredyAdded.html.twig');
-    		$personal = new PersonalPage();
-    		$personal->setOfficeid($office->getId());
-    		$personal->setTopicid($topic->getId());
-    		$personal->setUserid($this->getUser()->getId());
-    		$personal->setNamewindow($office->getName());
-    		$personal->setWindowid($window->getWindowid());
-    		$em = $this->getDoctrine()->getEntityManager();
-    		$em->persist($personal);
-    		$em->flush();
-    		$parameters = array (
-    				"office" => $office,
-    				"topic" => $topic);
+    	$office = $topic->getOffice();
+    	$window = $em->getRepository('IntranetMainBundle:PersonalPage')->findOneByOfficeid($office->getId());
+    	if($window == null)
+    		return $this->render('IntranetMainBundle:Topic:messageTopicIsAllredyAdded.html.twig');
+    	$personal = new PersonalPage();
+    	$personal->setOfficeid($office->getId());
+    	$personal->setTopicid($topic->getId());
+    	$personal->setUserid($this->getUser()->getId());
+    	$personal->setNamewindow($office->getName());
+    	$personal->setWindowid($window->getWindowid());
+    	$em = $this->getDoctrine()->getEntityManager();
+    	$em->persist($personal);
+    	$em->flush();
+    	$parameters = array (
+    		"office" => $office,
+    		"topic" => $topic);
     		return $this->redirect($this->generateUrl('intranet_show_topic', array('topic_id' => $topic_id)));
-    	}
     }
 }
