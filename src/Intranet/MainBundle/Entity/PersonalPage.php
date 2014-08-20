@@ -59,9 +59,8 @@ class PersonalPage
 	/**
 	 *@var integer
 	 *
-	 * @@ORM\Column(name="dropdown", type="integer")
+	 * @ORM\Column(name="dropdown", type="integer")
 	 */
-	
 	private $dropdown;
 	
     /**
@@ -341,5 +340,28 @@ class PersonalPage
     			if ($value->getWindowid() != $record->getWindowid()) 
     				array_push($arrayWindows, $record);
     	return  $arrayWindows;
+    }
+
+    /**
+     * Set dropdown
+     *
+     * @param integer $dropdown
+     * @return PersonalPage
+     */
+    public function setDropdown($dropdown)
+    {
+        $this->dropdown = $dropdown;
+
+        return $this;
+    }
+
+    /**
+     * Get dropdown
+     *
+     * @return integer 
+     */
+    public function getDropdown()
+    {
+        return $this->dropdown;
     }
 }
