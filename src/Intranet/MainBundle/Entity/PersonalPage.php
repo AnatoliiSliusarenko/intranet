@@ -387,20 +387,4 @@ class PersonalPage
      * @param integer $dropdown
      * @return PersonalPage
      */
-    public function setDropdown($dropdown)
-    {
-        $this->dropdown = $dropdown;
-
-        return $this;
-    }
-
-    /**
-     * Get dropdown
-     *
-     * @return integer 
-     */
-    public function getDropdown()
-    {
-        return $this->dropdown;
-    }
 }

@@ -20,9 +20,11 @@
   			{% else %}
   				{% for topic in windowtopics  %}
   				{% if loop.first %}
+  				{% if topic.getDropdown() == NULL %}
   					<li ng-class="{active:panel.isSelected({{loop.index}}) }">
         	        	<a href ng-click="panel.selectTab({{ loop.index }})" data-toggle="tab" >{{ topic.getTopicName(em, topic.getTopicid) }}</a>
         	        </li>
+        	    {% endif %}
         	    {% else %}
        	        	{% if topic.getOfficeid()== office.getId() and topic.getDropdown() == NULL %}
         	        	<li ng-class="{active:panel.isSelected({{loop.index}}) }">
