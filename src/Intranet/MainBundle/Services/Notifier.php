@@ -126,7 +126,7 @@ class Notifier
     public function createNotification($type, $resource, $destination)
     {
     	if (!in_array($type, $this->types)) return false;
-    	
+    	$creator = $this->user;
     	switch ($type)
     	{
     		case "topic_added":
