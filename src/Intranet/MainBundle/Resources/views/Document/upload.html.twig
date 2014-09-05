@@ -24,16 +24,33 @@
 {% block content %}
 <div class="panel panel-cascade">
 			<div class="panel-body">
-	        	<form enctype="multipart/form-data" action="{{ path('intranet_document') }}" method="POST">
-                Send this file: <input name="userfile" type="file" />
-                <input type="submit" value="Send File" />
-                </form>
+				<form enctype="multipart/form-data" action="{{ path('intranet_document') }}" method="POST">
+					<div class="form-group">
+						<label for="exampleInputFile">Upload file</label>
+						<input name="userfile" type="file" required="required" id="exampleInputFile">
+						<br/>
+						<input type="submit" value="Send File" />
+					</div>
+				</form>
+			</div>
+</div>
+	        	
                 
-                {% if image is not null %}
-                <img alt="{{ image }}" src="{{ app.request.getBaseURL() }}/../documents/{{ image }}"/>
-                {% endif %}
+                
+<div class="panel panel-cascade">
+			<div class="panel-body">
+				<div class="row demo-images">
+	                {% for document in documents %}
+	                <div class="col-sm-6 col-md-3">
+	                	{{ document.getName() }}
+		                <a href="{{ app.request.getBaseURL() }}/../{{ document.getWebPath() }}" class="thumbnail">
+		                	<img alt="{{ document.getName() }}" src="{{ app.request.getBaseURL() }}/../{{ document.getWebPath() }}">
+		                </a>
+	                </div>
+	                {% endfor %}
+                </div>
 		  	</div>
-	</div>
+</div>
 {% endblock %}
 {% block javascripts %}
 	{{ parent() }}

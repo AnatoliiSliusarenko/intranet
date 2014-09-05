@@ -4,25 +4,31 @@ namespace Intranet\MainBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Intranet\MainBundle\Entity\Document;
 
 class DocumentController extends Controller
 {
     public function uploadAction(Request $request)
     {
-    	
-    	$image = null;
+    	$em = $this->getDoctrine()->getManager();
     	
     	if ($request->getMethod() == 'POST') {
     		$uploadedFile = $request->files->get('userfile');
     		
-    		$uploadedFile->move('documents', $uploadedFile->getClientOriginalName());
-    	
+    		$document = new Document($this->getUser()->getId());
+    		$document->setFile($uploadedFile);
+    		
+    		$document->upload();
+    		
     		//$uploadedFile->getClientOriginalExtension()
     		
-    		$image = $uploadedFile->getClientOriginalName();
     		
+    		$em->persist($document);
+    		$em->flush();
     	}
     	
-        return $this->render('IntranetMainBundle:Document:upload.html.twig', array('image'=> $image));
+    	$documents = $em->getRepository("IntranetMainBundle:Document")->findAll();
+    	
+        return $this->render('IntranetMainBundle:Document:upload.html.twig', array('documents' => $documents));
     }
 }

@@ -24,6 +24,13 @@ class Document
     private $id;
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="userid", type="integer")
+     */
+    private $userid;
+    
+    /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255)
@@ -42,6 +49,11 @@ class Document
      * @Assert\File(maxSize="6000000")
      */
     private $file;
+    
+    function __construct($userid)
+    {
+    	$this->userid = $userid;
+    }
     
     public function getAbsolutePath()
     {
@@ -64,7 +76,7 @@ class Document
     
     protected function getUploadDir()
     {
-    	return 'uploads/documents';
+    	return 'documents';
     }
 
     /**
@@ -130,6 +142,10 @@ class Document
     public function setFile(UploadedFile $file = null)
     {
     	$this->file = $file;
+    	
+    	$this->path = $this->getFile()->getClientOriginalName();
+    	
+    	$this->name = $this->getFile()->getClientOriginalName();
     }
     
     /**
@@ -140,5 +156,37 @@ class Document
     public function getFile()
     {
     	return $this->file;
+    }
+
+    /**
+     * Set userid
+     *
+     * @param integer $userid
+     * @return Document
+     */
+    public function setUserid($userid)
+    {
+        $this->userid = $userid;
+
+        return $this;
+    }
+
+    /**
+     * Get userid
+     *
+     * @return integer 
+     */
+    public function getUserid()
+    {
+        return $this->userid;
+    }
+    
+    public function upload()
+    {
+    	if (null === $this->getFile()) return;
+    	
+    	$this->getFile()->move($this->getUploadRootDir(), $this->getFile()->getClientOriginalName());
+    	
+    	$this->file = null;
     }
 }
