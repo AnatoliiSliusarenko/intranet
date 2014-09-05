@@ -1,0 +1,41 @@
+{% extends 'IntranetMainBundle:Index:index.html.twig' %}
+
+{% block title %}Document{% endblock %}
+
+{% block breadcrumbs %}
+<ul class="breadcrumb">
+	<li class="active">Document</li>
+</ul>
+{% endblock %}
+
+{% block pageheader %}   
+<div class="row">
+	<div class="col-md-12">
+		<h3 class="page-header"><i class="fa fa-file-text"></i> Document  <i class="fa fa-info-circle animated bounceInDown show-info"></i> </h3>
+
+		<blockquote class="page-information hidden">
+		<p>
+			On this page you can upload files...
+		</p>
+		</blockquote>
+	</div>
+</div>
+{% endblock %}
+{% block content %}
+<div class="panel panel-cascade">
+			<div class="panel-body">
+	        	<form enctype="multipart/form-data" action="{{ path('intranet_document') }}" method="POST">
+                Send this file: <input name="userfile" type="file" />
+                <input type="submit" value="Send File" />
+                </form>
+                
+                {% if image is not null %}
+                <img alt="{{ image }}" src="{{ app.request.getBaseURL() }}/../documents/{{ image }}"/>
+                {% endif %}
+		  	</div>
+	</div>
+{% endblock %}
+{% block javascripts %}
+	{{ parent() }}
+	
+{% endblock %}

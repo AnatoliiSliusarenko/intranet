@@ -187,3 +187,7 @@ intranet_add_office_to_dropdown:
 intranet_add_topic_to_dropdown:
   pattern: /topic/{topicId}/{windowId}/addTopicToDropdown/
   defaults: { _controller: IntranetMainBundle:Topic:addTopicToDropdown }
+  
+intranet_document:
+  pattern: /document/
+  defaults: { _controller: IntranetMainBundle:Document:upload }
