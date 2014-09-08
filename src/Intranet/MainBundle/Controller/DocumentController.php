@@ -15,7 +15,7 @@ class DocumentController extends Controller
     	if ($request->getMethod() == 'POST') {
     		$uploadedFile = $request->files->get('userfile');
     		
-    		$document = new Document($this->getUser()->getId());
+    		$document = new Document($this->getUser());
     		$document->setFile($uploadedFile);
     		
     		$document->upload();

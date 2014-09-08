@@ -64,9 +64,10 @@ class Document
      */
     private $user;
     
-    function __construct($userid)
+    function __construct($user)
     {
-    	$this->setUserid($userid);
+    	$this->setUserid($user->getId());
+    	$this->setUser($user);
     	$this->setUploaded(new \DateTime());
     }
     
