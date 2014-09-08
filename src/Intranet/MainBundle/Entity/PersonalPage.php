@@ -245,10 +245,10 @@ class PersonalPage
     			"topics" => $topics,
     			"em" => $em,
     			"offices" => $offices,
-    			"windows" => []
+    			"windows" => array()
     	);
     	
-    	$parameters["windows"][0] = $windows[0];
+    	//$parameters["windows"][0] = $windows[0];
     	foreach ($windows as $wind)
     	{
     		$flag = false;
@@ -340,7 +340,7 @@ class PersonalPage
     	$arrayWindows = array();
     	$result = array();
     	$records = $em->getRepository('IntranetMainBundle:PersonalPage')->findByUserid($userId);
-    	$arrayWindows[0] = $records[0];
+    	//$arrayWindows[0] = $records[0];
     	foreach ($records as $record)
     	{
     		$flag = false;

@@ -3652,7 +3652,7 @@ textarea.input-group-sm>.form-control,textarea.input-group-sm>.input-group-addon
 
 .nav-tabs>li {
 	float: left;
-	margin-bottom: -1px;
+	margin-bottom: -2px;
 }
 
 .nav-tabs>li>a {
