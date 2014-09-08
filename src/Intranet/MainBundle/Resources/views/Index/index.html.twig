@@ -28,9 +28,9 @@
         <div class="collapse navbar-collapse">
           <ul class="nav navbar-nav user-menu navbar-right ">
 
-            <li><a href="#" class="user dropdown-toggle" data-toggle="dropdown"><span class="username"><img src="{{ asset('bundles/intranet/images/profiles/' ~ app.user.avatar) }}" class="user-avatar" alt="">  {{ app.user.name ~ ' ' ~ app.user.surname }} </span></a>
+            <li><a href="#" class="user dropdown-toggle" data-toggle="dropdown"><span class="username"><img src="{{ app.request.getBaseURL() }}/../documents/{{ app.user.getAvatar() }}" class="user-avatar" alt="">  {{ app.user.name ~ ' ' ~ app.user.surname }} </span></a>
               <ul class="dropdown-menu">
-                <li><a href="#"><i class="fa fa-user"></i> My Profile</a></li>
+                <li><a href="{{ path('intranet_user_profile') }}"><i class="fa fa-user"></i> My Profile</a></li>
                 <li>
                       <a href="{{ url('intranet_show_personal_page') }}">
                         <i class="fa fa-user"></i> 
@@ -38,7 +38,6 @@
                       </a>
                     </li>
                 <li><a href="#"><i class="fa fa-envelope"></i> Inbox</a></li>
-                <li><a href="{{ path('intranet_user_settings') }}"><i class="fa fa-cogs"></i> Settings</a></li>
                 <li><a href="{{ path('intranet_task_activity_logs_show') }}"><i class="fa fa-book"></i> Show logs</a></li>
                 <li><a href="{{ path('intranet_task_reporter') }}"><i class="fa fa-puzzle-piece"></i> Task Reporter</a></li>
                 <li><a href="{{ path('intranet_document') }}"><i class="fa fa-file-text"></i> Documents upload</a></li>

@@ -441,7 +441,7 @@
 	var STATUSES = {{ availableStatus|json_encode|raw }};
 	JSON_URLS.posts = "{{ path('intranet_post_office_get_posts', {office_id: office.id}) }}";
 	JSON_URLS.post_add = "{{ path('intranet_post_office_add_post', {office_id: office.id}) }}"; 
-	JSON_URLS.avatar = "{{ asset('bundles/intranet/images/profiles/') }}";
+	JSON_URLS.avatar = "{{ app.request.getBaseURL() }}/../documents/";
 	JSON_URLS.members = "{{ path('intranet_office_members', {office_id: office.id}) }}";
 	JSON_URLS.editMembers = "{{ url('intranet_change_office_members', {office_id: office.getId()}) }}";
 	JSON_URLS.posts_new = "{{ path('intranet_post_office_new', {office_id: office.id}) }}";

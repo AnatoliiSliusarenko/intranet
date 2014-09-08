@@ -93,6 +93,12 @@ class User implements UserInterface, \Serializable
 	private $tasks;
 	
 	/**
+	 * @ORM\OneToMany(targetEntity="Document", mappedBy="user")
+	 * @var array
+	 */
+	private $documents;
+	
+	/**
 	 * @ORM\ManyToMany(targetEntity="Office", inversedBy="users")
 	 * @var array
 	 */
@@ -916,5 +922,38 @@ class User implements UserInterface, \Serializable
     public function getPostsTask()
     {
         return $this->postsTask;
+    }
+
+    /**
+     * Add documents
+     *
+     * @param \Intranet\MainBundle\Entity\Document $documents
+     * @return User
+     */
+    public function addDocument(\Intranet\MainBundle\Entity\Document $documents)
+    {
+        $this->documents[] = $documents;
+
+        return $this;
+    }
+
+    /**
+     * Remove documents
+     *
+     * @param \Intranet\MainBundle\Entity\Document $documents
+     */
+    public function removeDocument(\Intranet\MainBundle\Entity\Document $documents)
+    {
+        $this->documents->removeElement($documents);
+    }
+
+    /**
+     * Get documents
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getDocuments()
+    {
+        return $this->documents;
     }
 }

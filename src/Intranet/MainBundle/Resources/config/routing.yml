@@ -148,9 +148,13 @@ intranet_task_resetNewCommentsCount:
     pattern:  /task/{task_id}/resetNewCommentsCount/
     defaults: { _controller: IntranetMainBundle:Task:resetNewComments }
     
-intranet_user_settings:
-    pattern:  /user/settings/
-    defaults: { _controller: IntranetMainBundle:UserSettings:index }
+intranet_user_profile:
+    pattern:  /user/profile/
+    defaults: { _controller: IntranetMainBundle:UserProfile:show }
+    
+intranet_user_change_avatar:
+    pattern:  /user/changeAvatar/{document_id}
+    defaults: { _controller: IntranetMainBundle:UserProfile:changeAvatar }
     
 intranet_add_topic_to_personal_page:
   pattern: /topic/{topic_id}/addTopicChatToNewWindowPersonalPage/

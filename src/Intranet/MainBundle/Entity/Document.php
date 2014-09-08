@@ -46,13 +46,28 @@ class Document
     private $path;
     
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="uploaded", type="datetime")
+     */
+    private $uploaded;
+    
+    /**
      * @Assert\File(maxSize="6000000")
      */
     private $file;
     
+    /**
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="documents")
+     * @ORM\JoinColumn(name="userid")
+     * @var User
+     */
+    private $user;
+    
     function __construct($userid)
     {
-    	$this->userid = $userid;
+    	$this->setUserid($userid);
+    	$this->setUploaded(new \DateTime());
     }
     
     public function getAbsolutePath()
@@ -188,5 +203,51 @@ class Document
     	$this->getFile()->move($this->getUploadRootDir(), $this->getFile()->getClientOriginalName());
     	
     	$this->file = null;
+    }
+
+    /**
+     * Set uploaded
+     *
+     * @param \DateTime $uploaded
+     * @return Document
+     */
+    public function setUploaded($uploaded)
+    {
+        $this->uploaded = $uploaded;
+
+        return $this;
+    }
+
+    /**
+     * Get uploaded
+     *
+     * @return \DateTime 
+     */
+    public function getUploaded()
+    {
+        return $this->uploaded;
+    }
+
+    /**
+     * Set user
+     *
+     * @param \Intranet\MainBundle\Entity\User $user
+     * @return Document
+     */
+    public function setUser(\Intranet\MainBundle\Entity\User $user = null)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return \Intranet\MainBundle\Entity\User 
+     */
+    public function getUser()
+    {
+        return $this->user;
     }
 }

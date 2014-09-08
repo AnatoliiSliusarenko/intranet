@@ -1,0 +1,90 @@
+{% extends 'IntranetMainBundle:Index:index.html.twig' %}
+
+{% block title %}Profile Page{% endblock %}
+
+{% block breadcrumbs %}
+<ul class="breadcrumb">
+	<li class="active">My Profile</li>
+</ul>
+{% endblock %}
+
+{% block pageheader %}   
+{% endblock %}
+{% block content %}
+<div class="row profile">
+	<div class="col-md-3 user-details well text-center col-sm-12" >
+    	<img src="{{ app.request.getBaseURL() }}/../documents/{{ app.user.getAvatar() }}" class="main-avatar" />
+        	<div class="user-main-info">
+              	<h2 class="text-primary user-name">{{ app.user.name ~ ' ' ~ app.user.surname }}</h2>
+                <h5 class="text-info user-designation">Simple user</h5>
+                <a href="#" class="btn btn-success"><i class="fa fa-check"></i> Following </a>
+                <a href="#" class="btn btn-info"><i class="fa fa-comment"></i> Chat </a>
+            </div>
+                    <div class="about">
+                      <p><strong>About: </strong>Short information about me... </p>
+                    </div>
+                    <ul class="list-group details-list">
+                     <li class="list-group-item">
+                      <span class="badge bg-info">903</span>
+                      Friends
+                    </li>
+                    <li class="list-group-item">
+                      <span class="badge bg-pink">981</span>
+                      Followers
+                    </li>
+                    <li class="list-group-item">
+                      <span class="badge bg-warning">46</span>
+                      Following
+                    </li>
+                    <li class="list-group-item">
+                      <span class="badge bg-purple">50M</span>
+                      Likes
+                    </li>
+                  </ul>
+                </div>
+                <div class="col-md-9 profile-tabs">
+
+                  <ul id="myTab" class="nav nav-tabs">
+                    <li class="active"><a href="#files" data-toggle="tab">Files</a></li>
+                    <li><a href="#friends" data-toggle="tab">Friends</a></li>
+                    <li><a href="#settings" data-toggle="tab">Settings</a></li>
+                  </ul>
+
+                  <div id="myTabContent" class="tab-content">
+
+                    <div class="tab-pane fade  in active" id="files">
+                      <ul>
+                      	{% for document in app.user.getDocuments()%}
+                        <li class="col-md-4">
+                          <div class="img-container">
+                            <img src="{{ app.request.getBaseURL() }}/../{{ document.getWebPath() }}" alt="" class="imggg" />
+                          	<a href="{{ app.request.getBaseURL() }}/../{{ document.getWebPath() }}">{{ document.getName() }}<span class="pull-right">Added {{ document.getUploaded() | date("m-d-Y H:i:s")}}</span></a>
+                          	
+                          </div>
+                          {% if app.user.getAvatar() != document.getName() %}
+                          	<a href="{{ path('intranet_user_change_avatar', {document_id: document.getId()}) }}">Set as avatar <i class="fa fa-picture-o"></i></a>
+                          	{% endif %}
+                        </li>
+                        {% endfor %}
+                      </ul>
+                    </div>
+                    <div class="tab-pane fade" id="friends">
+                      <ul>
+                        <li class="col-md-2">
+                          <img src="images/profiles/one.png" />
+                          <a href="#">John Deo</a>
+                          <span class="username">@johndeo</span>
+                        </li>
+                      </ul>
+                    </div>
+                    <div class="tab-pane fade" id="settings">
+                      <h3>Settings will be here...</h3>
+                    </div>
+                  </div>
+                </div>
+             </div>
+{% endblock %}
+{% block javascripts %}
+	{{ parent() }}
+	
+{% endblock %}
