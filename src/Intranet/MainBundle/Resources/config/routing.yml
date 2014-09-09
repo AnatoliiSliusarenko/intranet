@@ -194,4 +194,12 @@ intranet_add_topic_to_dropdown:
   
 intranet_document:
   pattern: /document/
+  defaults: { _controller: IntranetMainBundle:Document:index }
+  
+intranet_document_upload:
+  pattern: /document/upload/
   defaults: { _controller: IntranetMainBundle:Document:upload }
+  
+intranet_document_get:
+  pattern: /document/get/
+  defaults: { _controller: IntranetMainBundle:Document:getDocuments }

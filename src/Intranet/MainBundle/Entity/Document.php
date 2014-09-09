@@ -55,7 +55,7 @@ class Document
     /**
      * @Assert\File(maxSize="6000000")
      */
-    private $file;
+    private $file = null;
     
     /**
      * @ORM\ManyToOne(targetEntity="User", inversedBy="documents")
@@ -63,6 +63,15 @@ class Document
      * @var User
      */
     private $user;
+    
+    private static $fileTypes = array('doc','docx','xls','xlsx','jpg','jpeg','gif','png','avi','pdf','mp3');
+    
+    private static $SALT = 'kj3o4ityijn873250u4hc978234h[oj670q7ufhjsdhoa4';
+    
+    public static function getToken($timestamp)
+    {
+    	return md5(self::$SALT . $timestamp);
+    }
     
     function __construct($user)
     {
@@ -155,13 +164,18 @@ class Document
      * Sets file
      * @param UploadedFile $file
      */
-    public function setFile(UploadedFile $file = null)
+    public function setFile(UploadedFile $file = null, $timestamp, $token)
     {
+    	$verifyToken = md5(self::$SALT . $timestamp);
+
+    	if ($token !== $verifyToken) return false;
+    	
     	$this->file = $file;
     	
     	$this->path = $this->getFile()->getClientOriginalName();
     	
     	$this->name = $this->getFile()->getClientOriginalName();
+    	return true;
     }
     
     /**
@@ -199,11 +213,17 @@ class Document
     
     public function upload()
     {
-    	if (null === $this->getFile()) return;
+    	if (null === $this->getFile()) return false;
     	
-    	$this->getFile()->move($this->getUploadRootDir(), $this->getFile()->getClientOriginalName());
+    	$pathinfo = pathinfo($this->getName());
     	
-    	$this->file = null;
+    	if (in_array($pathinfo['extension'],self::$fileTypes)) {
+    		$this->getFile()->move($this->getUploadRootDir(), $this->getFile()->getClientOriginalName());
+    		$this->file = null;
+    		return true;
+    	} else {
+    		return false;
+    	}
     }
 
     /**
@@ -250,5 +270,44 @@ class Document
     public function getUser()
     {
         return $this->user;
+    }
+    
+    public static function getAvailableTypesInString()
+    {
+    	$result = '';
+    	foreach (self::$fileTypes as $type)
+    	{
+    		$result .= "'*.".$type."' ";
+    	}
+    	
+    	return $result;
+    }
+    
+    public static function getAllDocuments($em)
+    {
+    	$query = $em
+    			->createQueryBuilder()
+    			->select('d')
+    	   		->from('IntranetMainBundle:Document', 'd')
+		    	->orderBy('d.uploaded', 'DESC')
+		    	->getQuery();
+    	 
+    	$documents = $query->getResult();
+    	 
+    	return array_map(function($document){
+    		return $document->getInArray();
+    	}, $documents);
+    }
+    
+    public function getInArray()
+    {
+    	return array(
+    			'id' => $this->getId(),
+    			'userid' => $this->getUserid(),
+    			'user' => $this->getUser()->getInArray(),
+    			'name' => $this->getName(),
+    			'uploaded' => $this->getUploaded(),
+    			'url' => $this->getWebPath()
+    	);
     }
 }
