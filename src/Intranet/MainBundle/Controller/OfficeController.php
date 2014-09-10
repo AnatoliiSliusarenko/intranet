@@ -176,16 +176,19 @@ class OfficeController extends Controller
     {
     	$em = $this->getDoctrine()->getManager();
     	$office = $em->getRepository('IntranetMainBundle:Office')->find($office_id);
-    	$personal_office = $em->getRepository('IntranetMainBundle:PersonalPage')->find($office_id);
+    	$personal_office = $em->getRepository('IntranetMainBundle:PersonalPage')->findByOfficeid($office_id);
     	$personal_data = $em->getRepository('IntranetMainBundle:PersonalPage')->findAll($this->getUser()->getId());
     	$count_window = count($personal_data)+1;
-    	if( $personal_office != null)
+    	if(count($personal_office) != 0)
     	{
-    		return $this->render('IntranetMainBundle:Office:messageOfficeIsAllredyAdded.html.twig');
-    		//die("bla-bla-bla");
+    		$personal_office = array_shift($personal_office);
+    		if( $personal_office != null && $personal_office->getTopicid() == null 
+    			&& $personal_office->getUserid() == $this->getUser()->getId())
+    		{
+    			
+    			return $this->render('IntranetMainBundle:Office:messageOfficesAllredyAdded.html.twig');
+    		}
     	}
-    	else 
-    	{
     		$personal = new PersonalPage();
     		$personal->setOfficeid($office_id);
     		$personal->setTopicid(NULL);
@@ -195,6 +198,7 @@ class OfficeController extends Controller
     			$personal->setWindowid(0);
     		else
     			$personal->setWindowid($count_window);
+    		$personal->setDropdown(0);
     		$em = $this->getDoctrine()->getEntityManager();
     		$em->persist($personal);
     		$em->flush();
@@ -202,7 +206,6 @@ class OfficeController extends Controller
     				"office" => $office,
     				"topic" => 0);
     		return $this->redirect($this->generateUrl('intranet_show_office',array('office_id' => $office_id)));
-    	}
     	
     }
     
@@ -211,25 +214,28 @@ class OfficeController extends Controller
     	$em = $this->getDoctrine()->getManager();
     	$office = $em->getRepository('IntranetMainBundle:Office')->find($office_id);
     	$personal_office = $em->getRepository('IntranetMainBundle:PersonalPage')->findByOfficeid($office_id);
-    	if( $personal_office != null )
+   		if(count($personal_office) != 0)
     	{
-
-    		return $this->render('IntranetMainBundle:Office:messageOfficesAllredyAdded.html.twig');
+    		$personal_office = array_shift($personal_office);
+    		if( $personal_office != null && $personal_office->getTopicid() == null 
+    			&& $personal_office->getUserid() == $this->getUser()->getId())
+    		{
+    			
+    			return $this->render('IntranetMainBundle:Office:messageOfficesAllredyAdded.html.twig');
+    		}
     	}
-    	else
-    	{
-    		$personal = new PersonalPage();
-    		$personal->setOfficeid($office_id);
-    		$personal->setTopicid(NULL);
-    		$personal->setUserid($this->getUser()->getId());
-    		$personal->setNamewindow($office->getName());
-    		$personal->setWindowid($window_id);
-    		$em = $this->getDoctrine()->getEntityManager();
-    		$em->persist($personal);
-    		$em->flush();
-    		$parameters = array (
-    				"office" => $office);
-    		return $this->redirect($this->generateUrl('intranet_show_office',array('office_id' => $office_id)));
-    	}
+    	$personal = new PersonalPage();
+    	$personal->setOfficeid($office_id);
+    	$personal->setTopicid(NULL);
+    	$personal->setUserid($this->getUser()->getId());
+    	$personal->setNamewindow($office->getName());
+    	$personal->setWindowid($window_id);
+    	$personal->setDropdown(0);
+    	$em = $this->getDoctrine()->getEntityManager();
+    	$em->persist($personal);
+    	$em->flush();
+    	$parameters = array (
+    			"office" => $office);
+    	return $this->redirect($this->generateUrl('intranet_show_office',array('office_id' => $office_id)));
     }
 }

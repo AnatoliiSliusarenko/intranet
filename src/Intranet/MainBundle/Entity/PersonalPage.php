@@ -247,8 +247,11 @@ class PersonalPage
     			"offices" => $offices,
     			"windows" => array()
     	);
-    	
-    	//$parameters["windows"][0] = $windows[0];
+    	if(count($windows) != 0)
+    	{
+    		$tmp = array_shift($windows);
+    		array_push($parameters["windows"], $tmp);
+    	}
     	foreach ($windows as $wind)
     	{
     		$flag = false;
@@ -341,6 +344,11 @@ class PersonalPage
     	$result = array();
     	$records = $em->getRepository('IntranetMainBundle:PersonalPage')->findByUserid($userId);
     	//$arrayWindows[0] = $records[0];
+    	if(count($records) != 0)
+    	{
+    		$tmp = array_shift($records);
+    		array_push($arrayWindows, $tmp);
+    	}
     	foreach ($records as $record)
     	{
     		$flag = false;

@@ -141,10 +141,13 @@ class TopicController extends Controller
     	$personal_topic = $em->getRepository('IntranetMainBundle:PersonalPage')->findByTopicid($topic_id);
     	$personal_data = $em->getRepository('IntranetMainBundle:PersonalPage')->findAll();
     	$count_window = count($personal_data)+1;
-    	
-    	if( $personal_topic != null )
+    	if(count($personal_topic) != 0)
     	{
-    		return $this->render('IntranetMainBundle:Topic:messageTopicIsAllredyAdded.html.twig');
+    		$personal_topic = array_shift($personal_topic);
+    		if( $personal_topic != null )
+    		{
+    			return $this->render('IntranetMainBundle:Topic:messageTopicIsAllredyAdded.html.twig');
+    		}
     	}
     	else
     	{
@@ -158,7 +161,7 @@ class TopicController extends Controller
     			$personal->setWindowid(0);
     		else 
     			$personal->setWindowid($count_window);
-    		$personal->setDropdown(null);
+    		$personal->setDropdown(0);
     		$em = $this->getDoctrine()->getEntityManager();
     		$em->persist($personal);
     		$em->flush();
@@ -189,7 +192,7 @@ class TopicController extends Controller
     	$personal->setUserid($this->getUser()->getId());
     	$personal->setNamewindow($office->getName());
     	$personal->setWindowid($window_id);
-    	$personal->setDropdown(null);
+    	$personal->setDropdown(0);
     	$em = $this->getDoctrine()->getEntityManager();
     	$em->persist($personal);
     	$em->flush();
