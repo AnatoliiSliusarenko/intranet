@@ -1,4 +1,4 @@
-var Intranet = angular.module('Intranet', ['ui.bootstrap'])
+var Intranet = angular.module('Intranet', ['ui.bootstrap','ngSanitize'])
 .config(['$interpolateProvider', function ($interpolateProvider) {
     $interpolateProvider.startSymbol('[[');
     $interpolateProvider.endSymbol(']]');

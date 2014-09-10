@@ -5083,6 +5083,10 @@ to {
 	border: 1px solid #dddddd;
 }
 
+.list-group-item > p > a {
+	color: #0000FF;
+}
+
 .list-group-item:first-child {
 	border-top-right-radius: 4px;
 	border-top-left-radius: 4px;

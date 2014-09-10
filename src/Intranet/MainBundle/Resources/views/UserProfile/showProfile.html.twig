@@ -58,7 +58,7 @@
                         <li class="col-md-4">
                           <div class="img-container">
                             <img src="{{ app.request.getBaseURL() }}/../{{ document.getWebPath() }}" alt="" class="imggg" />
-                          	<a href="{{ app.request.getBaseURL() }}/../{{ document.getWebPath() }}">{{ document.getName() }}<span class="pull-right">Added {{ document.getUploaded() | date("m-d-Y H:i:s")}}</span></a>
+                          	<a href="{{ app.request.getBaseURL() }}/../{{ document.getWebPath() }}"  download="{{ document.getName() }}">{{ document.getName() }}<span class="pull-right">Added {{ document.getUploaded() | date("m-d-Y H:i:s")}}</span></a>
                           	
                           </div>
                           {% if app.user.getAvatar() != document.getName() %}

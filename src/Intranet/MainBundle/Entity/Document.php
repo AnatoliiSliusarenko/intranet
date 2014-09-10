@@ -283,16 +283,21 @@ class Document
     	return $result;
     }
     
-    public static function getAllDocuments($em)
+    public static function getAllDocuments($em, $userid = null)
     {
-    	$query = $em
-    			->createQueryBuilder()
-    			->select('d')
-    	   		->from('IntranetMainBundle:Document', 'd')
-		    	->orderBy('d.uploaded', 'DESC')
-		    	->getQuery();
+    	$qb = $em->createQueryBuilder();
+    	
+    	$qb->select('d')
+    	   ->from('IntranetMainBundle:Document', 'd')
+		   ->orderBy('d.uploaded', 'DESC');
+		   
+    	if ($userid != null)
+    	{
+    		$qb->andWhere('d.userid = :userid')
+    		->setParameter('userid', $userid);
+    	}
     	 
-    	$documents = $query->getResult();
+    	$documents = $qb->getQuery()->getResult();
     	 
     	return array_map(function($document){
     		return $document->getInArray();

@@ -2,6 +2,11 @@
 
 {% block title %}{{ topic.name }}{% endblock %}
 
+{% block styles %}
+	{{ parent() }}
+	<link href="{{ asset('bundles/intranet/css/uploadify.css') }}" rel="stylesheet">
+{% endblock %}
+
 {% block breadcrumbs %}
 <ul class="breadcrumb">
 	{% if activeSection == 'office' %}
@@ -171,14 +176,17 @@
 									
   									<div class="panel-body nopadding">
   										<div id="conversation" class="list-group conversation">
-  											<a class="list-group-item" ng-repeat="post in posts">
+  											<div class="list-group-item" ng-repeat="post in posts">
   												<img src="[[avatarURL + post.user.avatar]]" class="chat-user-avatar" alt="" />
   												<span class="username" >[[post.user.name + ' ' + post.user.surname]] ([[post.user.username]])<span class="time">[[ post.posted.date ]]</span> </span>
   												<i class="fa fa-edit" ng-show="post.edited"></i>
-  												<p style="white-space: pre-line;" ng-class="{editable:isEditable(post)}" ng-click="editPost(post)">[[post.message]]</p>
-  											</a>
+  												<p style="white-space: pre-line;" ng-class="{editable:isEditable(post)}" ng-click="editPost(post)" ng-bind-html="post.message"></p>
+  											</div>
   										</div>
   										<div class="input-group">
+  											<span class="input-group-btn">
+  												<button class="btn btn-success" ng-click="addDocuments()"><i class="fa fa-file"></i></button>
+  											</span>
   											<textarea style="resize:vertical;" class="form-control write-message" ng-class="{editing: editingPost}" id="write-message" placeholder="Type something here and hit enter" ng-model="message" ng-keypress="pressEnter($event)"></textarea>
   											<span class="input-group-btn">
   												<button class="btn text-white bg-primary send-message" type="button" id="send-message" ng-click="sendPost()">Send</button>
@@ -344,7 +352,7 @@
 	{{ parent() }}
 	<script src="{{ asset('bundles/intranet/js/custom/chat.js') }}"></script>
 	<script src="{{ asset('bundles/intranet/js/custom/tasks.js') }}"></script>
-	
+	<script src="{{ asset('bundles/intranet/js/uploadify/jquery.uploadify.min.js') }}"></script>
 	<script type="text/javascript">
 	var USERS = {{ users|json_encode|raw }};
 	var TOPICS = {{ topicsForTasks|json_encode|raw }};
@@ -364,6 +372,11 @@
 	JSON_URLS.urlsPostsTaskGet = "{{ path('intranet_post_task_get', {task_id: 0}) }}";
 	JSON_URLS.urlsPostsTaskAdd = "{{ path('intranet_post_task_add', {task_id: 0}) }}";
 	JSON_URLS.urlsResetCommentsCount = "{{ path('intranet_task_resetNewCommentsCount', {task_id: 0}) }}";
+	JSON_URLS.documentsAdd = "{{ path('intranet_document_dialog_add') }}";
+	JSON_URLS.documentsGet = "{{ path('intranet_document_get') }}";
+	JSON_URLS.uploaderSWF = '../../../bundles/intranet/swf/uploadify.swf';
+	JSON_URLS.uploaderUpload = "{{ path('intranet_document_upload') }}";
+	JSON_URLS.baseUrl = "{{ app.request.getBaseURL() }}/../";
 	
     var USER = {
     	    id: "{{ app.user.getId() }}"

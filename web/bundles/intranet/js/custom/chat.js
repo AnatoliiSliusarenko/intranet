@@ -1,4 +1,4 @@
-Intranet.controller('ChatController', ['$scope', '$http', '$paginator', function($scope, $http, $paginator){
+Intranet.controller('ChatController', ['$scope', '$http', '$paginator', '$modal', function($scope, $http, $paginator, $modal){
 	container = $('#conversation');
 	messageContainer = $('#write-message');
 	
@@ -34,7 +34,9 @@ Intranet.controller('ChatController', ['$scope', '$http', '$paginator', function
 	$scope.postAddURL = JSON_URLS.post_add;
 	$scope.membersURL = JSON_URLS.members;
 	$scope.postsNewURL = JSON_URLS.posts_new;
-	$scope.postsCountURL = JSON_URLS.post_count;	
+	$scope.postsCountURL = JSON_URLS.post_count;
+	$scope.urlsDocumentsAdd = JSON_URLS.documentsAdd;
+	$scope.urlsBase = JSON_URLS.baseUrl;
 	
 	$scope.entityid = window.ENTITY.id;
 	$scope.userid = window.USER.id;
@@ -237,5 +239,101 @@ Intranet.controller('ChatController', ['$scope', '$http', '$paginator', function
 	}
 	
 	startChat();
+	
+	$scope.addDocuments = function()
+	{
+		$http({
+			method: "GET", 
+			url: $scope.urlsDocumentsAdd
+			  })
+		.success(function(response){
+			var modalInstance = $modal.open({
+			      template: response,
+			      controller: 'AddDocumentsController'
+			    });
+			
+			modalInstance.result.then(function (addedDocuments) {
+				insertDocumentsLinks(addedDocuments);
+			}, function(){});
+		})
+	}
+	
+	function insertDocumentsLinks(documents)
+	{
+		_.map(documents, function(d){
+			$scope.message += '\n<a href="'+$scope.urlsBase+d.url+'" download="'+d.name+'">'+d.name+'</a>';
+		});
+	}
+}])
+.controller('AddDocumentsController', ['$scope', '$http', '$modalInstance', function($scope, $http, $modalInstance){
+	console.log('AddDocumentsController was loaded!');
+	
+	function bindList()
+	{
+		$('.finish').click(function(){
+			$(this).parent().toggleClass('finished');
+			$(this).toggleClass('fa-square-o');
+		});
+	}
+	
+	setTimeout(function(){
+	    $('#file_upload').uploadify({
+	    	'fileSizeLimit': 0,
+	    	'progressData' : 'speed',
+	    	'formData'     : {
+				'timestamp' : TIMESTAMP,
+				'token'     : TOKEN
+			},
+	    	'buttonText' : 'Upload files...',
+	        'swf'      : JSON_URLS.uploaderSWF,
+	        'uploader' : JSON_URLS.uploaderUpload,
+	        'onUploadSuccess' : function(file, data, response) {
+	            console.log('The file ' + file.name + ' was successfully uploaded with a response of ' + response + ':' + data);
+	            getDocuments();
+	        }
+	    });
+		    
+	},500);
+
+	$scope.documents = [];
+	$scope.urlsDocumentsGet = JSON_URLS.documentsGet;
+	
+	function prepareDocuments(documents)
+	{
+		return _.map(documents, function(d){d.checked = false; return d;});
+	}
+	
+	function getDocuments()
+	{
+		$http({
+			method: "GET", 
+			url: $scope.urlsDocumentsGet,
+			params: {
+				userid: USER.id
+			}
+			  })
+		.success(function(response){
+			console.log(response);
+			if (response.result)	
+			{
+				$scope.documents = prepareDocuments(response.result);
+				setTimeout(bindList, 500);
+			}
+		})
+	}
+	
+	getDocuments();
+	
+	$scope.addDocuments = function()
+	{
+		$modalInstance.close(_.filter($scope.documents, function(d){return d.checked;}));
+	}
+	
+	$scope.checkItem = function(documentid)
+	{
+		_.map($scope.documents, function(d){
+			if (d.id == documentid) d.checked = !d.checked;
+		});
+	}
 	
 }]);
