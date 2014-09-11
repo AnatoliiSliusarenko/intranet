@@ -144,10 +144,8 @@ class TopicController extends Controller
     	if(count($personal_topic) != 0)
     	{
     		$personal_topic = array_shift($personal_topic);
-    		if( $personal_topic != null )
-    		{
+    		if( $personal_topic != null && $personal_topic->getUserid() == $this->getUser()->getId())
     			return $this->render('IntranetMainBundle:Topic:messageTopicIsAllredyAdded.html.twig');
-    		}
     	}
     	else
     	{
@@ -176,14 +174,13 @@ class TopicController extends Controller
     {
     	$em = $this->getDoctrine()->getManager();
     	$topic = $em->getRepository('IntranetMainBundle:Topic')->find($topic_id);
-    	
-    	$personal_topic = $em->getRepository('IntranetMainBundle:PersonalPage')->findByTopicid($topic_id);
-    	foreach ($personal_topic as $topic)
-    		if( $topic != null && $topic->getWindowid() == $window_id)
-    			return $this->render('IntranetMainBundle:Topic:messageTopicIsAllredyAdded.html.twig');
     	$office = $topic->getOffice();
+    	$personal_topic = $em->getRepository('IntranetMainBundle:PersonalPage')->findByTopicid($topic_id);
+    	$topic_data = array_pop($personal_topic);
+    		if( $topic_data != null && $topic_data->getUserid() == $this->getUser()->getId())
+    			return $this->render('IntranetMainBundle:Topic:messageTopicIsAllredyAdded.html.twig');
     	$window = $em->getRepository('IntranetMainBundle:PersonalPage')->findOneByOfficeid($office->getId());
-    	if($window == null)
+    	if(count($window) == 0)
     		return $this->render('IntranetMainBundle:Topic:messageTopicIsAllredyAdded.html.twig');
     	
     	$personal = new PersonalPage();
@@ -207,10 +204,12 @@ class TopicController extends Controller
     	$em = $this->getDoctrine()->getManager();
     	$topic = $em->getRepository('IntranetMainBundle:Topic')->find($topicId);
     	$personal_topic = $em->getRepository('IntranetMainBundle:PersonalPage')->findByTopicid($topicId);
-    	foreach ($personal_topic as $topic)
-    		if( $topic != null && $topic->getWindowid() == $windowId)
-    			return $this->render('IntranetMainBundle:Topic:messageTopicIsAllredyAdded.html.twig');
+    	
     	$office = $topic->getOffice();
+    	foreach ($personal_topic as $topic)
+    		if( $topic != null && $topic->getUserid() == $this->getUser()->getId())
+    			return $this->render('IntranetMainBundle:Topic:messageTopicIsAllredyAdded.html.twig');
+    	
     	$window = $em->getRepository('IntranetMainBundle:PersonalPage')->findOneByWindowid($windowId);
    		if($window == null)
    			return $this->render('IntranetMainBundle:Topic:messageTopicIsAllredyAdded.html.twig');

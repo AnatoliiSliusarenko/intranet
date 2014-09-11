@@ -6,7 +6,7 @@
   			<i class="fa fa-comments"></i>
   			{{office.getName()}}
   			<ul id="myTab" class="nav nav-tabs pull-right">
-  			{% if officeForWindow != NULL and officeForWindow.getDropdown() == NULL %}
+  			{% if officeForWindow != NULL and officeForWindow.getDropdown() == 0 %}
   				<li ng-class="{active:panel.isSelected(0) }">
   					<a href ng-click="panel.selectTab(0)" data-toggle="tab">{{ office.getName() }} </a>
   				</li>
@@ -20,17 +20,17 @@
   			{% else %}
   				{% for topic in windowtopics  %}
   				{% if loop.first %}
-  				{% if topic.getDropdown() == NULL %}
+  				{% if topic.getDropdown() == 0 %}
   					<li ng-class="{active:panel.isSelected({{loop.index}}) }">
         	        	<a href ng-click="panel.selectTab({{ loop.index }})" data-toggle="tab" >{{ topic.getTopicName(em, topic.getTopicid) }}</a>
         	        </li>
         	    {% endif %}
         	    {% else %}
-       	        	{% if topic.getOfficeid()== office.getId() and topic.getDropdown() == NULL %}
+       	        	{% if topic.getOfficeid()== office.getId() and topic.getDropdown() == 0 %}
         	        	<li ng-class="{active:panel.isSelected({{loop.index}}) }">
         	       			<a href ng-click="panel.selectTab({{ loop.index }})" data-toggle="tab" >{{ topic.getTopicName(em, topic.getTopicid) }}</a>
         	       		</li>
-              		{% endif %}
+              	{% endif %}
               	{% endif %}
             	{% endfor %}
   			{% endif %}
@@ -39,11 +39,11 @@
                                             Dropdown <span class="caret"></span>
                                         </a>
                                         <ul class="dropdown-menu">
-                                        {% if officeForWindow != NULL and officeForWindow.getDropdown() != NULL %}
+                                        {% if officeForWindow != NULL and officeForWindow.getDropdown() != 0 %}
                                             <li role="presentation"><a role="menuitem" tabindex="-1" href="#">{{office.getName()}}</a></li>
                                         {% endif %}
                                         {% for topic in windowtopics  %}
-                                        {% if topic.getOfficeid()== office.getId() and topic.getDropdown() != NULL %}
+                                        {% if topic.getOfficeid()== office.getId() and topic.getDropdown() != 0 %}
                                         	 <li role="presentation">
                                         	 	<a role="menuitem" tabindex="-1" href ng-click="panel.selectTab({{ loop.index }})" data-toggle="tab" >{{ topic.getTopicName(em, topic.getTopicid) }}</a>
                                         	 </li>
@@ -61,8 +61,10 @@
            	{% if topic.getOfficeid()== office.getId()  %}
            	
     	        <div  ng-show="panel.isSelected({{loop.index}})" ng-controller="PersonalTopicChatController" ng-init="init('{{ topic.getTopicid() }}')" >
-  						<button class="btn btn-primary btn-sm"><a href="{{ url('intranet_delete_window_from_personal_page', { windowid: window.getWindowid() } ) }}">Delete window</button>
-  						<button class="btn btn-primary btn-sm"><a href="{{ url('intranet_delete_tab_from_personal_page', { id: tabsId[loop.index0] } ) }}">Delete tab</button>
+  						<div style="position: absolute; left: 550px;">
+  						<a style="color: #285e8e" href="{{ url('intranet_delete_window_from_personal_page', { windowid: window.getWindowid() } ) }}">Delete window	</a>
+  						<a style="color: #285e8e" href="{{ url('intranet_delete_tab_from_personal_page', { id: tabsId[loop.index0] } ) }}">Delete tab</a>
+  						</div>
   						<div class="row">
   							<div class="col-md-7" style=" width:320px">
 								<ul class="pagination" style="margin-left: 5px;">
@@ -105,8 +107,10 @@
         {% endfor %}
         {% if officeForWindow != NULL %}
         	<div ng-show="panel.isSelected(0)" ng-controller="PersonalOfficeChatController" ng-init="init('{{ office.getId() }}')">
-  				<button class="btn btn-primary btn-sm"><a href="{{ url('intranet_delete_window_from_personal_page', { windowid: window.getWindowid() } ) }}">Delete window </button>
-  				<button class="btn btn-primary btn-sm"><a href="{{ url('intranet_delete_tab_from_personal_page', { id: officeForWindow.getId() } ) }}">Delete tab</button>
+  				<div style="position: absolute; left: 550px;">
+  				<a style="color: #285e8e" href="{{ url('intranet_delete_window_from_personal_page', { windowid: window.getWindowid() } ) }}">Delete window</a> 
+  				<a style="color: #285e8e" href="{{ url('intranet_delete_tab_from_personal_page', { id: officeForWindow.getId() } ) }}">Delete tab</a>
+  				</div>
   				<div class="row">
   					<div class="col-md-7" style= "width: 370px;">
 						<ul class="pagination" style="margin-left: 5px;">
@@ -164,13 +168,6 @@
 	var DATA_ID = {{ dataid|json_encode|raw }};
 	var WINDOW = {{ window.getTopicid()|json_encode|raw }}
 	var JSON_URLS_FOR_PERSONAL_PAGE = [];
-	setTimeout(function(){},3000);
-	//debugger
-	/*if($(WINDOW == null))
-	{
-		$('div#1').addClass('active in');
-	}*/
-	console.log('OFFICE ID ', DATA_ID);
 
 	JSON_URLS_FOR_PERSONAL_PAGE.avatar = "{{ asset('bundles/intranet/images/profiles/') }}";
 

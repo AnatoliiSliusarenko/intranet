@@ -267,22 +267,14 @@ class PersonalPage
     public static function getTopicsForWindow($officeid, $em, $topics, $userId)
     {
     	$topicsPersonal = $em->getRepository('IntranetMainBundle:PersonalPage')->findByWindowid($officeid);
-    	
     	$window_topics = array();
     	$mas = array();
-    	foreach ($topics as $topic)
-    	{
-    		if($topic == NULL)
-    			continue;
-    		foreach ($topicsPersonal as $window_topic)
-    			if($topic->getId() == $window_topic->getTopicid() 
-    					&& $window_topic->getTopicid() != NULL 
-    					&& $window_topic->getUserid() == $userId)
-    			{
-    				array_push($window_topics,  $window_topic);
-    				array_push($mas,$window_topic->getId());
-    			}
-    	}
+    	foreach ($topicsPersonal as $topic) 
+    		if($topic->getTopicid() != null)
+    		{
+    			array_push($window_topics, $topic);
+    			array_push($mas, $topic->getId());
+    		}
     	return array("topics" => $window_topics, "tabId" => $mas);
     }
     
@@ -299,7 +291,7 @@ class PersonalPage
     		if($office->getWindowid()==$window->getWindowid()
     	&& $office->getUserid() == $userId)
     			return $office;
-    	return NULL;
+    	return null;
     }
     
     public static function getAllIdForUser($em, $userid)
