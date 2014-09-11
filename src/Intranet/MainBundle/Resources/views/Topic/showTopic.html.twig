@@ -178,9 +178,9 @@
   										<div id="conversation" class="list-group conversation">
   											<div class="list-group-item" ng-repeat="post in posts">
   												<img src="[[avatarURL + post.user.avatar]]" class="chat-user-avatar" alt="" />
-  												<span class="username" >[[post.user.name + ' ' + post.user.surname]] ([[post.user.username]])<span class="time">[[ post.posted.date ]]</span> </span>
+  												<span class="username" >[[post.user.name + ' ' + post.user.surname]] ([[post.user.username]])<span class="time">[[ post.posted.date ]]&nbsp;<span ng-show="isEditable(post)" ng-click="editPost(post)" class="badge bg-info pull-right editable"><i class="fa fa-pencil"></i></span></span> </span>
   												<i class="fa fa-edit" ng-show="post.edited"></i>
-  												<p style="white-space: pre-line;" ng-class="{editable:isEditable(post)}" ng-click="editPost(post)" ng-bind-html="post.message"></p>
+  												<p style="white-space: pre-line;" ng-bind-html="post.message"></p>
   											</div>
   										</div>
   										<div class="input-group">

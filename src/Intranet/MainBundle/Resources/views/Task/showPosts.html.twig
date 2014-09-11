@@ -1,5 +1,5 @@
 <div class="modal-body">
-	<div class="row chat-box">
+	<div ng-show="!addingDocuments" class="row chat-box">
 		<div class="panel panel-cascade recipient-box">
 			<div class="panel-heading">
                 <h3 class="panel-title">
@@ -10,14 +10,17 @@
             </div>
 			<div class="panel-body nopadding">
 		  		<div id="conversation-task" class="list-group conversation" style="height: 300px;">
-		  			<a class="list-group-item" ng-repeat="post in posts">
+		  			<div class="list-group-item" ng-repeat="post in posts">
 		  				<img src="[[avatarURL + post.user.avatar]]" class="chat-user-avatar" alt="" />
-		  				<span class="username" >[[post.user.name + ' ' + post.user.surname]] ([[post.user.username]])<span class="time">[[ post.posted.date ]]</span> </span>
+		  				<span class="username" >[[post.user.name + ' ' + post.user.surname]] ([[post.user.username]])<span class="time">[[ post.posted.date ]]&nbsp;<span ng-show="isEditable(post)" ng-click="editPost(post)" class="badge bg-info pull-right editable"><i class="fa fa-pencil"></i></span></span> </span>
 		  				<i class="fa fa-edit" ng-show="post.edited"></i>
-		  				<p style="white-space: pre-line;" ng-class="{editable:isEditable(post)}" ng-click="editPost(post)">[[post.message]]</p>
-		  			</a>
+		  				<p style="white-space: pre-line;" ng-bind-html="post.message"></p>
+		  			</div>
 		  		</div>
 		  		<div class="input-group">
+		  			<span class="input-group-btn">
+  						<button class="btn btn-success" ng-click="addDocuments()"><i class="fa fa-file"></i></button>
+  					</span>
 			  		<textarea id="write-message-task" ng-model="comment" style="resize:vertical;" class="form-control write-message" ng-class="{editing: editingPost}" placeholder="Type something here and hit enter" ng-keypress="pressEnter($event)">[[ message ]]</textarea>
 			  		<span class="input-group-btn">
 			  			<button class="btn text-white bg-primary send-message" type="button" ng-click="addPost()">Add</button>
@@ -26,4 +29,35 @@
 		  	</div>
 		</div>
 	</div>
+	
+	<div ng-show="addingDocuments" class="panel ">
+    		<div class="panel-body">
+				<h4>Available types: <b>{{ availableTypes }}</b></h4>
+           		<input type="file" name="file_upload" id="file_upload" />
+			</div>
+			<div class="panel-heading bg-primary text-white">
+				<h3 class="panel-title">
+					<i class="fa fa-check-square-o"></i>
+					Documents List
+				</h3>
+			</div>
+			<div class="panel-body nopadding" style="display: block; height: 400px; overflow-y:scroll">
+				<ul class="list-group list-todo">
+					<li class="list-group-item" ng-repeat="document in documents">
+						<i class="fa fa-check-square-o finish   fa-square-o" ng-click="checkItem(document.id)"></i>
+						<span>&nbsp;[[ document.name ]]</span>
+						<span class="pull-right ">
+							<img src="{{ app.request.getBaseURL() }}/../[[ document.url ]]" width="32" height="32" alt="[[ document.name ]]">
+						</span>
+					</li>
+				</ul>
+			</div>
+			<div class="panel-body" style="display: block;">
+				<button class="btn btn-success btn-block" ng-click="addDocuments()">Add Documents</button>
+			</div>
+	</div>
+	<script>
+	var TIMESTAMP = '{{ timestamp }}';
+	var TOKEN = '{{ token }}';
+	</script>
 </div>

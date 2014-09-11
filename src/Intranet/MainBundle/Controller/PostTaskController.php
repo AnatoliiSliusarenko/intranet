@@ -4,6 +4,7 @@ namespace Intranet\MainBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Intranet\MainBundle\Entity\PostTask;
+use Intranet\MainBundle\Entity\Document;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -19,7 +20,14 @@ class PostTaskController extends Controller
 			return $response;
 		}
     	
-    	return $this->render('IntranetMainBundle:Task:showPosts.html.twig');
+		$timestamp = time();
+		$token = Document::getToken($timestamp);
+		
+    	return $this->render('IntranetMainBundle:Task:showPosts.html.twig', 
+    			array('timestamp' => $timestamp,
+        			  'token' => $token,
+        			  'availableTypes'=> Document::getAvailableTypesInString()
+        ));
     }
     
     public function getPostsAction(Request $request, $task_id)
