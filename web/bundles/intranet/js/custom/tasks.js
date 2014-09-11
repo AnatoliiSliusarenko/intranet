@@ -390,12 +390,15 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 .controller('ShowPostsController', ['$scope', '$http', '$modalInstance', 'task', function($scope, $http, $modalInstance, task){
 	console.log('ShowPostsController was loaded!');
 	
+	$scope.addingDocuments = false;
 	$scope.task = task;
 	$scope.posts = [];
 	$scope.urlsPostsTaskAdd = JSON_URLS.urlsPostsTaskAdd.replace('0', task.id);
 	$scope.urlsPostsTaskGet = JSON_URLS.urlsPostsTaskGet.replace('0', task.id);
 	$scope.urlsResetCommentsCount = JSON_URLS.urlsResetCommentsCount.replace('0', task.id);
 	$scope.avatarURL = JSON_URLS.avatar;
+	$scope.urlsBase = JSON_URLS.baseUrl;
+	
 	$scope.comment = "";
 	$scope.editingPost = null;
 	$scope.entityid = task.id;
@@ -423,6 +426,67 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 	.success(function(response){
 		$modalInstance.result.response = response;
 	});
+	
+	function bindList()
+	{
+		$('.finish').click(function(){
+			$(this).parent().toggleClass('finished');
+			$(this).toggleClass('fa-square-o');
+		});
+	}
+	
+	setTimeout(function(){
+	    $('#file_upload').uploadify({
+	    	'fileSizeLimit': 0,
+	    	'progressData' : 'speed',
+	    	'formData'     : {
+				'timestamp' : TIMESTAMP,
+				'token'     : TOKEN
+			},
+	    	'buttonText' : 'Upload files...',
+	        'swf'      : JSON_URLS.uploaderSWF,
+	        'uploader' : JSON_URLS.uploaderUpload,
+	        'onUploadSuccess' : function(file, data, response) {
+	            console.log('The file ' + file.name + ' was successfully uploaded with a response of ' + response + ':' + data);
+	            getDocuments();
+	        }
+	    });
+		    
+	},500);
+	
+	$scope.documents = [];
+	$scope.urlsDocumentsGet = JSON_URLS.documentsGet;
+	
+	function prepareDocuments(documents)
+	{
+		return _.map(documents, function(d){d.checked = false; return d;});
+	}
+	
+	function getDocuments()
+	{
+		$http({
+			method: "GET", 
+			url: $scope.urlsDocumentsGet,
+			params: {
+				userid: USER.id
+			}
+			  })
+		.success(function(response){
+			console.log(response);
+			if (response.result)	
+			{
+				$scope.documents = prepareDocuments(response.result);
+				setTimeout(bindList, 500);
+			}
+		})
+	}
+	
+	$scope.checkItem = function(documentid)
+	{
+		_.map($scope.documents, function(d){
+			if (d.id == documentid) d.checked = !d.checked;
+		});
+	}
 	
 	$scope.isEditable = function(post)
 	{
@@ -493,5 +557,25 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 			$scope.messageContainerTask.val("");
 			$scope.messageContainerTask.focus();
 		})
+	}
+	
+	function insertDocumentsLinks(documents)
+	{
+		_.map(documents, function(d){
+			$scope.comment += '\n<a href="'+$scope.urlsBase+d.url+'" download="'+d.name+'">'+d.name+'</a>';
+		});
+	}
+	
+	$scope.addDocuments = function()
+	{
+		if ($scope.addingDocuments == false)
+		{
+			getDocuments();
+		}else
+		{
+			insertDocumentsLinks(_.filter($scope.documents, function(d){return d.checked;}));
+		}
+		
+		$scope.addingDocuments = !$scope.addingDocuments;
 	}
 }]);

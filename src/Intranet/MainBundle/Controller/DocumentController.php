@@ -52,9 +52,25 @@ class DocumentController extends Controller
     {
     	$em = $this->getDoctrine()->getManager();
     	
-    	$response = new Response(json_encode(array("result" => Document::getAllDocuments($em))));
+    	$userid = $request->query->get('userid');
+    	
+    	$documents = Document::getAllDocuments($em, $userid);
+    	
+    	$response = new Response(json_encode(array("result" => $documents)));
     	$response->headers->set('Content-Type', 'application/json');
     		
     	return $response;
+    }
+    
+    public function addDialogAction()
+    {
+    	$timestamp = time();
+    	$token = Document::getToken($timestamp);
+    	
+    	return $this->render('IntranetMainBundle:Document:addDialog.html.twig', array(
+    			'timestamp' => $timestamp,
+        		'token' => $token,
+        		'availableTypes'=> Document::getAvailableTypesInString()
+        ));
     }
 }

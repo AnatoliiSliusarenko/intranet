@@ -203,3 +203,7 @@ intranet_document_upload:
 intranet_document_get:
   pattern: /document/get/
   defaults: { _controller: IntranetMainBundle:Document:getDocuments }
+  
+intranet_document_dialog_add:
+  pattern: /document/dialog/add/
+  defaults: { _controller: IntranetMainBundle:Document:addDialog }

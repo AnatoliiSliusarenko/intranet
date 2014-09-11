@@ -2471,10 +2471,9 @@ div[data-role="editor-toolbar"] {
 	font-weight: bold;
 }
 
-.chat-box .recipient-box .conversation .list-group-item p.editable:hover
-	{
+.editable
+{
 	cursor: pointer;
-	text-decoration: underline;
 }
 
 .chat-box .recipient-box .conversation .list-group-item .time {

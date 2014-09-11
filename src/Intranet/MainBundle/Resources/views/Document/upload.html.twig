@@ -41,7 +41,7 @@
 				<div class="row demo-images">
 	                <div class="col-sm-6 col-md-3" ng-repeat="document in documents">
 	                	[[ document.name ]]
-		                <a href="{{ app.request.getBaseURL() }}/../[[ document.url ]]" class="thumbnail">
+		                <a href="{{ app.request.getBaseURL() }}/../[[ document.url ]]" class="thumbnail" download="[[ document.name ]]">
 		                	<img alt="[[ document.name ]]" src="{{ app.request.getBaseURL() }}/../[[ document.url ]]">
 		                </a>
 	                </div>
