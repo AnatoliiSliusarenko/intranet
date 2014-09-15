@@ -53,7 +53,8 @@ class OfficeController extends Controller
 				'officeUsers' => array_map(function($e){return $e->getInArray();}, $officeUsers->toArray()),
 				'users' => array_map(function($e){return $e->getInArray();}, $users), 
 				'offices' => $childrenOfficesForUser,
-				"windows" => $windows);
+				"windows" => $windows,
+				'message'=>false);
 		
 		
 		if ($request->getSession()->has('errorOffice'))
@@ -102,7 +103,7 @@ class OfficeController extends Controller
 			$request->getSession()->set('nameOffice', $name);
 			$request->getSession()->set('descriptionOffice', $description);
 	
-			return $this->redirect($this->generateUrl('intranet_show_office', array("office_id" => $office_id)));
+			return $this->redirect($this->generateUrl('intranet_show_office', array("office_id" => $office_id, 'message'=>false)));
 		}
 		 
 		$em = $this->getDoctrine()->getManager();
@@ -168,8 +169,7 @@ class OfficeController extends Controller
 		$parent = $office->getOfficeid();
 		$office->deleteAllChildren($em);
 		$em->flush();
-		
-		return $this->redirect($this->generateUrl('intranet_show_office', array('office_id' => $parent)));
+		return $this->redirect($this->generateUrl('intranet_show_office', array('office_id' => $parent, 'message'=>false)));
 	}
 	
     public function addOfficeChatToPersonalAction($office_id)
@@ -185,27 +185,22 @@ class OfficeController extends Controller
     		if( $personal_office != null && $personal_office->getTopicid() == null 
     			&& $personal_office->getUserid() == $this->getUser()->getId())
     		{
-    			
-    			return $this->render('IntranetMainBundle:Office:messageOfficesAllredyAdded.html.twig');
+    			return $this->redirect($this->generateUrl('intranet_show_office',array('office_id' => $office_id, 'message'=>true)));
     		}
     	}
-    		$personal = new PersonalPage();
-    		$personal->setOfficeid($office_id);
-    		$personal->setTopicid(NULL);
-    		$personal->setUserid($this->getUser()->getId());
-    		$personal->setNamewindow($office->getName());
     		if(!$count_window)
-    			$personal->setWindowid(0);
+    			$window_id=1 ;
     		else
-    			$personal->setWindowid($count_window);
-    		$personal->setDropdown(0);
+    			$window_id = $count_window;
+    		$personal = PersonalPage::createPersonal($this->getUser()->getId(),$office_id,NULL,
+    				$office->getName(),0,$window_id);
     		$em = $this->getDoctrine()->getEntityManager();
     		$em->persist($personal);
     		$em->flush();
     		$parameters = array (
     				"office" => $office,
     				"topic" => 0);
-    		return $this->redirect($this->generateUrl('intranet_show_office',array('office_id' => $office_id)));
+    		return $this->redirect($this->generateUrl('intranet_show_office',array('office_id' => $office_id, 'message'=>false)));
     	
     }
     
@@ -220,22 +215,17 @@ class OfficeController extends Controller
     		if( $personal_office != null && $personal_office->getTopicid() == null 
     			&& $personal_office->getUserid() == $this->getUser()->getId())
     		{
-    			
-    			return $this->render('IntranetMainBundle:Office:messageOfficesAllredyAdded.html.twig');
+    			return $this->redirect($this->generateUrl('intranet_show_office',array('office_id' => $office_id, 'message'=>true)));
     		}
     	}
-    	$personal = new PersonalPage();
-    	$personal->setOfficeid($office_id);
-    	$personal->setTopicid(NULL);
-    	$personal->setUserid($this->getUser()->getId());
-    	$personal->setNamewindow($office->getName());
-    	$personal->setWindowid($window_id);
-    	$personal->setDropdown(0);
+    	//$userId, $officeId, $officeId, $nameWindow, $dropdown, $windowId
+    	$personal = PersonalPage::createPersonal($this->getUser()->getId(),$office_id,NULL,
+    			$office->getName(),0,$window_id);
     	$em = $this->getDoctrine()->getEntityManager();
     	$em->persist($personal);
     	$em->flush();
     	$parameters = array (
     			"office" => $office);
-    	return $this->redirect($this->generateUrl('intranet_show_office',array('office_id' => $office_id)));
+    	return $this->redirect($this->generateUrl('intranet_show_office',array('office_id' => $office_id, 'message'=>false)));
     }
 }

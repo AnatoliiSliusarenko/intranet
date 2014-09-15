@@ -214,7 +214,6 @@ class PersonalPage
     	$offices = array();
     	$windows = array();
     	$personal_data = $em->getRepository('IntranetMainBundle:PersonalPage')->findAll($userid);
-    	//$personal_data[0]->getDropdown();
     	if ($personal_data == null)
 			return;
     	foreach ($personal_data as $personal_record)
@@ -387,4 +386,15 @@ class PersonalPage
      * @param integer $dropdown
      * @return PersonalPage
      */
+    public static function createPersonal($userId, $officeId, $topicId, $nameWindow, $dropdown, $windowId)
+    {
+    	$personal = new PersonalPage();
+    	$personal->setOfficeid($officeId);
+    	$personal->setTopicid($topicId);
+    	$personal->setUserid($userId);
+    	$personal->setNamewindow($nameWindow);
+    	$personal->setWindowid($windowId);
+    	$personal->setDropdown($dropdown);
+    	return $personal;
+    }
 }

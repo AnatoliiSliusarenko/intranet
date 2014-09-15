@@ -2,9 +2,9 @@
 <div class="col-md-6 personalchat line"  style="margin-top:2px;margin-right: 2px;">
 	<div class="panel text-primary panel-cascade">
 		<div class="panel-heading">
-  			<h3 class="panel-title">
-  			<i class="fa fa-comments"></i>
-  			{{office.getName()}}
+  			<h3 class="panel-title" style="display: flex;">
+  			<i class="fa fa-comments" style="display: inline-table;">{{office.getName()}}</i>
+  			
   			<ul id="myTab" class="nav nav-tabs pull-right">
   			{% if officeForWindow != NULL and officeForWindow.getDropdown() == 0 %}
   				<li ng-class="{active:panel.isSelected(0) }">
@@ -108,7 +108,7 @@
         {% if officeForWindow != NULL %}
         	<div ng-show="panel.isSelected(0)" ng-controller="PersonalOfficeChatController" ng-init="init('{{ office.getId() }}')">
   				<div style="position: absolute; left: 550px;">
-  				<a style="color: #285e8e" href="{{ url('intranet_delete_window_from_personal_page', { windowid: window.getWindowid() } ) }}">Delete window</a> 
+  				<a style="color: #285e8e" href="{{ url('intranet_delete_window_from_personal_page', { windowid: window.getWindowid() } ) }}">Delete window	</a> 
   				<a style="color: #285e8e" href="{{ url('intranet_delete_tab_from_personal_page', { id: officeForWindow.getId() } ) }}">Delete tab</a>
   				</div>
   				<div class="row">
