@@ -255,7 +255,7 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 				if (modalInstance.result.response.result != null)
 				{
 					_.map($scope.tasks, function(t){
-						if(t.id = modalInstance.result.response.result)
+						if(t.id == modalInstance.result.response.result)
 						{
 							t.newCommentsCount = 0;
 						}
@@ -267,7 +267,7 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
             	if (modalInstance.result.response.result != null)
 			{
 				_.map($scope.tasks, function(t){
-					if(t.id = modalInstance.result.response.result)
+					if(t.id == modalInstance.result.response.result)
 					{
 						t.newCommentsCount = 0;
 					}
