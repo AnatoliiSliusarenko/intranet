@@ -92,7 +92,7 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 			data: $scope.filter
 			  })
 		.success(function(response){
-			console.log(response);
+			//console.log(response);
 			if (response.result)
 			{
 				$scope.tasks = prepareTasks(response.result);

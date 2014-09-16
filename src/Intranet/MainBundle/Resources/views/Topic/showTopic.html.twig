@@ -387,5 +387,13 @@
     };
    	
    	var TASKS_NOTIFICATIONS = [];
+   	
+   	var MESSAGE_TOPIC = "{{ message }}";
+
+	(function()
+	{
+	if(MESSAGE_TOPIC == 1)
+		alert("This topic allready added!");
+	})();
 	</script>
 {% endblock %}

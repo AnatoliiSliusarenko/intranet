@@ -62,7 +62,8 @@ class TopicController extends Controller
 					    	'topicsForTasks' => array_map(function($e){return $e->getInArray();}, $topicsForTasks),
 					    	'office' => $office, 
 					    	"tasks" => $tasks,
-    						"windows" => $windows);
+    						"windows" => $windows,
+    						'message' => false);
     	
     	if ($request->getSession()->has('errorTopic'))
     	{
@@ -145,7 +146,31 @@ class TopicController extends Controller
     	{
     		$personal_topic = array_shift($personal_topic);
     		if( $personal_topic != null && $personal_topic->getUserid() == $this->getUser()->getId())
-    			return $this->render('IntranetMainBundle:Topic:messageTopicIsAllredyAdded.html.twig');
+    		{
+    			$this->get('twig')->addGlobal('activeSection', 'topic');
+    			$office = $topic->getOffice();
+    			$subtopics = $topic->getChildrenForOffice($em);
+    			$breadcrumbs = $topic->getBreadcrumbs($em);
+    			$tasks = $topic->getTasksWithChildren($em);
+    			$users = $this->getUser()->getAllUsers($em, false);
+    			$topicsForTasks = $topic->getAllChildrenForOffice($em);
+    			array_unshift($topicsForTasks, $topic);
+    			$windows = array();
+    			$windows = PersonalPage::getWindowsName($em, $this->getUser()->getId(), $office->getName());
+    			$parameters = array("users" => array_map(function($e){return $e->getInArray();}, $users),
+    			"topic" => $topic,
+    			"em" => $em,
+    			"availableStatus" => TaskStatus::getAllStatuses($em),
+    			"breadcrumbs" => $breadcrumbs,
+    			'subtopics' => $subtopics,
+    			'topicsForTasks' => array_map(function($e){return $e->getInArray();}, $topicsForTasks),
+    			'office' => $office,
+    			"tasks" => $tasks,
+    			"windows" => $windows,
+    			'message' => true);
+    			
+    			return $this->render('IntranetMainBundle:Topic:showTopic.html.twig', $parameters);
+    		}
     	}
     	else
     	{
@@ -163,10 +188,28 @@ class TopicController extends Controller
     		$em = $this->getDoctrine()->getEntityManager();
     		$em->persist($personal);
     		$em->flush();
-    		$parameters = array (
-    				"office" => $office,
-    				"topic" => $topic);
-    		return $this->redirect($this->generateUrl('intranet_show_topic', array('topic_id' => $topic_id)));
+    		$subtopics = $topic->getChildrenForOffice($em);
+    		$breadcrumbs = $topic->getBreadcrumbs($em);
+    		$tasks = $topic->getTasksWithChildren($em);
+    		$users = $this->getUser()->getAllUsers($em, false);
+    		$topicsForTasks = $topic->getAllChildrenForOffice($em);
+    		array_unshift($topicsForTasks, $topic);
+    		$windows = array();
+    		$windows = PersonalPage::getWindowsName($em, $this->getUser()->getId(), $office->getName());
+    		$this->get('twig')->addGlobal('activeSection', 'topic');
+    		$parameters = array("users" => array_map(function($e){return $e->getInArray();}, $users),
+    			"topic" => $topic,
+    			"em" => $em,
+    			"availableStatus" => TaskStatus::getAllStatuses($em),
+    			"breadcrumbs" => $breadcrumbs,
+    			'subtopics' => $subtopics,
+    			'topicsForTasks' => array_map(function($e){return $e->getInArray();}, $topicsForTasks),
+    			'office' => $office,
+    			"tasks" => $tasks,
+    			"windows" => $windows,
+    			'message' => false);
+    			
+    		return $this->render('IntranetMainBundle:Topic:showTopic.html.twig', $parameters);
     	}
     }
     
@@ -178,10 +221,58 @@ class TopicController extends Controller
     	$personal_topic = $em->getRepository('IntranetMainBundle:PersonalPage')->findByTopicid($topic_id);
     	$topic_data = array_pop($personal_topic);
     		if( $topic_data != null && $topic_data->getUserid() == $this->getUser()->getId())
-    			return $this->render('IntranetMainBundle:Topic:messageTopicIsAllredyAdded.html.twig');
+    {
+    		$this->get('twig')->addGlobal('activeSection', 'topic');
+    		$office = $topic->getOffice();
+    		$subtopics = $topic->getChildrenForOffice($em);
+    		$breadcrumbs = $topic->getBreadcrumbs($em);
+    		$tasks = $topic->getTasksWithChildren($em);
+    		$users = $this->getUser()->getAllUsers($em, false);
+    		$topicsForTasks = $topic->getAllChildrenForOffice($em);
+    		array_unshift($topicsForTasks, $topic);
+    		$windows = array();
+    		$windows = PersonalPage::getWindowsName($em, $this->getUser()->getId(), $office->getName());
+    		$parameters = array("users" => array_map(function($e){return $e->getInArray();}, $users),
+    			"topic" => $topic,
+    			"em" => $em,
+    			"availableStatus" => TaskStatus::getAllStatuses($em),
+    			"breadcrumbs" => $breadcrumbs,
+    			'subtopics' => $subtopics,
+    			'topicsForTasks' => array_map(function($e){return $e->getInArray();}, $topicsForTasks),
+    			'office' => $office,
+    			"tasks" => $tasks,
+    			"windows" => $windows,
+    			'message' => true);
+    		 
+    		return $this->render('IntranetMainBundle:Topic:showTopic.html.twig', $parameters);
+    	}
     	$window = $em->getRepository('IntranetMainBundle:PersonalPage')->findOneByOfficeid($office->getId());
     	if(count($window) == 0)
-    		return $this->render('IntranetMainBundle:Topic:messageTopicIsAllredyAdded.html.twig');
+    	{
+    		$this->get('twig')->addGlobal('activeSection', 'topic');
+    		$office = $topic->getOffice();
+    		$subtopics = $topic->getChildrenForOffice($em);
+    		$breadcrumbs = $topic->getBreadcrumbs($em);
+    		$tasks = $topic->getTasksWithChildren($em);
+    		$users = $this->getUser()->getAllUsers($em, false);
+    		$topicsForTasks = $topic->getAllChildrenForOffice($em);
+    		array_unshift($topicsForTasks, $topic);
+    		$windows = array();
+    		$windows = PersonalPage::getWindowsName($em, $this->getUser()->getId(), $office->getName());
+    		$parameters = array("users" => array_map(function($e){return $e->getInArray();}, $users),
+    			"topic" => $topic,
+    			"em" => $em,
+    			"availableStatus" => TaskStatus::getAllStatuses($em),
+    			"breadcrumbs" => $breadcrumbs,
+    			'subtopics' => $subtopics,
+    			'topicsForTasks' => array_map(function($e){return $e->getInArray();}, $topicsForTasks),
+    			'office' => $office,
+    			"tasks" => $tasks,
+    			"windows" => $windows,
+    			'message' => true);
+    		 
+    		return $this->render('IntranetMainBundle:Topic:showTopic.html.twig', $parameters);
+    	}
     	
     	$personal = new PersonalPage();
     	$personal->setOfficeid($office->getId());
@@ -193,26 +284,93 @@ class TopicController extends Controller
     	$em = $this->getDoctrine()->getEntityManager();
     	$em->persist($personal);
     	$em->flush();
-    	$parameters = array (
-    		"office" => $office,
-    		"topic" => $topic);
-    		return $this->redirect($this->generateUrl('intranet_show_topic', array('topic_id' => $topic_id)));
+    	$subtopics = $topic->getChildrenForOffice($em);
+    		$breadcrumbs = $topic->getBreadcrumbs($em);
+    		$tasks = $topic->getTasksWithChildren($em);
+    		$users = $this->getUser()->getAllUsers($em, false);
+    		$topicsForTasks = $topic->getAllChildrenForOffice($em);
+    		array_unshift($topicsForTasks, $topic);
+    		$windows = array();
+    		$windows = PersonalPage::getWindowsName($em, $this->getUser()->getId(), $office->getName());
+    		$this->get('twig')->addGlobal('activeSection', 'topic');
+    		$parameters = array("users" => array_map(function($e){return $e->getInArray();}, $users),
+    			"topic" => $topic,
+    			"em" => $em,
+    			"availableStatus" => TaskStatus::getAllStatuses($em),
+    			"breadcrumbs" => $breadcrumbs,
+    			'subtopics' => $subtopics,
+    			'topicsForTasks' => array_map(function($e){return $e->getInArray();}, $topicsForTasks),
+    			'office' => $office,
+    			"tasks" => $tasks,
+    			"windows" => $windows,
+    			'message' => false);
+    		 
+    		return $this->render('IntranetMainBundle:Topic:showTopic.html.twig', $parameters);
     }
     
     public function addTopicToDropdownAction($topicId, $windowId)
     {
+    	
     	$em = $this->getDoctrine()->getManager();
     	$topic = $em->getRepository('IntranetMainBundle:Topic')->find($topicId);
     	$personal_topic = $em->getRepository('IntranetMainBundle:PersonalPage')->findByTopicid($topicId);
     	
     	$office = $topic->getOffice();
-    	foreach ($personal_topic as $topic)
-    		if( $topic != null && $topic->getUserid() == $this->getUser()->getId())
-    			return $this->render('IntranetMainBundle:Topic:messageTopicIsAllredyAdded.html.twig');
+    	foreach ($personal_topic as $topic_)
+    		if( $topic_ != null && $topic_->getUserid() == $this->getUser()->getId())
+    {
+    	
+    		$this->get('twig')->addGlobal('activeSection', 'topic');
+    		$subtopics = $topic->getChildrenForOffice($em);
+    		$breadcrumbs = $topic->getBreadcrumbs($em);
+    		$tasks = $topic->getTasksWithChildren($em);
+    		$users = $this->getUser()->getAllUsers($em, false);
+    		$topicsForTasks = $topic->getAllChildrenForOffice($em);
+    		array_unshift($topicsForTasks, $topic);
+    		$windows = array();
+    		$windows = PersonalPage::getWindowsName($em, $this->getUser()->getId(), $office->getName());
+    		$parameters = array("users" => array_map(function($e){return $e->getInArray();}, $users),
+    			"topic" => $topic,
+    			"em" => $em,
+    			"availableStatus" => TaskStatus::getAllStatuses($em),
+    			"breadcrumbs" => $breadcrumbs,
+    			'subtopics' => $subtopics,
+    			'topicsForTasks' => array_map(function($e){return $e->getInArray();}, $topicsForTasks),
+    			'office' => $office,
+    			"tasks" => $tasks,
+    			"windows" => $windows,
+    			'message' => true);
+    		 
+    		return $this->render('IntranetMainBundle:Topic:showTopic.html.twig', $parameters);
+    	}
     	
     	$window = $em->getRepository('IntranetMainBundle:PersonalPage')->findOneByWindowid($windowId);
    		if($window == null)
-   			return $this->render('IntranetMainBundle:Topic:messageTopicIsAllredyAdded.html.twig');
+    {
+    		$this->get('twig')->addGlobal('activeSection', 'topic');
+    		$office = $topic->getOffice();
+    		$subtopics = $topic->getChildrenForOffice($em);
+    		$breadcrumbs = $topic->getBreadcrumbs($em);
+    		$tasks = $topic->getTasksWithChildren($em);
+    		$users = $this->getUser()->getAllUsers($em, false);
+    		$topicsForTasks = $topic->getAllChildrenForOffice($em);
+    		array_unshift($topicsForTasks, $topic);
+    		$windows = array();
+    		$windows = PersonalPage::getWindowsName($em, $this->getUser()->getId(), $office->getName());
+    		$parameters = array("users" => array_map(function($e){return $e->getInArray();}, $users),
+    			"topic" => $topic,
+    			"em" => $em,
+    			"availableStatus" => TaskStatus::getAllStatuses($em),
+    			"breadcrumbs" => $breadcrumbs,
+    			'subtopics' => $subtopics,
+    			'topicsForTasks' => array_map(function($e){return $e->getInArray();}, $topicsForTasks),
+    			'office' => $office,
+    			"tasks" => $tasks,
+    			"windows" => $windows,
+    			'message' => true);
+    		 
+    		return $this->render('IntranetMainBundle:Topic:showTopic.html.twig', $parameters);
+    	}
    		$personal = new PersonalPage();
    		$personal->setOfficeid($office->getId());
    		$personal->setTopicid($topic->getId());
@@ -223,9 +381,31 @@ class TopicController extends Controller
    		$em = $this->getDoctrine()->getEntityManager();
    		$em->persist($personal);
    		$em->flush();
-   		$parameters = array (
-   				"office" => $office,
-   				"topic" => $topic);
-   		return $this->redirect($this->generateUrl('intranet_show_topic', array('topic_id' => $topicId)));
+   		
+   		$office = $topic->getOffice();
+   		$this->get('twig')->addGlobal('activeSection', 'topic');
+    		$office = $topic->getOffice();
+    		$subtopics = $topic->getChildrenForOffice($em);
+    		$breadcrumbs = $topic->getBreadcrumbs($em);
+    		$tasks = $topic->getTasksWithChildren($em);
+    		$users = $this->getUser()->getAllUsers($em, false);
+    		$topicsForTasks = $topic->getAllChildrenForOffice($em);
+    		array_unshift($topicsForTasks, $topic);
+    		$windows = array();
+    		$windows = PersonalPage::getWindowsName($em, $this->getUser()->getId(), $office->getName());
+    		$parameters = array("users" => array_map(function($e){return $e->getInArray();}, $users),
+    			"topic" => $topic,
+    			"em" => $em,
+    			"availableStatus" => TaskStatus::getAllStatuses($em),
+    			"breadcrumbs" => $breadcrumbs,
+    			'subtopics' => $subtopics,
+    			'topicsForTasks' => array_map(function($e){return $e->getInArray();}, $topicsForTasks),
+    			'office' => $office,
+    			"tasks" => $tasks,
+    			"windows" => $windows,
+    			'message' => true);
+    		 
+   		 
+   		return $this->render('IntranetMainBundle:Topic:showTopic.html.twig', $parameters);
     }
 }

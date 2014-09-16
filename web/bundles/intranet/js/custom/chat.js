@@ -10,7 +10,7 @@ Intranet.controller('ChatController', ['$scope', '$http', '$paginator', '$modal'
 		var offset = $scope.paginator.postsPerPage*($scope.paginator.curPageId - 1);
 		var limit = $scope.paginator.postsPerPage;
 		getPosts(offset, limit);
-		console.log("curPageId: paginator--->", $scope.paginator);
+		//console.log("curPageId: paginator--->", $scope.paginator);
 	});
 		
 	$scope.pressEnter = function(e)
@@ -65,7 +65,7 @@ Intranet.controller('ChatController', ['$scope', '$http', '$paginator', '$modal'
 			url: $scope.postsGetURL, 
 			params: {offset: offset, limit: limit}})
 		.success(function(response){
-			console.log("posts: ",response.result);
+			//console.log("posts: ",response.result);
 			if (response.result)
 			{
 				$scope.posts = response.result.reverse();
@@ -85,7 +85,7 @@ Intranet.controller('ChatController', ['$scope', '$http', '$paginator', '$modal'
 			url: $scope.postsCountURL, 
 			})
 		.success(function(response){
-			console.log("posts count: ", response.result);
+			//console.log("posts count: ", response.result);
 			if (response.result)
 				callback(response.result);
 		})
@@ -98,7 +98,7 @@ Intranet.controller('ChatController', ['$scope', '$http', '$paginator', '$modal'
 			url: $scope.membersURL, 
 			})
 		.success(function(response){
-			console.log("members: ", response.result);
+			//console.log("members: ", response.result);
 			if (response.result)
 				$scope.members = response.result;
 		})
@@ -114,7 +114,7 @@ Intranet.controller('ChatController', ['$scope', '$http', '$paginator', '$modal'
 				url: $scope.postsNewURL, 
 				params: {last_posted: $scope.lastDate}})
 			.success(function(response){
-				console.log("new posts: ", response.result);
+				//console.log("new posts: ", response.result);
 				if ((response.result) && (response.result.length > 0))
 				{	
 					var onlyUpdated = updatePosts(response.result);
@@ -234,7 +234,7 @@ Intranet.controller('ChatController', ['$scope', '$http', '$paginator', '$modal'
 			$scope.paginator.init(postsCount, $scope.postsPerPage);
 			
 		});
-		console.log('==========');
+		//console.log('==========');
 		setInterval(getNewPosts, 3000);
 	}
 	
@@ -288,7 +288,7 @@ Intranet.controller('ChatController', ['$scope', '$http', '$paginator', '$modal'
 	        'swf'      : JSON_URLS.uploaderSWF,
 	        'uploader' : JSON_URLS.uploaderUpload,
 	        'onUploadSuccess' : function(file, data, response) {
-	            console.log('The file ' + file.name + ' was successfully uploaded with a response of ' + response + ':' + data);
+	            //console.log('The file ' + file.name + ' was successfully uploaded with a response of ' + response + ':' + data);
 	            getDocuments();
 	        }
 	    });
@@ -313,7 +313,7 @@ Intranet.controller('ChatController', ['$scope', '$http', '$paginator', '$modal'
 			}
 			  })
 		.success(function(response){
-			console.log(response);
+			//console.log(response);
 			if (response.result)	
 			{
 				$scope.documents = prepareDocuments(response.result);

@@ -1,7 +1,7 @@
 <section class="tab" ng-controller="TabController as panel">
 <div class="col-md-6 personalchat line"  style="margin-top:2px;margin-right: 2px;">
 	<div class="panel text-primary panel-cascade">
-		<div class="panel-heading">
+		<div class="panel-heading" style="height:90px">
   			<h3 class="panel-title" style="display: flex;">
   			<i class="fa fa-comments" style="display: inline-table;">{{office.getName()}}</i>
   			
@@ -12,7 +12,7 @@
   				</li>
   				{% for topic in windowtopics  %}
        	        		{% if topic.getOfficeid()== office.getId() and topic.getDropdown() == NULL %}
-        	        		<li ng-class="{active:panel.isSelected({{loop.index}}) }">
+        	        		<li ng-class="{active:panel.isSelected({{ loop.index }}) }">
         	        			<a href ng-click="panel.selectTab({{ loop.index }})" data-toggle="tab" >{{ topic.getTopicName(em, topic.getTopicid) }}</a>
         	        		</li>
               			{% endif %}
@@ -21,13 +21,13 @@
   				{% for topic in windowtopics  %}
   				{% if loop.first %}
   				{% if topic.getDropdown() == 0 %}
-  					<li ng-class="{active:panel.isSelected({{loop.index}}) }">
+  					<li ng-class="{active:panel.isSelected({{ loop.index }}) }">
         	        	<a href ng-click="panel.selectTab({{ loop.index }})" data-toggle="tab" >{{ topic.getTopicName(em, topic.getTopicid) }}</a>
         	        </li>
         	    {% endif %}
         	    {% else %}
        	        	{% if topic.getOfficeid()== office.getId() and topic.getDropdown() == 0 %}
-        	        	<li ng-class="{active:panel.isSelected({{loop.index}}) }">
+        	        	<li ng-class="{active:panel.isSelected({{ loop.index }}) }">
         	       			<a href ng-click="panel.selectTab({{ loop.index }})" data-toggle="tab" >{{ topic.getTopicName(em, topic.getTopicid) }}</a>
         	       		</li>
               	{% endif %}
@@ -44,7 +44,7 @@
                                         {% endif %}
                                         {% for topic in windowtopics  %}
                                         {% if topic.getOfficeid()== office.getId() and topic.getDropdown() != 0 %}
-                                        	 <li role="presentation">
+                                        	 <li role="presentation" ng-class="{active:panel.isSelected({{ loop.index }}) }">
                                         	 	<a role="menuitem" tabindex="-1" href ng-click="panel.selectTab({{ loop.index }})" data-toggle="tab" >{{ topic.getTopicName(em, topic.getTopicid) }}</a>
                                         	 </li>
                                         {% endif %}
