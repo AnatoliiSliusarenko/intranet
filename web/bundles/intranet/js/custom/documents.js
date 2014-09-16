@@ -5,7 +5,7 @@ Intranet.controller('DocumentsController', ['$scope', '$http', '$modal', functio
 	
 	$scope.urlsDocumentsGet = JSON_URLS.documentsGet;
 	
-	$(function() {
+	setTimeout($(function() {
 	    $('#file_upload').uploadify({
 	    	'fileSizeLimit': 0,
 	    	'progressData' : 'speed',
@@ -21,7 +21,7 @@ Intranet.controller('DocumentsController', ['$scope', '$http', '$modal', functio
 	            getDocuments();
 	        }
 	    });
-	});
+	}), 1000);
 	
 	function getDocuments()
 	{	

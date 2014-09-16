@@ -18,21 +18,12 @@
 	<li class="active">{{ topic.name }}</li>
 </ul>
 {% endblock %}
-{% block search %}
-<div class="panel">
-<div class="form-group hiddn-minibar pull-right" >
-	<input type="text" class="form-control form-cascade-control nav-input-search" size="20" placeholder="Search through discussion" />
-
-	<span class="input-icon fui-search"></span>
-</div>
-</div>
-{% endblock %}
 
 {% block pageheader %}
 <div class="row">
 	<div class="col-md-12 ">
 	<div class="panel">
-		<h3 class="page-header"><i class="fa fa-comment"></i> {{ topic.name }} <i class="fa fa-info-circle animated bounceInDown show-info"></i> {% if (topic.getUserid() != 0 and (is_granted('ROLE_ADMIN') or topic.getUserid() == app.user.getId())) %}<i class="fa fa-times-circle animated bounceInDown show-danger"></i>{% endif %} </h3>
+		<h3 class="page-header"><i class="fa fa-comment"></i> {{ topic.name }}{% if (topic.getUserid() != 0 and (is_granted('ROLE_ADMIN') or topic.getUserid() == app.user.getId())) %} ({{ topic.status }}){% endif %} <i class="fa fa-info-circle animated bounceInDown show-info"></i> {% if (topic.getUserid() != 0 and (is_granted('ROLE_ADMIN') or topic.getUserid() == app.user.getId())) %}<i class="fa fa-times-circle animated bounceInDown show-danger"></i> {% if topic.status == 'opened' %}<i class="fa fa-lock animated bounceInDown show-lock"></i>{% elseif topic.status == 'closed'%}<i class="fa fa-unlock animated bounceInDown show-lock"></i>{% endif %}{% endif %} </h3>
 
 		<blockquote class="page-information hidden">
 		<p>
@@ -42,9 +33,22 @@
 		{% if (topic.getUserid() != 0 and (is_granted('ROLE_ADMIN') or topic.getUserid() == app.user.getId())) %}
 		<blockquote class="page-danger-zone hidden">
 		<p>
-			If you really want to delete this topic please click <a href="{{ url('intranet_delete_topic', {'topic_id': topic.getId()}) }}">here</a> (can't be rollback!)
+			If you really want to DELETE this topic please click <a href="{{ url('intranet_delete_topic', {'topic_id': topic.getId()}) }}">here</a> (can't be rollback!)
 		</p>
 		</blockquote>
+		{% if topic.status == 'opened' %}
+		<blockquote class="page-lock-zone hidden">
+		<p>
+			If you really want to CLOSE this topic please click <a href="{{ url('intranet_close_topic', {'topic_id': topic.getId()}) }}">here</a>
+		</p>
+		</blockquote>
+		{% elseif topic.status == 'closed'%}
+		<blockquote class="page-lock-zone hidden">
+		<p>
+			If you really want to OPEN this topic please click <a href="{{ url('intranet_open_topic', {'topic_id': topic.getId()}) }}">here</a>
+		</p>
+		</blockquote>
+		{% endif %}
 		{% endif %}
 		<div>
 				<div id='menu-block'>
@@ -64,6 +68,7 @@
 		</div>
 
 	</div>
+	{% if ((topic.status == 'opened') or (topic.status == 'closed' and topic.getUserid() != 0 and (is_granted('ROLE_ADMIN') or topic.getUserid() == app.user.getId()))) %}
 	<div class="panel panel-cascade">
 		<div class="panel-heading">
     	    <h3 class="panel-title">
@@ -98,10 +103,12 @@
    		</form>
     </div>
 </div>
+{% endif %}
 </div>
 </div>
 {% endblock %}
 {% block content %}
+{% if ((topic.status == 'opened') or (topic.status == 'closed' and topic.getUserid() != 0 and (is_granted('ROLE_ADMIN') or topic.getUserid() == app.user.getId()))) %}
 <div class="row">
 	<div class="col-md-12">
 <div class="row chat-box" ng-controller="ChatController">
@@ -347,6 +354,10 @@
  </div>
  </div>
  </div>
+ {% elseif topic.status == 'closed' %}
+ <h1>Sorry, topic is closed!</h1> 
+ <h3>Please contact administrator or owner ({{ topic.user.name ~ ' ' ~ topic.user.surname }}) to unlock this topic.</h3>
+ {% endif %}
 {% endblock %}
 {% block javascripts %}
 	{{ parent() }}

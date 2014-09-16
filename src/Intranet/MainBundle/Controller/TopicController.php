@@ -134,6 +134,34 @@ class TopicController extends Controller
     	return $this->redirect($this->generateUrl('intranet_show_topic', array('topic_id' => $parent)));
     }
     
+    public function closeTopicAction($topic_id)
+    {
+    	$em = $this->getDoctrine()->getManager();
+    	$topic = $em->getRepository('IntranetMainBundle:Topic')->find($topic_id);
+    	if (($topic == null) || (($topic->getUserid() !== $this->getUser()->getId()) && (false === $this->get('security.context')->isGranted('ROLE_ADMIN'))) )
+    		return $this->redirect($this->generateUrl('intranet_main_homepage'));
+    	
+    	$topic->close();
+    	$em->persist($topic);
+    	$em->flush();
+    	
+    	return $this->redirect($this->generateUrl('intranet_show_topic', array('topic_id' => $topic_id)));
+    }
+    
+    public function openTopicAction($topic_id)
+    {
+    	$em = $this->getDoctrine()->getManager();
+    	$topic = $em->getRepository('IntranetMainBundle:Topic')->find($topic_id);
+    	if (($topic == null) || (($topic->getUserid() !== $this->getUser()->getId()) && (false === $this->get('security.context')->isGranted('ROLE_ADMIN'))) )
+    		return $this->redirect($this->generateUrl('intranet_main_homepage'));
+    	 
+    	$topic->open();
+    	$em->persist($topic);
+    	$em->flush();
+    	 
+    	return $this->redirect($this->generateUrl('intranet_show_topic', array('topic_id' => $topic_id)));
+    }
+    
     public function addTopicChatToNewWindowPersonalAction($topic_id)
     {
     	$em = $this->getDoctrine()->getManager();

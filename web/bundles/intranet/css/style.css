@@ -865,11 +865,21 @@ body {
 	cursor: pointer;
 }
 
+.content .page-header .show-lock {
+	font-size: 16px;
+	color: blue;
+	cursor: pointer;
+}
+
 .content .page-header .show-info:hover {
 	font-size: 24px;
 }
 
 .content .page-header .show-danger:hover {
+	font-size: 24px;
+}
+
+.content .page-header .show-lock:hover {
 	font-size: 24px;
 }
 
@@ -3034,6 +3044,29 @@ blockquote.page-danger-zone p {
 
 blockquote.page-danger-zone a {
 	color: red;
+	font-size: 14px;
+	font-weight: normal;
+}
+
+blockquote.page-lock-zone {
+	padding: 10px 20px;
+	margin: 0 0 20px;
+	border-left: 5px solid blue;
+	background: #f9f9f9;
+	-webkit-transition: 500ms ease;
+	-moz-transition: 500ms ease;
+	-o-transition: 500ms ease;
+	-ms-transition: 500ms ease;
+	transition: 500ms ease;
+}
+
+blockquote.page-lock-zone p {
+	font-size: 14px;
+	font-weight: normal;
+}
+
+blockquote.page-lock-zone a {
+	color: blue;
 	font-size: 14px;
 	font-weight: normal;
 }
