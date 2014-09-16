@@ -80,6 +80,14 @@ intranet_delete_topic:
     pattern:  /topic/{topic_id}/delete
     defaults: { _controller: IntranetMainBundle:Topic:deleteTopic }
     
+intranet_close_topic:
+    pattern:  /topic/{topic_id}/close
+    defaults: { _controller: IntranetMainBundle:Topic:closeTopic }
+    
+intranet_open_topic:
+    pattern:  /topic/{topic_id}/open
+    defaults: { _controller: IntranetMainBundle:Topic:openTopic }
+    
 intranet_change_office_members:
     pattern:  /office/{office_id}/members/change
     defaults: { _controller: IntranetMainBundle:Office:changeOfficeMembers }

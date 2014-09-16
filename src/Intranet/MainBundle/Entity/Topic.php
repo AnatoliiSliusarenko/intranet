@@ -57,6 +57,13 @@ class Topic
     private $description;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="status", type="string", length=255)
+     */
+    private $status;
+    
+    /**
      * @ORM\ManyToOne(targetEntity="Office", inversedBy="topics")
      * @ORM\JoinColumn(name="officeid")
      * @var Office
@@ -521,5 +528,38 @@ class Topic
     	}
     	 
     	return array_map(function($t){return $t->getInArray();}, $tasks);
+    }
+
+    /**
+     * Set status
+     *
+     * @param string $status
+     * @return Topic
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * Get status
+     *
+     * @return string 
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+    
+    public function close()
+    {
+    	$this->setStatus('closed');
+    }
+    
+    public function open()
+    {
+    	$this->setStatus('opened');
     }
 }
