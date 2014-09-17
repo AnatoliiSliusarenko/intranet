@@ -146,8 +146,10 @@ class User implements UserInterface, \Serializable
 	 */
 	private $postsTask;
 	
-	//variable for settings
-	private $globalSettings;
+	/**
+	 * @ORM\OneToOne(targetEntity="UserSettings", mappedBy="user")
+	 */
+	private $userSettings;
 	
 	public function __construct()
 	{
@@ -955,5 +957,28 @@ class User implements UserInterface, \Serializable
     public function getDocuments()
     {
         return $this->documents;
+    }
+
+    /**
+     * Set userSettings
+     *
+     * @param \Intranet\MainBundle\Entity\UserSettings $userSettings
+     * @return User
+     */
+    public function setUserSettings(\Intranet\MainBundle\Entity\UserSettings $userSettings = null)
+    {
+        $this->userSettings = $userSettings;
+
+        return $this;
+    }
+
+    /**
+     * Get userSettings
+     *
+     * @return \Intranet\MainBundle\Entity\UserSettings 
+     */
+    public function getUserSettings()
+    {
+        return $this->userSettings;
     }
 }

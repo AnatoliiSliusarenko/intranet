@@ -38,7 +38,7 @@
             <ul class='vertical-menu btn-block'>
             	<li class='drop-link'><a href="#">Topics</a>
             		<ul class='drop-block'>
-            			{% for topic in office.getTopTopics(em) %}
+            			{% for topic in office.getTopTopics(em, app.user.userSettings.showHiddenTopics) %}
             				{{include(
          						'IntranetMainBundle:Topic:showTopicMenuTree.html.twig',
            						{ 'topic': topic }

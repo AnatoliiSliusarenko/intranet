@@ -409,13 +409,15 @@ class Office
         return $this->topics;
     }
     
-    public function getTopTopics($em)
+    public function getTopTopics($em, $showHiddenTopics = true)
     {
     	$officeTree = $this->getOfficeTree($em);
     	$topics = new \Doctrine\Common\Collections\ArrayCollection();
     	
     	foreach ($this->topics as $topic)
     	{
+    		if (($topic->getStatus() == 'closed') && (!$showHiddenTopics)) continue;
+    		
     		if ($topic->getParentid() == $officeTree[0]->getId())
     		{
     			$topics[] = $topic;

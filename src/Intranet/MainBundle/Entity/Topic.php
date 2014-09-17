@@ -209,7 +209,7 @@ class Topic
     	return $result;
     }
     
-    public function getChildrenForOffice($em, \Intranet\MainBundle\Entity\Office $office = null)
+    public function getChildrenForOffice($em, \Intranet\MainBundle\Entity\Office $office = null, $showHiddenTopics  = true)
     {
     	if ($office == null) $office = $this->getOffice();
     	
@@ -218,6 +218,8 @@ class Topic
     
     	foreach ($topicChildren as $topic)
     	{
+    		if (($topic->getStatus() == 'closed') && (!$showHiddenTopics)) continue;
+    		
     		if ($topic->getOfficeid() == $office->getId())
     			$result[] = $topic;
     	}

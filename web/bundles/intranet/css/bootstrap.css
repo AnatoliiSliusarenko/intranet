@@ -6537,11 +6537,21 @@ th.hidden-lg,td.hidden-lg {
   padding: 0;
   margin: 2px;
 }
+
+.vertical-menu li.closed {
+  background: #d9534f;
+}
+
 .vertical-menu li:hover {
   background: #285e8e;
   border: solid 1px transparent;
   border-radius: 5px;
 }
+
+.vertical-menu li.closed:hover{
+  background: #d2322d;
+}
+
 .vertical-menu a {
   display: block;
   text-decoration: none;
@@ -6555,6 +6565,7 @@ th.hidden-lg,td.hidden-lg {
   margin: 0;
   transition: margin 0.5s ease;
 }
+
 .drop-link:hover {
   background: #ccf;
 }

@@ -4,6 +4,7 @@ namespace Intranet\MainBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Intranet\MainBundle\Entity\User;
+use Intranet\MainBundle\Entity\UserSettings;
 use Intranet\MainBundle\Entity\Document;
 use Intranet\MainBundle\Entity\Office;
 use Intranet\MainBundle\Entity\Role;
@@ -24,14 +25,6 @@ class UserController extends Controller
     		'password' => $request->request->get('password'),
     		'avatar' => $request->request->get('avatar')
     	);
-    	/*
-    	$document = new Document();
-    	$form = $this->createFormBuilder($document)
-    				 ->add('name')
-    				 ->add('file')
-    				 ->getForm();
-    	
-    	return new Response(var_dump($request));*/
     	
     	$em = $this->getDoctrine()->getManager();
     	
@@ -71,6 +64,14 @@ class UserController extends Controller
     	
     	$em->persist($publicOffice);
     	$em->persist($user);
+    	$em->flush();
+    	
+    	$settings = new UserSettings();
+    	$settings->setUserid($user->getId());
+    	$settings->setUser($user);
+    	$settings->setShowHiddenTopics(true);
+    	
+    	$em->persist($settings);
     	$em->flush();
     	
     	//set session
