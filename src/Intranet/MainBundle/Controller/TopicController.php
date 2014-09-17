@@ -110,6 +110,7 @@ class TopicController extends Controller
     	$topic->setOffice($office);
     	$topic->setUserid($this->getUser()->getId());
     	$topic->setUser($this->getUser());
+    	$topic->open();
     	
     	$em->persist($topic);
     	$em->flush();
