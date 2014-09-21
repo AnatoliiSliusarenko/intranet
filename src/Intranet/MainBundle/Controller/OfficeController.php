@@ -179,35 +179,14 @@ class OfficeController extends Controller
     	$personal_office = $em->getRepository('IntranetMainBundle:PersonalPage')->findByOfficeid($office_id);
     	$personal_data = $em->getRepository('IntranetMainBundle:PersonalPage')->findAll($this->getUser()->getId());
     	$count_window = count($personal_data)+1;
-    	
     	if(count($personal_office) != 0)
     	{
     		foreach ($personal_office as $value) {
     			if( $value != null && $value->getTopicid() == null 
     				&& $value->getUserid() == $this->getUser()->getId())
     			{
-    				$breadcrumbs = $office->getBreadcrumbs($em);
-    				$users = $this->getUser()->getAllUsers($em, false);
-    				 
-    				$officeUsers = $office->getUsers();
-    				$childrenOfficesForUser = $office->getChildrenForUser($em, $this->getUser());
-    				 
-    				$topicTree = Topic::getTopicTree($em);
-    				$parentTopic = $topicTree[0];
-    				$windows = array();
-    				$windows = PersonalPage::getWindowsName($em, $this->getUser()->getId(), $office->getName());
-    				$parameters = array(
-    						"availableStatus" => TaskStatus::getAllStatuses($em),
-    						"em" => $em,
-    						"office" => $office,
-    						"parentTopic" => $parentTopic,
-    						"breadcrumbs" => $breadcrumbs,
-    						"topics" => array_map(function($e){return $e->getInArray();}, $office->getTopics()->toArray()),
-    						'officeUsers' => array_map(function($e){return $e->getInArray();}, $officeUsers->toArray()),
-    						'users' => array_map(function($e){return $e->getInArray();}, $users),
-    						'offices' => $childrenOfficesForUser,
-    						"windows" => $windows,
-    						'message'=>true);
+    				$parameters = Office::getParameters($office, $em, $this->getUser(), true);
+    				
     				return $this->render("IntranetMainBundle:Office:showOffice.html.twig",$parameters);
     			}
     		}
@@ -221,28 +200,7 @@ class OfficeController extends Controller
     	$em = $this->getDoctrine()->getEntityManager();
     	$em->persist($personal);
     	$em->flush();
-    	$breadcrumbs = $office->getBreadcrumbs($em);
-    	$users = $this->getUser()->getAllUsers($em, false);
-    				 
-    	$officeUsers = $office->getUsers();
-    	$childrenOfficesForUser = $office->getChildrenForUser($em, $this->getUser());
-    		 
-    	$topicTree = Topic::getTopicTree($em);
-    	$parentTopic = $topicTree[0];
-    	$windows = array();
-    	$windows = PersonalPage::getWindowsName($em, $this->getUser()->getId(), $office->getName());
-    	$parameters = array(
-    			"availableStatus" => TaskStatus::getAllStatuses($em),
-    			"em" => $em,
-    			"office" => $office,
-    			"parentTopic" => $parentTopic,
-    			"breadcrumbs" => $breadcrumbs,
-    			"topics" => array_map(function($e){return $e->getInArray();}, $office->getTopics()->toArray()),
-    			'officeUsers' => array_map(function($e){return $e->getInArray();}, $officeUsers->toArray()),
-    			'users' => array_map(function($e){return $e->getInArray();}, $users),
-    			'offices' => $childrenOfficesForUser,
-    			"windows" => $windows,
-    			'message'=>true);
+    	$parameters = Office::getParameters($office, $em, $this->getUser(), false);
     	return $this->render("IntranetMainBundle:Office:showOffice.html.twig",$parameters);
     }
     
@@ -257,28 +215,7 @@ class OfficeController extends Controller
     			if( $value != null && $value->getTopicid() == null 
     				&& $value->getUserid() == $this->getUser()->getId())
     			{
-    				$breadcrumbs = $office->getBreadcrumbs($em);
-    				$users = $this->getUser()->getAllUsers($em, false);
-    					
-    				$officeUsers = $office->getUsers();
-    				$childrenOfficesForUser = $office->getChildrenForUser($em, $this->getUser());
-    					
-    				$topicTree = Topic::getTopicTree($em);
-    				$parentTopic = $topicTree[0];
-    				$windows = array();
-    				$windows = PersonalPage::getWindowsName($em, $this->getUser()->getId(), $office->getName());
-    				$parameters = array(
-    						"availableStatus" => TaskStatus::getAllStatuses($em),
-    						"em" => $em,
-    						"office" => $office,
-    						"parentTopic" => $parentTopic,
-    						"breadcrumbs" => $breadcrumbs,
-    						"topics" => array_map(function($e){return $e->getInArray();}, $office->getTopics()->toArray()),
-    						'officeUsers' => array_map(function($e){return $e->getInArray();}, $officeUsers->toArray()),
-    						'users' => array_map(function($e){return $e->getInArray();}, $users),
-    						'offices' => $childrenOfficesForUser,
-    						"windows" => $windows,
-    						'message'=>true);
+    				$parameters = Office::getParameters($office, $em, $this->getUser(), true);
     				return $this->render("IntranetMainBundle:Office:showOffice.html.twig",$parameters);
     			}
     		}
@@ -288,27 +225,7 @@ class OfficeController extends Controller
     	$em = $this->getDoctrine()->getEntityManager();
     	$em->persist($personal);
     	$em->flush();
-    	$breadcrumbs = $office->getBreadcrumbs($em);
-    				$users = $this->getUser()->getAllUsers($em, false);
-    				 
-    				$officeUsers = $office->getUsers();
-    				$childrenOfficesForUser = $office->getChildrenForUser($em, $this->getUser());
-    				$topicTree = Topic::getTopicTree($em);
-    				$parentTopic = $topicTree[0];
-    				$windows = array();
-    				$windows = PersonalPage::getWindowsName($em, $this->getUser()->getId(), $office->getName());
-    				$parameters = array(
-    						"availableStatus" => TaskStatus::getAllStatuses($em),
-    						"em" => $em,
-    						"office" => $office,
-    						"parentTopic" => $parentTopic,
-    						"breadcrumbs" => $breadcrumbs,
-    						"topics" => array_map(function($e){return $e->getInArray();}, $office->getTopics()->toArray()),
-    						'officeUsers' => array_map(function($e){return $e->getInArray();}, $officeUsers->toArray()),
-    						'users' => array_map(function($e){return $e->getInArray();}, $users),
-    						'offices' => $childrenOfficesForUser,
-    						"windows" => $windows,
-    						'message'=>false);
+    	$parameters = Office::getParameters($office, $em, $this->getUser(), false);
     				return $this->render("IntranetMainBundle:Office:showOffice.html.twig",$parameters);
     }
 }

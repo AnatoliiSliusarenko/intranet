@@ -534,4 +534,34 @@ class Office
     	
     	return array_map(function($t){return $t->getInArray();}, $tasks);
     }
+    
+    public static function getParameters($office ,$em, $user, $flag)
+    {
+    	$breadcrumbs = $office->getBreadcrumbs($em);
+    	$users = $user->getAllUsers($em, false);
+    		
+    	$officeUsers = $office->getUsers();
+    	$childrenOfficesForUser = $office->getChildrenForUser($em, $user);
+    		
+    	$topicTree = Topic::getTopicTree($em);
+    	$parentTopic = $topicTree[0];
+    	$windows = array();
+    	$windows = PersonalPage::getWindowsName($em, $user->getId(), $office->getName());
+    	if($flag == true)
+    		$param=true;
+    	else
+    		$param=false;
+    	return  $parameters = array(
+    			"availableStatus" => TaskStatus::getAllStatuses($em),
+    			"em" => $em,
+    			"office" => $office,
+    			"parentTopic" => $parentTopic,
+    			"breadcrumbs" => $breadcrumbs,
+    			"topics" => array_map(function($e){return $e->getInArray();}, $office->getTopics()->toArray()),
+    			'officeUsers' => array_map(function($e){return $e->getInArray();}, $officeUsers->toArray()),
+    			'users' => array_map(function($e){return $e->getInArray();}, $users),
+    			'offices' => $childrenOfficesForUser,
+    			"windows" => $windows,
+    			'message'=>$param);
+    }
 }

@@ -564,4 +564,32 @@ class Topic
     {
     	$this->setStatus('opened');
     }
+    
+    public static function getParameters($topic, $em, $user, $flag)
+    {
+    	$office = $topic->getOffice();
+    	$subtopics = $topic->getChildrenForOffice($em);
+    	$breadcrumbs = $topic->getBreadcrumbs($em);
+    	$tasks = $topic->getTasksWithChildren($em);
+    	$users = $user->getAllUsers($em, false);
+    	$topicsForTasks = $topic->getAllChildrenForOffice($em);
+    	array_unshift($topicsForTasks, $topic);
+    	$windows = array();
+    	$windows = PersonalPage::getWindowsName($em, $user->getId(), $office->getName());
+    	if($flag == true)
+    		$param=true;
+    	else
+    		$param=false;
+    	return $parameters = array("users" => array_map(function($e){return $e->getInArray();}, $users),
+    		"topic" => $topic,
+    		"em" => $em,
+    		"availableStatus" => TaskStatus::getAllStatuses($em),
+    		"breadcrumbs" => $breadcrumbs,
+    		'subtopics' => $subtopics,
+    		'topicsForTasks' => array_map(function($e){return $e->getInArray();}, $topicsForTasks),
+    		'office' => $office,
+    		"tasks" => $tasks,
+    		"windows" => $windows,
+    		'message' => $param);
+    }
 }

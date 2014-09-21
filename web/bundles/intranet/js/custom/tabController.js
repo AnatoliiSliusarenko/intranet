@@ -1,7 +1,7 @@
 Intranet.controller('TabController', function (){
     console.log("TabController was loaded!");
 	
-    this.tab = 1;
+    this.tab = 0;
     
     this.selectTab = function (setTab){
         this.tab = setTab;
