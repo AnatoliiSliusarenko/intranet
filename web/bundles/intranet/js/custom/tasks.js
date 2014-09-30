@@ -70,7 +70,7 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 				delete groupedList[task.id];
 			}
 		});
-		
+		topList = [];
 		for (key in groupedList)
 			topList = topList.concat(groupedList[key]);
 		return topList;
@@ -347,7 +347,21 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 	$scope.estimated = false;
 	checkEstimated();
 	
+	$scope.addingDocuments = false;
+	$scope.task = task;
+	$scope.posts = [];
+	$scope.urlsPostsTaskAdd = JSON_URLS.urlsPostsTaskAdd.replace('0', task.id);
+	$scope.urlsPostsTaskGet = JSON_URLS.urlsPostsTaskGet.replace('0', task.id);
+	$scope.urlsResetCommentsCount = JSON_URLS.urlsResetCommentsCount.replace('0', task.id);
+	$scope.avatarURL = JSON_URLS.avatar;
+	$scope.urlsBase = JSON_URLS.baseUrl;
+	
+	$scope.comment = "";
+	$scope.editingPost = null;
+	$scope.entityid = task.id;
+	$scope.userid = window.USER.id;
 	$scope.checkEstimated = checkEstimated;
+	
 	function checkEstimated()
 	{
 		_.map(STATUSES, function(s){
@@ -386,23 +400,7 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 				$modalInstance.close(response.result);
 		})
 	}
-}])
-.controller('ShowPostsController', ['$scope', '$http', '$modalInstance', 'task', function($scope, $http, $modalInstance, task){
-	console.log('ShowPostsController was loaded!');
 	
-	$scope.addingDocuments = false;
-	$scope.task = task;
-	$scope.posts = [];
-	$scope.urlsPostsTaskAdd = JSON_URLS.urlsPostsTaskAdd.replace('0', task.id);
-	$scope.urlsPostsTaskGet = JSON_URLS.urlsPostsTaskGet.replace('0', task.id);
-	$scope.urlsResetCommentsCount = JSON_URLS.urlsResetCommentsCount.replace('0', task.id);
-	$scope.avatarURL = JSON_URLS.avatar;
-	$scope.urlsBase = JSON_URLS.baseUrl;
-	
-	$scope.comment = "";
-	$scope.editingPost = null;
-	$scope.entityid = task.id;
-	$scope.userid = window.USER.id;
 	$http({
 		method: "GET", 
 		url: $scope.urlsPostsTaskGet

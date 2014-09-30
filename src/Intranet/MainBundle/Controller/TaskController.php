@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Intranet\MainBundle\Entity\Task;
 use Intranet\MainBundle\Entity\TaskStatus;
+use Intranet\MainBundle\Entity\Document;
 
 class TaskController extends Controller
 {
@@ -205,12 +206,20 @@ class TaskController extends Controller
 			$response->headers->set('Content-Type', 'application/json');
 			return $response;
     	}
-    	
+    	$timestamp = time();
+    	$token = Document::getToken($timestamp);
+    	$user = $em->getRepository('IntranetMainBundle:User')->find($task->getUserid());
     	$availableStatus = $task->getAvailableStatus($this->getUser());
+    	//var_dump($user);die();
     	$parameters = array(
+    			'user'=> $user,
     			'availableStatus' => $availableStatus,
-    			'topics' => $task->getOffice()->getTopics()
+    			'topics' => $task->getOffice()->getTopics(),
+    			'timestamp' => $timestamp,
+    			'token' => $token,
+    			'availableTypes'=> Document::getAvailableTypesInString()
     	);
+    	
     	if ($task->getParentid() != null)
     	{
     		$parentTask = $em->getRepository('IntranetMainBundle:Task')->find($task->getParentid());

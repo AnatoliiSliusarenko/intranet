@@ -500,9 +500,6 @@ Intranet.controller('PersonalTopicChatController',['$http', '$scope', '$paginato
 		});
 		setInterval(getNewPostsForTopic, 3000);
 	}
-	//console.log('Topic chat init!!!');
-	
-	//console.log('chat topic started 1');
 	getMembersForTopics();
 	getPostsCountForTopic(function(postsCount){
 		$scope.paginator.init(postsCount, $scope.postsPerPage);

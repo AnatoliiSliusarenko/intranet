@@ -285,7 +285,7 @@
 		           		<tr>
 					   		<td class="visible-lg">[[i+1]]</td>
 					   		<td  class="visible-lg">[[task.id]]</td>
-				            <td class="visible-lg"><div class="tooltips"><span class="clickable" ng-click="changeDrop(task)"><i ng-show="task.subtasks.length>0 && !task.dropped" class="fa fa-plus"></i><i ng-show="task.subtasks.length>0 && task.dropped" class="fa fa-minus"></i></span> <a data-original-title="[[task.description]]" data-placement="top" href="#">[[ task.name ]]</a></div></td>
+				            <td class="visible-lg"><div class="tooltips"><span class="clickable" ng-click="changeDrop(task)"><i ng-show="task.subtasks.length>0 && !task.dropped" class="fa fa-plus"></i><i ng-show="task.subtasks.length>0 && task.dropped" class="fa fa-minus"></i></span> <a ng-click="editTask(task)" data-original-title="[[task.description]]" data-placement="top" href="#">[[ task.name ]]</a></div></td>
 				            <td class="visible-lg">
 				            	<label class="label" style="background-color: [[task.status.color]];">[[task.status.label]]</label>
 				            </td>
@@ -308,16 +308,14 @@
 				            </td>
 				            <td>
 				             <button type="button" class="btn btn-primary btn-xs" ng-click="addTask(task)"><i class="fa fa-code-fork"></i></button>
-				             <button type="button" class="btn btn-warning btn-xs" ng-click="editTask(task)"><i class="fa fa-edit"></i></button>
 				             <button type="button" class="btn btn-danger btn-xs" ng-click="removeTask(task)"><i class="fa fa-trash-o"></i></button>
 				             <a href="[[ task.hrefTopic ]]" ng-show="task.topicid != 0" class="btn btn-info btn-xs" ><i class="fa fa-mail-forward"></i></a>
-				             <button style="width:25px;" type="button" class="btn btn-success btn-xs" ng-click="showPosts(task)"><i class="fa fa-comment"></i><span ng-show="task.newCommentsCount>0" class="badge bg-danger">[[task.newCommentsCount]]</span></button>
 				            </td>
 	           			</tr>
 	           			<tr ng-show="task.dropped == true" class="success" ng-repeat="subtask in task.subtasks">
 				            <td class="visible-lg">&nbsp;&nbsp;[[i+1]].[[$index+1]]</td>
 				            <td  class="visible-lg">[[subtask.id]]</td>
-				            <td class="visible-lg"><div class="tooltips"><a data-original-title="[[subtask.description]]" data-placement="top" href="#">[[ subtask.name ]]</a></div></td>
+				            <td class="visible-lg"><div class="tooltips"><a ng-click="editTask(task)" data-original-title="[[subtask.description]]" data-placement="top" href="#">[[ subtask.name ]]</a></div></td>
 				            <td class="visible-lg">
 				            	<label class="label" style="background-color: [[subtask.status.color]];">[[subtask.status.label]]</label>
 				            </td>
@@ -339,10 +337,8 @@
 				            <span ng-show="subtask.topic!=null">[[subtask.topic.name]]</span>
 				            </td>
 				            <td>
-				             <button type="button" class="btn btn-warning btn-xs" ng-click="editTask(subtask)"><i class="fa fa-edit"></i></button>
 				             <button type="button" class="btn btn-danger btn-xs" ng-click="removeTask(subtask)"><i class="fa fa-trash-o"></i></button>
 				             <a href="[[ subtask.hrefTopic ]]" ng-show="subtask.topicid != null" class="btn btn-info btn-xs"><i class="fa fa-mail-forward"></i></a>
-				             <button type="button" class="btn btn-success btn-xs" ng-click="showPosts(subtask)"><i class="fa fa-comment"></i><span class="badge bg-danger">[[subtask.newCommentsCount]]</span></button>
 				            </td>
 		            	</tr>
 			  </tbody>
