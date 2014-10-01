@@ -210,7 +210,7 @@ class TaskController extends Controller
     	$userid = $task->getUserid($task->getUserid());
     	if ($userid != null)
     	{
-    		$user = $em->getRepository('IntranetMainBundle:User')->find();
+    		$user = $em->getRepository('IntranetMainBundle:User')->find($userid);
     		$avatar = $user->getAvatar();
     	}
     	else 
