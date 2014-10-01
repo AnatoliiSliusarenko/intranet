@@ -163,7 +163,6 @@ class TaskController extends Controller
     		
     		$data = json_decode(file_get_contents("php://input"));
     		$taskData = (object) $data;
-    		
     		$name = $taskData->name;
     		$description = $taskData->description;
     		$priority = $taskData->priority;
@@ -172,7 +171,7 @@ class TaskController extends Controller
     		$userid = (isset($taskData->userid) && ($taskData->userid != 'null')) ? $taskData->userid : null;
     		$parentid = (isset($taskData->parentid)) ? $taskData->parentid : null;
     		$topicid = (isset($taskData->topicid) && ($taskData->topicid != 'null')) ? $taskData->topicid : null;
-    		
+    		die();
     		$status = ($statusid != null) ? $em->getRepository('IntranetMainBundle:TaskStatus')->find($statusid) : null;
     		if ($status == null)
     		{
@@ -208,11 +207,18 @@ class TaskController extends Controller
     	}
     	$timestamp = time();
     	$token = Document::getToken($timestamp);
-    	$user = $em->getRepository('IntranetMainBundle:User')->find($task->getUserid());
+    	$userid = $task->getUserid($task->getUserid());
+    	if ($userid != null)
+    	{
+    		$user = $em->getRepository('IntranetMainBundle:User')->find();
+    		$avatar = $user->getAvatar();
+    	}
+    	else 
+    		$avatar = null;
     	$availableStatus = $task->getAvailableStatus($this->getUser());
     	//var_dump($user);die();
     	$parameters = array(
-    			'user'=> $user,
+    			'userAvatar'=> $avatar,
     			'availableStatus' => $availableStatus,
     			'topics' => $task->getOffice()->getTopics(),
     			'timestamp' => $timestamp,
