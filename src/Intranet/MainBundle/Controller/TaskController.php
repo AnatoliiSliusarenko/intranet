@@ -223,6 +223,7 @@ class TaskController extends Controller
     			'topics' => $task->getOffice()->getTopics(),
     			'timestamp' => $timestamp,
     			'token' => $token,
+    			'taskName' => $task->getName(),
     			'availableTypes'=> Document::getAvailableTypesInString()
     	);
     	
