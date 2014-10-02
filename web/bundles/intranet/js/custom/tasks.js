@@ -320,8 +320,9 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 	
 	$scope.addTask = function(event)
 	{
-		if ($scope.task.name != undefined)
-			event.preventDefault();				
+		if ($scope.task.name != undefined && $scope.task.description != undefined){
+			event.preventDefault();
+		}
 		
 		$scope.task.estimated = parseInt($scope.task.esth)*60 + parseInt($scope.task.estm);
 		
