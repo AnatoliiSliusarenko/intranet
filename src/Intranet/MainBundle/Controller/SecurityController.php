@@ -6,7 +6,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\SecurityContext;
-use Symfony\Component\Intl\Intl;
 
 class SecurityController extends Controller
 {
@@ -36,7 +35,11 @@ class SecurityController extends Controller
     {
     	$session = $request->getSession();
     	
+    	$accessFilter = $this->get('intranet.accessFilter');
+    	
     	$clientIp = $request->getClientIp();
+    	
+    	$country = $accessFilter->getCountryNameByIp($clientIp);
     	
     	$register_error = $session->get('register_error');
     	$session->remove('register_error');
@@ -46,9 +49,15 @@ class SecurityController extends Controller
     	
     	$parameters = array('register_error' => $register_error,
     				  'register_user' => $register_user,
-    				  'clientIp' => $clientIp);
+    				  'country' => $country);
     	
     	return $this->render("IntranetMainBundle:Security:register.html.twig",
     			$parameters);
+    }
+    
+    
+    private function getCountrySymbolByIp($ip)
+    {	 
+    	
     }
 }

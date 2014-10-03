@@ -86,3 +86,8 @@ services:
         arguments: 
             - @security.context
             - @doctrine.orm.entity_manager
+    intranet.accessFilter:
+        class: Intranet\MainBundle\Services\AccessFilter
+        arguments: 
+            - @security.context
+            - @doctrine.orm.entity_manager
