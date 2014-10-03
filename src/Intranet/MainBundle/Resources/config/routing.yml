@@ -50,18 +50,22 @@ intranet_post_office_new:
     pattern:  /posts/office/{office_id}/new/
     defaults: { _controller: IntranetMainBundle:PostOffice:getNewPosts }
     
-intranet_security:
-    pattern: /security
-    defaults: { _controller: IntranetMainBundle:Security:index }
+intranet_login:
+    pattern: /login/
+    defaults: { _controller: IntranetMainBundle:Security:login }
     
-intranet_security_login_check:
-    path: /security/login_check
+intranet_login_check:
+    path: /login_check/
     
-intranet_security_logout:
-    path: /security/logout
+intranet_logout:
+    path: /logout/
     
 intranet_register:
     pattern:  /register/
+    defaults: { _controller: IntranetMainBundle:Security:register }
+    
+intranet_register_action:
+    pattern:  /register_action/
     defaults: { _controller: IntranetMainBundle:User:addUser }
     
 intranet_show_office:

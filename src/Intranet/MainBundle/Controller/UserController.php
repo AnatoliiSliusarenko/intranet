@@ -10,7 +10,6 @@ use Intranet\MainBundle\Entity\Office;
 use Intranet\MainBundle\Entity\Role;
 
 use Symfony\Component\HttpFoundation\Request;
-
 use Symfony\Component\HttpFoundation\Response;
 
 class UserController extends Controller
