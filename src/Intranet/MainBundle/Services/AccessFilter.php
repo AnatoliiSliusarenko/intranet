@@ -39,6 +39,6 @@ class AccessFilter
     
     public function hasAccess($ip)
     {
-    	return in_array($this->getCountrySymbolByIp($ip),$this->blacklistCountries);
+    	return !in_array($this->getCountrySymbolByIp($ip),$this->blacklistCountries);
     }
 }

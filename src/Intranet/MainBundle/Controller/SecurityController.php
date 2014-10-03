@@ -34,12 +34,14 @@ class SecurityController extends Controller
     public function registerAction(Request $request)
     {
     	$session = $request->getSession();
-    	
     	$accessFilter = $this->get('intranet.accessFilter');
-    	
     	$clientIp = $request->getClientIp();
     	
+    	//india = 58.146.96.0
+    	//ukraine = 92.113.48.68
+    	
     	$country = $accessFilter->getCountryNameByIp($clientIp);
+    	$hasAccess = $accessFilter->hasAccess($clientIp);
     	
     	$register_error = $session->get('register_error');
     	$session->remove('register_error');
@@ -49,15 +51,10 @@ class SecurityController extends Controller
     	
     	$parameters = array('register_error' => $register_error,
     				  'register_user' => $register_user,
-    				  'country' => $country);
+    				  'country' => $country,
+    				  'hasAccess' => $hasAccess);
     	
     	return $this->render("IntranetMainBundle:Security:register.html.twig",
     			$parameters);
-    }
-    
-    
-    private function getCountrySymbolByIp($ip)
-    {	 
-    	
     }
 }
