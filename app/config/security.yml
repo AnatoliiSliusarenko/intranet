@@ -14,22 +14,30 @@ security:
             pattern:  ^/(_(profiler|wdt)|css|images|js)/
             security: false
             
+        welcome:
+            pattern:  ^/welcome/
+            security: false    
+            
         register:
             pattern:  ^/register/
             security: false
-  
-        login:
-            pattern:  ^/security$
+            
+        register_action:
+            pattern:  ^/register_action/
             security: false
-
+        
+        login:
+            pattern:  ^/login/
+            security: false
+  
         secured_area:
             pattern:    ^/*
             form_login:
-                login_path: intranet_security
-                check_path: intranet_security_login_check
+                login_path: intranet_login
+                check_path: intranet_login_check
                 
             logout:
-                path:   intranet_security_logout
+                path:   intranet_logout
            
 
     access_control:
