@@ -474,12 +474,15 @@ body {
 	margin-bottom: 0px !important;
 	padding-bottom: 0px;
 	padding-top: 0px;
-	width: 700px;
+	max-width: 1000px;
+	min-width: 700px;
+	width: auto;
 }
 
 .navbar .user-menu>li ul.dropdown-menu.notifications>li>a {
 	padding: 0px;
 	border-bottom: 1px solid #d9dfe8 !important;
+	height: 35px;
 }
 
 .navbar .user-menu>li ul.dropdown-menu.notifications>li>a:hover {
@@ -495,10 +498,16 @@ body {
 	color: #FFFFFF;
 	width: 40px;
 	text-align: center;
+	float: left;
 }
 
 .navbar .user-menu>li ul.dropdown-menu.notifications>li>a .description {
 	padding-left: 5px;
+	overflow: hidden;
+	display: block;
+	height: 35px;
+	width: 74%;
+	float: left;
 }
 
 .navbar .user-menu>li ul.dropdown-menu.notifications>li>a .time {
