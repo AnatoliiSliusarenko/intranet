@@ -20,7 +20,7 @@ class AccessFilter
     
     private function getCountrySymbolByIp($ip)
     {
-    	$result = file_get_contents("http://ipinfo.io/".$ip);
+    	$result = file_get_contents("http://ipinfo.io/".$ip."/json");
     	
     	list($a, $b) = explode('country', $result);
     	
