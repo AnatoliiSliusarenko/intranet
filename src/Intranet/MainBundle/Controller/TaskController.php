@@ -11,7 +11,7 @@ use Intranet\MainBundle\Entity\Document;
 
 class TaskController extends Controller
 {
-	public function getTasksForOfficeAction(Request $request, $office_id)
+public function getTasksForOfficeAction(Request $request, $office_id)
 	{
 		$em = $this->getDoctrine()->getManager();
 		
@@ -29,8 +29,6 @@ class TaskController extends Controller
 		$response = new Response(json_encode(array("result" => $office->getTasksFilteredInArray($em, $filter))));
 		$response->headers->set('Content-Type', 'application/json');
 		return $response;
-		
-		
 	}
 	
 	public function getTasksForTopicAction(Request $request, $topic_id)
@@ -171,7 +169,6 @@ class TaskController extends Controller
     		$userid = (isset($taskData->userid) && ($taskData->userid != 'null')) ? $taskData->userid : null;
     		$parentid = (isset($taskData->parentid)) ? $taskData->parentid : null;
     		$topicid = (isset($taskData->topicid) && ($taskData->topicid != 'null')) ? $taskData->topicid : null;
-    		die();
     		$status = ($statusid != null) ? $em->getRepository('IntranetMainBundle:TaskStatus')->find($statusid) : null;
     		if ($status == null)
     		{
@@ -195,12 +192,10 @@ class TaskController extends Controller
     		$task->setParentid($parentid);
     		$task->setEstimated($estimated);
     		$task->setTopic($topic);
-    		
     		$em->persist($task);
     		$em->flush();
     		
     		$this->get('intranet.taskActivityLoger')->addChangesLog($task);
-    		
     		$response = new Response(json_encode(array("result" => $task->getInArray())));
 			$response->headers->set('Content-Type', 'application/json');
 			return $response;
@@ -216,7 +211,6 @@ class TaskController extends Controller
     	else 
     		$avatar = null;
     	$availableStatus = $task->getAvailableStatus($this->getUser());
-    	//var_dump($user);die();
     	$parameters = array(
     			'userAvatar'=> $avatar,
     			'availableStatus' => $availableStatus,
@@ -224,6 +218,7 @@ class TaskController extends Controller
     			'timestamp' => $timestamp,
     			'token' => $token,
     			'taskName' => $task->getName(),
+    			'taskDescription' => $task->getDescription(),
     			'availableTypes'=> Document::getAvailableTypesInString()
     	);
     	

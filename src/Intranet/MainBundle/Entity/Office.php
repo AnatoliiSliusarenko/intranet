@@ -484,7 +484,6 @@ class Office
     public function getTasksFilteredInArray($em, $filter = array())
     {
     	$qb = $em->createQueryBuilder();
-    	 
     	$qb->select('t')
     	->from('IntranetMainBundle:Task', 't')
     	->where('t.officeid = :officeid')
@@ -507,7 +506,6 @@ class Office
     	
     	
     	$tasks = $qb->getQuery()->getResult();
-    	
     	if (isset($filter->user) && ($filter->user != array()))
     	{
     		$filteredTasks = new \Doctrine\Common\Collections\ArrayCollection();

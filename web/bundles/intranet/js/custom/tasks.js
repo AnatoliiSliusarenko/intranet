@@ -70,7 +70,6 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 				delete groupedList[task.id];
 			}
 		});
-		topList = [];
 		for (key in groupedList)
 			topList = topList.concat(groupedList[key]);
 		return topList;
@@ -396,6 +395,7 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 			data: $scope.task
 			  })
 		.success(function(response){
+			debugger
 			if (response.result)
 				$modalInstance.close(response.result);
 		})
