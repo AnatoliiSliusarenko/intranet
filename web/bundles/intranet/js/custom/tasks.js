@@ -395,7 +395,6 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 			data: $scope.task
 			  })
 		.success(function(response){
-			debugger
 			if (response.result)
 				$modalInstance.close(response.result);
 		})
