@@ -37,8 +37,8 @@ class SecurityController extends Controller
     	$accessFilter = $this->get('intranet.accessFilter');
     	$clientIp = $request->getClientIp();
     	
-    	//india = 58.146.96.0
-    	//ukraine = 92.113.48.68
+    	//$clientIp = '58.146.96.0'; //india 
+    	$clientIp = '92.113.48.68'; //ukraine 
     	
     	$country = $accessFilter->getCountryNameByIp($clientIp);
     	$hasAccess = $accessFilter->hasAccess($clientIp);

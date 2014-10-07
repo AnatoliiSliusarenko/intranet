@@ -164,6 +164,14 @@ intranet_user_profile:
     pattern:  /user/profile/
     defaults: { _controller: IntranetMainBundle:UserProfile:show }
     
+intranet_user_check_username:
+    pattern:  /user/check/username/
+    defaults: { _controller: IntranetMainBundle:User:checkUsername }
+    
+intranet_user_check_email:
+    pattern:  /user/check/email/
+    defaults: { _controller: IntranetMainBundle:User:checkEmail }
+    
 intranet_user_change_settings:
     pattern:  /user/changeSettings/
     defaults: { _controller: IntranetMainBundle:UserProfile:changeSettings }

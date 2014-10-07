@@ -1708,6 +1708,9 @@ textarea.form-control {
 	margin-bottom: 10px;
 	vertical-align: middle;
 }
+.large-font {
+	font-size: 25px !important;
+}
 
 .radio label,.checkbox label {
 	display: inline;
