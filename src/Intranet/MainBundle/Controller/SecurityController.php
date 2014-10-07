@@ -43,17 +43,10 @@ class SecurityController extends Controller
     	$country = $accessFilter->getCountryNameByIp($clientIp);
     	$hasAccess = $accessFilter->hasAccess($clientIp);
     	
-    	$register_error = $session->get('register_error');
-    	$session->remove('register_error');
-    	
-    	$register_user = $session->get('register_user');
-    	$session->remove('register_user');
-    	
-    	$parameters = array('register_error' => $register_error,
-    				  'register_user' => $register_user,
+    	$parameters = array(
     				  'country' => $country,
     				  'hasAccess' => $hasAccess);
-    	
+    	  	
     	return $this->render("IntranetMainBundle:Security:register.html.twig",
     			$parameters);
     }

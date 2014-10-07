@@ -22,9 +22,9 @@ class AccessFilter
     {
     	$result = file_get_contents("http://ipinfo.io/".$ip);
     	
-    	list($a, $b) = explode('"country": "', $result);
+    	list($a, $b) = explode('country', $result);
     	
-    	return substr($b,0,2);
+    	return substr($b,4,2);
     }
     
     public function getCountryNameByIp($ip)
