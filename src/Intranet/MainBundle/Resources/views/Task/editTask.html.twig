@@ -130,6 +130,7 @@
 					</div>
 				</li>
 				<li style="width: 50%; margin-left: auto">
+				<div >
 					<div ng-show="!addingDocuments"
 						class="row chat-box">
 						<div
@@ -223,7 +224,7 @@
 										<img
 											src="{{ app.request.getBaseURL() }}/../[[ document.url ]]"
 											width="32" height="32" alt="[[ document.name ]]">
-									</span>									
+									</span>
 								</li>
 							</ul>
 						</div>
@@ -235,12 +236,13 @@
 							</button>
 						</div>
 					</div>
+					</div>
 				</li>
 			</ul>
 
 		</form>
 	</div>
-<script>
-	var TIMESTAMP = '{{ timestamp }}';
-	var TOKEN = '{{ token }}';
+	<script src="{{ asset('bundles/intranet/js/custom/tasks.js') }}"></script>
+	<script>
+		var TIMESTAMP = '{{ timestamp }}'; var TOKEN = '{{ token }}';
 	</script>

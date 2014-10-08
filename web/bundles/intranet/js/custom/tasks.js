@@ -568,11 +568,12 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 		if ($scope.addingDocuments == false)
 		{
 			getDocuments();
+			debugger
 		}else
 		{
 			insertDocumentsLinks(_.filter($scope.documents, function(d){return d.checked;}));
 		}
-		
+		//debugger
 		$scope.addingDocuments = !$scope.addingDocuments;
 	}
 }]);
