@@ -4,11 +4,11 @@ parameters:
     database_host: localhost
     database_port: 3306
     database_name: zectranet_com
-    database_user: zectranet_com
-    database_password: 123456
+    database_user: root
+    database_password: 1234
     mailer_transport: smtp
     mailer_host: mailout.one.com
-    mailer_user: support@zectranet.com
-    mailer_password: ~
+    mailer_user: sanuha740@gmail.com
+    mailer_password: 506529504
     locale: en
     secret: ThisTokenIsNotSoSecretChangeIt

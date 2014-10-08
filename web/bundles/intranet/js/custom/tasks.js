@@ -70,6 +70,7 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 				delete groupedList[task.id];
 			}
 		});
+		topList = [];
 		for (key in groupedList)
 			topList = topList.concat(groupedList[key]);
 		return topList;
@@ -320,8 +321,8 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 	$scope.addTask = function(event)
 	{
 		if ($scope.task.name != undefined && $scope.task.description != undefined){
-						event.preventDefault();
-					}			
+			event.preventDefault();
+		}
 		
 		$scope.task.estimated = parseInt($scope.task.esth)*60 + parseInt($scope.task.estm);
 		
@@ -569,12 +570,11 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 		if ($scope.addingDocuments == false)
 		{
 			getDocuments();
-			debugger
 		}else
 		{
 			insertDocumentsLinks(_.filter($scope.documents, function(d){return d.checked;}));
 		}
-		//debugger
+		
 		$scope.addingDocuments = !$scope.addingDocuments;
 	}
 }]);

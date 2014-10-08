@@ -1,0 +1,127 @@
+{% extends 'IntranetMainBundle::layout.html.twig' %}
+
+{% block title %}Register area{% endblock %}
+
+{% block libraries %}
+{% endblock %}
+{% block styles %}
+	{{ parent() }}
+  	<!-- Loading Stylesheets -->    
+  	<link href="{{ asset('bundles/intranet/css/login.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block body %}
+<div class="list-group side-menu ">
+	<a class="list-group-item" href="{{ url('intranet_login') }}">Login</a>
+	<a class="list-group-item" href="#forgot-password">Forgot Password?</a>
+</div>
+
+<section id="register" ng-app="Intranet" ng-controller="RegistrationController">
+  
+  <!-- multistep form -->
+	<div id="msform">
+	<!-- progressbar -->
+	<ul id="progressbar">
+		<li class="active">Hire/Work</li>
+		<li>Your details</li>
+    <li>Congratulations</li>
+	</ul>
+	<!-- fieldsets -->
+	<fieldset>
+		 <h2 class="fs-title">Please choose type of usage</h2>
+		 {% if hasAccess == false %}
+		 <div class="alert alert-danger">
+			Sorry, users from your country can choose only "work" type!
+		 </div>
+		 {% endif %}
+		
+		 <form>
+   				{% if hasAccess == true %}
+   				<div class="radio-inline">
+    				<label for="hire" class="large-font">
+    					<input type="radio" ng-model="regData.typeOfUsage" name="opt1" id="hire" value="hire"/>
+    					Hire
+    				</label>
+ 				</div>
+ 				{% endif %}
+ 				<div class="radio-inline">
+ 					<label for="work" class="large-font">
+ 						<input type="radio" ng-model="regData.typeOfUsage" name="opt1" id="work" value="work"/>
+ 						Work
+ 					</label>
+				</div>
+		</form>
+
+	     <label>
+        	Your country: {{ country }}
+      	 </label>
+		 <input type="button" name="Next" class="action-button" value="Next" ng-click="next($event)"/>
+	</fieldset>
+	<fieldset>
+		<h2 class="fs-title">Please enter registration data</h2>
+		<div id="errorBox" class="alert alert-danger" style="display: none;">
+			<div ng-bind-html="errorPasswordMessage"></div>
+			<div ng-bind-html="errorEmptyMessage"></div>
+			<div ng-bind-html="errorEmailMessage"></div>
+			<div ng-bind-html="errorUsernameMessage"></div>
+		</div>
+		<div class="form-group">
+        	<input type="text" ng-model="regData.name" placeholder="Name" id="name" required>
+      	</div>
+	    <div class="form-group">
+	        <input type="text" ng-model="regData.surname" placeholder="Surname" id="surname" required>
+	    </div>
+        <div class="form-group">
+            <input type="text" ng-blur="checkEmail()" ng-model="regData.email" placeholder="Email" id="email" required>
+        </div>
+        <div class="form-group">
+          <input type="text" ng-blur="checkUsername()" ng-model="regData.username" placeholder="Username" id="username" required>
+        </div>
+        <div class="form-group">
+          <input type="password" ng-model="regData.password" placeholder="Password" id="password" required>
+        </div>
+        <div class="form-group">
+          <input type="password" ng-model="regData.password2" placeholder="Repeat Password" id="password2" required>
+        </div>
+        <select id="role" ng-model="regData.role">
+	       <option value="dev" selected>Developer</option>
+	       <option value="client">Client</option>
+	    </select>
+        
+		<input type="button" name="previous" class="action-button" value="Previous" ng-click="previous($event)"/>
+		<input type="button" name="next" class="action-button" value="Register" ng-click="register($event)"/>
+	</fieldset>
+	<fieldset>
+		<h2 class="fs-title">Congratulations!</h2>
+		<div class="resumo">
+		Registration is successful. Welcome email was sent.
+		</div>
+		<input type="button" style="width: 300px;" class="action-button" value="Create your first office" ng-click="redirectAction()"/>
+	</fieldset>
+</div>
+</section>
+{% endblock %}
+{% block javascripts %}
+	{{ parent() }}
+<!-- Angular and Underscore  -->
+<script src="{{ asset('bundles/intranet/js/angular.min.js') }}"></script>
+<script src="{{ asset('bundles/intranet/js/angular-sanitize.min.js') }}"></script>
+<script src="{{ asset('bundles/intranet/js/ui-bootstrap-tpls-0.10.0.min.js') }}"></script>
+<script src="{{ asset('bundles/intranet/js/underscore-min.js') }}"></script>
+<script src="{{ asset('bundles/intranet/js/custom/angular-core.js') }}"></script>
+	
+	
+<!-- RECAPTCHA -->
+<script type="text/javascript" src="http://www.google.com/recaptcha/api/js/recaptcha_ajax.js"></script>
+
+<!-- jQuery easing plugin -->
+<script src="http://thecodeplayer.com/uploads/js/jquery.easing.min.js" type="text/javascript"></script>
+<script src="{{ asset('bundles/intranet/js/custom/registration.js') }}"></script>
+<script>
+var JSON_URLS = {
+		registrationAction : "{{ url('intranet_register_action') }}",
+		checkUsername: "{{ url('intranet_user_check_username') }}",
+		checkEmail: "{{ url('intranet_user_check_email') }}",
+}
+</script>
+{% endblock %}

@@ -120,6 +120,16 @@ class Role implements RoleInterface
     	return $em->getRepository("IntranetMainBundle:Role")->find(2);
     }
     
+    public static function getDevRole($em)
+    {
+    	return $em->getRepository("IntranetMainBundle:Role")->find(3);
+    }
+    
+    public static function getClientRole($em)
+    {
+    	return $em->getRepository("IntranetMainBundle:Role")->find(4);
+    }
+    
     public static function getAdminRole($em)
     {
     	return $em->getRepository("IntranetMainBundle:Role")->find(1);

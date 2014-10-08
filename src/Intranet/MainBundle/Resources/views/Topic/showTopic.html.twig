@@ -108,7 +108,7 @@
 </div>
 {% endblock %}
 {% block content %}
-{% if ((topic.status == 'opened') or (topic.status == 'closed' and topic.getUserid() != 0 and (is_granted('ROLE_ADMIN') or topic.getUserid() == app.user.getId()))) %}
+{# {% if ((topic.status == 'opened') or (topic.status == 'closed' and topic.getUserid() != 0 and (is_granted('ROLE_ADMIN') or topic.getUserid() == app.user.getId()))) %} #}
 <div class="row">
 	<div class="col-md-12">
 <div class="row chat-box" ng-controller="ChatController">
@@ -190,6 +190,7 @@
   												<p style="white-space: pre-line;" ng-bind-html="post.message"></p>
   											</div>
   										</div>
+  										{% if topic.status != 'closed' %}
   										<div class="input-group">
   											<span class="input-group-btn">
   												<button class="btn btn-success" ng-click="addDocuments()"><i class="fa fa-file"></i></button>
@@ -200,6 +201,7 @@
   											</span>
 
   										</div><!-- /input-group -->
+  										{% endif %}
   									</div>
   								</div>
   							</div>
@@ -350,10 +352,12 @@
  </div>
  </div>
  </div>
- {% elseif topic.status == 'closed' %}
+{# {% elseif topic.status == 'closed' %} #}
+ <!--
  <h1>Sorry, topic is closed!</h1> 
- <h3>Please contact administrator or owner ({{ topic.user.name ~ ' ' ~ topic.user.surname }}) to unlock this topic.</h3>
- {% endif %}
+ <h3>Please contact administrator or owner ({{ topic.user.name ~ ' ' ~ topic.user.surname }}) to unlock this topic.</h3> 
+  -->
+{# {% endif %} #}
 {% endblock %}
 {% block javascripts %}
 	{{ parent() }}
