@@ -55,7 +55,6 @@ class DocumentController extends Controller
     	$userid = $request->query->get('userid');
     	
     	$documents = Document::getAllDocuments($em, $userid);
-    	
     	$response = new Response(json_encode(array("result" => $documents)));
     	$response->headers->set('Content-Type', 'application/json');
     		
