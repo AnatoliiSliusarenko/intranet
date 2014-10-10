@@ -53,9 +53,9 @@ class Notifier
     	$this->em->persist($notification);
     	$this->em->flush();
     	$user_settings = $user->getUserSettings();
-    	//var_dump($user_settings->getDisableAllOnEmail());
+    	//var_dump(array("777" => $user_settings->getDisableAllOnEmail()));
     	//die;
-    	if(!$user_settings->getDisableAllOnEmail()){
+    	if($user_settings->getDisableAllOnEmail() == false ){
     		$this->sendNotificationEmail($user, $message, $type, $destinationid);
     	}
     }
