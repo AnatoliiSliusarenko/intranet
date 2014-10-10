@@ -37,6 +37,20 @@ class UserProfileController extends Controller
     	else
     		$settings->setShowHiddenTopics(true);
     	
+    	$disableAllOnEmail = $request->request->get('disableAllOnEmail');
+    	 
+    	if ($disableAllOnEmail == null)
+    		$settings->setDisableAllOnEmail(false);
+    	else
+    		$settings->setDisableAllOnEmail(true);
+    	
+    	$disableAllOnSite = $request->request->get('disableAllOnSite');
+    	
+    	if ($disableAllOnSite == null)
+    		$settings->setDisableAllOnSite(false);
+    	else
+    		$settings->setDisableAllOnSite(true);
+    	
     	$em->persist($settings);
     	$em->flush();
     	

@@ -223,3 +223,7 @@ intranet_document_get:
 intranet_document_dialog_add:
   pattern: /document/dialog/add/
   defaults: { _controller: IntranetMainBundle:Document:addDialog }
+  
+intranet_get_user_settings:
+  pattern: /getusersettings/
+  defaults: { _controller: IntranetMainBundle:Index:getUserSettings }
