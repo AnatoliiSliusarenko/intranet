@@ -24,6 +24,14 @@ security:
             
         register_action:
             pattern:  ^/register_action/
+            security: false       
+        
+        check_username:
+            pattern:  ^/user/check/username/
+            security: false
+            
+        check_email:
+            pattern:  ^/user/check/email/
             security: false
         
         login:

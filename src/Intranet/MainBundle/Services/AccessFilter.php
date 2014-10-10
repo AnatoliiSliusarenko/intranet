@@ -20,11 +20,11 @@ class AccessFilter
     
     private function getCountrySymbolByIp($ip)
     {
-    	$result = file_get_contents("http://who.is/whois-ip/ip-address/".$ip);
+    	$result = file_get_contents("http://ipinfo.io/".$ip."/json");
     	
-    	list($a, $b) = explode('country:        ', $result);
-    	 
-    	return strtoupper(substr($b,0,2));
+    	list($a, $b) = explode('country', $result);
+    	
+    	return substr($b,4,2);
     }
     
     public function getCountryNameByIp($ip)

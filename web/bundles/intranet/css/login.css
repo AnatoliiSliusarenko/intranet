@@ -167,14 +167,13 @@ section:nth-child(2n) {
 }
 #msform select{
   color:#808080;
-  padding: 15px;
+  padding: 10px;
 	border: 1px solid #ccc;
 	border-radius: 3px;
-	margin-bottom: 10px;
 	width: 100%;
 	box-sizing: border-box;
 	font-family: montserrat;
-  font-size: 13px;
+  font-size: 16px;
 }
 
 
@@ -182,16 +181,21 @@ section:nth-child(2n) {
   color:#2C3E50;
 }
 
+input[type='radio'] {
+	transform: scale(1.5);
+	margin-top: 13px;
+	width: 50px !important;
+}
+
 #msform input, #msform textarea {
-	padding: 15px;
+	padding: 10px;
 	border: 1px solid #ccc;
 	border-radius: 3px;
-	margin-bottom: 10px;
 	width: 100%;
 	box-sizing: border-box;
 	font-family: montserrat;
 	color: #2C3E50;
-	font-size: 13px;
+	font-size: 16px;
 }
 
 /*buttons*/
@@ -226,8 +230,6 @@ section:nth-child(2n) {
 #progressbar {
 	margin-bottom: 30px;
 	overflow: hidden;
-	/*CSS counters to number the steps*/
-	counter-reset: step;
 }
 #progressbar li {
 	list-style-type: none;
@@ -239,8 +241,7 @@ section:nth-child(2n) {
 	position: relative;
 }
 #progressbar li:before {
-	content: counter(step);
-	counter-increment: step;
+	content: "\00a0";
 	width: 20px;
 	line-height: 20px;
 	display: block;

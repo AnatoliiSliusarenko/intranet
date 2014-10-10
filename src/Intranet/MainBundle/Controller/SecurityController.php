@@ -37,23 +37,16 @@ class SecurityController extends Controller
     	$accessFilter = $this->get('intranet.accessFilter');
     	$clientIp = $request->getClientIp();
     	
-    	//india = 58.146.96.0
-    	//ukraine = 92.113.48.68
+    	//$clientIp = '58.146.96.0'; //india 
+    	//$clientIp = '92.113.48.68'; //ukraine 
     	
     	$country = $accessFilter->getCountryNameByIp($clientIp);
     	$hasAccess = $accessFilter->hasAccess($clientIp);
     	
-    	$register_error = $session->get('register_error');
-    	$session->remove('register_error');
-    	
-    	$register_user = $session->get('register_user');
-    	$session->remove('register_user');
-    	
-    	$parameters = array('register_error' => $register_error,
-    				  'register_user' => $register_user,
+    	$parameters = array(
     				  'country' => $country,
     				  'hasAccess' => $hasAccess);
-    	
+    	  	
     	return $this->render("IntranetMainBundle:Security:register.html.twig",
     			$parameters);
     }

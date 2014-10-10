@@ -585,6 +585,49 @@ class User implements UserInterface, \Serializable
     	$request->getSession()->set('_security_' . $firewall_name, serialize($token));
     }
     
+    public static function addUser($em, $encoderFactory, $parameters)
+    {
+    	$user = new User();
+    	$encoder = $encoderFactory->getEncoder($user);
+    	$user->setName($parameters['name']);
+    	$user->setSurname($parameters['surname']);
+    	$user->setEmail($parameters['email']);
+    	$user->setUsername($parameters['username']);
+    	$user->setPassword($encoder->encodePassword($parameters['password'], $user->getSalt()));
+    	$user->setRegistered(new \DateTime());
+    	$user->setLastActive(new \DateTime());
+    	$user->setAvatar('eleven.png');
+    	$user->addRole(Role::getUserRole($em));
+    	
+    	if ($parameters['role'] == 'dev')
+    		$user->addRole(Role::getDevRole($em));
+    	else 
+    		$user->addRole(Role::getClientRole($em));
+    	
+    	//add to public office
+    	$tree = Office::getOfficeTree($em);
+    	$publicOffice = $tree[0];
+    	 
+    	$user->addOffice($publicOffice);
+    	$publicOffice->addUser($user);
+    	 
+    	$em->persist($publicOffice);
+    	$em->persist($user);
+    	$em->flush();
+    	 
+    	$settings = new UserSettings();
+    	$settings->setUserid($user->getId());
+    	$settings->setUser($user);
+    	$settings->setShowHiddenTopics(true);
+    	$settings->setDisableAllOnEmail(false);
+    	$settings->setDisableAllOnSite(false);
+    	 
+    	$em->persist($settings);
+    	$em->flush();
+    	
+    	return $user;
+    }
+    
     public static function getTopicMembers($em, $topic_id, $inArray=false)
     {
     	$query = $em->getRepository("IntranetMainBundle:User")

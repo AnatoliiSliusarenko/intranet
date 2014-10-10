@@ -298,7 +298,6 @@ class Document
     	}
     	 
     	$documents = $qb->getQuery()->getResult();
-    	 
     	return array_map(function($document){
     		return $document->getInArray();
     	}, $documents);

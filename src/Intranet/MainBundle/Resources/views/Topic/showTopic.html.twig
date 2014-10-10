@@ -317,7 +317,7 @@
 	           			<tr ng-show="task.dropped == true" class="success" ng-repeat="subtask in task.subtasks">
 				            <td class="visible-lg">&nbsp;&nbsp;[[i+1]].[[$index+1]]</td>
 				            <td  class="visible-lg">[[subtask.id]]</td>
-				            <td class="visible-lg"><div class="tooltips"><a ng-click="editTask(task)" data-original-title="[[subtask.description]]" data-placement="top" href="#">[[ subtask.name ]]</a></div></td>
+				            <td class="visible-lg"><div class="tooltips"><a ng-click="editTask(subtask)" data-original-title="[[subtask.description]]" data-placement="top" href="#">[[ subtask.name ]]</a></div></td>
 				            <td class="visible-lg">
 				            	<label class="label" style="background-color: [[subtask.status.color]];">[[subtask.status.label]]</label>
 				            </td>

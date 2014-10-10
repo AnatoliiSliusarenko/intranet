@@ -70,7 +70,7 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 				delete groupedList[task.id];
 			}
 		});
-		topList = [];
+		//topList = [];
 		for (key in groupedList)
 			topList = topList.concat(groupedList[key]);
 		return topList;
