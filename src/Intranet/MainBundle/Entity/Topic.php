@@ -591,5 +591,6 @@ class Topic
     		"tasks" => $tasks,
     		"windows" => $windows,
     		'message' => $param);
+    	return $parameters;
     }
 }
