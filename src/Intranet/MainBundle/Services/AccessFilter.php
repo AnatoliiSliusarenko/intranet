@@ -18,7 +18,7 @@ class AccessFilter
     	$this->em = $em;
     }
     
-    private function getCountrySymbolByIp($ip)
+    public function getCountrySymbolByIp($ip)
     {
     	$result = file_get_contents("http://ipinfo.io/".$ip."/json");
     	

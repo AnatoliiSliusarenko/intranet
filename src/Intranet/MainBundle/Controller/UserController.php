@@ -25,7 +25,8 @@ class UserController extends Controller
     		'email' => $data->email,
     		'username' => $data->username,
     		'password' => $data->password,
-    		'role' => $data->role
+    		'role' => $data->role,
+    		'country' => $data->country
     	);
     	
     	$em = $this->getDoctrine()->getManager();

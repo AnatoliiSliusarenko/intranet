@@ -81,6 +81,13 @@ class User implements UserInterface, \Serializable
 	private $active;
 	
 	/**
+	 * @var string
+	 *
+	 * @ORM\Column(name="country", type="string", length=2)
+	 */
+	private $country;
+	
+	/**
 	 * @ORM\ManyToMany(targetEntity="Role", inversedBy="users")
 	 * @var array
 	 */
@@ -596,6 +603,7 @@ class User implements UserInterface, \Serializable
     	$user->setPassword($encoder->encodePassword($parameters['password'], $user->getSalt()));
     	$user->setRegistered(new \DateTime());
     	$user->setLastActive(new \DateTime());
+    	$user->setCountry($parameters['country']);
     	$user->setAvatar('eleven.png');
     	$user->addRole(Role::getUserRole($em));
     	
@@ -1021,5 +1029,28 @@ class User implements UserInterface, \Serializable
     public function getUserSettings()
     {
         return $this->userSettings;
+    }
+
+    /**
+     * Set country
+     *
+     * @param string $country
+     * @return User
+     */
+    public function setCountry($country)
+    {
+        $this->country = $country;
+
+        return $this;
+    }
+
+    /**
+     * Get country
+     *
+     * @return string 
+     */
+    public function getCountry()
+    {
+        return $this->country;
     }
 }

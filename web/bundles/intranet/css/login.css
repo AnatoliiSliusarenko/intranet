@@ -121,7 +121,7 @@ section:nth-child(2n) {
 
 /*register form styles*/
 #msform {
-	width: 600px;
+	width: 700px;
 	margin: 50px auto;
 	text-align: center;
 	position: relative;
@@ -258,7 +258,7 @@ input[type='radio'] {
 	height: 2px;
 	background: white;
 	position: absolute;
-	left: -44%;
+	left: -45%;
 	top: 9px;
 	z-index: 1; /*put it behind the numbers*/
 }
@@ -286,5 +286,35 @@ input[type='radio'] {
 	font-size: 13px;
 }
 
+#inline-form input{
+	width: 48%;
+	margin-bottom: 15px;
+}
+
+#inline-form :nth-child(1){
+	float: left;
+}
+#inline-form :nth-child(2){
+	float: right;
+}
+
+#inline-form :nth-child(3){
+	float: left;
+	margin-bottom: 10px;
+	margin-top: -15px;
+	margin-left: 50px;
+}
+#inline-form :nth-child(4){
+	float: right;
+	margin-bottom: 10px;
+	margin-top: -15px;
+	margin-right: 50px;
+}
+
+
+
+div.warning {
+	color: #FF0000;
+}
 
 
