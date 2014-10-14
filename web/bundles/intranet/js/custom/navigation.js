@@ -5,6 +5,7 @@ Intranet.controller('NavigationController', ['$scope', '$http', function($scope,
 	notificationsGetUrl = JSON_URLS.notificationsGet;
 	officeShowUrlBase = JSON_URLS.officeShow;
 	topicShowUrlBase = JSON_URLS.topicShow;
+	disableOnSite = "/getusersettings/";
 	
 	$scope.notifications = [];
 	$scope.notifyHandler = null;
@@ -33,15 +34,38 @@ Intranet.controller('NavigationController', ['$scope', '$http', function($scope,
 			url: notificationsGetUrl
 			  })
 		.success(function(response){
-			if (response.result.length > 0)
-			{
-				if ($scope.notifyHandler == null) StartNotify();
-				$scope.notifications = prepareNotifications(response.result);
-			}else
-			{
-				StopNotify();
-				$scope.notifications = [];
-			}
+			
+			$http({
+				method: "GET", 
+				url: disableOnSite
+				  })
+			.success(function(response2){
+				//console.log("disable_message_on_site->"+response2.result.disable_message_on_site);
+				if(!response2.result.disable_message_on_site){
+					if (response.result.length > 0)
+					{
+						if ($scope.notifyHandler == null) StartNotify();
+						$scope.notifications = prepareNotifications(response.result);
+					}else
+					{
+						StopNotify();
+						$scope.notifications = [];
+					}
+				}
+			})
+			
+			
+		})
+	}
+	
+	function getDisableOnSite(){
+		$http({
+			method: "GET", 
+			url: disableOnSite
+			  })
+		.success(function(response){
+			console.log("disable_message_on_site->"+response.result.disable_message_on_site);
+			return response.result.disable_message_on_site;
 		})
 	}
 	
@@ -73,6 +97,7 @@ Intranet.controller('NavigationController', ['$scope', '$http', function($scope,
 			  });
 		
 		return notifications;
+		
 	}
 	
 	setInterval(getNotifications, 2000);

@@ -627,6 +627,8 @@ class User implements UserInterface, \Serializable
     	$settings->setUserid($user->getId());
     	$settings->setUser($user);
     	$settings->setShowHiddenTopics(true);
+    	$settings->setDisableAllOnEmail(false);
+    	$settings->setDisableAllOnSite(false);
     	 
     	$em->persist($settings);
     	$em->flush();
