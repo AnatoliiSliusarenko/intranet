@@ -53,10 +53,61 @@ class Notifier
     	$this->em->persist($notification);
     	$this->em->flush();
     	$user_settings = $user->getUserSettings();
-    	//var_dump(array("777" => $user_settings->getDisableAllOnEmail()));
-    	//die;
+    	$user_settings_notifications = $user->getUserSettingsNotifications();
+    	
+    	switch ($type){
+    		case "message_office":
+    			$method = $user_settings_notifications->getMsgEmailMessageOffice();
+    			break;
+    		case "message_topic" :
+    			$method = $user_settings_notifications->getMsgEmailMessageTopic();
+    			break;
+    		case "membership_own" :
+    			$method = $user_settings_notifications->getMsgEmailMembershipOwn();
+    			break;
+    		case "membership_own_out" :
+    			$method = $user_settings_notifications->getMsgEmailMembershipOwnOut();
+    			break;
+    		case "membership_user" :
+    			$method = $user_settings_notifications->getMsgEmailMembershipUser();
+    			break;
+    		case "membership_user_out" :
+    			$method = $user_settings_notifications->getMsgEmailMembershipUserOut();
+    			break;
+    		case "membership_out_own" :
+    			$method = $user_settings_notifications->getMsgEmailMembershipOwnOut();
+    			break;
+    		case "membership_out_user" :
+    			$method = $user_settings_notifications->getMsgEmailMembershipUserOut();
+    			break;
+    		case "removed_office" :
+    			$method = $user_settings_notifications->getMsgEmailRemovedOffice();
+    			break;
+    		case "removed_topic" :
+    			$method = $user_settings_notifications->getMsgEmailRemovedTopic();
+    			break;
+    		case "topic_added" :
+    			$method = $user_settings_notifications->getMsgEmailTopicAdd();
+    			break;
+    		case "task_assigned" :
+    			$method = $user_settings_notifications->getMsgEmailTaskAssigned();
+    			break;
+    		case "task_comment" :
+    			$method = $user_settings_notifications->getMsgEmailTaskComment();
+    			break;
+    		case "private_message" :
+    			$method = "no_method";
+    			break;
+    	}
+    	
     	if($user_settings->getDisableAllOnEmail() == false ){
-    		$this->sendNotificationEmail($user, $message, $type, $destinationid);
+    		if($method != "no_method"){
+    			if($method == true ){
+    				$this->sendNotificationEmail($user, $message, $type, $destinationid);
+    			}
+    		}else {
+    			$this->sendNotificationEmail($user, $message, $type, $destinationid);
+    		}
     	}
     }
     

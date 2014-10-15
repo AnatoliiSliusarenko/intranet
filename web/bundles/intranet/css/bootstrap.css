@@ -6700,3 +6700,10 @@ user-avatar{
 	margin-left: 50%;
 	border-radius: 40px;
 }
+#settings_notifications_table{
+	margin: 10px;
+}
+#settings_notifications_table td{
+	padding: 5px;
+	text-align: center;
+}

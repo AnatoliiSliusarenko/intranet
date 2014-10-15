@@ -245,7 +245,8 @@
 var JSON_URLS = {
 		notificationsGet: "{{ path('intranet_notifications_get') }}",
 		officeShow: "{{ url('intranet_show_office', {office_id: 0}) }}",
-		topicShow: "{{ url('intranet_show_topic', {topic_id: 0}) }}"
+		topicShow: "{{ url('intranet_show_topic', {topic_id: 0}) }}",
+		userSettings: "{{ path('intranet_get_user_settings') }}"
 };
 </script>
 {% endblock %}

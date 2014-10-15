@@ -5,7 +5,7 @@ Intranet.controller('NavigationController', ['$scope', '$http', function($scope,
 	notificationsGetUrl = JSON_URLS.notificationsGet;
 	officeShowUrlBase = JSON_URLS.officeShow;
 	topicShowUrlBase = JSON_URLS.topicShow;
-	disableOnSite = "/getusersettings/";
+	userSettingsUrl = JSON_URLS.userSettings;
 	
 	$scope.notifications = [];
 	$scope.notifyHandler = null;
@@ -34,38 +34,76 @@ Intranet.controller('NavigationController', ['$scope', '$http', function($scope,
 			url: notificationsGetUrl
 			  })
 		.success(function(response){
-			
 			$http({
 				method: "GET", 
-				url: disableOnSite
+				url: userSettingsUrl
 				  })
 			.success(function(response2){
-				//console.log("disable_message_on_site->"+response2.result.disable_message_on_site);
-				if(!response2.result.disable_message_on_site){
+				//console.log("disable_message_on_site->"+response2.result.user_settings.disable_message_on_site);
+				//console.log("msg_site_message_office->"+response2.result.user_settings_notifications.msg_site_message_office);
+				if(!response2.result.user_settings.disable_message_on_site){
+					//---main
 					if (response.result.length > 0)
-					{
-						if ($scope.notifyHandler == null) StartNotify();
-						$scope.notifications = prepareNotifications(response.result);
+					{	
+						var notification_to_show = false;
+						for(i = 0; i < response.result.length; i++){
+							switch (response.result[i].type) {
+							case 'message_office' :
+								notification_to_show = response2.result.user_settings_notifications.msg_site_message_office;
+								break;
+							case 'message_topic' :
+								notification_to_show = response2.result.user_settings_notifications.msg_site_message_topic;
+								break;
+							case 'membership_own' :
+								notification_to_show = response2.result.user_settings_notifications.msg_site_membership_own;
+								break;
+							case 'membership_user' :
+								notification_to_show = response2.result.user_settings_notifications.msg_site_membership_user;
+								break;
+							case 'removed_office' :
+								notification_to_show = response2.result.user_settings_notifications.msg_site_removed_office;
+								break;
+							case 'removed_topic' :
+								notification_to_show = response2.result.user_settings_notifications.msg_site_removed_topic;
+								break;
+							case 'topic_added' :
+								notification_to_show = response2.result.user_settings_notifications.msg_site_topic_added;
+								break;
+							case 'membership_own_out' :
+								notification_to_show = response2.result.user_settings_notifications.msg_site_membership_own_out;
+								break;
+							case 'membership_user_out' :
+								notification_to_show = response2.result.user_settings_notifications.msg_site_membership_user_out;
+								break;
+							case 'task_assigned' :
+								notification_to_show = response2.result.user_settings_notifications.msg_site_task_assigned;
+								break;
+							case 'task_comment' :
+								notification_to_show = response2.result.user_settings_notifications.msg_site_task_comment;
+								break;
+							}
+							//console.log("notification_to_show["+i+"] -> "+notification_to_show);
+							if(notification_to_show == false){
+								response.result.splice(i,1);
+								i--;
+							}
+						}
+						//console.log("response_result -> "+response.result);
+						if(response.result.length > 0){
+							if ($scope.notifyHandler == null) StartNotify();
+							$scope.notifications = prepareNotifications(response.result);
+						}
+						
 					}else
 					{
 						StopNotify();
 						$scope.notifications = [];
 					}
+					//---end main
 				}
 			})
 			
 			
-		})
-	}
-	
-	function getDisableOnSite(){
-		$http({
-			method: "GET", 
-			url: disableOnSite
-			  })
-		.success(function(response){
-			console.log("disable_message_on_site->"+response.result.disable_message_on_site);
-			return response.result.disable_message_on_site;
 		})
 	}
 	

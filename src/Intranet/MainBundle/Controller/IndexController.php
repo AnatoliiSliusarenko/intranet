@@ -14,7 +14,13 @@ class IndexController extends Controller
     
     public function getUserSettingsAction(){
     	$user_settings = $this->getUser()->getUserSettings();
-    	$response = new Response(json_encode(array("result" => $user_settings->getInArray())));
+    	$user_settings_notifications = $this->getUser()->getUserSettingsnotifications();
+    	$response = new Response(json_encode(array("result" => 
+    			array(
+    					"user_settings" => $user_settings->getInArray(),
+    					"user_settings_notifications" => $user_settings_notifications->getInArray()
+    			)
+    	)));
     	$response->headers->set('Content-Type', 'application/json');
     	return $response;
     }

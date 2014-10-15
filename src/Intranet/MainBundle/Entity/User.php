@@ -157,6 +157,11 @@ class User implements UserInterface, \Serializable
 	 * @ORM\OneToOne(targetEntity="UserSettings", mappedBy="user")
 	 */
 	private $userSettings;
+
+	/**
+	 * @ORM\OneToOne(targetEntity="UserSettingsNotifications", mappedBy="user")
+	 */
+	private $userSettingsNotifications;
 	
 	public function __construct()
 	{
@@ -1032,7 +1037,30 @@ class User implements UserInterface, \Serializable
     {
         return $this->userSettings;
     }
-
+	
+    /**
+     * Set userSettingsNotifications
+     *
+     * @param \Intranet\MainBundle\Entity\UserSettingsNotifications $userSettingsNotifications
+     * @return User
+     */
+    public function setUserSettingsNotifications(\Intranet\MainBundle\Entity\UserSettingsNotifications $userSettingsNotifications = null)
+    {
+    	$this->userSettingsNotifications = $userSettingsNotifications;
+    
+    	return $this;
+    }
+    
+    /**
+     * Get userSettingsNotifications
+     *
+     * @return \Intranet\MainBundle\Entity\UserSettingsNotifications
+     */
+    public function getUserSettingsNotifications()
+    {
+    	return $this->userSettingsNotifications;
+    }
+    
     /**
      * Set country
      *
