@@ -1,0 +1,5 @@
+In this folder please place files with changes needed for database!
+
+Please save filename with template: "dd-mm-yyyy_<username>.sql"
+
+In this file will be placed SQL query code for changes.

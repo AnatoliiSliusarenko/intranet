@@ -91,9 +91,37 @@
 							     						<input name="showHiddenTopics" type="checkbox" {% if (app.user.userSettings.getShowHiddenTopics()) %}{{'checked'}}{% endif %}>
 							     						Show Hidden Topics
 							   						</label>
+							   						
 						 						</div>
 											</div>
 										</div>
+										
+										<div class="form-group">
+						  					<label for="inputEmail1" class="col-lg-2 col-md-3 control-label">Notifications on email</label>
+						  					<div class="col-lg-10 col-md-9">
+						   						<div class="checkbox">
+							    					<label>
+							     						<input name="disableAllOnEmail" type="checkbox" {% if (app.user.userSettings.getDisableAllOnEmail()) %}{{'checked'}}{% endif %}>
+							     						Disable all
+							   						</label>
+							   						
+						 						</div>
+											</div>
+										</div>
+										
+										<div class="form-group">
+						  					<label for="inputEmail1" class="col-lg-2 col-md-3 control-label">Notifications on site</label>
+						  					<div class="col-lg-10 col-md-9">
+						   						<div class="checkbox">
+							    					<label>
+							     						<input name="disableAllOnSite" type="checkbox" {% if (app.user.userSettings.getDisableAllOnSite()) %}{{'checked'}}{% endif %}>
+							     						Disable all
+							   						</label>
+							   						
+						 						</div>
+											</div>
+										</div>
+										
 										<input type="submit" class="btn btn-success btn-block" value="Save Settings"/>
               						</form>
               					</div>

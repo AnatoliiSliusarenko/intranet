@@ -37,6 +37,18 @@ class UserSettings
     private $showHiddenTopics;
     
     /**
+     * @var boolean
+     * @ORM\Column(name="disable_message_on_email", type="boolean")
+     */
+    private $disableAllOnEmail;
+    
+    /**
+     * @var boolean
+     * @ORM\Column(name="disable_message_on_site", type="boolean")
+     */
+    private $disableAllOnSite;
+    
+    /**
      * @ORM\OneToOne(targetEntity="User", inversedBy="userSettings")
      * @ORM\JoinColumn(name="userid", referencedColumnName="id")
      * @var User
@@ -99,7 +111,53 @@ class UserSettings
     {
         return $this->showHiddenTopics;
     }
-
+	
+    /**
+     * Set disableAllOnEmail
+     *
+     * @param boolean $disableAllOnEmail
+     * @return UserSettings
+     */
+    public function setDisableAllOnEmail($disableAllOnEmail)
+    {
+    	$this->disableAllOnEmail = $disableAllOnEmail;
+    
+    	return $this;
+    }
+    
+    /**
+     * Get disableAllOnEmail
+     *
+     * @return boolean
+     */
+    public function getDisableAllOnEmail()
+    {
+    	return $this->disableAllOnEmail;
+    }
+    
+    /**
+     * Set disableAllOnSite
+     *
+     * @param boolean $disableAllOnSite
+     * @return UserSettings
+     */
+    public function setDisableAllOnSite($disableAllOnSite)
+    {
+    	$this->disableAllOnSite = $disableAllOnSite;
+    
+    	return $this;
+    }
+    
+    /**
+     * Get disableAllOnSite
+     *
+     * @return boolean
+     */
+    public function getDisableAllOnSite()
+    {
+    	return $this->disableAllOnSite;
+    }
+    
     /**
      * Set user
      *
@@ -122,4 +180,21 @@ class UserSettings
     {
         return $this->user;
     }
+    
+    /**
+     * Get inArray
+     *
+     * @return array
+     */
+    public function getInArray()
+    {
+    	return array(
+    			'id' => $this->getId(),
+    			'userid' => $this->getUserid(),
+    			'show_hidden_topics' => $this->getShowHiddenTopics(),
+    			'disable_message_on_site' => $this->getDisableAllOnSite(),
+    			'disable_message_on_email' => $this->getDisableAllOnEmail()
+    	);
+    }
+    
 }

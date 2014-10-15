@@ -7,23 +7,27 @@ Intranet.controller('RegistrationController', ['$scope', '$http', '$modal', func
 	var fieldsetn = 1;
 	
 	$scope.regData = {
-			typeOfUsage: 'work',
 			name: '',
 			surname: '',
 			email: '',
 			username: '',
 			password: '',
 			password2: '',
-			role: 'dev'
+			role: 'dev',
+			country: userCountry
 	};
 	
 	$scope.redirect = '#';
 	
+	$scope.emptyName = false;
+	$scope.emptySurname = false;
+	$scope.emptyEmail = false;
+	$scope.emptyUsername = false;
+	$scope.emptyPassword = false;
+	$scope.emptyPassword2 = false;	
+	
 	$scope.errorPassword = false;
 	$scope.errorPasswordMessage = '';
-	
-	$scope.errorEmpty = false;
-	$scope.errorEmptyMessage = '';
 	
 	$scope.errorEmail = false;
 	$scope.errorEmailMessage = '';
@@ -41,62 +45,73 @@ Intranet.controller('RegistrationController', ['$scope', '$http', '$modal', func
 	
 	function displayErrors()
 	{	
-		var errorBox = $('#errorBox');
-		
-		if (($scope.regData.name == undefined) ||
-			($scope.regData.surname == undefined) ||
-			($scope.regData.email == undefined) ||
-			($scope.regData.username == undefined) ||
-			($scope.regData.password == undefined) ||
-			($scope.regData.password2 == undefined))	
+		if (($scope.regData.name == undefined) || (($scope.regData.name != undefined) && ($scope.regData.name.isEmpty())))
 		{
-			$scope.errorEmpty = true;
-			$scope.errorEmptyMessage = 'Please fill in all fields!';
+			$scope.emptyName = true;
 		}else
-		if (($scope.regData.name.isEmpty()) ||
-		($scope.regData.surname.isEmpty()) ||
-		($scope.regData.email.isEmpty()) ||
-		($scope.regData.username.isEmpty()) ||
-		($scope.regData.password.isEmpty()) ||
-		($scope.regData.password2.isEmpty()))	
-		{
-			$scope.errorEmpty = true;
-			$scope.errorEmptyMessage = 'Please fill in all fields!';
-		}else
-		{
-			$scope.errorEmpty = false;
-			$scope.errorEmptyMessage = '';
-		}
+			$scope.emptyName = false;
 		
-		if ($scope.regData.password !== $scope.regData.password2)
+		if (($scope.regData.surname == undefined) || (($scope.regData.surname != undefined) && ($scope.regData.surname.isEmpty())))
 		{
-			$('input#password2').addClass('warning');
+			$scope.emptySurname = true;
+		}else
+			$scope.emptySurname = false;
+		
+		if (($scope.regData.email == undefined) || (($scope.regData.email != undefined) && ($scope.regData.email.isEmpty())))
+		{
+			$scope.emptyEmail = true;
+		}else
+			$scope.emptyEmail = false;
+		
+		if (($scope.regData.username == undefined) || (($scope.regData.username != undefined) && ($scope.regData.username.isEmpty())))
+		{
+			$scope.emptyUsername = true;
+		}else
+			$scope.emptyUsername = false;
+		
+		if (($scope.regData.password == undefined) || (($scope.regData.password != undefined) && ($scope.regData.password.isEmpty())))
+		{
+			$scope.emptyPassword = true;
+		}else
+			$scope.emptyPassword = false;
+		
+		if (($scope.regData.password2 == undefined) || (($scope.regData.password2 != undefined) && ($scope.regData.password2.isEmpty())))
+		{
+			$scope.emptyPassword2 = true;
+		}else
+			$scope.emptyPassword2 = false;
+		
+		
+		if ((!$scope.emptyPassword && !$scope.emptyPassword2) && ($scope.regData.password !== $scope.regData.password2))
+		{
 			$scope.errorPassword = true;
 			$scope.errorPasswordMessage = 'Please fill in right password!';
 		}else
 		{
-			$('input#password2').removeClass('warning');
 			$scope.errorPassword = false;
 			$scope.errorPasswordMessage = '';
 		}
 		
-		if (($scope.errorEmail) || ($scope.errorUsername) || ($scope.errorEmpty) || ($scope.errorPassword))
+		if (($scope.emptyName) || ($scope.emptySurname) || ($scope.emptyEmail) || ($scope.emptyUsername) || ($scope.emptyPassword) || ($scope.emptyPassword2) || ($scope.errorEmail) || ($scope.errorUsername) || ($scope.errorEmpty) || ($scope.errorPassword))
 		{
-			errorBox.show('slow');
 			$scope.$apply();
 			return true;
 		}
 		else
 		{
-			errorBox.hide('slow');
 			$scope.$apply();
 			return false;
 		}
 	}
 	
 	$scope.checkUsername = function(){
-		if (($scope.regData.username == undefined) || ($scope.regData.username.isEmpty())) return false;
-		
+		if (($scope.regData.username == undefined) || ($scope.regData.username.isEmpty())) 
+		{
+			$scope.errorUsername = false;
+			$scope.errorUsernameMessage = '';
+			return false;
+		}
+			
 		$http({
 				method: "POST", 
 				url: $scope.urlsCheckUsername,
@@ -105,12 +120,10 @@ Intranet.controller('RegistrationController', ['$scope', '$http', '$modal', func
 		.success(function(response){
 			if (response.result)
 			{	
-				$('input#username').removeClass('warning');
 				$scope.errorUsername = false;
 				$scope.errorUsernameMessage = '';
 			}else
 			{
-				$('input#username').addClass('warning');
 				$scope.errorUsername = true;
 				$scope.errorUsernameMessage = 'Username is already exist!';
 			}
@@ -120,14 +133,19 @@ Intranet.controller('RegistrationController', ['$scope', '$http', '$modal', func
 	};
 	
 	$scope.checkEmail = function(){
-		if (($scope.regData.email == undefined) || ($scope.regData.email.isEmpty())) return false;
+		if (($scope.regData.email == undefined) || ($scope.regData.email.isEmpty())) 
+		{
+			$scope.errorEmail = false;
+			$scope.errorEmailMessage = '';
+			return false;
+		}
+			
 		
 		var emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
 		var checkResult = emailReg.test($scope.regData.email);
 		
 		if (!checkResult)
 		{
-			$('input#email').addClass('warning');
 			$scope.errorEmail = true;
 			$scope.errorEmailMessage = 'Please enter right email!';
 			displayErrors();
@@ -142,12 +160,10 @@ Intranet.controller('RegistrationController', ['$scope', '$http', '$modal', func
 		.success(function(response){
 			if (response.result)
 			{
-				$('input#email').removeClass('warning');
 				$scope.errorEmail = false;
 				$scope.errorEmailMessage = '';
 			}else
 			{
-				$('input#email').addClass('warning');
 				$scope.errorEmail = true;
 				$scope.errorEmailMessage = 'Email is already exist!';
 			}

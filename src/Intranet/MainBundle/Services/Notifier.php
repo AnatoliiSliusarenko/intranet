@@ -29,7 +29,8 @@ class Notifier
     			"removed_topic",
     			"topic_added",
     			"task_assigned",
-				"task_comment");
+				"task_comment",
+				"private_message");
 	
     public function __construct($securityContext, $em, $router, $mailer)
     {
@@ -51,8 +52,12 @@ class Notifier
     	$notification->setActivated(new \DateTime());
     	$this->em->persist($notification);
     	$this->em->flush();
-    	 
-    	$this->sendNotificationEmail($user, $message, $type, $destinationid);
+    	$user_settings = $user->getUserSettings();
+    	//var_dump(array("777" => $user_settings->getDisableAllOnEmail()));
+    	//die;
+    	if($user_settings->getDisableAllOnEmail() == false ){
+    		$this->sendNotificationEmail($user, $message, $type, $destinationid);
+    	}
     }
     
     private function sendNotificationEmail($user, $message, $type, $destinationid)
