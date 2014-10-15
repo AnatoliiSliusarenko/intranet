@@ -94,12 +94,12 @@ Intranet.controller('RegistrationController', ['$scope', '$http', '$modal', func
 		
 		if (($scope.emptyName) || ($scope.emptySurname) || ($scope.emptyEmail) || ($scope.emptyUsername) || ($scope.emptyPassword) || ($scope.emptyPassword2) || ($scope.errorEmail) || ($scope.errorUsername) || ($scope.errorEmpty) || ($scope.errorPassword))
 		{
-			$scope.$apply()
+			$scope.$apply();
 			return true;
 		}
 		else
 		{
-			$scope.$apply()
+			$scope.$apply();
 			return false;
 		}
 	}
