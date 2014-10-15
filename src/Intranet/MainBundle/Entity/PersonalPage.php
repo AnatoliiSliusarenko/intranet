@@ -239,7 +239,19 @@ class PersonalPage
     			if($window->getUserid()==$userid)
     				array_push($windows, $window);
     	}
-    	
+    	for($i=0;$i<count($windows);$i++)
+    	{
+    		$tmp=$windows[$i];
+    		$count = 1;
+    		for($j=$i+1;$j<count($windows);$j++)
+    		{
+    			if($windows[$i]->getNamewindow()==$windows[$j]->getNamewindow())
+    			{
+    				$windows[$j]->setNamewindow($windows[$j]->getNamewindow()."	($count)");
+    				$count++;
+    			}
+    		}    		
+    	}
     	$parameters = array (
     			"topics" => $topics,
     			"em" => $em,
@@ -333,8 +345,8 @@ class PersonalPage
     {
     	$arrayWindows = array();
     	$result = array();
+    	$res = array();
     	$records = $em->getRepository('IntranetMainBundle:PersonalPage')->findByUserid($userId);
-    	//$arrayWindows[0] = $records[0];
     	if(count($records) != 0)
     	{
     		$tmp = array_shift($records);
@@ -349,10 +361,17 @@ class PersonalPage
     			if(!$flag)
     				array_push($arrayWindows, $record);
     	}
-    	foreach ($arrayWindows as $value) {
-    		if ($value->getNamewindow() == $officeName) {
+    	foreach ($arrayWindows as $value) 
+    		if ($value->getNamewindow() == $officeName) 
     			array_push($result, $value);
-    		};
+    	if(count($result) > 1)
+    	{
+    		$i =  1;
+    		foreach($result as $res)
+    		{
+    			$res->setNamewindow($res->getNamewindow()."	($i)");
+    			$i++;
+    		}
     	}
     	return  $result;
     }

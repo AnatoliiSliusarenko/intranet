@@ -38,9 +38,9 @@ class SecurityController extends Controller
     	$clientIp = $request->getClientIp();
     	
     	//$clientIp = '58.146.96.0'; //india 
-    	//$clientIp = '92.113.48.68'; //ukraine 
+    	$clientIp = '92.113.48.68'; //ukraine 
     	
-    	$country = $accessFilter->getCountryNameByIp($clientIp);
+    	$country = $accessFilter->getCountrySymbolByIp($clientIp);
     	$hasAccess = $accessFilter->hasAccess($clientIp);
     	
     	$parameters = array(

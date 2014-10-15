@@ -179,6 +179,7 @@ class OfficeController extends Controller
     	$personal_office = $em->getRepository('IntranetMainBundle:PersonalPage')->findByOfficeid($office_id);
     	$personal_data = $em->getRepository('IntranetMainBundle:PersonalPage')->findAll($this->getUser()->getId());
     	$count_window = count($personal_data)+1;
+    	
     	if(count($personal_office) != 0)
     	{
     		foreach ($personal_office as $value) {
@@ -226,6 +227,6 @@ class OfficeController extends Controller
     	$em->persist($personal);
     	$em->flush();
     	$parameters = Office::getParameters($office, $em, $this->getUser(), false);
-    				return $this->render("IntranetMainBundle:Office:showOffice.html.twig",$parameters);
+    	return $this->render("IntranetMainBundle:Office:showOffice.html.twig",$parameters);
     }
 }

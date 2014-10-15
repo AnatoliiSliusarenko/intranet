@@ -171,24 +171,29 @@ class TopicController extends Controller
     	$personal_topic = $em->getRepository('IntranetMainBundle:PersonalPage')->findByTopicid($topic_id);
     	$personal_data = $em->getRepository('IntranetMainBundle:PersonalPage')->findAll();
     	$count_window = count($personal_data)+1;
-    	if(count($personal_topic) != 0)
+    	$office = $topic->getOffice();
+    	$window = $em->getRepository('IntranetMainBundle:PersonalPage')->findByNamewindow($office->getName());
+    	$window = array_pop($window);
+    	$count_window = count($window)+1;
+    	if($window)
+    		$windowName = $office->getName(). " ($count_window)";
+    	else 
+    		$windowName =  $office->getName() . '(1)';
+    	foreach ($personal_topic as $value)
     	{
-    		$personal_topic = array_shift($personal_topic);
-    		if( $personal_topic != null && $personal_topic->getUserid() == $this->getUser()->getId())
+    		if( $value != null && $value->getUserid() == $this->getUser()->getId())
     		{
     			$this->get('twig')->addGlobal('activeSection', 'topic');
-    			Topic::getParameters($topic, $em, $this->getUser(), true);
+    			$parameters = Topic::getParameters($topic, $em, $this->getUser(), true);
     			return $this->render('IntranetMainBundle:Topic:showTopic.html.twig', $parameters);
     		}
     	}
-    	else
-    	{
     		$office = $topic->getOffice();
     		$personal = new PersonalPage();
     		$personal->setOfficeid($office->getId());
     		$personal->setTopicid($topic->getId());
     		$personal->setUserid($this->getUser()->getId());
-    		$personal->setNamewindow($office->getName());
+    		$personal->setNamewindow($windowName);
     		if(!$count_window)
     			$personal->setWindowid(0);
     		else 
@@ -198,9 +203,9 @@ class TopicController extends Controller
     		$em->persist($personal);
     		$em->flush();
     		$this->get('twig')->addGlobal('activeSection', 'topic');
-    		Topic::getParameters($topic, $em, $this->getUser(), false);
+    		$parameters = Topic::getParameters($topic, $em, $this->getUser(), false);
     		return $this->render('IntranetMainBundle:Topic:showTopic.html.twig', $parameters);
-    	}
+    	
     }
     
     public function addTopicToExistWindowPersonalPageAction($topic_id, $window_id)
@@ -209,12 +214,15 @@ class TopicController extends Controller
     	$topic = $em->getRepository('IntranetMainBundle:Topic')->find($topic_id);
     	$office = $topic->getOffice();
     	$personal_topic = $em->getRepository('IntranetMainBundle:PersonalPage')->findByTopicid($topic_id);
-    	$topic_data = array_pop($personal_topic);
-    		if( $topic_data != null && $topic_data->getUserid() == $this->getUser()->getId())
-    {
+    	foreach ($personal_topic as $topic_data)
+    	{
+    	if( $topic_data != null && $topic_data->getUserid() == $this->getUser()->getId())
+    	{
     		$this->get('twig')->addGlobal('activeSection', 'topic');
     		$parameters = Topic::getParameters($topic, $em, $this->getUser(), true);
     		return $this->render('IntranetMainBundle:Topic:showTopic.html.twig', $parameters);
+    	}
+    	
     	}
     	$window = $em->getRepository('IntranetMainBundle:PersonalPage')->findOneByOfficeid($office->getId());
     	if(count($window) == 0)
@@ -249,7 +257,7 @@ class TopicController extends Controller
     	$office = $topic->getOffice();
     	foreach ($personal_topic as $topic_)
     		if( $topic_ != null && $topic_->getUserid() == $this->getUser()->getId())
-    {
+    	{
     	$this->get('twig')->addGlobal('activeSection', 'topic');
     	$parameters = Topic::getParameters($topic, $em, $this->getUser(), true);
     		return $this->render('IntranetMainBundle:Topic:showTopic.html.twig', $parameters);
