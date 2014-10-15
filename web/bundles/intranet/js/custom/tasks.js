@@ -574,7 +574,6 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 		{
 			insertDocumentsLinks(_.filter($scope.documents, function(d){return d.checked;}));
 		}
-		
 		$scope.addingDocuments = !$scope.addingDocuments;
 	}
 }]);
