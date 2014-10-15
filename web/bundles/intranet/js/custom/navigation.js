@@ -39,8 +39,8 @@ Intranet.controller('NavigationController', ['$scope', '$http', function($scope,
 				url: userSettingsUrl
 				  })
 			.success(function(response2){
-				console.log("disable_message_on_site->"+response2.result.user_settings.disable_message_on_site);
-				console.log("msg_site_message_office->"+response2.result.user_settings_notifications.msg_site_message_office);
+				//console.log("disable_message_on_site->"+response2.result.user_settings.disable_message_on_site);
+				//console.log("msg_site_message_office->"+response2.result.user_settings_notifications.msg_site_message_office);
 				if(!response2.result.user_settings.disable_message_on_site){
 					//---main
 					if (response.result.length > 0)
