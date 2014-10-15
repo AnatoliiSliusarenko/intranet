@@ -174,7 +174,6 @@ class TopicController extends Controller
     	$office = $topic->getOffice();
     	$window = $em->getRepository('IntranetMainBundle:PersonalPage')->findByNamewindow($office->getName());
     	$window = array_pop($window);
-    	$count_window = count($window)+1;
     	foreach ($personal_topic as $value)
     	{
     		if( $value != null && $value->getUserid() == $this->getUser()->getId())
@@ -185,16 +184,12 @@ class TopicController extends Controller
     		}
     	}
     		$office = $topic->getOffice();
-    		$personal = new PersonalPage();
-    		$personal->setOfficeid($office->getId());
-    		$personal->setTopicid($topic->getId());
-    		$personal->setUserid($this->getUser()->getId());
-    		$personal->setNamewindow($office->getName());
     		if(!$count_window)
-    			$personal->setWindowid(0);
+    			$winId = 0;
     		else 
-    			$personal->setWindowid($count_window);
-    		$personal->setDropdown(0);
+    			$winId = $count_window;
+    		$personal = PersonalPage::createPersonal($this->getUser()->getId(),$office->getId(),$topic->getId(),
+    				$office->getName(),0,$winId);
     		$em = $this->getDoctrine()->getEntityManager();
     		$em->persist($personal);
     		$em->flush();
