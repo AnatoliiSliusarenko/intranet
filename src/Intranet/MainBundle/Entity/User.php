@@ -151,6 +151,11 @@ class User implements UserInterface, \Serializable
 	 */
 	private $userSettings;
 	
+	/**
+	 * @ORM\OneToOne(targetEntity="UserSettingsNotifications", mappedBy="user")
+	 */
+	private $userSettingsNotifications;
+	
 	public function __construct()
 	{
 		$this->active = true;
@@ -621,8 +626,13 @@ class User implements UserInterface, \Serializable
     	$settings->setShowHiddenTopics(true);
     	$settings->setDisableAllOnEmail(false);
     	$settings->setDisableAllOnSite(false);
+    	$settingsNotifications = new UserSettingsNotifications();
+    	$settingsNotifications->setUserid($user->getId());
+    	$settingsNotifications->setUser($user);
+    	$settingsNotifications->setMsgEmailMessageOffice(false);
     	 
     	$em->persist($settings);
+    	$em->persist($settingsNotifications);
     	$em->flush();
     	
     	return $user;
@@ -1023,5 +1033,29 @@ class User implements UserInterface, \Serializable
     public function getUserSettings()
     {
         return $this->userSettings;
+    }
+    
+    /**
+     * Set userSettingsNotifications
+     *
+     * @param \Intranet\MainBundle\Entity\UserSettingsNotifications $userSettingsNotifications
+     * @return User
+     */
+    public function setUserSettingsNotifications(\Intranet\MainBundle\Entity\UserSettingsNotifications $userSettingsNotifications = null)
+    {
+    	$this->userSettingsNotifications = $userSettingsNotifications;
+    
+    	return $this;
+    }
+    
+    /**
+     * Get userSettingsNotifications
+     *
+     * @return \Intranet\MainBundle\Entity\UserSettingsNotifications
+     */
+    public function getUserSettingsNotifications()
+    {
+    	return $this->userSettingsNotifications;
+    	//return $em->getRepository('IntranetMainBundle:UserSettingsNotifications')->findByUserid($userid);
     }
 }

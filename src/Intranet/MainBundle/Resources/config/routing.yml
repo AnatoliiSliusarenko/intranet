@@ -176,6 +176,10 @@ intranet_user_change_settings:
     pattern:  /user/changeSettings/
     defaults: { _controller: IntranetMainBundle:UserProfile:changeSettings }
     
+intranet_user_change_settings_notifications:
+    pattern:  /user/changeSettingsNotifications/
+    defaults: { _controller: IntranetMainBundle:UserProfile:changeSettingsNotifications }
+    
 intranet_user_change_avatar:
     pattern:  /user/changeAvatar/{document_id}
     defaults: { _controller: IntranetMainBundle:UserProfile:changeAvatar }

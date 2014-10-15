@@ -122,8 +122,70 @@
 											</div>
 										</div>
 										
+										<table id="settings_notifications_table">
+											<thead><tr>
+												<td>Message Type</td><td>Send on e-mail</td><td>Show on site</td>
+											</tr></thead>
+	                        					<tr>
+													<td><input name="message_office" type="text" disabled="disabled" value="message_office"></td>
+													<td><input name="msgEmailMessageOffice" type="checkbox" {% if (app.user.userSettingsNotifications.getMsgEmailMessageOffice()) %}{{'checked'}}{% endif %}></td>
+													<td><input name="msgSiteMessageOffice" type="checkbox" {% if (app.user.userSettingsNotifications.getMsgSiteMessageOffice()) %}{{'checked'}}{% endif %}></td>
+												</tr>
+												<tr>
+													<td><input name="message_topic" type="text" disabled="disabled" value="message_topic"></td>
+													<td><input name="msgEmailMessageTopic" type="checkbox" {% if (app.user.userSettingsNotifications.getMsgEmailMessageTopic()) %}{{'checked'}}{% endif %}></td>
+													<td><input name="msgSiteMessageTopic" type="checkbox" {% if (app.user.userSettingsNotifications.getMsgSiteMessageTopic()) %}{{'checked'}}{% endif %}></td>
+												</tr>
+												<tr>
+													<td><input name="membership_own" type="text" disabled="disabled" value="membership_own"></td>
+													<td><input name="msgEmailMembershipOwn" type="checkbox" {% if (app.user.userSettingsNotifications.getMsgEmailMembershipOwn()) %}{{'checked'}}{% endif %}></td>
+													<td><input name="msgSiteMembershipOwn" type="checkbox" {% if (app.user.userSettingsNotifications.getMsgSiteMembershipOwn()) %}{{'checked'}}{% endif %}></td>
+												</tr>
+												<tr>
+													<td><input name="membership_user" type="text" disabled="disabled" value="membership_user"></td>
+													<td><input name="msgEmailMembershipUser" type="checkbox" {% if (app.user.userSettingsNotifications.getMsgEmailMembershipUser()) %}{{'checked'}}{% endif %}></td>
+													<td><input name="msgSiteMembershipUser" type="checkbox" {% if (app.user.userSettingsNotifications.getMsgSiteMembershipUser()) %}{{'checked'}}{% endif %}></td>
+												</tr>
+												<tr>
+													<td><input name="removed_office" type="text" disabled="disabled" value="removed_office"></td>
+													<td><input name="msgEmailRemovedOffice" type="checkbox" {% if (app.user.userSettingsNotifications.getMsgEmailRemovedOffice()) %}{{'checked'}}{% endif %}></td>
+													<td><input name="msgSiteRemovedOffice" type="checkbox" {% if (app.user.userSettingsNotifications.getMsgSiteRemovedOffice()) %}{{'checked'}}{% endif %}></td>
+												</tr>
+												<tr>
+													<td><input name="removed_topic" type="text" disabled="disabled" value="removed_topic"></td>
+													<td><input name="msgEmailRemovedTopic" type="checkbox" {% if (app.user.userSettingsNotifications.getMsgEmailRemovedTopic()) %}{{'checked'}}{% endif %}></td>
+													<td><input name="msgSiteRemovedTopic" type="checkbox" {% if (app.user.userSettingsNotifications.getMsgSiteRemovedTopic()) %}{{'checked'}}{% endif %}></td>
+												</tr>
+												<tr>
+													<td><input name="topic_added" type="text" disabled="disabled" value="topic_added"></td>
+													<td><input name="msgEmailTopicAdd" type="checkbox" {% if (app.user.userSettingsNotifications.getMsgEmailTopicAdd()) %}{{'checked'}}{% endif %}></td>
+													<td><input name="msgSiteTopicAdd" type="checkbox" {% if (app.user.userSettingsNotifications.getMsgSiteTopicAdd()) %}{{'checked'}}{% endif %}></td>
+												</tr>
+												<tr>
+													<td><input name="membership_own_out" type="text" disabled="disabled" value="membership_own_out"></td>
+													<td><input name="msgEmailMembershipOwnOut" type="checkbox" {% if (app.user.userSettingsNotifications.getMsgEmailMembershipOwnOut()) %}{{'checked'}}{% endif %}></td>
+													<td><input name="msgSiteMembershipOwnOut" type="checkbox" {% if (app.user.userSettingsNotifications.getMsgSiteMembershipOwnOut()) %}{{'checked'}}{% endif %}></td>
+												</tr>
+												<tr>
+													<td><input name="membership_user_out" type="text" disabled="disabled" value="membership_user_out"></td>
+													<td><input name="msgEmailMembershipUserOut" type="checkbox" {% if (app.user.userSettingsNotifications.getMsgEmailMembershipUserOut()) %}{{'checked'}}{% endif %}></td>
+													<td><input name="msgSiteMembershipUserOut" type="checkbox" {% if (app.user.userSettingsNotifications.getMsgSiteMembershipUserOut()) %}{{'checked'}}{% endif %}></td>
+												</tr>
+												<tr>
+													<td><input name="task_assigned" type="text" disabled="disabled" value="task_assigned"></td>
+													<td><input name="msgEmailTaskAssigned" type="checkbox" {% if (app.user.userSettingsNotifications.getMsgEmailTaskAssigned()) %}{{'checked'}}{% endif %}></td>
+													<td><input name="msgSiteTaskAssigned" type="checkbox" {% if (app.user.userSettingsNotifications.getMsgSiteTaskAssigned()) %}{{'checked'}}{% endif %}></td>
+												</tr>
+												<tr>
+													<td><input name="task_comment" type="text" disabled="disabled" value="task_comment"></td>
+													<td><input name="msgEmailTaskComment" type="checkbox" {% if (app.user.userSettingsNotifications.getMsgEmailTaskComment()) %}{{'checked'}}{% endif %}></td>
+													<td><input name="msgSiteTaskComment" type="checkbox" {% if (app.user.userSettingsNotifications.getMsgSiteTaskComment()) %}{{'checked'}}{% endif %}></td>
+												</tr>
+										</table>
+										
 										<input type="submit" class="btn btn-success btn-block" value="Save Settings"/>
               						</form>
+              						
               					</div>
               				</div>
               			</div>
