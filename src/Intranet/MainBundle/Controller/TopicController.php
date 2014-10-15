@@ -175,10 +175,6 @@ class TopicController extends Controller
     	$window = $em->getRepository('IntranetMainBundle:PersonalPage')->findByNamewindow($office->getName());
     	$window = array_pop($window);
     	$count_window = count($window)+1;
-    	if($window)
-    		$windowName = $office->getName(). " ($count_window)";
-    	else 
-    		$windowName =  $office->getName() . '(1)';
     	foreach ($personal_topic as $value)
     	{
     		if( $value != null && $value->getUserid() == $this->getUser()->getId())
@@ -193,7 +189,7 @@ class TopicController extends Controller
     		$personal->setOfficeid($office->getId());
     		$personal->setTopicid($topic->getId());
     		$personal->setUserid($this->getUser()->getId());
-    		$personal->setNamewindow($windowName);
+    		$personal->setNamewindow($office->getName());
     		if(!$count_window)
     			$personal->setWindowid(0);
     		else 
