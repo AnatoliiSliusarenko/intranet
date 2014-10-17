@@ -1,0 +1,224 @@
+{% extends 'IntranetMainBundle::layout.html.twig' %}
+
+{% block title %}Home page{% endblock %}
+
+{% block styles %}
+	{{ parent() }}
+	<link href="{{ asset('bundles/intranet/css/jquery.datetimepicker.css') }}" rel="stylesheet">
+  	<!-- Loading Stylesheets -->    
+  	<link href="{{ asset('bundles/intranet/css/font-awesome.css') }}" rel="stylesheet">
+	<!-- Loading Less -->
+  	<link href="{{ asset('bundles/intranet/less/style.less') }}" rel="stylesheet"  title="lessCss" id="lessCss">
+{% endblock %}
+
+{% block body %}
+<div class="site-holder" ng-app="Intranet">
+
+      <!-- this is a dummy text -->
+      <!-- .navbar -->
+      <nav class="navbar fix" role="navigation" ng-controller="NavigationController" style="width:100%">
+
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header" >
+          <a class="navbar-brand" href="{{ path('intranet_main_homepage') }}"><span class="logo">Int<strong>ra</strong>net <i class="fa fa-bookmark"></i></span></a>
+        </div>
+
+		{% if app.user %}
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse">
+          <ul class="nav navbar-nav user-menu navbar-right ">
+
+            <li><a href="#" class="user dropdown-toggle" data-toggle="dropdown"><span class="username"><img src="{{ app.request.getBaseURL() }}/../documents/{{ app.user.getAvatar() }}" class="user-avatar" alt="">  {{ app.user.name ~ ' ' ~ app.user.surname }} </span></a>
+              <ul class="dropdown-menu">
+                <li><a href="{{ path('intranet_user_profile') }}"><i class="fa fa-user"></i> My Profile</a></li>
+                <li>
+                      <a href="{{ url('intranet_show_personal_page') }}">
+                        <i class="fa fa-user"></i> 
+                        <span class="description">Personal page</span>
+                      </a>
+                    </li>
+                <li><a href="#"><i class="fa fa-envelope"></i> Inbox</a></li>
+                <li><a href="{{ path('intranet_task_activity_logs_show') }}"><i class="fa fa-book"></i> Show logs</a></li>
+                <li><a href="{{ path('intranet_task_reporter') }}"><i class="fa fa-puzzle-piece"></i> Task Reporter</a></li>
+                <li><a href="{{ path('intranet_document') }}"><i class="fa fa-file-text"></i> Documents upload</a></li>
+                <li class="divider"></li>
+                <li><a href="{{ path('intranet_logout') }}" class="text-danger"><i class="fa fa-lock"></i> Logout</a></li>
+              </ul>
+              <li ng-show="notifications.length > 0"><a href="#" class="settings dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bell animated shake"></i><span class="badge bg-success">[[ notifications.length ]]</span></a>
+                  <ul class="dropdown-menu notifications">
+                    <li ng-repeat="notification in notifications|limitTo: 20">
+                      <a ng-show="notification.type == 'membership_own'""
+                        href="[[notification.href]]"
+                        class="text-success">
+                        <i class="fa noty-icon fa-user bg-success"></i> 
+                        <span class="description">[[ notification.message ]]</span>
+                        <span class="time"> <i class="fa fa-clock-o"></i>  [[ notification.activated.date ]]</span>
+                      </a>
+                      
+                      <a ng-show="notification.type == 'membership_own_out'""
+                        href="[[notification.href]]"
+                        class="text-danger">
+                        <i class="fa noty-icon fa-user bg-danger"></i>
+                        <span class="description">[[ notification.message ]]</span>
+                        <span class="time"> <i class="fa fa-clock-o"></i>  [[ notification.activated.date ]]</span>
+                      </a>
+                      
+                      <a ng-show="notification.type == 'membership_user'""
+                        href="[[notification.href]]"
+                        class="text-warning">
+                        <i class="fa noty-icon fa-user bg-warning"></i>
+                        <span class="description">[[ notification.message ]]</span>
+                        <span class="time"> <i class="fa fa-clock-o"></i>  [[ notification.activated.date ]]</span>
+                      </a>
+                      
+                      <a ng-show="notification.type == 'membership_user_out'""
+                        href="[[notification.href]]"
+                        class="text-danger">
+                        <i class="fa noty-icon fa-user bg-danger"></i>
+                        <span class="description">[[ notification.message ]]</span>
+                        <span class="time"> <i class="fa fa-clock-o"></i>  [[ notification.activated.date ]]</span>
+                      </a>
+                      
+                      <a ng-show="notification.type == 'message_office'""
+                        href="[[notification.href]]">
+                        <i class="fa noty-icon fa-comment bg-primary"></i>
+                        <span class="description">[[ notification.message ]]</span>
+                        <span class="time"> <i class="fa fa-clock-o"></i>  [[ notification.activated.date ]]</span>
+                      </a>
+                      
+                      <a ng-show="notification.type == 'message_topic'""
+                        href="[[notification.href]]"
+                        class="text-info">
+                        <i class="fa noty-icon fa-comment bg-info"></i>
+                        <span class="description">[[ notification.message ]]</span>
+                        <span class="time"> <i class="fa fa-clock-o"></i>  [[ notification.activated.date ]]</span>
+                      </a>
+                      
+                      <a ng-show="notification.type == 'removed_office'""
+                        href="[[notification.href]]"
+                        class="text-danger">
+                        <i class="fa noty-icon fa-exclamation bg-danger"></i>
+                        <span class="description">[[ notification.message ]]</span>
+                        <span class="time"> <i class="fa fa-clock-o"></i>  [[ notification.activated.date ]]</span>
+                      </a>
+                      
+                      <a ng-show="notification.type == 'removed_topic'""
+                        href="[[notification.href]]"
+                        class="text-danger">
+                        <i class="fa noty-icon fa-exclamation bg-danger"></i> 
+                        <span class="description">[[ notification.message ]]</span>
+                        <span class="time"> <i class="fa fa-clock-o"></i>  [[ notification.activated.date ]]</span>
+                      </a>
+                      
+                      <a ng-show="notification.type == 'task_assigned'""
+                        href="[[notification.href]]"
+                        class="text-warning">
+                        <i class="fa noty-icon fa-tasks bg-warning"></i> 
+                        <span class="description">[[ notification.message ]]</span>
+                        <span class="time"> <i class="fa fa-clock-o"></i>  [[ notification.activated.date ]]</span>
+                      </a>
+                      
+                      <a ng-show="notification.type == 'task_comment'""
+                        href="[[notification.href]]">
+                        <i class="fa noty-icon fa-tasks bg-primary"></i> 
+                        <span class="description">[[ notification.message ]]</span>
+                        <span class="time"> <i class="fa fa-clock-o"></i>  [[ notification.activated.date ]]</span>
+                      </a>
+                      
+                      <a ng-show="notification.type == 'topic_added'""
+                        href="[[notification.href]]"
+                        class="text-success">
+                        <i class="fa noty-icon fa-comment bg-success"></i> 
+                        <span class="description">[[ notification.message ]]</span>
+                        <span class="time"> <i class="fa fa-clock-o"></i>  [[ notification.activated.date ]]</span>
+                      </a>
+                    </li>
+                    <li><a href="{{ url('intranet_notifications_show') }}" class="btn bg-primary">View All</a></li>
+                  </ul>
+                </li>
+                </li>
+              </ul>
+            </div><!-- /.navbar-collapse -->
+            {% else %}
+            <div class="navbar-right">
+            	<a class="navbar-link" href="{{ path('intranet_login') }}">Log In</a>
+            	<a class="navbar-link" href="{{ path('intranet_register') }}">Sign Up</a>
+			</div>
+            {% endif %}
+          </nav> <!-- /.navbar -->
+
+          <!-- .box-holder -->
+          <div class="box-holder">
+            {% block content %}
+          	<div class="row">
+				<div class="col-md-12" style="margin-top:90px">
+					<div class="jumbotron">
+						<h1>Hello, {% if app.user %}{{ app.user.name }}{% else %}quest{% endif %}!</h1>
+						<p>We welcome to our service. Here you can chat with other users, create your own private community with its topics for discussion.</p>
+					</div>
+				</div>
+			</div>
+			{% endblock %}
+			<div class="footer">
+  					© 2014 Intranet. All rights reserved.
+  			</div>
+		  </div>
+
+
+</div> <!-- /.box-holder -->
+</div><!-- /.site-holder -->
+{% endblock %}
+{% block javascripts %}
+{{ parent() }}
+
+<script src="{{ asset('bundles/intranet/js/jquery.datetimepicker.js') }}"></script>
+<script src="{{ asset('bundles/intranet/js/less-1.5.0.min.js') }}"></script>
+
+<script src="{{ asset('bundles/intranet/js/bic_calendar.js') }}"></script>
+<script src="{{ asset('bundles/intranet/js/jquery.accordion.js') }}"></script>
+<script src="{{ asset('bundles/intranet/js/failsafe.js') }}"></script>
+
+<script src="{{ asset('bundles/intranet/js/theme-options.js') }}"></script>
+
+<script src="{{ asset('bundles/intranet/js/bootstrap-progressbar.js') }}"></script>
+<script src="{{ asset('bundles/intranet/js/bootstrap-progressbar-custom.js') }}"></script>
+<script src="{{ asset('bundles/intranet/js/bootstrap-colorpicker.min.js') }}"></script>
+<script src="{{ asset('bundles/intranet/js/bootstrap-colorpicker-custom.js') }}"></script>
+
+<script src="{{ asset('bundles/intranet/js/raphael-min.js') }}"></script>
+<script src="{{ asset('bundles/intranet/js/morris-0.4.3.min.js') }}"></script>
+<script src="{{ asset('bundles/intranet/js/morris-custom.js') }}"></script>
+
+<script src="{{ asset('bundles/intranet/js/charts/jquery.sparkline.min.js') }}"></script>	
+
+<!-- NVD3 graphs  =============================-->
+<script src="{{ asset('bundles/intranet/js/nvd3/lib/d3.v3.js') }}"></script>
+<script src="{{ asset('bundles/intranet/js/nvd3/nv.d3.js') }}"></script>
+<script src="{{ asset('bundles/intranet/js/nvd3/src/models/legend.js') }}"></script>
+<script src="{{ asset('bundles/intranet/js/nvd3/src/models/pie.js') }}"></script>
+<script src="{{ asset('bundles/intranet/js/nvd3/src/models/pieChart.js') }}"></script>
+<script src="{{ asset('bundles/intranet/js/nvd3/src/utils.js') }}"></script>
+<script src="{{ asset('bundles/intranet/js/nvd3/sample.nvd3.js') }}"></script>
+
+<!-- Core Jquery File  =============================-->
+<script src="{{ asset('bundles/intranet/js/core.js') }}"></script>
+<script src="{{ asset('bundles/intranet/js/dashboard-custom.js') }}"></script>
+
+<!-- Angular and Underscore  -->
+<script src="{{ asset('bundles/intranet/js/angular.min.js') }}"></script>
+<script src="{{ asset('bundles/intranet/js/angular-sanitize.min.js') }}"></script>
+<script src="{{ asset('bundles/intranet/js/ui-bootstrap-tpls-0.10.0.min.js') }}"></script>
+<script src="{{ asset('bundles/intranet/js/underscore-min.js') }}"></script>
+<script src="{{ asset('bundles/intranet/js/custom/angular-core.js') }}"></script>
+<script src="{{ asset('bundles/intranet/js/custom/navigation.js') }}"></script>
+
+<script type="text/javascript">
+var JSON_URLS = {
+		notificationsGet: "{{ path('intranet_notifications_get') }}",
+		officeShow: "{{ url('intranet_show_office', {office_id: 0}) }}",
+		topicShow: "{{ url('intranet_show_topic', {topic_id: 0}) }}",
+		userSettings: "{{ path('intranet_get_user_settings') }}"
+};
+</script>
+{% endblock %}
+

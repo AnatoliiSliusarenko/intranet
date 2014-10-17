@@ -24,4 +24,9 @@ class IndexController extends Controller
     	$response->headers->set('Content-Type', 'application/json');
     	return $response;
     }
+    
+    public function showHomepageAction()
+    {
+    	return $this->render('IntranetMainBundle:Index:showHomepage.html.twig');
+    }
 }

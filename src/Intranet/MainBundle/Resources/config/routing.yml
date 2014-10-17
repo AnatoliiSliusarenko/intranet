@@ -1,3 +1,7 @@
+intranet_homepage:
+    pattern:  /homepage/
+    defaults: { _controller: IntranetMainBundle:Index:showHomepage }
+
 intranet_main_homepage:
     pattern:  /
     defaults: { _controller: IntranetMainBundle:Index:index }

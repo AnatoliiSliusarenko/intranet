@@ -11,11 +11,6 @@
 {% endblock %}
 
 {% block body %}
-<div class="list-group side-menu ">
-	<a class="list-group-item" href="{{ url('intranet_login') }}">Login</a>
-	<a class="list-group-item" href="#forgot-password">Forgot Password?</a>
-</div>
-
 <section id="register" ng-app="Intranet" ng-controller="RegistrationController">
   
   <!-- multistep form -->
@@ -55,7 +50,6 @@
 		 <input type="button" name="Next" class="action-button" value="Next" ng-click="next($event)"/>
 	</fieldset>
 	<fieldset>
-		<h2 class="fs-title">Please enter registration data</h2>
 		<div id="inline-form" class="form-group">
         	<input ng-class="{warning: emptyName}" type="text" ng-model="regData.name" placeholder="Name" id="name" required>
         	<input ng-class="{warning: emptySurname}" type="text" ng-model="regData.surname" placeholder="Surname" id="surname" required>
