@@ -122,12 +122,10 @@ public function getTasksForOfficeAction(Request $request, $office_id)
 			$response->headers->set('Content-Type', 'application/json');
 			return $response;
     	}
-    	
     	$parameters = array(
     		'topics' => $office->getTopics(),
     		'taskStatuses' => TaskStatus::getInitialStatuses($em)
     	);
-		
     	$parentid = $request->query->get('parentid');
     	if ($parentid != null)
     	{
