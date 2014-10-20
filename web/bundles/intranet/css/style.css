@@ -221,7 +221,10 @@ body {
 }
 a.private_message{
 	background: rgb(255, 205, 205)!important;	
-	font-weight: bold;
+	font-weight: bold!important;
+}
+a.private_message span{	
+	font-weight: bold!important;
 }
 .bg-success {
 	background: #90c657 !important;
