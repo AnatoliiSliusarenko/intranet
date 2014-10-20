@@ -40,8 +40,9 @@ security:
   
         secured_area:
             pattern:    ^/*
+            anonymous: ~
             form_login:
-                login_path: intranet_login
+                login_path: intranet_homepage
                 check_path: intranet_login_check
                 
             logout:
@@ -49,4 +50,5 @@ security:
            
 
     access_control:
-        #- { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
+         - { path: ^/homepage/, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+         - { path: ^/*, roles: ROLE_USER }

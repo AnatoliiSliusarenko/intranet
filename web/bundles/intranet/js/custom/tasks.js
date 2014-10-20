@@ -17,7 +17,7 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 	$scope.users = USERS;
 	$scope.topics = TOPICS;
 	$scope.tasksNotification = TASKS_NOTIFICATIONS;
-	
+	$scope.curentTopic = ENTITY.id;
 	$scope.urlsTasksGet = JSON_URLS.tasksGet;
 	$scope.urlsTasksRemove = JSON_URLS.tasksRemove;
 	$scope.urlsTasksEdit = JSON_URLS.tasksEdit;
@@ -167,7 +167,8 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 			      controller: 'AddTasksController',
 			      resolve: {
 			    	  users: function(){return $scope.users;},
-			    	  parentid: function(){return parentid;}
+			    	  parentid: function(){return parentid;},
+			    	  curentTopic: function(){return $scope.curentTopic}
 			      }
 			    });
 			
@@ -276,7 +277,7 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 		});
 	}
 }])
-.controller('AddTasksController', ['$scope', '$http', '$modalInstance', 'users', 'parentid', function($scope, $http, $modalInstance, users, parentid){
+.controller('AddTasksController', ['$scope', '$http', '$modalInstance', 'users', 'parentid', 'curentTopic', function($scope, $http, $modalInstance, users, parentid, curentTopic){
 	console.log('AddTasksController was loaded!');
 	
 	$scope.urlsTasksAdd = JSON_URLS.tasksAdd;
@@ -290,7 +291,7 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 			parentid: parentid,
 			esth: 0,															
 			estm: 0,
-			topicid: null
+			topicid: ENTITY
 	};
 	
 	setTimeout(function(){
@@ -298,7 +299,7 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 		if (topics[0].length>0)
 		{
 			$(topics[0][1]).attr('selected', true);
-			$scope.task.topicid = $(topics[0][1]).val();
+			$scope.task.topicid = curentTopic;
 			topics[0][0] = null;
 		}
 	}, 500);
@@ -325,7 +326,6 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 		}
 		
 		$scope.task.estimated = parseInt($scope.task.esth)*60 + parseInt($scope.task.estm);
-		
 		$http({
 			method: "POST", 
 			url: $scope.urlsTasksAdd,

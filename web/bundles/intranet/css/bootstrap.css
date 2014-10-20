@@ -4184,8 +4184,22 @@ textarea.input-group-sm>.form-control,textarea.input-group-sm>.input-group-addon
 	margin-bottom: 15px;
 }
 
+.navbar-link {
+	float: left;
+	margin-top: 35px;
+	margin-bottom: 15px;
+	font-weight: bold;
+}
+
 @media ( min-width : 768px) {
 	.navbar-text {
+		margin-right: 15px;
+		margin-left: 15px;
+	}
+}
+
+@media ( min-width : 768px) {
+	.navbar-link {
 		margin-right: 15px;
 		margin-left: 15px;
 	}

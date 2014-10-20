@@ -356,6 +356,10 @@ a.private_message{
 	color: #ffffff;
 }
 
+.navbar .navbar-link {
+	color: #ffffff;
+}
+
 .navbar .top-navbar {
 	margin-right: 50px !important;
 }
