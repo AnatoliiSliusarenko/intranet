@@ -30,7 +30,9 @@ class Notifier
     			"topic_added",
     			"task_assigned",
 				"task_comment",
-				"private_message");
+				"private_message_office",
+				"private_message_topic",
+				"private_message_task");
 	
     public function __construct($securityContext, $em, $router, $mailer)
     {
@@ -95,9 +97,15 @@ class Notifier
     		case "task_comment" :
     			$method = $user_settings_notifications->getMsgEmailTaskComment();
     			break;
-    		case "private_message" :
+    		case "private_message_office" :
     			$method = "no_method";
     			break;
+    		case "private_message_topic" :
+    			$method = "no_method";
+    			break;
+  			case "private_message_task" :
+   				$method = "no_method";
+   				break;
     	}
     	
     	if($user_settings->getDisableAllOnEmail() == false ){
@@ -302,7 +310,19 @@ class Notifier
     				break;
     			}
     			
-    		case "private_message":
+    		case "private_message_office":
+    			{
+    				$message = 'New message from '.$resource->getName().' '.$resource->getSurname().' in "'.$destination->getName().'"';
+    				$users = User::getUserByUsername($this->em, $user_to_send_name);
+    				break;
+    			}
+    		case "private_message_topic":
+    			{
+    				$message = 'New message from '.$resource->getName().' '.$resource->getSurname().' in "'.$destination->getName().'"';
+    				$users = User::getUserByUsername($this->em, $user_to_send_name);
+    				break;
+    			}
+    		case "private_message_task":
     			{
     				$message = 'New message from '.$resource->getName().' '.$resource->getSurname().' in "'.$destination->getName().'"';
     				$users = User::getUserByUsername($this->em, $user_to_send_name);
