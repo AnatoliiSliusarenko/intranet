@@ -45,7 +45,7 @@ Intranet.controller('NavigationController', ['$scope', '$http', function($scope,
 					//---main
 					if (response.result.length > 0)
 					{	
-						var notification_to_show = false;
+						var notification_to_show = true;
 						for(i = 0; i < response.result.length; i++){
 							switch (response.result[i].type) {
 							case 'message_office' :
@@ -81,6 +81,9 @@ Intranet.controller('NavigationController', ['$scope', '$http', function($scope,
 							case 'task_comment' :
 								notification_to_show = response2.result.user_settings_notifications.msg_site_task_comment;
 								break;
+							default:
+								notification_to_show = true;
+								break;
 							}
 							//console.log("notification_to_show["+i+"] -> "+notification_to_show);
 							if(notification_to_show == false){
@@ -110,7 +113,7 @@ Intranet.controller('NavigationController', ['$scope', '$http', function($scope,
 	function prepareNotifications(notifications)
 	{
 		notifications = _.map(notifications, function(n){
-			if (['task_comment', 'task_assigned', 'membership_own', 'membership_own_out', 'membership_user', 'membership_user_out', 'message_office', 'removed_office'].indexOf(n.type) != -1)
+			if (['private_message_office', 'task_comment', 'task_assigned', 'membership_own', 'membership_own_out', 'membership_user', 'membership_user_out', 'message_office', 'removed_office'].indexOf(n.type) != -1)
 			{
 				n.href = officeShowUrlBase.replace('0', n.destinationid);
 			}else
@@ -139,5 +142,16 @@ Intranet.controller('NavigationController', ['$scope', '$http', function($scope,
 	}
 	
 	setInterval(getNotifications, 2000);
+	
+	$(".write-message").keyup(function(){
+		var msg = $(this).val();
+		var symb_index = msg.indexOf("@");
+		if(symb_index != -1){
+			var tmp_str = msg.substring(symb_index);
+			var space_index = tmp_str.indexOf(" ");
+			var user_to_light_name = tmp_str.substring('0',space_index);
+			//alert(user_to_light_name);
+		}
+	});
 	
 }]);

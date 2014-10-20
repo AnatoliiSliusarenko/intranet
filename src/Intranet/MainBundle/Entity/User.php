@@ -590,6 +590,18 @@ class User implements UserInterface, \Serializable
     	}
     }
     
+    public static function getUserByUsername($em, $username)
+    {
+    	$repository = $em->getRepository('IntranetMainBundle:User');
+    	$query = $repository->createQueryBuilder('u')
+    	->where('u.username = :username')
+    	->setParameter('username', $username)
+    	->getQuery();
+    	 
+    	$result = $query->getResult();
+    	return $result;
+    }
+    
     public static function forceLogin(UserInterface $user, $firewall_name, $securityContext, $request)
     {
     	$token = new UsernamePasswordToken($user, null, $firewall_name, $user->getRoles());

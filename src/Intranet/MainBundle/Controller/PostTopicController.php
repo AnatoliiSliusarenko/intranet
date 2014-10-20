@@ -64,4 +64,18 @@ class PostTopicController extends Controller
     	
     	return $response;
     }
+    
+    public function sendPrivateMsgAction($topic_id){
+    	$em = $this->getDoctrine()->getManager();
+    	$data = json_decode(file_get_contents("php://input"));
+    	$post = (object) $data;
+    	$user_to_send_name = $post->usertosendname;
+    	$topic = $em->getRepository("IntranetMainBundle:Topic")->find($topic_id);
+    	$notifier = $this->get('intranet.notifier');
+    	$notifier->createNotification("private_message_topic",$this->getUser(),$topic,$user_to_send_name);
+    	$response = new Response(json_encode(array("result" => 'res')));
+    	$response->headers->set('Content-Type', 'application/json');
+    	return $response;
+    }
+    
 }

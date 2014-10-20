@@ -179,7 +179,7 @@ class Notifier
     	return $qb->getQuery()->getResult();
     }
     
-    public function createNotification($type, $resource, $destination)
+    public function createNotification($type, $resource, $destination, $user_to_send_name)
     {
     	if (!in_array($type, $this->types)) return false;
     	$creator = $this->user;
@@ -301,6 +301,13 @@ class Notifier
     				if ($userAsigned != null) $users[] = $userAsigned;
     				break;
     			}
+    			
+    		case "private_message":
+    			{
+    				$message = 'New message from '.$resource->getName().' '.$resource->getSurname().' in "'.$destination->getName().'"';
+    				$users = User::getUserByUsername($this->em, $user_to_send_name);
+    				break;
+    			}
     	}
     	
     	foreach($users as $user)
@@ -311,4 +318,5 @@ class Notifier
     	}
     	return true;
     }
+
 }

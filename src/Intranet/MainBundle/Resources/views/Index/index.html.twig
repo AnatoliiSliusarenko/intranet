@@ -86,6 +86,20 @@
                         <span class="time"> <i class="fa fa-clock-o"></i>  [[ notification.activated.date ]]</span>
                       </a>
                       
+                      <a ng-show="notification.type == 'private_message_office'""
+                        href="[[notification.href]]" class="private_message" >
+                        <i class="fa noty-icon fa-comment bg-private-msg"></i>
+                        <span class="description">[[ notification.message ]]</span>
+                        <span class="time"> <i class="fa fa-clock-o"></i>  [[ notification.activated.date ]]</span>
+                      </a>
+                      
+                      <a ng-show="notification.type == 'private_message_topic'""
+                        href="[[notification.href]]" class="private_message" >
+                        <i class="fa noty-icon fa-comment bg-private-msg"></i>
+                        <span class="description">[[ notification.message ]]</span>
+                        <span class="time"> <i class="fa fa-clock-o"></i>  [[ notification.activated.date ]]</span>
+                      </a>
+                      
                       <a ng-show="notification.type == 'message_topic'""
                         href="[[notification.href]]"
                         class="text-info">

@@ -4,6 +4,7 @@ namespace Intranet\MainBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
+use Intranet\MainBundle\Services\Notifier;
 
 class IndexController extends Controller
 {
@@ -24,4 +25,5 @@ class IndexController extends Controller
     	$response->headers->set('Content-Type', 'application/json');
     	return $response;
     }
+    
 }

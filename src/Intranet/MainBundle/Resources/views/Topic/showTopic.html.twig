@@ -370,6 +370,7 @@
 	var STATUSES = {{ availableStatus|json_encode|raw }};
     JSON_URLS.posts = "{{ path('intranet_post_topic_get_posts', {topic_id: topic.id}) }}";
     JSON_URLS.post_add = "{{ path('intranet_post_topic_add_post', {topic_id: topic.id}) }}";
+    JSON_URLS.sendPrivateMsg = "{{ path('intranet_post_topic_send_private_msg', {topic_id: topic.id}) }}";
     JSON_URLS.avatar = "{{ app.request.getBaseURL() }}/../documents/";
     JSON_URLS.members = "{{ path('intranet_topic_members', {topic_id: topic.id}) }}";
     JSON_URLS.posts_new = "{{ path('intranet_post_topic_new', {topic_id: topic.id}) }}";

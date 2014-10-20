@@ -53,7 +53,14 @@
 		<a href="{{ url('intranet_show_office', {'office_id': notification.destinationid }) }}" class="btn btn-warning btn-block"><i class="fa fa-tasks aligned-left"></i> {{ notification.message }} <span class="time aligned-right"> <i class="fa fa-clock-o"></i>  {{ notification.activated|date('d/m/y H:i:s') }}</span></a>
 		{% elseif notification.type=='task_comment' %}
 		<a href="{{ url('intranet_show_office', {'office_id': notification.destinationid }) }}" class="btn btn-primary btn-block"><i class="fa fa-tasks aligned-left"></i> {{ notification.message }} <span class="time aligned-right"> <i class="fa fa-clock-o"></i>  {{ notification.activated|date('d/m/y H:i:s') }}</span></a>
+        {% elseif notification.type=='private_message_office' %}
+		<a href="{{ url('intranet_show_office', {'office_id': notification.destinationid }) }}" class="btn btn-primary btn-block"><i class="fa fa-tasks aligned-left bg-private-msg"></i> {{ notification.message }} <span class="time aligned-right"> <i class="fa fa-clock-o"></i>  {{ notification.activated|date('d/m/y H:i:s') }}</span></a>
+		{% elseif notification.type=='private_message_topic' %}
+		<a href="{{ url('intranet_show_topic', {'topic_id': notification.destinationid }) }}" class="btn btn-primary btn-block"><i class="fa fa-tasks aligned-left bg-private-msg"></i> {{ notification.message }} <span class="time aligned-right"> <i class="fa fa-clock-o"></i>  {{ notification.activated|date('d/m/y H:i:s') }}</span></a>
+		{% elseif notification.type=='private_message_task' %}
+		<a href="{{ url('intranet_show_task', {'task_id': notification.destinationid }) }}" class="btn btn-primary btn-block"><i class="fa fa-tasks aligned-left bg-private-msg"></i> {{ notification.message }} <span class="time aligned-right"> <i class="fa fa-clock-o"></i>  {{ notification.activated|date('d/m/y H:i:s') }}</span></a>
         {% endif %}		
+        
 	{% endfor %}
 	</div>
 </div>

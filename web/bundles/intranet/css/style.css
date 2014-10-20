@@ -216,7 +216,12 @@ body {
 .bg-danger {
 	background: #e45857 !important;
 }
-
+.bg-private-msg{
+	background: red !important;
+}
+a.private_message{
+	background: rgb(255, 205, 205)!important;	
+}
 .bg-success {
 	background: #90c657 !important;
 }
