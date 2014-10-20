@@ -108,15 +108,16 @@ class Notifier
    				break;
     	}
     	
-    	if($user_settings->getDisableAllOnEmail() == false ){
-    		if($method != "no_method"){
+    	if($method != "no_method"){
+    		if($user_settings->getDisableAllOnEmail() == false ){
     			if($method == true ){
     				$this->sendNotificationEmail($user, $message, $type, $destinationid);
     			}
-    		}else {
-    			$this->sendNotificationEmail($user, $message, $type, $destinationid);
     		}
+    	}else {
+    		$this->sendNotificationEmail($user, $message, $type, $destinationid);
     	}
+    	
     }
     
     private function sendNotificationEmail($user, $message, $type, $destinationid)
