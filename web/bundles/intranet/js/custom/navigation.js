@@ -147,7 +147,12 @@ Intranet.controller('NavigationController', ['$scope', '$http', function($scope,
 		if(symb_index != -1){
 			var tmp_str = msg.substring(symb_index);
 			var space_index = tmp_str.indexOf(" ");
-			var user_to_light_name = tmp_str.substring('0',space_index);
+			var user_to_send_name = "";
+			if(space_index != -1){
+				user_to_send_name = tmp_str.substring('0',space_index);
+			}else{
+				user_to_send_name = tmp_str;
+			}
 			//alert(user_to_light_name);
 		}
 	});

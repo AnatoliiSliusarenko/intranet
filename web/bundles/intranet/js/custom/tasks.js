@@ -524,7 +524,12 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 		var symb_index = msg.indexOf("@");
 		var tmp_str = msg.substring(symb_index);
 		var space_index = tmp_str.indexOf(" ");
-		var user_to_send_name = tmp_str.substring('1',space_index);
+		var user_to_send_name = "";
+		if(space_index != -1){
+			user_to_send_name = tmp_str.substring('1',space_index);
+		}else{
+			user_to_send_name = tmp_str;
+		}
 		
 		var post = {
 				entityid: $scope.entityid, 
