@@ -520,7 +520,6 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 	{
 		$scope.comment = $scope.messageContainerTask.val();
 		var msg = $scope.comment;
-		//console.log("11111111");
 		var symb_index = msg.indexOf("@");
 		var tmp_str = msg.substring(symb_index);
 		var space_index = tmp_str.indexOf(" ");
