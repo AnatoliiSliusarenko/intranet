@@ -6,6 +6,7 @@ Intranet.controller('NavigationController', ['$scope', '$http', function($scope,
 	officeShowUrlBase = JSON_URLS.officeShow;
 	topicShowUrlBase = JSON_URLS.topicShow;
 	userSettingsUrl = JSON_URLS.userSettings;
+	checkUserByUsernameUrl = JSON_URLS.checkUserByUsername
 	
 	$scope.notifications = [];
 	$scope.notifyHandler = null;
@@ -179,14 +180,38 @@ Intranet.controller('NavigationController', ['$scope', '$http', function($scope,
 		if(symb_index != -1){
 			var tmp_str = msg.substring(symb_index);
 			var space_index = tmp_str.indexOf(" ");
-			var user_to_send_name = "";
+			var user_to_light_name = "";
 			if(space_index != -1){
-				user_to_send_name = tmp_str.substring('0',space_index);
+				user_to_light_name = tmp_str.substring('0',space_index);
 			}else{
-				user_to_send_name = tmp_str.substring('1');
+				user_to_light_name = tmp_str.substring('1');
 			}
 			//alert(user_to_light_name);
 		}
 	});
+	
+	function refreshConversationUsernameLight(){
+		$("#conversation p").each(function(){
+			var msg = $(this).text();
+			var msg_to = "";
+			var msg_after = "";
+			var symb_index = msg.indexOf("@");
+			if(symb_index != -1){
+				msg_to = msg.substring('0',symb_index);
+				var tmp_str = msg.substring(symb_index);
+				var space_index = tmp_str.indexOf(" ");
+				var user_to_light_name = "";
+				if(space_index != -1){
+					user_to_light_name = tmp_str.substring('0',space_index);
+					msg_after = tmp_str.substring(space_index);
+				}else{
+					user_to_light_name = tmp_str.substring('0');
+				}
+				$(this).html("");
+				$(this).append(msg_to+'<span class="inside_span" style="color:darkblue;">'+user_to_light_name+'</span>'+msg_after);
+			}
+		});
+	}
+	setInterval(refreshConversationUsernameLight,2000);
 	
 }]);
