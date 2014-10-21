@@ -153,7 +153,8 @@ class Notifier
     	   		    OR n.type = 'membership_user'
     	   		    OR n.type = 'membership_user_out'
     	   		    OR n.type = 'removed_office'
-    	   			OR n.type = 'task_assigned'")
+    	   			OR n.type = 'task_assigned'
+    	   			OR n.type = 'private_message_office'")
            ->setParameter("userid", $this->user->getId())
            ->setParameter("destinationid", $office_id);
     	 
@@ -168,7 +169,8 @@ class Notifier
     	   ->andWhere("n.destinationid = :destinationid")
     	   ->andWhere("n.type = 'message_topic'
     			    OR n.type = 'removed_topic'
-    			    OR n.type = 'topic_added'")
+    			    OR n.type = 'topic_added'
+    	   			OR n.type = 'private_message_topic'")
            ->setParameter("userid", $this->user->getId())
            ->setParameter("destinationid", $topic_id);
     
@@ -181,7 +183,8 @@ class Notifier
     	$qb->delete('IntranetMainBundle:Notification', 'n')
     	->where("n.userid = :userid")
     	->andWhere("n.resourceid = :resourceid")
-    	->andWhere("n.type = 'task_comment'")
+    	->andWhere("n.type = 'task_comment'
+    				OR n.type = 'private_message_task'")
                ->setParameter("userid", $this->user->getId())
                ->setParameter("resourceid", $taskId);
     

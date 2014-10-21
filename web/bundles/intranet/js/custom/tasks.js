@@ -528,7 +528,7 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 		if(space_index != -1){
 			user_to_send_name = tmp_str.substring('1',space_index);
 		}else{
-			user_to_send_name = tmp_str;
+			user_to_send_name = tmp_str.substring('1');
 		}
 		
 		var post = {

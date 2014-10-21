@@ -186,7 +186,7 @@ Intranet.controller('ChatController', ['$scope', '$http', '$paginator', '$modal'
 		if(space_index != -1){
 			user_to_send_name = tmp_str.substring('1',space_index);
 		}else{
-			user_to_send_name = tmp_str;
+			user_to_send_name = tmp_str.substring('1');
 		}
 		var post = {
 				entityid: $scope.entityid, 

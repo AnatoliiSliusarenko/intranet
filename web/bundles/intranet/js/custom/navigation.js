@@ -183,7 +183,7 @@ Intranet.controller('NavigationController', ['$scope', '$http', function($scope,
 			if(space_index != -1){
 				user_to_send_name = tmp_str.substring('0',space_index);
 			}else{
-				user_to_send_name = tmp_str;
+				user_to_send_name = tmp_str.substring('1');
 			}
 			//alert(user_to_light_name);
 		}
