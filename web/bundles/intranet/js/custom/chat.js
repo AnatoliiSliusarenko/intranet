@@ -195,7 +195,6 @@ Intranet.controller('ChatController', ['$scope', '$http', '$paginator', '$modal'
 				posted: new Date(),
 				usertosendname: user_to_send_name
 		}
-		
 		///////////
 		if(symb_index != -1){
 			$http({

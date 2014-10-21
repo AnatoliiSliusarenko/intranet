@@ -39,10 +39,9 @@ Intranet.controller('NavigationController', ['$scope', '$http', function($scope,
 				url: userSettingsUrl
 				  })
 			.success(function(response2){
-				if(!response2.result.user_settings.disable_message_on_site){
 					//---main
 					if (response.result.length > 0)
-					{	
+					{
 						var notification_to_show = true;
 						for(i = 0; i < response.result.length; i++){
 							switch (response.result[i].type) {
@@ -90,18 +89,51 @@ Intranet.controller('NavigationController', ['$scope', '$http', function($scope,
 							}
 						}
 						//console.log("response_result -> "+response.result);
-						if(response.result.length > 0){
-							if ($scope.notifyHandler == null) StartNotify();
-							$scope.notifications = prepareNotifications(response.result);
+						if(!response2.result.user_settings.disable_message_on_site){
+							if(response.result.length > 0){
+								if ($scope.notifyHandler == null) StartNotify();
+								$scope.notifications = prepareNotifications(response.result);
+							}else{
+								StopNotify();
+								$scope.notifications = [];
+							}
+						}else{
+							var notification_to_show2 = true;
+							for(i = 0; i < response.result.length; i++){
+								switch (response.result[i].type) {
+								case 'private_message_office' :
+									notification_to_show2 = true;
+									break;
+								case 'private_message_topic' :
+									notification_to_show2 = true;
+									break;
+								case 'private_message_task' :
+									notification_to_show2 = true;
+									break;
+								default:
+									notification_to_show2 = false;
+									break;
+								}
+								//console.log("notification_to_show["+i+"] -> "+notification_to_show);
+								if(notification_to_show2 == false){
+									response.result.splice(i,1);
+									i--;
+								}
+							}
+							if(response.result.length > 0){
+								if ($scope.notifyHandler == null) StartNotify();
+								$scope.notifications = prepareNotifications(response.result);
+							}else{
+								StopNotify();
+								$scope.notifications = [];
+							}
 						}
-						
 					}else
 					{
 						StopNotify();
 						$scope.notifications = [];
 					}
 					//---end main
-				}
 			})
 			
 			
