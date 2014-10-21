@@ -253,8 +253,8 @@ intranet_document_dialog_add:
   defaults: { _controller: IntranetMainBundle:Document:addDialog }
   
 intranet_get_user_settings:
-  pattern: /getusersettings/
-  defaults: { _controller: IntranetMainBundle:Index:getUserSettings }
+  pattern: /user/getsettings/
+  defaults: { _controller: IntranetMainBundle:User:getSettings }
   
 intranet_send_private_msg:
   pattern: /sendprivatemsg/
