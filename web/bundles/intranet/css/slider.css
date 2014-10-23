@@ -20,6 +20,8 @@
 	display: block;
 	margin: 0;
 	padding: 0;
+	overflow: hidden; /* custom */
+	height: 500px; /* custom */
 }
 
 .cbp-fwslider ul li > a,
@@ -30,6 +32,7 @@
 }
 
 .cbp-fwslider ul li > a img {
+	height: 100%; /* custom */
 	width: 100%; /* custom */
 	border: none;
 	margin: 0 auto;
