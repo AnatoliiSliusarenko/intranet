@@ -151,7 +151,8 @@ body {
 
 .site-holder {
 	overflow: hidden;
-	min-height: 1080px;
+	height: auto !important;
+	min-height: 900px !important;
 	position: relative;
 	background: #FFFFFF;
 }
@@ -177,7 +178,7 @@ body {
 }
 
 .box-holder {
-	min-height: 1200px !important;
+	height: auto !important;
 }
 
 .btn:focus,a {

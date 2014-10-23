@@ -1,9 +1,7 @@
 {% extends 'IntranetMainBundle::layout.html.twig' %}
 
-{% block title %}Register area{% endblock %}
+{% block title %}Register Area{% endblock %}
 
-{% block libraries %}
-{% endblock %}
 {% block styles %}
 	{{ parent() }}
   	<!-- Loading Stylesheets -->    
@@ -11,106 +9,97 @@
 {% endblock %}
 
 {% block body %}
-<section id="register" ng-app="Intranet" ng-controller="RegistrationController">
+<div class="row">
+	<div class="col-md-12" style="margin-top:90px">
+		<section id="register" ng-app="Intranet" ng-controller="RegistrationController">
   
-  <!-- multistep form -->
-	<div id="msform">
-	<!-- progressbar -->
-	<ul id="progressbar">
-		<li class="active">Hire/Work</li>
-		<li>Your details</li>
-    <li>Congratulations</li>
-	</ul>
-	<!-- fieldsets -->
-	<fieldset>
-		 <h2 class="fs-title">Please choose type of usage</h2>
-		 {% if hasAccess == false %}
-		 <div class="alert alert-danger">
-			Sorry, users from your country can choose only "work" type!
-		 </div>
-		 {% endif %}
+	  		<!-- multistep form -->
+			<div id="msform">
+				<!-- progressbar -->
+				<ul id="progressbar">
+					<li class="active">Hire/Work</li>
+					<li>Your details</li>
+	    			<li>Congratulations</li>
+				</ul>
+				<!-- fieldsets -->
+				<fieldset>
+				 	<h2 class="fs-title">Please choose type of usage</h2>
+				 	{% if hasAccess == false %}
+				 	<div class="alert alert-danger">
+						Sorry, users from your country can choose only "work" type!
+				 	</div>
+				 	{% endif %}
+				
+				 	<form>
+		   				{% if hasAccess == true %}
+		   				<div class="radio-inline">
+		    				<label for="hire" class="large-font">
+		    					<input type="radio" ng-model="regData.role" name="opt1" id="hire" value="client"/>
+		    					Hire
+		    				</label>
+		 				</div>
+		 				{% endif %}
+		 				<div class="radio-inline">
+		 					<label for="work" class="large-font">
+		 						<input type="radio" ng-model="regData.role" name="opt1" id="work" value="dev"/>
+		 						Work
+		 					</label>
+						</div>
+					</form>
 		
-		 <form>
-   				{% if hasAccess == true %}
-   				<div class="radio-inline">
-    				<label for="hire" class="large-font">
-    					<input type="radio" ng-model="regData.role" name="opt1" id="hire" value="client"/>
-    					Hire
-    				</label>
- 				</div>
- 				{% endif %}
- 				<div class="radio-inline">
- 					<label for="work" class="large-font">
- 						<input type="radio" ng-model="regData.role" name="opt1" id="work" value="dev"/>
- 						Work
- 					</label>
-				</div>
-		</form>
-
-		 <input type="button" name="Next" class="action-button" value="Next" ng-click="next($event)"/>
-	</fieldset>
-	<fieldset>
-		<div id="inline-form" class="form-group">
-        	<input ng-class="{warning: emptyName}" type="text" ng-model="regData.name" placeholder="Name" id="name" required>
-        	<input ng-class="{warning: emptySurname}" type="text" ng-model="regData.surname" placeholder="Surname" id="surname" required>
-      	    <div class="warning" ng-show="emptyName">Please fill in this field</div>
-      	    <div class="warning" ng-show="emptySurname">Please fill in this field</div>
-      	</div>
-        <div class="form-group">
-            <input ng-class="{warning: (emptyEmail || errorEmail)}" type="text" ng-blur="checkEmail()" ng-model="regData.email" placeholder="Email" id="email" required>
-        	<div class="warning" ng-show="errorEmail" ng-bind-html="errorEmailMessage"></div>
-        	<div class="warning" ng-show="emptyEmail">Please fill in this field</div>
-        </div>
-        <div class="form-group">
-          <input ng-class="{warning: (emptyUsername || errorUsername)}" type="text" ng-blur="checkUsername()" ng-model="regData.username" placeholder="Username" id="username" required>
-          <div class="warning" ng-show="errorUsername" ng-bind-html="errorUsernameMessage"></div>
-          <div class="warning" ng-show="emptyUsername">Please fill in this field</div>
-        </div>
-        <div class="form-group">
-          <input ng-class="{warning: emptyPassword}" type="password" ng-model="regData.password" placeholder="Password" id="password" required>
-          <div class="warning" ng-show="emptyPassword">Please fill in this field</div>
-        </div>
-        <div class="form-group">
-          <input ng-class="{warning: (emptyPassword2 || errorPassword)}" type="password" ng-model="regData.password2" placeholder="Repeat Password" id="password2" required>
-          <div class="warning" ng-show="errorPassword" ng-bind-html="errorPasswordMessage"></div>
-          <div class="warning" ng-show="emptyPassword2">Please fill in this field</div>
-        </div>
-        
-		<input type="button" name="previous" class="action-button" value="Previous" ng-click="previous($event)"/>
-		<input type="button" name="next" class="action-button" value="Register" ng-click="register($event)"/>
-	</fieldset>
-	<fieldset>
-		<h2 class="fs-title">Congratulations!</h2>
-		<div class="resumo">
-		Registration is successful. Welcome email was sent.
-		</div>
-		<input type="button" style="width: 300px;" class="action-button" value="Create your first office" ng-click="redirectAction()"/>
-	</fieldset>
+				 	<input type="button" name="Next" class="action-button" value="Next" ng-click="next($event)"/>
+				</fieldset>
+				<fieldset>
+					<div id="inline-form" class="form-group">
+			        	<input ng-class="{warning: emptyName}" type="text" ng-model="regData.name" placeholder="Name" id="name" required>
+			        	<input ng-class="{warning: emptySurname}" type="text" ng-model="regData.surname" placeholder="Surname" id="surname" required>
+			      	    <div class="warning" ng-show="emptyName">Please fill in this field</div>
+			      	    <div class="warning" ng-show="emptySurname">Please fill in this field</div>
+			      	</div>
+			        <div class="form-group">
+			            <input ng-class="{warning: (emptyEmail || errorEmail)}" type="text" ng-blur="checkEmail()" ng-model="regData.email" placeholder="Email" id="email" required>
+			        	<div class="warning" ng-show="errorEmail" ng-bind-html="errorEmailMessage"></div>
+			        	<div class="warning" ng-show="emptyEmail">Please fill in this field</div>
+			        </div>
+			        <div class="form-group">
+			          <input ng-class="{warning: (emptyUsername || errorUsername)}" type="text" ng-blur="checkUsername()" ng-model="regData.username" placeholder="Username" id="username" required>
+			          <div class="warning" ng-show="errorUsername" ng-bind-html="errorUsernameMessage"></div>
+			          <div class="warning" ng-show="emptyUsername">Please fill in this field</div>
+			        </div>
+			        <div class="form-group">
+			          <input ng-class="{warning: emptyPassword}" type="password" ng-model="regData.password" placeholder="Password" id="password" required>
+			          <div class="warning" ng-show="emptyPassword">Please fill in this field</div>
+			        </div>
+			        <div class="form-group">
+			          <input ng-class="{warning: (emptyPassword2 || errorPassword)}" type="password" ng-model="regData.password2" placeholder="Repeat Password" id="password2" required>
+			          <div class="warning" ng-show="errorPassword" ng-bind-html="errorPasswordMessage"></div>
+			          <div class="warning" ng-show="emptyPassword2">Please fill in this field</div>
+			        </div>
+	        
+					<input type="button" name="previous" class="action-button" value="Previous" ng-click="previous($event)"/>
+					<input type="button" name="next" class="action-button" value="Register" ng-click="register($event)"/>
+				</fieldset>
+				<fieldset>
+					<h2 class="fs-title">Congratulations!</h2>
+					<div class="resumo">
+					Registration is successful. Welcome email was sent.
+					</div>
+					<input type="button" style="width: 300px;" class="action-button" value="Create your first office" ng-click="redirectAction()"/>
+				</fieldset>
+			</div>
+		</section>
+	</div>
 </div>
-</section>
 {% endblock %}
 {% block javascripts %}
 	{{ parent() }}
-<!-- Angular and Underscore  -->
-<script src="{{ asset('bundles/intranet/js/angular.min.js') }}"></script>
-<script src="{{ asset('bundles/intranet/js/angular-sanitize.min.js') }}"></script>
-<script src="{{ asset('bundles/intranet/js/ui-bootstrap-tpls-0.10.0.min.js') }}"></script>
-<script src="{{ asset('bundles/intranet/js/underscore-min.js') }}"></script>
-<script src="{{ asset('bundles/intranet/js/custom/angular-core.js') }}"></script>
+	<!-- RECAPTCHA -->
+	<script type="text/javascript" src="http://www.google.com/recaptcha/api/js/recaptcha_ajax.js"></script>
 	
-	
-<!-- RECAPTCHA -->
-<script type="text/javascript" src="http://www.google.com/recaptcha/api/js/recaptcha_ajax.js"></script>
-
-<!-- jQuery easing plugin -->
-<script src="http://thecodeplayer.com/uploads/js/jquery.easing.min.js" type="text/javascript"></script>
-<script src="{{ asset('bundles/intranet/js/custom/registration.js') }}"></script>
-<script>
-var JSON_URLS = {
-		registrationAction : "{{ url('intranet_register_action') }}",
-		checkUsername: "{{ url('intranet_user_check_username') }}",
-		checkEmail: "{{ url('intranet_user_check_email') }}",
-}
-var userCountry = "{{ country }}";
-</script>
+	<!-- jQuery easing plugin -->
+	<script src="http://thecodeplayer.com/uploads/js/jquery.easing.min.js" type="text/javascript"></script>
+	<script src="{{ asset('bundles/intranet/js/custom/registration.js') }}"></script>
+	<script>
+	var userCountry = "{{ country }}";
+	</script>
 {% endblock %}

@@ -3,9 +3,13 @@
 {% block title %}Task Activity Logs{% endblock %}
 
 {% block breadcrumbs %}
-<ul class="breadcrumb">
-	<li class="active">Task Activity Logs</li>
-</ul>
+<div class="row">
+	<div class="col-md-12">
+		<ul class="breadcrumb">
+			<li class="active">Task Activity Logs</li>
+		</ul>
+	</div>
+</div>
 {% endblock %}
 
 {% block pageheader %}
@@ -23,7 +27,9 @@
 {% endblock %}
 
 {% block content %}
-	<div class="panel panel-cascade" ng-controller="LogsController">
+<div class="row">
+	<div class="col-md-12">
+		<div class="panel panel-cascade" ng-controller="LogsController">
 			<div class="panel-heading">
                 <h3 class="panel-title">
                 	<span>
@@ -106,7 +112,9 @@
 			  </tbody>
 			</table>
 		  </div>
+		</div>
 	</div>
+</div>
 {% endblock %}
 {% block javascripts %}
 	{{ parent() }}

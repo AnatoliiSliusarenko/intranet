@@ -2,21 +2,20 @@
 
 {% block title %}{{ topic.name }}{% endblock %}
 
-{% block styles %}
-	{{ parent() }}
-	<link href="{{ asset('bundles/intranet/css/uploadify.css') }}" rel="stylesheet">
-{% endblock %}
-
 {% block breadcrumbs %}
-<ul class="breadcrumb">
-	{% if activeSection == 'office' %}
-	<li><a href="{{ url('intranet_show_office', {office_id: office.getId()}) }}">{{ office.name }}</a></li>
-	{% endif %}
-	{% for item in breadcrumbs %}
-		<li><a href="{{ url('intranet_show_topic', {topic_id: item.getId()}) }}">{{ item.name }}</a></li>
-	{% endfor %}
-	<li class="active">{{ topic.name }}</li>
-</ul>
+<div class="row">
+	<div class="col-md-12">
+		<ul class="breadcrumb">
+			{% if activeSection == 'office' %}
+			<li><a href="{{ url('intranet_show_office', {office_id: office.getId()}) }}">{{ office.name }}</a></li>
+			{% endif %}
+			{% for item in breadcrumbs %}
+				<li><a href="{{ url('intranet_show_topic', {topic_id: item.getId()}) }}">{{ item.name }}</a></li>
+			{% endfor %}
+			<li class="active">{{ topic.name }}</li>
+		</ul>
+	</div>
+</div>
 {% endblock %}
 
 {% block pageheader %}
@@ -110,7 +109,7 @@
 {% block content %}
 <div class="row">
 	<div class="col-md-12">
-<div class="row chat-box" ng-controller="ChatController">
+		<div class="row chat-box" ng-controller="ChatController">
   							<div class="col-md-2">
   								<div class="panel panel-cascade contacts-box">
   									<div class="panel-heading">
@@ -356,7 +355,6 @@
 	{{ parent() }}
 	<script src="{{ asset('bundles/intranet/js/custom/chat.js') }}"></script>
 	<script src="{{ asset('bundles/intranet/js/custom/tasks.js') }}"></script>
-	<script src="{{ asset('bundles/intranet/js/uploadify/jquery.uploadify.min.js') }}"></script>
 	<script type="text/javascript">
 	var USERS = {{ users|json_encode|raw }};
 	var TOPICS = {{ topicsForTasks|json_encode|raw }};

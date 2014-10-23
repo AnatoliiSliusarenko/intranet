@@ -3,9 +3,13 @@
 {% block title %}Task Reporter{% endblock %}
 
 {% block breadcrumbs %}
-<ul class="breadcrumb">
-	<li class="active">Task Reporter</li>
-</ul>
+<div class="row">
+	<div class="col-md-12">
+		<ul class="breadcrumb">
+			<li class="active">Task Reporter</li>
+		</ul>
+	</div>
+</div>
 {% endblock %}
 
 {% block pageheader %}   
@@ -22,7 +26,9 @@
 </div>
 {% endblock %}
 {% block content %}
-<div class="panel panel-cascade" ng-controller="ReporterController">
+<div class="row">
+	<div class="col-md-12">
+		<div class="panel panel-cascade" ng-controller="ReporterController">
 			<div class="panel-heading">
                 <h3 class="panel-title">
                 	<span>
@@ -155,7 +161,9 @@
 			  		</tbody>
 				</table>
 		  	</div>
+		</div>
 	</div>
+</div>
 {% endblock %}
 {% block javascripts %}
 	{{ parent() }}
