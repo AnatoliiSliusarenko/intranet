@@ -2577,8 +2577,8 @@ div[data-role="editor-toolbar"] {
 	background: #ebeff2;
 	border-top: 2px solid #ccd6de;
 	z-index: 20;
-	margin-left: -20px;
-	margin-right: -20px;
+	margin-left: 0px;
+	margin-right: 0px;
 	text-align: center;
 	padding: 10px;
 	bottom: 0px !important;
