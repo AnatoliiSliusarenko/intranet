@@ -2573,6 +2573,11 @@ div[data-role="editor-toolbar"] {
 }
 /* Footer
 ---------------------------------------------------------------------------------------------- */
+.content > .footer
+{
+	margin-left: -20px;
+}
+
 .footer {
 	background: #ebeff2;
 	border-top: 2px solid #ccd6de;
