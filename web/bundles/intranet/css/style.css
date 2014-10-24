@@ -399,7 +399,7 @@ a.private_message span{
 }
 
 .navbar .user-menu>li ul.dropdown-menu {
-	margin-top: 3px;
+	margin-top: -7px;
 	border-color: #364359;
 	border-width: 1px;
 	border-top-width: 0px;
@@ -812,12 +812,16 @@ a.private_message span{
 	padding: 10px;
 }
 
+span.hidden-minibar.hide {
+	display: none !important;
+}
+
 .sidebar-holder>ul.nav>li>a>span.hidden-minibar.hide {
 	display: none !important;
 }
 
 .sidebar-holder .nav>li ul>li>a span.hidden-minibar.hide {
-	display: inline-block !important;
+	display: none !important;
 }
 /*	 Right Sidebar
 ---------------------------------------------------------------------------------------------- */
