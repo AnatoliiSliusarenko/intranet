@@ -336,9 +336,9 @@ class Notifier
     	
     	foreach($users as $user)
     	{
-    		if ($user->getId() == $this->user->getId()) continue;
-    	
-    		$this->postNotification($user, $type, $resource->getId(), $destination->getId(), $message);
+    		if ($user->getId() == $this->user->getId()){
+    			$this->postNotification($user, $type, $resource->getId(), $destination->getId(), $message);
+    		}
     	}
     	return true;
     }
