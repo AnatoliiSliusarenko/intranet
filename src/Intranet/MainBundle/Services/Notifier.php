@@ -30,7 +30,9 @@ class Notifier
     			"topic_added",
     			"task_assigned",
 				"task_comment",
-				"private_message");
+				"private_message_office",
+				"private_message_topic",
+				"private_message_task");
 	
     public function __construct($securityContext, $em, $router, $mailer)
     {
@@ -95,20 +97,27 @@ class Notifier
     		case "task_comment" :
     			$method = $user_settings_notifications->getMsgEmailTaskComment();
     			break;
-    		case "private_message" :
+    		case "private_message_office" :
     			$method = "no_method";
     			break;
+    		case "private_message_topic" :
+    			$method = "no_method";
+    			break;
+  			case "private_message_task" :
+   				$method = "no_method";
+   				break;
     	}
     	
-    	if($user_settings->getDisableAllOnEmail() == false ){
-    		if($method != "no_method"){
+    	if($method == "no_method"){
+    		$this->sendNotificationEmail($user, $message, $type, $destinationid);
+    	}else {
+    		if($user_settings->getDisableAllOnEmail() == false ){
     			if($method == true ){
     				$this->sendNotificationEmail($user, $message, $type, $destinationid);
     			}
-    		}else {
-    			$this->sendNotificationEmail($user, $message, $type, $destinationid);
     		}
     	}
+    	
     }
     
     private function sendNotificationEmail($user, $message, $type, $destinationid)
@@ -144,7 +153,8 @@ class Notifier
     	   		    OR n.type = 'membership_user'
     	   		    OR n.type = 'membership_user_out'
     	   		    OR n.type = 'removed_office'
-    	   			OR n.type = 'task_assigned'")
+    	   			OR n.type = 'task_assigned'
+    	   			OR n.type = 'private_message_office'")
            ->setParameter("userid", $this->user->getId())
            ->setParameter("destinationid", $office_id);
     	 
@@ -159,7 +169,8 @@ class Notifier
     	   ->andWhere("n.destinationid = :destinationid")
     	   ->andWhere("n.type = 'message_topic'
     			    OR n.type = 'removed_topic'
-    			    OR n.type = 'topic_added'")
+    			    OR n.type = 'topic_added'
+    	   			OR n.type = 'private_message_topic'")
            ->setParameter("userid", $this->user->getId())
            ->setParameter("destinationid", $topic_id);
     
@@ -172,14 +183,15 @@ class Notifier
     	$qb->delete('IntranetMainBundle:Notification', 'n')
     	->where("n.userid = :userid")
     	->andWhere("n.resourceid = :resourceid")
-    	->andWhere("n.type = 'task_comment'")
+    	->andWhere("n.type = 'task_comment'
+    				OR n.type = 'private_message_task'")
                ->setParameter("userid", $this->user->getId())
                ->setParameter("resourceid", $taskId);
     
     	return $qb->getQuery()->getResult();
     }
     
-    public function createNotification($type, $resource, $destination)
+    public function createNotification($type, $resource, $destination, $user_to_send_name)
     {
     	if (!in_array($type, $this->types)) return false;
     	$creator = $this->user;
@@ -301,14 +313,34 @@ class Notifier
     				if ($userAsigned != null) $users[] = $userAsigned;
     				break;
     			}
+    			
+    		case "private_message_office":
+    			{
+    				$message = 'New message from '.$resource->getName().' '.$resource->getSurname().' in "'.$destination->getName().'"';
+    				$users = User::getUserByUsername($this->em, $user_to_send_name);
+    				break;
+    			}
+    		case "private_message_topic":
+    			{
+    				$message = 'New message from '.$resource->getName().' '.$resource->getSurname().' in "'.$destination->getName().'"';
+    				$users = User::getUserByUsername($this->em, $user_to_send_name);
+    				break;
+    			}
+    		case "private_message_task":
+    			{
+    				$message = 'New message from '.$resource->getName().' '.$resource->getSurname().' in "'.$destination->getName().'"';
+    				$users = User::getUserByUsername($this->em, $user_to_send_name);
+    				break;
+    			}
     	}
     	
     	foreach($users as $user)
     	{
-    		if ($user->getId() == $this->user->getId()) continue;
-    	
-    		$this->postNotification($user, $type, $resource->getId(), $destination->getId(), $message);
+    		if ($user->getId() == $this->user->getId()){
+    			$this->postNotification($user, $type, $resource->getId(), $destination->getId(), $message);
+    		}
     	}
     	return true;
     }
+
 }
