@@ -72,4 +72,18 @@ class PostTaskController extends Controller
     	
     	return $response;
     }
+    
+    public function sendPrivateMsgAction($task_id){
+    	$em = $this->getDoctrine()->getManager();
+    	$data = json_decode(file_get_contents("php://input"));
+    	$post = (object) $data;
+    	$user_to_send_name = $post->usertosendname;
+    	$task = $em->getRepository("IntranetMainBundle:Task")->find($task_id);
+    	$notifier = $this->get('intranet.notifier');
+    	$notifier->createNotification("private_message_task",$this->getUser(),$task,$user_to_send_name);
+    	$response = new Response(json_encode(array("result" => 'res')));
+    	$response->headers->set('Content-Type', 'application/json');
+    	return $response;
+    }
+    
 }
