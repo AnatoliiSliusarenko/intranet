@@ -70,6 +70,7 @@ class Notification
      * @ORM\Column(name="resourceid", type="integer")
      */
     private $resourceid;
+    
     /**
      * Get id
      *
@@ -258,4 +259,5 @@ class Notification
     {
         return $this->resourceid;
     }
+    
 }

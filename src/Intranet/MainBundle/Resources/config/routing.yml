@@ -1,3 +1,7 @@
+intranet_homepage:
+    pattern:  /homepage/
+    defaults: { _controller: IntranetMainBundle:Index:showHomepage }
+
 intranet_main_homepage:
     pattern:  /
     defaults: { _controller: IntranetMainBundle:Index:index }
@@ -25,6 +29,18 @@ intranet_post_topic_add_post:
 intranet_post_office_add_post:
     pattern:  /posts/office/{office_id}/add/
     defaults: { _controller: IntranetMainBundle:PostOffice:addPost }
+
+intranet_post_office_send_private_msg:
+    pattern:  /posts/office/{office_id}/sendprivatemsg/
+    defaults: { _controller: IntranetMainBundle:PostOffice:sendPrivateMsg }
+    
+intranet_post_topic_send_private_msg:
+    pattern:  /posts/topic/{topic_id}/sendprivatemsg/
+    defaults: { _controller: IntranetMainBundle:PostTopic:sendPrivateMsg }
+
+intranet_post_task_send_private_msg:
+    pattern:  /posts/task/{task_id}/sendprivatemsg/
+    defaults: { _controller: IntranetMainBundle:PostTask:sendPrivateMsg }
     
 intranet_post_topic_count:
     pattern:  /posts/topic/{topic_id}/count/
@@ -237,5 +253,10 @@ intranet_document_dialog_add:
   defaults: { _controller: IntranetMainBundle:Document:addDialog }
   
 intranet_get_user_settings:
-  pattern: /getusersettings/
-  defaults: { _controller: IntranetMainBundle:Index:getUserSettings }
+  pattern: /user/getsettings/
+  defaults: { _controller: IntranetMainBundle:User:getSettings }
+  
+intranet_send_private_msg:
+  pattern: /sendprivatemsg/
+  defaults: { _controller: IntranetMainBundle:Index:sendPrivateMsg }
+  

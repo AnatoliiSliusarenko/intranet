@@ -1,46 +1,40 @@
 {% extends 'IntranetMainBundle::layout.html.twig' %}
 
-{% block title %}Login area{% endblock %}
+{% block title %}Login Area{% endblock %}
 
-{% block libraries %}
-{% endblock %}
 {% block styles %}
 	{{ parent() }}
   	<!-- Loading Stylesheets -->    
   	<link href="{{ asset('bundles/intranet/css/login.css') }}" rel="stylesheet">
 {% endblock %}
 
-{% block body %}
-<div class="list-group side-menu ">
-	<a class="list-group-item" href="{{ url('intranet_register') }}">Register</a>
-	<a class="list-group-item" href="#forgot-password">Forgot Password?</a>
-</div>
-  
-   <section id="login">
-    <div class="row animated fadeILeftBig">
-     <div class="login-holder col-md-6 col-md-offset-3">
-       <h2 class="page-header text-center text-primary"> Welcome to Intranet </h2>
-       <form role="form" action="{{ path('intranet_login_check') }}" method="post">
-        <div class="form-group">
-          <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Enter username/email" name="_username" value="{{ last_username }}">
-        </div>
-        <div class="form-group">
-          <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" name="_password">
-        </div>
-        {% if error %}
-        <div class="alert alert-danger">
-		{{ error.message }}
-		</div>
-		{% endif %}
-        <div class="form-footer">
-          <button type="submit" class="btn btn-info pull-right btn-submit">Login</button>
-        </div>
+{% block body %}  
+<div class="row">
+	<div class="col-md-12" style="margin-top:90px">
+   		<section id="login">
+    		<div class="row animated fadeILeftBig">
+     			<div class="login-holder">
+       				<h2 class="page-header text-center text-primary"> Welcome to Intranet </h2>
+       				<form role="form" action="{{ path('intranet_login_check') }}" method="post">
+        				<div class="form-group">
+          					<input type="text" class="form-control" id="exampleInputEmail1" placeholder="Enter username/email" name="_username" value="{{ last_username }}">
+        				</div>
+        				<div class="form-group">
+          					<input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" name="_password">
+        				</div>
+        				{% if error %}
+        				<div class="alert alert-danger">
+						{{ error.message }}
+						</div>
+						{% endif %}
+        				<div class="form-footer">
+         	 				<button type="submit" class="btn btn-info pull-right btn-submit">Login</button>
+        				</div>
 
-      </form>
-    </div>
-  </div>
-</section>
-{% endblock %}
-{% block javascripts %}
-	{{ parent() }}
+      				</form>
+    			</div>
+  			</div>
+		</section>
+	</div>
+</div>
 {% endblock %}

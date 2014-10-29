@@ -2,21 +2,20 @@
 
 {% block title %}{{ topic.name }}{% endblock %}
 
-{% block styles %}
-	{{ parent() }}
-	<link href="{{ asset('bundles/intranet/css/uploadify.css') }}" rel="stylesheet">
-{% endblock %}
-
 {% block breadcrumbs %}
-<ul class="breadcrumb">
-	{% if activeSection == 'office' %}
-	<li><a href="{{ url('intranet_show_office', {office_id: office.getId()}) }}">{{ office.name }}</a></li>
-	{% endif %}
-	{% for item in breadcrumbs %}
-		<li><a href="{{ url('intranet_show_topic', {topic_id: item.getId()}) }}">{{ item.name }}</a></li>
-	{% endfor %}
-	<li class="active">{{ topic.name }}</li>
-</ul>
+<div class="row">
+	<div class="col-md-12">
+		<ul class="breadcrumb">
+			{% if activeSection == 'office' %}
+			<li><a href="{{ url('intranet_show_office', {office_id: office.getId()}) }}">{{ office.name }}</a></li>
+			{% endif %}
+			{% for item in breadcrumbs %}
+				<li><a href="{{ url('intranet_show_topic', {topic_id: item.getId()}) }}">{{ item.name }}</a></li>
+			{% endfor %}
+			<li class="active">{{ topic.name }}</li>
+		</ul>
+	</div>
+</div>
 {% endblock %}
 
 {% block pageheader %}
@@ -108,10 +107,9 @@
 </div>
 {% endblock %}
 {% block content %}
-{# {% if ((topic.status == 'opened') or (topic.status == 'closed' and topic.getUserid() != 0 and (is_granted('ROLE_ADMIN') or topic.getUserid() == app.user.getId()))) %} #}
 <div class="row">
 	<div class="col-md-12">
-<div class="row chat-box" ng-controller="ChatController">
+		<div class="row chat-box" ng-controller="ChatController">
   							<div class="col-md-2">
   								<div class="panel panel-cascade contacts-box">
   									<div class="panel-heading">
@@ -358,24 +356,18 @@
  </div>
  </div>
  </div>
-{# {% elseif topic.status == 'closed' %} #}
- <!--
- <h1>Sorry, topic is closed!</h1> 
- <h3>Please contact administrator or owner ({{ topic.user.name ~ ' ' ~ topic.user.surname }}) to unlock this topic.</h3> 
-  -->
-{# {% endif %} #}
 {% endblock %}
 {% block javascripts %}
 	{{ parent() }}
 	<script src="{{ asset('bundles/intranet/js/custom/chat.js') }}"></script>
 	<script src="{{ asset('bundles/intranet/js/custom/tasks.js') }}"></script>
-	<script src="{{ asset('bundles/intranet/js/uploadify/jquery.uploadify.min.js') }}"></script>
 	<script type="text/javascript">
 	var USERS = {{ users|json_encode|raw }};
 	var TOPICS = {{ topicsForTasks|json_encode|raw }};
 	var STATUSES = {{ availableStatus|json_encode|raw }};
     JSON_URLS.posts = "{{ path('intranet_post_topic_get_posts', {topic_id: topic.id}) }}";
     JSON_URLS.post_add = "{{ path('intranet_post_topic_add_post', {topic_id: topic.id}) }}";
+    JSON_URLS.sendPrivateMsg = "{{ path('intranet_post_topic_send_private_msg', {topic_id: topic.id}) }}";
     JSON_URLS.avatar = "{{ app.request.getBaseURL() }}/../documents/";
     JSON_URLS.members = "{{ path('intranet_topic_members', {topic_id: topic.id}) }}";
     JSON_URLS.posts_new = "{{ path('intranet_post_topic_new', {topic_id: topic.id}) }}";

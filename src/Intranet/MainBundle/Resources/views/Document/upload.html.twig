@@ -1,18 +1,15 @@
 {% extends 'IntranetMainBundle:Index:index.html.twig' %}
 
-{% block title %}Document{% endblock %}
-
-{% block styles %}
-	{{ parent() }}
-	<link href="{{ asset('bundles/intranet/css/uploadify.css') }}" rel="stylesheet">
-{% endblock %}
-
-
+{% block title %}Documents Upload{% endblock %}
 
 {% block breadcrumbs %}
-<ul class="breadcrumb">
-	<li class="active">Document</li>
-</ul>
+<div class="row">
+	<div class="col-md-12">
+		<ul class="breadcrumb">
+			<li class="active">Document</li>
+		</ul>
+	</div>
+</div>
 {% endblock %}
 
 {% block pageheader %}   
@@ -29,14 +26,16 @@
 </div>
 {% endblock %}
 {% block content %}
-<div class="panel panel-cascade">
+<div class="row">
+	<div class="col-md-12">
+		<div class="panel panel-cascade">
 			<div class="panel-body">
 				<h4>Available types: <b>{{ availableTypes }}</b></h4>
-           		<input type="file" name="file_upload" id="file_upload" />
+	          	<input type="file" name="file_upload" id="file_upload" />
 			</div>
-</div>        	      
-                
-<div class="panel panel-cascade">
+		</div>        	      
+	              
+		<div class="panel panel-cascade">
 			<div class="panel-body" ng-controller="DocumentsController">
 				<div class="row demo-images">
 	                <div class="col-sm-6 col-md-3" ng-repeat="document in documents">
@@ -47,11 +46,12 @@
 	                </div>
                 </div>
 		  	</div>
+		</div>
+	</div>
 </div>
 {% endblock %}
 {% block javascripts %}
 	{{ parent() }}  
-	<script src="{{ asset('bundles/intranet/js/uploadify/jquery.uploadify.min.js') }}"></script>
 	<script src="{{ asset('bundles/intranet/js/custom/documents.js') }}"></script>
 	<script>
 	JSON_URLS.documentsGet = "{{ path('intranet_document_get') }}";

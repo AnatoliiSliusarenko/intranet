@@ -6,6 +6,7 @@ Intranet.controller('NavigationController', ['$scope', '$http', function($scope,
 	officeShowUrlBase = JSON_URLS.officeShow;
 	topicShowUrlBase = JSON_URLS.topicShow;
 	userSettingsUrl = JSON_URLS.userSettings;
+	checkUserByUsernameUrl = JSON_URLS.checkUserByUsername
 	
 	$scope.notifications = [];
 	$scope.notifyHandler = null;
@@ -39,13 +40,10 @@ Intranet.controller('NavigationController', ['$scope', '$http', function($scope,
 				url: userSettingsUrl
 				  })
 			.success(function(response2){
-				//console.log("disable_message_on_site->"+response2.result.user_settings.disable_message_on_site);
-				//console.log("msg_site_message_office->"+response2.result.user_settings_notifications.msg_site_message_office);
-				if(!response2.result.user_settings.disable_message_on_site){
 					//---main
 					if (response.result.length > 0)
-					{	
-						var notification_to_show = false;
+					{
+						var notification_to_show = true;
 						for(i = 0; i < response.result.length; i++){
 							switch (response.result[i].type) {
 							case 'message_office' :
@@ -81,6 +79,9 @@ Intranet.controller('NavigationController', ['$scope', '$http', function($scope,
 							case 'task_comment' :
 								notification_to_show = response2.result.user_settings_notifications.msg_site_task_comment;
 								break;
+							default:
+								notification_to_show = true;
+								break;
 							}
 							//console.log("notification_to_show["+i+"] -> "+notification_to_show);
 							if(notification_to_show == false){
@@ -89,18 +90,51 @@ Intranet.controller('NavigationController', ['$scope', '$http', function($scope,
 							}
 						}
 						//console.log("response_result -> "+response.result);
-						if(response.result.length > 0){
-							if ($scope.notifyHandler == null) StartNotify();
-							$scope.notifications = prepareNotifications(response.result);
+						if(!response2.result.user_settings.disable_message_on_site){
+							if(response.result.length > 0){
+								if ($scope.notifyHandler == null) StartNotify();
+								$scope.notifications = prepareNotifications(response.result);
+							}else{
+								StopNotify();
+								$scope.notifications = [];
+							}
+						}else{
+							var notification_to_show2 = true;
+							for(i = 0; i < response.result.length; i++){
+								switch (response.result[i].type) {
+								case 'private_message_office' :
+									notification_to_show2 = true;
+									break;
+								case 'private_message_topic' :
+									notification_to_show2 = true;
+									break;
+								case 'private_message_task' :
+									notification_to_show2 = true;
+									break;
+								default:
+									notification_to_show2 = false;
+									break;
+								}
+								//console.log("notification_to_show["+i+"] -> "+notification_to_show);
+								if(notification_to_show2 == false){
+									response.result.splice(i,1);
+									i--;
+								}
+							}
+							if(response.result.length > 0){
+								if ($scope.notifyHandler == null) StartNotify();
+								$scope.notifications = prepareNotifications(response.result);
+							}else{
+								StopNotify();
+								$scope.notifications = [];
+							}
 						}
-						
 					}else
 					{
 						StopNotify();
 						$scope.notifications = [];
 					}
 					//---end main
-				}
 			})
 			
 			
@@ -110,7 +144,7 @@ Intranet.controller('NavigationController', ['$scope', '$http', function($scope,
 	function prepareNotifications(notifications)
 	{
 		notifications = _.map(notifications, function(n){
-			if (['task_comment', 'task_assigned', 'membership_own', 'membership_own_out', 'membership_user', 'membership_user_out', 'message_office', 'removed_office'].indexOf(n.type) != -1)
+			if (['private_message_office', 'task_comment', 'task_assigned', 'membership_own', 'membership_own_out', 'membership_user', 'membership_user_out', 'message_office', 'removed_office'].indexOf(n.type) != -1)
 			{
 				n.href = officeShowUrlBase.replace('0', n.destinationid);
 			}else
@@ -139,5 +173,45 @@ Intranet.controller('NavigationController', ['$scope', '$http', function($scope,
 	}
 	
 	setInterval(getNotifications, 2000);
+	
+	$(".write-message").keyup(function(){
+		var msg = $(this).val();
+		var symb_index = msg.indexOf("@");
+		if(symb_index != -1){
+			var tmp_str = msg.substring(symb_index);
+			var space_index = tmp_str.indexOf(" ");
+			var user_to_light_name = "";
+			if(space_index != -1){
+				user_to_light_name = tmp_str.substring('0',space_index);
+			}else{
+				user_to_light_name = tmp_str.substring('1');
+			}
+			//alert(user_to_light_name);
+		}
+	});
+	
+	function refreshConversationUsernameLight(){
+		$("#conversation p").each(function(){
+			var msg = $(this).text();
+			var msg_to = "";
+			var msg_after = "";
+			var symb_index = msg.indexOf("@");
+			if(symb_index != -1){
+				msg_to = msg.substring('0',symb_index);
+				var tmp_str = msg.substring(symb_index);
+				var space_index = tmp_str.indexOf(" ");
+				var user_to_light_name = "";
+				if(space_index != -1){
+					user_to_light_name = tmp_str.substring('0',space_index);
+					msg_after = tmp_str.substring(space_index);
+				}else{
+					user_to_light_name = tmp_str.substring('0');
+				}
+				$(this).html("");
+				$(this).append(msg_to+'<span class="inside_span" style="color:darkblue;">'+user_to_light_name+'</span>'+msg_after);
+			}
+		});
+	}
+	setInterval(refreshConversationUsernameLight,2000);
 	
 }]);

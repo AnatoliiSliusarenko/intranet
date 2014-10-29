@@ -151,7 +151,8 @@ body {
 
 .site-holder {
 	overflow: hidden;
-	min-height: 1080px;
+	height: auto !important;
+	min-height: 900px !important;
 	position: relative;
 	background: #FFFFFF;
 }
@@ -177,7 +178,7 @@ body {
 }
 
 .box-holder {
-	min-height: 1200px !important;
+	height: auto !important;
 }
 
 .btn:focus,a {
@@ -216,7 +217,16 @@ body {
 .bg-danger {
 	background: #e45857 !important;
 }
-
+.bg-private-msg{
+	background: red !important;
+}
+a.private_message{
+	background: rgb(255, 205, 205)!important;	
+	font-weight: bold!important;
+}
+a.private_message span{	
+	font-weight: bold!important;
+}
 .bg-success {
 	background: #90c657 !important;
 }
@@ -351,6 +361,10 @@ body {
 	color: #ffffff;
 }
 
+.navbar .navbar-link {
+	color: #ffffff;
+}
+
 .navbar .top-navbar {
 	margin-right: 50px !important;
 }
@@ -385,7 +399,7 @@ body {
 }
 
 .navbar .user-menu>li ul.dropdown-menu {
-	margin-top: 3px;
+	margin-top: -7px;
 	border-color: #364359;
 	border-width: 1px;
 	border-top-width: 0px;
@@ -798,12 +812,16 @@ body {
 	padding: 10px;
 }
 
+span.hidden-minibar.hide {
+	display: none !important;
+}
+
 .sidebar-holder>ul.nav>li>a>span.hidden-minibar.hide {
 	display: none !important;
 }
 
 .sidebar-holder .nav>li ul>li>a span.hidden-minibar.hide {
-	display: inline-block !important;
+	display: none !important;
 }
 /*	 Right Sidebar
 ---------------------------------------------------------------------------------------------- */
@@ -2559,12 +2577,17 @@ div[data-role="editor-toolbar"] {
 }
 /* Footer
 ---------------------------------------------------------------------------------------------- */
+.content > .footer
+{
+	margin-left: -20px;
+}
+
 .footer {
 	background: #ebeff2;
 	border-top: 2px solid #ccd6de;
 	z-index: 20;
-	margin-left: -20px;
-	margin-right: -20px;
+	margin-left: 0px;
+	margin-right: 0px;
 	text-align: center;
 	padding: 10px;
 	bottom: 0px !important;

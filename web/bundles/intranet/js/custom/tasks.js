@@ -356,6 +356,7 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 	$scope.urlsResetCommentsCount = JSON_URLS.urlsResetCommentsCount.replace('0', task.id);
 	$scope.avatarURL = JSON_URLS.avatar;
 	$scope.urlsBase = JSON_URLS.baseUrl;
+	$scope.urlSendPrivateMsg = JSON_URLS.sendPrivateMsg;
 	
 	$scope.comment = "";
 	$scope.editingPost = null;
@@ -518,13 +519,36 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 	$scope.addPost = function()
 	{
 		$scope.comment = $scope.messageContainerTask.val();
+		var msg = $scope.comment;
+		var symb_index = msg.indexOf("@");
+		var tmp_str = msg.substring(symb_index);
+		var space_index = tmp_str.indexOf(" ");
+		var user_to_send_name = "";
+		if(space_index != -1){
+			user_to_send_name = tmp_str.substring('1',space_index);
+		}else{
+			user_to_send_name = tmp_str.substring('1');
+		}
+		
 		var post = {
 				entityid: $scope.entityid, 
 				userid: $scope.userid,
 				message: $scope.comment,
-				posted: new Date()
+				posted: new Date(),
+				usertosendname: user_to_send_name
 		}
 		
+		if(symb_index != -1){
+			//console.log("1");
+			$http({
+				method: "POST", 
+				url: $scope.urlSendPrivateMsg, 
+				data: post })
+			.success(function(response2){
+				console.log("Private notification was created!");
+			})
+		}
+
 		if ($scope.editingPost)
 			post.postid = $scope.editingPost.id;
 		

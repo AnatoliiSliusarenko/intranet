@@ -7,7 +7,6 @@ vendor/*
 */cache/*
 app/cache/*
 app/logs/*
-web/uploads/*
 web/bundles/framework/*
 web/bundles/sensiodistribution/*
 
@@ -20,3 +19,6 @@ composer.phar
 
 # Eclipse
 .project
+
+# Documents folder
+web/documents/*

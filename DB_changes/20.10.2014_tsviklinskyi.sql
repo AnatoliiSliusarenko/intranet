@@ -1,0 +1,2 @@
+ALTER TABLE `notifications`
+	CHANGE COLUMN `type` `type` ENUM('message_office','message_topic','membership_own','membership_user','removed_office','removed_topic','topic_added','membership_own_out','membership_user_out','task_assigned','task_comment','private_message_office','private_message_topic','private_message_task') NULL DEFAULT NULL AFTER `userid`;

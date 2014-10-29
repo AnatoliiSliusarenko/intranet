@@ -37,6 +37,7 @@ Intranet.controller('ChatController', ['$scope', '$http', '$paginator', '$modal'
 	$scope.postsCountURL = JSON_URLS.post_count;
 	$scope.urlsDocumentsAdd = JSON_URLS.documentsAdd;
 	$scope.urlsBase = JSON_URLS.baseUrl;
+	$scope.urlSendPrivateMsg = JSON_URLS.sendPrivateMsg;
 	
 	$scope.entityid = window.ENTITY.id;
 	$scope.userid = window.USER.id;
@@ -177,12 +178,34 @@ Intranet.controller('ChatController', ['$scope', '$http', '$paginator', '$modal'
 	
 	$scope.sendPost = function()
 	{
+		var msg = $scope.message;
+		var symb_index = msg.indexOf("@");
+		var tmp_str = msg.substring(symb_index);
+		var space_index = tmp_str.indexOf(" ");
+		var user_to_send_name = "";
+		if(space_index != -1){
+			user_to_send_name = tmp_str.substring('1',space_index);
+		}else{
+			user_to_send_name = tmp_str.substring('1');
+		}
 		var post = {
 				entityid: $scope.entityid, 
 				userid: $scope.userid,
 				message: $scope.message,
-				posted: new Date()
+				posted: new Date(),
+				usertosendname: user_to_send_name
 		}
+		///////////
+		if(symb_index != -1){
+			$http({
+				method: "POST", 
+				url: $scope.urlSendPrivateMsg, 
+				data: post })
+			.success(function(response2){
+				console.log("Private notification was created!");
+			})
+		}
+		///////////
 		
 		if ($scope.editingPost)
 			post.postid = $scope.editingPost.id;

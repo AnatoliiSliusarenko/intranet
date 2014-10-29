@@ -1,0 +1,46 @@
+{% extends 'IntranetMainBundle::layout.html.twig' %}
+
+{% block title %}Home page{% endblock %}
+
+{% block styles %}
+	{{ parent() }}
+	<!-- Slider element -->
+	<link href="{{ asset('bundles/intranet/css/slider.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block body %}
+            <div class="row">
+				<div class="col-md-12" style="margin-top:90px">
+					<div id="cbp-fwslider" class="cbp-fwslider">
+						<ul>
+							<li><a href="#"><img src="../../documents/agile_slide.png" alt="img01"/></a></li>
+							<li><a href="#"><img src="../../documents/colaboration_slide.png" alt="img02"/></a></li>
+							<li><a href="#"><img src="../../documents/office_slide.png" alt="img03"/></a></li>
+							<li><a href="#"><img src="../../documents/mobile_slide.png" alt="img04"/></a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+            
+          	<div class="row">
+				<div class="col-md-12">
+					<div class="jumbotron">
+						<h1>Hello, {% if app.user %}{{ app.user.name }}{% else %}guest{% endif %}!</h1>
+						<p>We welcome to our service. Here you can chat with other users, create your own private community with its topics for discussion.</p>
+					</div>
+				</div>
+			</div>
+{% endblock %}
+{% block javascripts %}
+{{ parent() }}
+<!-- Slider element -->
+<script src="{{ asset('bundles/intranet/js/modernizr.custom.js') }}"></script>
+<script src="{{ asset('bundles/intranet/js/jquery.cbpFWSlider.js') }}"></script>
+
+<script type="text/javascript">
+$('#cbp-fwslider').cbpFWSlider({
+	rotateSpeed: 10000
+});
+</script>
+{% endblock %}
+
