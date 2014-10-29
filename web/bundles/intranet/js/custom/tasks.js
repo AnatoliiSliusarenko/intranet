@@ -589,8 +589,9 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 		});
 	}
 	
-	$scope.addDocuments = function()
+	$scope.addDocuments = function(event)
 	{
+		event.preventDefault();
 		if ($scope.addingDocuments == false)
 		{
 			getDocuments();

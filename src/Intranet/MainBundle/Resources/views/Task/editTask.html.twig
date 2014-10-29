@@ -169,7 +169,7 @@
 								<div class="input-group">
 									<span class="input-group-btn">
 										<button class="btn btn-success"
-											ng-click="addDocuments()">
+											ng-click="addDocuments($event)">
 											<i class="fa fa-file"></i>
 										</button>
 									</span>
@@ -230,7 +230,7 @@
 						<div class="panel-body"
 							style="display: block;">
 							<button class="btn btn-success btn-block"
-								ng-click="addDocuments()">
+								ng-click="addDocuments($event)">
 								Add Documents
 							</button>
 						</div>
@@ -242,5 +242,5 @@
 	</div>
 	<script>
 		var TIMESTAMP = '{{ timestamp }}'; var TOKEN = '{{ token }}';
-		JSON_URLS.sendPrivateMsg = "{{ path('intranet_post_task_send_private_msg', {task_id: task.id}) }}";
+		JSON_URLS.sendPrivateMsg = "{{ path('intranet_post_task_send_private_msg', {task_id: task_id}) }}";
 	</script>

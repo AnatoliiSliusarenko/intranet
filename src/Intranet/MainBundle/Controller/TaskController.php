@@ -217,7 +217,8 @@ public function getTasksForOfficeAction(Request $request, $office_id)
     			'token' => $token,
     			'taskName' => $task->getName(),
     			'taskDescription' => $task->getDescription(),
-    			'availableTypes'=> Document::getAvailableTypesInString()
+    			'availableTypes'=> Document::getAvailableTypesInString(),
+    			'task_id' => $task_id
     	);
     	
     	if ($task->getParentid() != null)

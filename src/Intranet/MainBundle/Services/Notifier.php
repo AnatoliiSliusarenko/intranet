@@ -191,7 +191,7 @@ class Notifier
     	return $qb->getQuery()->getResult();
     }
     
-    public function createNotification($type, $resource, $destination, $user_to_send_name)
+    public function createNotification($type, $resource, $destination, $user_to_send_name = null)
     {
     	if (!in_array($type, $this->types)) return false;
     	$creator = $this->user;
