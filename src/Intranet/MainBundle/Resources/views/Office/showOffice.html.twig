@@ -161,7 +161,7 @@
             								<li class='drop-link' style="width:35px"><a href="#"><i class="fa fa-fw fa-qrcode"></i></a>
             								<ul class='drop-block1' style="margin-right: 5px;">
             									<li  style="width:200px"><a href="{{ url('intranet_add_office_to_personal_page', {office_id: office.getId()} ) }}"><i class="fa fa-fw fa-windows" ></i>Add to new window </a></li>
-                                                <li class="drop-link"style="width:200px"><a href="#"><i class="fa fa-fw fa-plus-square"></i>Add new Tab to existing window</a>
+                                                <li class="drop-link"style="width:200px"><a href="#"><i class="fa fa-fw fa-plus-square"></i>Add new tab to existing window</a>
             									<ul class='drop-block1' style="margin-right: 5px;">
             									{% for window in windows %}
             										<li class='drop-link' style="width:200px"><a href="{{ url('intranet_add_office_to_exist_window_personal_page', {office_id: office.getId(), window_id: window.getWindowid()} ) }}">{{window.getNamewindow()}}</a></li>
@@ -172,14 +172,14 @@
             								</li>
         									</ul>
         									</div>
-											
+											<div style="width: 60%;margin-left: 30%;">
 												  <label for="inputEmail1" class="col-lg-5 col-md-3 control-label" style="margin-top: 7px;">Messages/Page</label>
 												  <div class="col-lg-5 col-md-9">
 												   <select class="form-control" ng-model="postsPerPage" ng-change="changePostsPerPage()">
 												   	<option ng-repeat="item in paginator.postsPerPageValues">[[item]]</option>
 												  </select>
 												</div>											
-												
+											</div>
 											</div>
 									</div>
 									
@@ -192,13 +192,15 @@
   												<p style="white-space: pre-line;" ng-bind-html="post.message"></p>
   											</div>
   										</div>
-  										<div class="input-group">
+  										<div class="input-group tooltips">
   											<span class="input-group-btn">
+  											<a data-original-title="File attachment" data-placement="top">
   												<button class="btn btn-success" ng-click="addDocuments()"><i class="fa fa-file"></i></button>
+  											</a>
   											</span>
   											<textarea style="resize:vertical;" class="form-control write-message" ng-class="{editing: editingPost}" id="write-message" placeholder="Type something here and hit enter" ng-model="message" ng-keypress="pressEnter($event)"></textarea>
   											<span class="input-group-btn">
-  												<button class="btn text-white bg-primary send-message" type="button" id="send-message" ng-click="sendPost()">&nbsp;&nbsp;&nbsp;Send&nbsp;&nbsp;&nbsp;</button>
+  												<button class="btn text-white bg-primary send-message" type="button" id="send-message" ng-click="sendPost()">Send</button>
   											</span>
 
   										</div><!-- /input-group -->
@@ -284,12 +286,14 @@
 		{% endif %}
 		{% if office.getUserid() != 0 %}
 		<div class="panel panel-cascade" ng-controller="TasksController">
-			<div class="panel-heading">
+			<div class="panel-heading tooltips">
                 <h3 class="panel-title">
                 	<span>
-                    	<a href="#" class="panel-minimize"><i class="fa fa-pencil-square"></i> Tasks of this office</a>
+                    	<a data-original-title="Filter tasks" data-placement="top" href="#" class="panel-minimize"><i class="fa fa-filter"></i> Tasks of this office</a>
                     </span> 
+                    <a data-original-title="Add new task" data-placement="top">
                     <button type="button" class="btn btn-success" ng-click="addTask()"><i class="fa fa-plus-circle"></i></button>
+                	</a>
                 </h3>
             </div>
             <div class="panel-body" style="display:none;">
@@ -389,9 +393,11 @@
 				            <span ng-show="task.topic!=null">[[task.topic.name]]</span>
 				            </td>
 				            <td>
-				             <button type="button" class="btn btn-primary btn-xs" ng-click="addTask(task)"><i class="fa fa-code-fork"></i></button>
-				             <button type="button" class="btn btn-danger btn-xs" ng-click="removeTask(task)"><i class="fa fa-trash-o"></i></button>
-				             <a href="[[ task.hrefTopic ]]" ng-show="task.topicid != null" class="btn btn-info btn-xs"><i class="fa fa-mail-forward"></i></a>
+				            <div class="tooltips">
+				             <a data-original-title="Add subtasks" data-placement="top" href="#"><button type="button" class="btn btn-primary btn-xs" ng-click="addTask(task)"><i class="fa fa-code-fork"></i></button></a>
+				             <a data-original-title="Delete task" data-placement="top" href="#"><button type="button" class="btn btn-danger btn-xs" ng-click="removeTask(task)"><i class="fa fa-trash-o"></i></button></a>
+				             <a data-original-title="Go to topic" data-placement="top" href="[[ task.hrefTopic ]]" ng-show="task.topicid != null" class="btn btn-info btn-xs"><i class="fa fa-mail-forward"></i></a>
+				            </div>
 				            </td>
 	           			</tr>
 	           			<tr ng-show="task.dropped == true" class="success" ng-repeat="subtask in task.subtasks">
@@ -419,8 +425,10 @@
 				            <span ng-show="subtask.topic!=null">[[subtask.topic.name]]</span>
 				            </td>
 				            <td>
-				             <button type="button" class="btn btn-danger btn-xs" ng-click="removeTask(subtask)"><i class="fa fa-trash-o"></i></button>
-				             <a href="[[ subtask.hrefTopic ]]" ng-show="subtask.topicid != null" class="btn btn-info btn-xs"><i class="fa fa-mail-forward"></i></a>
+				            <div class="tooltips">
+				             <a data-original-title="Delete subtask" data-placement="top" href="#"><button type="button" class="btn btn-danger btn-xs" ng-click="removeTask(subtask)"><i class="fa fa-trash-o"></i></button></a>
+				             <a data-original-title="Go to topic" data-placement="top" href="#" href="[[ subtask.hrefTopic ]]" ng-show="subtask.topicid != null" class="btn btn-info btn-xs"><i class="fa fa-mail-forward"></i></a>
+				            </div>
 				            </td>
 		            	</tr>
 			  </tbody>

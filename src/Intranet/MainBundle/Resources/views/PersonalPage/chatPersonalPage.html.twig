@@ -1,11 +1,11 @@
 <section class="tab" ng-controller="TabController as panel">
 <div class="col-md-6 personalchat line"  style="margin-top:2px;margin-right: 2px;">
 	<div class="panel text-primary panel-cascade">
-		<div class="panel-heading" style="height:90px">
-  			<h3 class="panel-title" style="display: flex;">
-  			<i class="fa fa-comments" style="display: inline-table;">{{window.getNamewindow()}}</i>
+		<div class="panel-heading">
+  			<h3 class="panel-title">
+  			<i class="fa fa-comments" style="display: inline-table;">{{window.getNamewindow()}}&nbsp;&nbsp; </i>
   			
-  			<ul id="myTab" class="nav nav-tabs pull-right">
+  			<ul id="myTab" class="nav nav-tabs pull-right" >
   			{% if officeForWindow != NULL and officeForWindow.getDropdown() == 0 %}
   				<li ng-class="{active:panel.isSelected(0) }">
   					<a href ng-click="panel.selectTab(0)" data-toggle="tab">{{ office.getName() }} </a>
@@ -35,13 +35,11 @@
             	{% endfor %}
   			{% endif %}
   			<li class="dropdown">
- 	           <a class="dropdown-toggle" data-toggle="dropdown" href="#">Dropdown<span class="caret"></span></a>
-               	<ul class="dropdown-menu">
-                	{% if officeForWindow != NULL and officeForWindow.getDropdown() != 0 %}
-                    	<li role="presentation"><a role="menuitem" tabindex="-1" href="#">{{office.getName()}}</a></li>
-                    {% endif %}
+ 	           
                     {% for topic in windowtopics  %}
                     	{% if topic.getOfficeid()== office.getId() and topic.getDropdown() != 0 %}
+                        	<a class="dropdown-toggle" data-toggle="dropdown" href="#">Dropdown<span class="caret"></span></a>
+               	<ul class="dropdown-menu">
                         	<li role="presentation" ng-class="{active:panel.isSelected(999) }">
                             	<a role="menuitem" tabindex="-1" href ng-click="panel.selectTab(999)" data-toggle="tab" >{{ topic.getTopicName(em, topic.getTopicid) }}</a>
                             </li>
@@ -57,7 +55,7 @@
 		<div id="myTabContent" class="tab-content chat-box">
   		{% if officeForWindow != NULL %}
         	<div ng-show="panel.isSelected(0)" ng-controller="PersonalOfficeChatController" ng-init="init('{{ office.getId() }}')">
-  				<div style="position: absolute; left: 550px;">
+  				<div style="position: absolute; left: 550px; margin-top:5px">
   				<a style="color: #285e8e" href="{{ url('intranet_delete_tab_from_personal_page', { id: officeForWindow.getId() } ) }}">Delete tab</a>
   				&nbsp;&nbsp;
   				<a style="color: #285e8e" href="{{ url('intranet_delete_window_from_personal_page', { windowid: window.getWindowid() } ) }}">Delete window	</a> 
@@ -66,13 +64,13 @@
   					<div class="col-md-7" style= "width: 370px;">
 						<ul class="pagination" style="margin-left: 5px;">
 							<li ng-class="{disabled: paginator.curPageId == 1}"><a href="#" ng-click="paginator.firstPage($event)">first </a></li>
-							<li ng-class="{disabled: paginator.curPageId == 1}"><a href="#" ng-click="paginator.prevPage($event)">«</a></li>
+							<li ng-class="{disabled: paginator.curPageId == 1}"><a href="#" ng-click="paginator.prevPage($event)">&laquo;</a></li>
 							<li ng-class="{active: paginator.curPageId == item }" ng-repeat="item in paginator.pages"><a href="#" ng-click="paginator.toPage($event, item)">[[item]]</a></li>
 							<li ng-class="{disabled: paginator.curPageId == paginator.countPages}"><a href="#" ng-click="paginator.nextPage($event)">&raquo;</a>
 							<li ng-class="{disabled: paginator.curPageId == paginator.countPages}"><a href="#" ng-click="paginator.lastPage($event)">last</a></li></li>
 						</ul>
 					</div>
-					<div class="col-md-5" style="margin: 20px 0; width:370px;">
+					<div class="col-md-5" style="margin: 25px 0; width: 300px;float: right;">
 						<label for="inputEmail1" class="col-lg-5 col-md-3 control-label" style="margin-top: 7px;">Messages/Page</label>
 						<div class="col-lg-5 col-md-9" >
 					   	<select class="form-control" ng-model="postsPerPage" ng-change="changePostsPerPageOffice()">
@@ -104,7 +102,7 @@
 			{% for topic in windowtopics  %}
            		{% if topic.getOfficeid()== office.getId() and topic.getDropdown == 0  %}
     	        <div  ng-show="panel.isSelected({{loop.index}})" ng-controller="PersonalTopicChatController" ng-init="init('{{ topic.getTopicid() }}')" >
-  						<div style="position: absolute; left: 550px;">
+  						<div style="position: absolute; left: 550px; margin-top:5px"">
   						<a style="color: #285e8e" href="{{ url('intranet_delete_tab_from_personal_page', { id: tabsId[loop.index0] } ) }}">Delete tab</a>
   						&nbsp;&nbsp;
   						<a style="color: #285e8e" href="{{ url('intranet_delete_window_from_personal_page', { windowid: window.getWindowid() } ) }}">Delete window	</a>
@@ -113,13 +111,13 @@
   							<div class="col-md-7" style=" width:320px">
 								<ul class="pagination" style="margin-left: 5px;">
 									<li ng-class="{disabled: paginator.curPageId == 1}"><a href="#" ng-click="paginator.firstPage($event)">first</a></li>
-									<li ng-class="{disabled: paginator.curPageId == 1}"><a href="#" ng-click="paginator.prevPage($event)">«</a></li>
+									<li ng-class="{disabled: paginator.curPageId == 1}"><a href="#" ng-click="paginator.prevPage($event)">&laquo;</a></li>
 									<li ng-class="{active: paginator.curPageId == item }" ng-repeat="item in paginator.pages"><a href="#" ng-click="paginator.toPage($event, item)">[[item]]</a></li>
 									<li ng-class="{disabled: paginator.curPageId == paginator.countPages}"><a href="#" ng-click="paginator.nextPage($event)">&raquo;</a>
 									<li ng-class="{disabled: paginator.curPageId == paginator.countPages}"><a href="#" ng-click="paginator.lastPage($event)">last</a></li></li>
 								</ul>
 							</div>
-							<div class="col-md-5" style="margin: 20px 0; width:370px;">
+							<div class="col-md-5" style="margin: 25px 0; width: 300px;float: right;">
 								<label for="inputEmail1" class="col-lg-5 col-md-3 control-label" style="margin-top: 7px;">Messages/Page</label>
 								<div class="col-lg-5 col-md-9">
 					   			<select class="form-control" ng-model="postsPerPage" ng-change="changePostsPerPageTopic()">
@@ -150,7 +148,7 @@
             	{% if topic.getDropdown != 0  %}
             		{% if topic.getOfficeid()== office.getId()  %}
     	        <div  ng-show="panel.isSelected({{999}})" ng-controller="PersonalTopicChatController" ng-init="init('{{ topic.getTopicid() }}')" >
-  						<div style="position: absolute; left: 550px;">
+  						<div style="position: absolute; left: 550px; margin-top:5px"">
   						<a style="color: #285e8e" href="{{ url('intranet_delete_tab_from_personal_page', { id: tabsId[loop.index0] } ) }}">Delete tab</a>
   						&nbsp;&nbsp;
   						<a style="color: #285e8e" href="{{ url('intranet_delete_window_from_personal_page', { windowid: window.getWindowid() } ) }}">Delete window	</a>
@@ -159,13 +157,13 @@
   							<div class="col-md-7" style=" width:320px">
 								<ul class="pagination" style="margin-left: 5px;">
 									<li ng-class="{disabled: paginator.curPageId == 1}"><a href="#" ng-click="paginator.firstPage($event)">first</a></li>
-									<li ng-class="{disabled: paginator.curPageId == 1}"><a href="#" ng-click="paginator.prevPage($event)">«</a></li>
+									<li ng-class="{disabled: paginator.curPageId == 1}"><a href="#" ng-click="paginator.prevPage($event)">&laquo;</a></li>
 									<li ng-class="{active: paginator.curPageId == item }" ng-repeat="item in paginator.pages"><a href="#" ng-click="paginator.toPage($event, item)">[[item]]</a></li>
 									<li ng-class="{disabled: paginator.curPageId == paginator.countPages}"><a href="#" ng-click="paginator.nextPage($event)">&raquo;</a>
 									<li ng-class="{disabled: paginator.curPageId == paginator.countPages}"><a href="#" ng-click="paginator.lastPage($event)">last</a></li></li>
 								</ul>
 							</div>
-							<div class="col-md-5" style="margin: 20px 0; width:370px;">
+							<div class="col-md-5" style="margin: 25px 0; width: 300px;float: right;">
 								<label for="inputEmail1" class="col-lg-5 col-md-3 control-label" style="margin-top: 7px;">Messages/Page</label>
 								<div class="col-lg-5 col-md-9">
 					   			<select class="form-control" ng-model="postsPerPage" ng-change="changePostsPerPageTopic()">
@@ -199,7 +197,7 @@
 			{% for topic in windowtopics  %}
            		{% if topic.getOfficeid()== office.getId() and topic.getDropdown == 0  %}
     	        <div  ng-show="panel.isSelected({{loop.index0}})" ng-controller="PersonalTopicChatController" ng-init="init('{{ topic.getTopicid() }}')" >
-  						<div style="position: absolute; left: 550px;">
+  						<div style="position: absolute; left: 550px; margin-top:5px"">
   						<a style="color: #285e8e" href="{{ url('intranet_delete_tab_from_personal_page', { id: tabsId[loop.index0] } ) }}">Delete tab</a>
   						&nbsp;&nbsp;
   						<a style="color: #285e8e" href="{{ url('intranet_delete_window_from_personal_page', { windowid: window.getWindowid() } ) }}">Delete window	</a>
@@ -208,13 +206,13 @@
   							<div class="col-md-7" style=" width:320px">
 								<ul class="pagination" style="margin-left: 5px;">
 									<li ng-class="{disabled: paginator.curPageId == 1}"><a href="#" ng-click="paginator.firstPage($event)">first</a></li>
-									<li ng-class="{disabled: paginator.curPageId == 1}"><a href="#" ng-click="paginator.prevPage($event)">«</a></li>
+									<li ng-class="{disabled: paginator.curPageId == 1}"><a href="#" ng-click="paginator.prevPage($event)">&laquo;</a></li>
 									<li ng-class="{active: paginator.curPageId == item }" ng-repeat="item in paginator.pages"><a href="#" ng-click="paginator.toPage($event, item)">[[item]]</a></li>
 									<li ng-class="{disabled: paginator.curPageId == paginator.countPages}"><a href="#" ng-click="paginator.nextPage($event)">&raquo;</a>
 									<li ng-class="{disabled: paginator.curPageId == paginator.countPages}"><a href="#" ng-click="paginator.lastPage($event)">last</a></li></li>
 								</ul>
 							</div>
-							<div class="col-md-5" style="margin: 20px 0; width:370px;">
+							<div class="col-md-5" style="margin: 25px 0;width: 300px;float: right;">
 								<label for="inputEmail1" class="col-lg-5 col-md-3 control-label" style="margin-top: 7px;">Messages/Page</label>
 								<div class="col-lg-5 col-md-9">
 					   			<select class="form-control" ng-model="postsPerPage" ng-change="changePostsPerPageTopic()">
@@ -245,7 +243,7 @@
             	{% if topic.getDropdown != 0  %}
             		{% if topic.getOfficeid()== office.getId()  %}
     	        <div  ng-show="panel.isSelected({{999}})" ng-controller="PersonalTopicChatController" ng-init="init('{{ topic.getTopicid() }}')" >
-  						<div style="position: absolute; left: 550px;">
+  						<div style="position: absolute; left: 550px; margin-top:5px"">
   						<a style="color: #285e8e" href="{{ url('intranet_delete_tab_from_personal_page', { id: tabsId[loop.index0] } ) }}">Delete tab</a>
   						&nbsp;&nbsp;
   						<a style="color: #285e8e" href="{{ url('intranet_delete_window_from_personal_page', { windowid: window.getWindowid() } ) }}">Delete window	</a>
@@ -254,13 +252,13 @@
   							<div class="col-md-7" style=" width:320px">
 								<ul class="pagination" style="margin-left: 5px;">
 									<li ng-class="{disabled: paginator.curPageId == 1}"><a href="#" ng-click="paginator.firstPage($event)">first</a></li>
-									<li ng-class="{disabled: paginator.curPageId == 1}"><a href="#" ng-click="paginator.prevPage($event)">«</a></li>
+									<li ng-class="{disabled: paginator.curPageId == 1}"><a href="#" ng-click="paginator.prevPage($event)">&laquo;</a></li>
 									<li ng-class="{active: paginator.curPageId == item }" ng-repeat="item in paginator.pages"><a href="#" ng-click="paginator.toPage($event, item)">[[item]]</a></li>
 									<li ng-class="{disabled: paginator.curPageId == paginator.countPages}"><a href="#" ng-click="paginator.nextPage($event)">&raquo;</a>
 									<li ng-class="{disabled: paginator.curPageId == paginator.countPages}"><a href="#" ng-click="paginator.lastPage($event)">last</a></li></li>
 								</ul>
 							</div>
-							<div class="col-md-5" style="margin: 20px 0; width:370px;">
+							<div class="col-md-5" style="margin: 25px 0; width: 300px;float: right;">
 								<label for="inputEmail1" class="col-lg-5 col-md-3 control-label" style="margin-top: 7px;">Messages/Page</label>
 								<div class="col-lg-5 col-md-9">
 					   			<select class="form-control" ng-model="postsPerPage" ng-change="changePostsPerPageTopic()">
