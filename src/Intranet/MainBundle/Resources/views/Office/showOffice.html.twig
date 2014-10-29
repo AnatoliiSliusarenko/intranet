@@ -2,18 +2,17 @@
 
 {% block title %}{{ office.name }}{% endblock %}
 
-{% block styles %}
-	{{ parent() }}
-	<link href="{{ asset('bundles/intranet/css/uploadify.css') }}" rel="stylesheet">
-{% endblock %}
-
 {% block breadcrumbs %}
-<ul class="breadcrumb fix topstyle" style="z-index:9">
-	{% for item in breadcrumbs %}
-		<li><a href="{{ url('intranet_show_office', {office_id: item.getId()}) }}">{{ item.name }}</a></li>
-	{% endfor %}
-	<li class="active">{{ office.name }}</li>
-</ul>
+<div class="row">
+	<div class="col-md-12">
+		<ul class="breadcrumb fix topstyle" style="z-index:9">
+			{% for item in breadcrumbs %}
+				<li><a href="{{ url('intranet_show_office', {office_id: item.getId()}) }}">{{ item.name }}</a></li>
+			{% endfor %}
+			<li class="active">{{ office.name }}</li>
+		</ul>
+	</div>
+</div>
 {% endblock %}
 
 {% block pageheader %}   
@@ -447,14 +446,14 @@
 	{% if office.getUserid() != 0 %}
 	<script src="{{ asset('bundles/intranet/js/custom/chat.js') }}"></script>
 	<script src="{{ asset('bundles/intranet/js/custom/members.js') }}"></script>
-	<script src="{{ asset('bundles/intranet/js/uploadify/jquery.uploadify.min.js') }}"></script>
 	<script type="text/javascript">
 	var USERS = {{ users|json_encode|raw }};
 	var MEMBERS = {{ officeUsers|json_encode|raw }};
 	var TOPICS = {{ topics|json_encode|raw }};
 	var STATUSES = {{ availableStatus|json_encode|raw }};
 	JSON_URLS.posts = "{{ path('intranet_post_office_get_posts', {office_id: office.id}) }}";
-	JSON_URLS.post_add = "{{ path('intranet_post_office_add_post', {office_id: office.id}) }}"; 
+	JSON_URLS.post_add = "{{ path('intranet_post_office_add_post', {office_id: office.id}) }}";
+	JSON_URLS.sendPrivateMsg = "{{ path('intranet_post_office_send_private_msg', {office_id: office.id}) }}";
 	JSON_URLS.avatar = "{{ app.request.getBaseURL() }}/../documents/";
 	JSON_URLS.members = "{{ path('intranet_office_members', {office_id: office.id}) }}";
 	JSON_URLS.editMembers = "{{ url('intranet_change_office_members', {office_id: office.getId()}) }}";
