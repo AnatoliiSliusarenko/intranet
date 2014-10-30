@@ -181,7 +181,7 @@ public function getTasksForOfficeAction(Request $request, $office_id)
     		
     		$inProgress = ($user != null) ? $user->isInProgress($em) : 0;
     		
-    		if ($status->getCalcTimeStart() && $inProgress == 1)
+    		if ($status->getCalcTimeStart() && $inProgress > 0)
     		{
     			$response = new Response(json_encode(array("result" => null, "message" => 'Developer is already in progress!')));
     			$response->headers->set('Content-Type', 'application/json');
