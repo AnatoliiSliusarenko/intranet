@@ -387,19 +387,12 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 		
 		var url = $scope.urlsTasksEdit.replace('0', task.id);
 		
-		$scope.task.estimated = undefined;
 		_.map(STATUSES, function(s){
 			if ((s.id == $scope.task.statusid) && (s.updateEstimate == true))
 			{
 				$scope.task.estimated = parseInt($scope.task.esth)*60 + parseInt($scope.task.estm);
 			}
 		});
-		
-		if (($scope.task.estimated != undefined) && ($scope.task.estimated == 0))
-		{
-			alert('Estimation time can`t be zero!');
-			return false;
-		}
 		
 		$http({
 			method: "POST", 
@@ -409,6 +402,11 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 		.success(function(response){
 			if (response.result)
 				$modalInstance.close(response.result);
+			else
+			if (response.message != undefined)
+			{
+				alert(response.message);
+			}
 		})
 	}
 	
