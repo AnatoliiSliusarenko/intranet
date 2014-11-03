@@ -265,7 +265,6 @@ Intranet.controller('ChatController', ['$scope', '$http', '$paginator', '$modal'
 	
 	$scope.addDocuments = function()
 	{
-		debugger
 		$http({
 			method: "GET", 
 			url: $scope.urlsDocumentsAdd
