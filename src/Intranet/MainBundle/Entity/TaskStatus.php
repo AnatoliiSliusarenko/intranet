@@ -400,7 +400,8 @@ class TaskStatus
     		'color' => $this->getColor(),
     		'initStartdate' => $this->getInitStartdate(),
     		'updateEstimate' => $this->getUpdateEstimate(),
-    		'initial' => $this->getInitial()
+    		'initial' => $this->getInitial(),
+    		'calcTimeStart' => $this->getCalcTimeStart()
     	);
     }
     

@@ -389,7 +389,9 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 		
 		_.map(STATUSES, function(s){
 			if ((s.id == $scope.task.statusid) && (s.updateEstimate == true))
+			{
 				$scope.task.estimated = parseInt($scope.task.esth)*60 + parseInt($scope.task.estm);
+			}
 		});
 		
 		$http({
@@ -400,6 +402,11 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 		.success(function(response){
 			if (response.result)
 				$modalInstance.close(response.result);
+			else
+			if (response.message != undefined)
+			{
+				alert(response.message);
+			}
 		})
 	}
 	

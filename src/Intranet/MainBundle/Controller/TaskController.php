@@ -154,7 +154,7 @@ public function getTasksForOfficeAction(Request $request, $office_id)
 		}
 		
     	if ($request->getMethod() == 'POST')
-    	{
+    	{	
     		$this->get('intranet.taskActivityLoger')->setOldStateOfTask($task);
     		
     		$data = json_decode(file_get_contents("php://input"));
@@ -178,6 +178,23 @@ public function getTasksForOfficeAction(Request $request, $office_id)
     		$task->setUserid($userid);
     		$user = ($userid != null) ? $em->getRepository('IntranetMainBundle:User')->find($userid) : null;
     		$topic = ($topicid != null) ? $em->getRepository('IntranetMainBundle:Topic')->find($topicid) : null;
+    		
+    		$inProgress = ($user != null) ? $user->isInProgress($em) : 0;
+    		
+    		if ($status->getCalcTimeStart() && $inProgress > 0)
+    		{
+    			$response = new Response(json_encode(array("result" => null, "message" => 'Developer is already in progress!')));
+    			$response->headers->set('Content-Type', 'application/json');
+    			return $response;
+    		}
+    		
+    		if ($status->getUpdateEstimate() && $estimated == 0)
+    		{
+    			$response = new Response(json_encode(array("result" => null, "message" => 'Estimation time can`t be zero!')));
+    			$response->headers->set('Content-Type', 'application/json');
+    			return $response;
+    		}
+    		
     		$task->setUser($user, $this->get('intranet.notifier'));
     		
     		

@@ -1095,4 +1095,23 @@ class User implements UserInterface, \Serializable
     {
         return $this->country;
     }
+    
+    public function isInProgress($em)
+    {
+    	$calculatingStatuses = $em->getRepository('IntranetMainBundle:TaskStatus')->findByCalcTimeStart(true);
+    	$calculatingStatusesIds = array_map(function($status){return $status->getId();}, $calculatingStatuses);
+    	
+    	$qb = $em->createQueryBuilder();
+    	
+    	$repository = $em->getRepository('IntranetMainBundle:Task');
+    	$query = $repository->createQueryBuilder('t')
+    	->where('t.userid = :userid')
+    	->andWhere($qb->expr()->in('t.status', $calculatingStatusesIds))
+    	->setParameter('userid', $this->getId())
+    	->getQuery();
+    	
+    	$result = $query->getResult();
+    	
+    	return count($result);
+    }
 }
