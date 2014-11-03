@@ -55,6 +55,12 @@
 
                 <div id="myTabContent" class="tab-content">
                 	<div class="tab-pane fade  in active" id="files">
+                		<div class="panel panel-cascade">
+							<div class="panel-body">
+								<h4>Available types: <b>{{ availableTypes }}</b></h4>
+	          						<input type="file" name="file_upload" id="file_upload" />
+							</div>
+						</div>
                     	<ul>
                       	{% for document in app.user.getDocuments()%}
                         	<li class="col-md-4">
@@ -197,4 +203,16 @@
         </div>
 	</div>
 </div>
+{% endblock %}
+{% block javascripts %}
+{{ parent() }} 
+{{ parent() }}  
+	<script src="{{ asset('bundles/intranet/js/custom/documents.js') }}"></script>
+	<script>
+	JSON_URLS.documentsGet = "{{ path('intranet_document_get') }}";
+	JSON_URLS.uploaderSWF = '../../bundles/intranet/swf/uploadify.swf';
+	JSON_URLS.uploaderUpload = "{{ path('intranet_document_upload') }}";
+	var TIMESTAMP = '{{ timestamp }}';
+	var TOKEN = '{{ token }}';
+	</script>
 {% endblock %}

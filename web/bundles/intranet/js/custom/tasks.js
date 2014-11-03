@@ -448,7 +448,7 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 	        'uploader' : JSON_URLS.uploaderUpload,
 	        'onUploadSuccess' : function(file, data, response) {
 	            console.log('The file ' + file.name + ' was successfully uploaded with a response of ' + response + ':' + data);
-	            getDocuments();
+	            getDocuments_();
 	        }
 	    });
 		    
@@ -476,6 +476,25 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 			if (response.result)	
 			{
 				$scope.documents = prepareDocuments(response.result);
+				setTimeout(bindList, 500);
+			}
+		})
+	}
+	
+	function getDocuments_()
+	{
+		$http({
+			method: "GET", 
+			url: $scope.urlsDocumentsGet,
+			params: {
+				userid: USER.id
+			}
+			  })
+		.success(function(response){
+			//console.log(response);
+			if (response.result)	
+			{
+				$scope.documents[0].checked = true;
 				setTimeout(bindList, 500);
 			}
 		})

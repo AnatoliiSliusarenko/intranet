@@ -5,12 +5,19 @@ namespace Intranet\MainBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Intranet\MainBundle\Entity\Document;
 
 class UserProfileController extends Controller
 {
     public function showAction()
     {
-        return $this->render('IntranetMainBundle:UserProfile:showProfile.html.twig');
+    	$timestamp = time();
+    	$user = $this->getUser();
+    	$token = Document::getToken($timestamp); 
+        return $this->render('IntranetMainBundle:UserProfile:showProfile.html.twig',array('timestamp' => $timestamp,
+        			  'token' => $token,
+        			  'availableTypes'=> Document::getAvailableTypesInString()
+        ));
     }
     
     public function changeAvatarAction($document_id)
