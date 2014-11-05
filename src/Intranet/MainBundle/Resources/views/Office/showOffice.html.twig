@@ -448,6 +448,7 @@
 	<script src="{{ asset('bundles/intranet/js/custom/members.js') }}"></script>
 	<script type="text/javascript">
 	var USERS = {{ users|json_encode|raw }};
+	var OFFICE_USERS = {{ officeUsers|json_encode|raw }};
 	var MEMBERS = {{ officeUsers|json_encode|raw }};
 	var TOPICS = {{ topics|json_encode|raw }};
 	var STATUSES = {{ availableStatus|json_encode|raw }};

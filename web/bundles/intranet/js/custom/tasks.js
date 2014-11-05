@@ -15,6 +15,7 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 	
 	$scope.tasks = [];
 	$scope.users = USERS;
+	$scope.office_users = OFFICE_USERS;
 	$scope.topics = TOPICS;
 	$scope.tasksNotification = TASKS_NOTIFICATIONS;
 	$scope.curentTopic = ENTITY.id;
@@ -166,7 +167,7 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 			      template: response,
 			      controller: 'AddTasksController',
 			      resolve: {
-			    	  users: function(){return $scope.users;},
+			    	  users: function(){return $scope.office_users;},
 			    	  parentid: function(){return parentid;},
 			    	  curentTopic: function(){return $scope.curentTopic}
 			      }
@@ -202,7 +203,7 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 			      controller: 'EditTasksController',
 			      resolve: {
 			    	  task: function(){return task;},
-			    	  users: function(){return $scope.users;}
+			    	  users: function(){return $scope.office_users;}
 			      }
 			    });
 			
