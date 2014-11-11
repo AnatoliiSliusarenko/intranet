@@ -5,7 +5,6 @@ Intranet.controller('PersonalOfficeChatController',['$http', '$scope', '$paginat
 	
 	$scope.officesIdArray = DATA_ID.officesid;
 	$scope.paginator = $paginator;
-	
 	$scope.postsPerPage = 10;
 	$scope.paginator.postsPerPage = $scope.postsPerPage;
 	$scope.posts = [];
@@ -90,12 +89,12 @@ Intranet.controller('PersonalOfficeChatController',['$http', '$scope', '$paginat
 	
 	function getMembersForOffices()
 	{
-		_.map($scope.officesIdArray, function(officeId){
-			var url = $scope.membersOfficeURL.replace('0', $scope.count);
+        _.map($scope.officesIdArray, function (officeId) {
+            var url = $scope.membersOfficeURL.replace('0', $scope.count);
 			$http({
 				method: "GET", 
-				url: url, 
-				})
+				url: url
+            })
 			.success(function(response){
 				if (response.result)
 					$scope.members = response.result;
@@ -108,8 +107,8 @@ Intranet.controller('PersonalOfficeChatController',['$http', '$scope', '$paginat
 		var url = $scope.postsOfficeCountURL.replace('0', $scope.count);
 				$http({
 					method: "GET", 
-					url: url, 
-					})
+					url: url
+                })
 				.success(function(response){
 					//console.log("posts count: ", response.result);
 					if (response.result)
@@ -346,8 +345,8 @@ Intranet.controller('PersonalTopicChatController',['$http', '$scope', '$paginato
 			var url = $scope.membersTopicURL.replace('0', $scope.topicId);
 			$http({
 				method: "GET", 
-				url: url, 
-				})
+				url: url
+            })
 			.success(function(response){
 				//console.log("members: ", response.result);
 				if (response.result)
@@ -360,8 +359,8 @@ Intranet.controller('PersonalTopicChatController',['$http', '$scope', '$paginato
 		var url = $scope.postsTopicCountURL.replace('0', $scope.topicId);
 			$http({
 				method: "GET", 
-				url: url, 
-				})
+				url: url
+            })
 			.success(function(response){
 				//console.log("posts count: ", response.result);
 				if (response.result)
@@ -369,7 +368,7 @@ Intranet.controller('PersonalTopicChatController',['$http', '$scope', '$paginato
 			})
 	}
 	
-	function getNewPostsForTopic()
+	function getNewPostsForTopic(f)
 	{
 			if ($scope.paginator.curPageId == 1)
 			{

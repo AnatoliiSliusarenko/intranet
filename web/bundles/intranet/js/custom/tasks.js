@@ -96,6 +96,7 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 			if (response.result)
 			{
 				$scope.tasks = prepareTasks(response.result);
+				calculateNotifications();
 				setTimeout(addTooltips, 100);
 			}
 		})
@@ -192,6 +193,7 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 	$scope.editTask = function(task)
 	{
 		var url = $scope.urlsTasksEdit.replace('0', task.id);
+        task.newCommentsCount = 0;
 		$http({
 			method: "GET", 
 			url: url
@@ -440,6 +442,11 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 			$(this).parent().toggleClass('finished');
 			$(this).toggleClass('fa-square-o');
 		});
+		$('.finish').$scope.checkItem(function(){
+			debugger
+			$(this).parent().toggleClass('finished');
+			$(this).toggleClass('fa-square-o');
+		});
 	}
 	
 	setTimeout(function(){
@@ -454,7 +461,7 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 	        'swf'      : JSON_URLS.uploaderSWF,
 	        'uploader' : JSON_URLS.uploaderUpload,
 	        'onUploadSuccess' : function(file, data, response) {
-	            getDocuments();
+	            getDocuments_();
 	        }
 	    });
 		    
@@ -466,6 +473,26 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 	function prepareDocuments(documents)
 	{
 		return _.map(documents, function(d){d.checked = false; return d;});
+	}
+	
+	function getDocuments_()
+	{
+		$http({
+			method: "GET", 
+			url: $scope.urlsDocumentsGet,
+			params: {
+				userid: USER.id
+			}
+			  })
+		.success(function(response){
+			console.log(response);
+			if (response.result)	
+			{
+				$scope.documents = prepareDocuments(response.result);
+				setTimeout(bindList, 500);
+				$scope.checkItem($scope.documents[0].id)
+			}
+		})
 	}
 	
 	function getDocuments()

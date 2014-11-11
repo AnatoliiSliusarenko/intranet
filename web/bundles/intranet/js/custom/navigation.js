@@ -154,7 +154,6 @@ Intranet.controller('NavigationController', ['$scope', '$http', function($scope,
 			
 			return n;
 		});
-		
 		TASKS_NOTIFICATIONS =_.map(notifications,function(n){
 			if(n.type=='task_comment')
 				return n;

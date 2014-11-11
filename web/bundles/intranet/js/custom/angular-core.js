@@ -13,8 +13,7 @@ var Intranet = angular.module('Intranet', ['ui.bootstrap','ngSanitize'])
     paginator.postsPerPage = 5;
     paginator.postsPerPageValues = [5, 10, 20, 50, 100];
     paginator.countPosts = 100;
-    
-    
+
     paginator.nextPage = function(event){
     	event.preventDefault();
     	if (this.curPageId < this.countPages)

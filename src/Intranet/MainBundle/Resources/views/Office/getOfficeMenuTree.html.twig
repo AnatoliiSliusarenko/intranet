@@ -1,42 +1,42 @@
 {% for office in officeTree %}
-	<li class='{% if (activeSection is defined and activeSection=='office') %}{{ 'active' }}{% endif %}' >
-		<a class="dropdown" href='{{ url('intranet_show_office', {office_id: office.getId()}) }}' data-original-title='{{ office.name }}'>
-			<i class='fa fa-sitemap'></i>
-			<span class='hidden-minibar'> {{ office.name }}</span>
-		</a>
-	
-		<ul class="active">
-		{% for localOffice in office.getChildrenForUser(em, app.user) %}
-			<li class="{% if (fullOfficeBreadcrumbsIds is defined and localOffice.getId() in fullOfficeBreadcrumbsIds) %}{{ 'active' }}{% else %}{{ 'submenu' }}{% endif %}">
-				<a href='{{ url('intranet_show_office', {office_id: localOffice.getId()}) }}' data-original-title='{{ localOffice.name }}'>
-					<i class='fa fa-group'></i>
-					<span class='hidden-minibar'> {{ localOffice.getName() }}</span>
-				</a>
-				{% if localOffice.getChildrenForUser(em, app.user)|length>0 %}
-					<ul class="{% if (fullOfficeBreadcrumbsIds is defined and localOffice.getId() in fullOfficeBreadcrumbsIds) %}{{ 'active' }}{% endif %}">
-					{% for subOffice in localOffice.getChildrenForUser(em, app.user) %}
-						<li class="{% if (fullOfficeBreadcrumbsIds is defined and subOffice.getId() in fullOfficeBreadcrumbsIds) %}{{ 'active' }}{% endif %}">
-							<a href='{{ url('intranet_show_office', {office_id: subOffice.getId()}) }}' data-original-title='{{ subOffice.name }}'>
-								<i class='fa fa-user'></i>
-								<span class='hidden-minibar'> {{ subOffice.name }}</span>
-							</a>
-						</li>
-					{% endfor %}
-					</ul>
-				{% endif %}
-			</li>
-		{% endfor %}
-		</ul>
-	</li>
-	{% if office.getChildrenForUser(em, app.user)|length==0 %}
-		{% for userOffice in app.user.getOfficesWithoutOne(office) %}
-		<li class='{% if (fullOfficeBreadcrumbsIds is defined and userOffice.getId() in fullOfficeBreadcrumbsIds) %}{{ 'active' }}{% endif %}' >
-				<a class="dropdown" href='{{ url('intranet_show_office', {office_id: userOffice.getId()}) }}' data-original-title='{{ userOffice.name }}'>
-					<i class='fa fa-group'></i>
-					<span class='hidden-minibar'> {{ userOffice.name }}</span>
-				</a>
-		</li>
-		{% endfor %}
-	{% endif %}
+    <li class='{% if (activeSection is defined and activeSection=='office') %}{{ 'active' }}{% endif %}' >
+        <a class="dropdown" href='{{ url('intranet_show_office', {office_id: office.getId()}) }}' data-original-title='{{ office.name }}'>
+            <i class='fa fa-sitemap'></i>
+            <span class='hidden-minibar'> {{ office.name }}</span>
+        </a>
+
+        <ul class="active">
+            {% for localOffice in office.getChildrenForUser(em, app.user) %}
+                <li class="{% if (fullOfficeBreadcrumbsIds is defined and localOffice.getId() in fullOfficeBreadcrumbsIds) %}{{ 'active' }}{% else %}{{ 'submenu' }}{% endif %}">
+                    <a href='{{ url('intranet_show_office', {office_id: localOffice.getId()}) }}' data-original-title='{{ localOffice.name }}'>
+                        <i class='fa fa-group'></i>
+                        <span class='hidden-minibar'> {{ localOffice.getName() }}</span>
+                    </a>
+                    {% if localOffice.getChildrenForUser(em, app.user)|length>0 %}
+                        <ul class="{% if (fullOfficeBreadcrumbsIds is defined and localOffice.getId() in fullOfficeBreadcrumbsIds) %}{{ 'active' }}{% endif %}">
+                            {% for subOffice in localOffice.getChildrenForUser(em, app.user) %}
+                                <li class="{% if (fullOfficeBreadcrumbsIds is defined and subOffice.getId() in fullOfficeBreadcrumbsIds) %}{{ 'active' }}{% endif %}">
+                                    <a href='{{ url('intranet_show_office', {office_id: subOffice.getId()}) }}' data-original-title='{{ subOffice.name }}'>
+                                        <i class='fa fa-user'></i>
+                                        <span class='hidden-minibar'> {{ subOffice.name }}</span>
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    </li>
+    {% if office.getChildrenForUser(em, app.user)|length==0 %}
+        {% for userOffice in app.user.getOfficesWithoutOne(office) %}
+            <li class='{% if (fullOfficeBreadcrumbsIds is defined and userOffice.getId() in fullOfficeBreadcrumbsIds) %}{{ 'active' }}{% endif %}' >
+                <a class="dropdown" href='{{ url('intranet_show_office', {office_id: userOffice.getId()}) }}' data-original-title='{{ userOffice.name }}'>
+                    <i class='fa fa-group'></i>
+                    <span class='hidden-minibar'> {{ userOffice.name }}</span>
+                </a>
+            </li>
+        {% endfor %}
+    {% endif %}
 {% endfor %}
 

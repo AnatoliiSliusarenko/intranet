@@ -312,7 +312,7 @@ Intranet.controller('ChatController', ['$scope', '$http', '$paginator', '$modal'
 	        'uploader' : JSON_URLS.uploaderUpload,
 	        'onUploadSuccess' : function(file, data, response) {
 	        	
-	            getDocuments();
+	            getDocuments_();
 	        }
 	    });
 		    
@@ -324,6 +324,27 @@ Intranet.controller('ChatController', ['$scope', '$http', '$paginator', '$modal'
 	function prepareDocuments(documents)
 	{
 		return _.map(documents, function(d){d.checked = false; return d;});
+	}
+	
+	function getDocuments_()
+	{
+		$http({
+			method: "GET", 
+			url: $scope.urlsDocumentsGet,
+			params: {
+				userid: USER.id
+			}
+			  })
+		.success(function(response){
+			console.log(response);
+			if (response.result)	
+			{
+				$scope.documents = prepareDocuments(response.result);
+				setTimeout(bindList, 500);
+				debugger
+				$scope.documents[0].checked = true;
+			}
+		})
 	}
 	
 	function getDocuments()
