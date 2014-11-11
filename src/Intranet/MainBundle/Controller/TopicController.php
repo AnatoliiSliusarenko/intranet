@@ -49,11 +49,13 @@ class TopicController extends Controller
     	
     	$tasks = $topic->getTasksWithChildren($em);
     	$users = $this->getUser()->getAllUsers($em, false);
+    	$officeUsers = $topic->getOffice()->getUsers();
     	$topicsForTasks = $topic->getAllChildrenForOffice($em);
     	array_unshift($topicsForTasks, $topic);
     	$windows = array();
     	$windows = PersonalPage::getWindowsName($em, $this->getUser()->getId(), $office->getName());
     	$parameters = array("users" => array_map(function($e){return $e->getInArray();}, $users), 
+    						'officeUsers' => array_map(function($e){return $e->getInArray();}, $officeUsers->toArray()),
 					    	"topic" => $topic,
 					    	"em" => $em,
 					    	"availableStatus" => TaskStatus::getAllStatuses($em),
