@@ -308,7 +308,7 @@ class Notifier
     		case "task_comment":
     			{
     				$message = 'New comment around the task "'.$resource->getName().'"';
-    				$users = User::getTaskCommentsMembers($this->em, $resource->getId());
+    				$users = $destination->getUsers();
     				$userAsigned = $resource->getUser();
     				if ($userAsigned != null) $users[] = $userAsigned;
     				break;

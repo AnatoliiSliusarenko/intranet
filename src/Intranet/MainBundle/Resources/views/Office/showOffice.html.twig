@@ -5,89 +5,74 @@
 {% block breadcrumbs %}
 <ul class="breadcrumb fix topstyle" style="z-index:9">
 <div class="row">
-	<div class="col-md-12">
+	<div class="col-md-12" style="display: flex">
 			{% for item in breadcrumbs %}
-				<li><a href="{{ url('intranet_show_office', {office_id: item.getId()}) }}">{{ item.name }}</a></li>
+				<li><a href="{{ url('intranet_show_office', {office_id: item.getId()}) }}">{{ item.name }}</a></li>&nbsp;&nbsp;
 			{% endfor %}
 			<li class="active">{{ office.name }}</li>
 	</div>
 </div>
 </ul>
+    <div class="panel fix toppanel" style="z-index:9">
+        <h3 class="page-header "><i class="fa fa-sitemap"></i> {{ office.name }} <i class="fa fa-info-circle animated bounceInDown show-info"></i> {% if (office.getUserid() != 0 and office.getUserid() == app.user.getId()) %}<i class="fa fa-times-circle animated bounceInDown show-danger"></i>{% endif %} </h3>
+
+        <blockquote class="page-information hidden">
+            <p>
+                {{ office.description }}
+            </p>
+        </blockquote>
+        {% if (office.getUserid() != 0 and office.getUserid() == app.user.getId()) %}
+            <blockquote class="page-danger-zone hidden">
+                <p>
+                    If you really want to delete this office please click <a href="{{ url('intranet_delete_office', {office_id: office.getId()}) }}">here</a> (can't be rollback!)
+                </p>
+            </blockquote>
+        {% endif %}
+    </div>
 {% endblock %}
 
 {% block pageheader %}   
 <div class="row">
-	<div class="col-md-12">
-	<div class="panel fix toppanel" style="z-index:9">
-		<h3 class="page-header "><i class="fa fa-sitemap"></i> {{ office.name }} <i class="fa fa-info-circle animated bounceInDown show-info"></i> {% if (office.getUserid() != 0 and office.getUserid() == app.user.getId()) %}<i class="fa fa-times-circle animated bounceInDown show-danger"></i>{% endif %} </h3>
-
-		<blockquote class="page-information hidden">
-		<p>
-			{{ office.description }}
-		</p>
-		</blockquote>
-		{% if (office.getUserid() != 0 and office.getUserid() == app.user.getId()) %}
-		<blockquote class="page-danger-zone hidden">
-		<p>
-			If you really want to delete this office please click <a href="{{ url('intranet_delete_office', {office_id: office.getId()}) }}">here</a> (can't be rollback!)
-		</p>
-		</blockquote>
-		{% endif %}
-		<div  id='menu-block'>
-            <ul class='vertical-menu btn-block'>
-            	<li class='drop-link'><a href="#">Topics</a>
-            		<ul class='drop-block'>
-            			{% for topic in office.getTopTopics(em, app.user.userSettings.showHiddenTopics) %}
-            				{{include(
-         						'IntranetMainBundle:Topic:showTopicMenuTree.html.twig',
-           						{ 'topic': topic }
-        					)}}
-            			{% endfor %}
-            		</ul>
-            	</li>
-        	</ul>
-        </div>
-
+	<div class="col-md-12" style="margin-top: 180px">
         <div class="panel panel-cascade">
-			<div class="panel-heading">
+            <div class="panel-heading">
                 <h3 class="panel-title">
                 	<span>
                     	<a href="#" class="panel-minimize">Add New Topic</a>
-                    </span>  
+                    </span>
                 </h3>
             </div>
             <div class="panel-body" style="{% if errorTopic is defined %}{{ 'display:block;' }}{% else %}{{ 'display:none;' }}{% endif %}">
-            	<form action="{{ url('intranet_add_topic', {topic_id: parentTopic.getId()}) }}" class="form-horizontal" role="form" method="post">
-            		<div class="form-group">
-                		<label for="inputEmail1" class="col-lg-2 col-md-3 control-label">Topic Name</label>
-                		<div class="col-lg-10 col-md-9">
-                 			<input type="text" name="name" class="form-control form-cascade-control" id="inputEmail1" placeholder="Type topic name here" value="{% if nameTopic is defined %}{{ nameTopic }}{% endif %}" required>
-               			</div>
-             		</div>
-             		<div class="form-group">
-                		<label for="inputEmail1" class="col-lg-2 col-md-3 control-label">Topic Description</label>
-                		<div class="col-lg-10 col-md-9">
-                 			<input type="text" name="description" class="form-control form-cascade-control" id="inputEmail1" placeholder="Type topic description here" value="{% if descriptionTopic is defined %}{{ descriptionTopic }}{% endif %}" required>
-               			</div>
-             		</div>
-             		<input type="hidden" value="{{ office.getId() }}" name="officeid" />
-             		{% if errorTopic is defined %}
-             		<div class="alert alert-danger">
-               			{{ errorTopic }}
-             		</div>
-             		{% endif %}
-             		<div class="form-actions">
-             			<input type="submit" value="Save New Topic" class="btn bg-primary btn-block text-white">
-             		</div>
-            	</form>
+                <form action="{{ url('intranet_add_topic', {topic_id: parentTopic.getId()}) }}" class="form-horizontal" role="form" method="post">
+                    <div class="form-group">
+                        <label for="inputEmail1" class="col-lg-2 col-md-3 control-label">Topic Name</label>
+                        <div class="col-lg-10 col-md-9">
+                            <input type="text" name="name" class="form-control form-cascade-control" id="inputEmail1" placeholder="Type topic name here" value="{% if nameTopic is defined %}{{ nameTopic }}{% endif %}" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputEmail1" class="col-lg-2 col-md-3 control-label">Topic Description</label>
+                        <div class="col-lg-10 col-md-9">
+                            <input type="text" name="description" class="form-control form-cascade-control" id="inputEmail1" placeholder="Type topic description here" value="{% if descriptionTopic is defined %}{{ descriptionTopic }}{% endif %}" required>
+                        </div>
+                    </div>
+                    <input type="hidden" value="{{ office.getId() }}" name="officeid" />
+                    {% if errorTopic is defined %}
+                        <div class="alert alert-danger">
+                            {{ errorTopic }}
+                        </div>
+                    {% endif %}
+                    <div class="form-actions">
+                        <input type="submit" value="Save New Topic" class="btn bg-primary btn-block text-white">
+                    </div>
+                </form>
             </div>
-            </div>
-		</div>
+        </div>
 		</div>
 		{% if office.getUserid() != 0 %}
-		<div style="margin-top:300px">
+		<div>
 		<div class="row chat-box" style="display: table-row-group">
-  							<div class="col-md-4" ng-controller="MembersController">
+  							<div class="col-md-4" ng-controller="MembersController" style="width:20%">
   								<div class="panel panel-cascade contacts-box" >
   									<div class="panel-heading">
   										<h3 class="panel-title "> 
@@ -139,7 +124,7 @@
   							</div>
   							
   							
-  							<div class="col-md-8" ng-controller="ChatController"> 
+  							<div class="col-md-8" ng-controller="ChatController" style="width:80%">
   								<div class="panel panel-cascade recipient-box">
 									<div class="panel-body nopadding">
 										<div class="row">
@@ -155,7 +140,7 @@
 											
 											<div class="col-md-5" style="margin: 20px 0;">
 											
-											<div  id='menu-block' style="position: absolute;left: 80%;">
+											<div  id='menu-block' style="position: absolute;left: 96%;">
             								<ul class='vertical-menu btn-block'style="width:40px">
             								<li class='drop-link' style="width:35px;"><a href="#"style="background-color:#454140" ><img src="http://zectranet.com/bundles/intranet/images/win.png" style="width: 25px;margin-left: -3px;"></a>
             								<ul class='drop-block1' style="margin-right: 5px;">
@@ -213,7 +198,7 @@
 		{% if (office.getUserid() == 0 or office.getUserid() == app.user.getId()) %}
 		<div class="panel panel-cascade">
 			<div class="panel-heading">
-                <h3 class="panel-title" style="margin-top:300px">
+                <h3 class="panel-title">
                 	<span>
                     	<a href="#" class="panel-minimize">Add New Local Office</a>
                     </span>

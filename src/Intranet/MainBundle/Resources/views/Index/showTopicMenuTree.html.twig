@@ -1,8 +1,7 @@
 
-{% set children = topic.getChildrenForOffice(em, office, app.user.userSettings.showHiddenTopics) %}
-{#{% if topic.getTasksCount() > 0 or children|length > 0 %}#}
+{% set children = topic.getChildrenForOffice(em, localOffice, app.user.userSettings.showHiddenTopics) %}
 <li class='drop-link {% if topic.status == "closed" %}closed{% else %} active {% endif %} ' style="width:400px">
-    <a href="{{ url('intranet_show_topic', {topic_id: topic.getId()}) }}">
+    <a  href="{{ url('intranet_show_topic', {topic_id: topic.getId()}) }}">
         {{topic.name}}{% if (children|length > 0 ) %}
             <i class="fa fa-share right"></i>
         {% endif %}
@@ -19,7 +18,7 @@
 		<ul class='drop-block active'>
         {% for child in children %}
 			{{include(
-         		'IntranetMainBundle:Topic:showTopicMenuTree.html.twig',
+         		'IntranetMainBundle:Index:showTopicMenuTree.html.twig',
            		{ 'topic': child }
         	)}}
         {% endfor %}

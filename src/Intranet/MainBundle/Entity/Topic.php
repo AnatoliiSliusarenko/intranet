@@ -593,4 +593,15 @@ class Topic
     		'message' => $param);
     	return $parameters;
     }
+
+    public static function getTopicsForProject($project, $em)
+    {
+        $topics = $em->getRepository('IntranetMainBundle:Topic')->findByproject($project);
+        var_dump($topics);
+    }
+
+    public function getTasksCount()
+    {
+        return count($this->getTasks());
+    }
 }

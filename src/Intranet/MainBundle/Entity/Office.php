@@ -562,4 +562,25 @@ class Office
     			"windows" => $windows,
     			'message'=>$param);
     }
+
+    public function getProgects()
+    {
+        $topics = $this->getTopics();
+        $projects = array();
+        foreach($topics as $topic){
+            if ($topic->getProject() != null)
+                array_push($projects, $topic->getProject());
+        }
+        return $projects = array_unique($projects);
+    }
+
+    public function getTopicsForProject($project, $em)
+    {
+        $topics  = $this->getTopTopics($em);
+        $topInProj = array();
+        foreach($topics as $topic)
+            if($topic->getProject() == $project)
+                array_push($topInProj,$topic);
+        return $topInProj;
+    }
 }

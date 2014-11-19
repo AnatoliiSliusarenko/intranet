@@ -715,7 +715,6 @@ pre code {
 
 .col-xs-1,.col-sm-1,.col-md-1,.col-lg-1,.col-xs-2,.col-sm-2,.col-md-2,.col-lg-2,.col-xs-3,.col-sm-3,.col-md-3,.col-lg-3,.col-xs-4,.col-sm-4,.col-md-4,.col-lg-4,.col-xs-5,.col-sm-5,.col-md-5,.col-lg-5,.col-xs-6,.col-sm-6,.col-md-6,.col-lg-6,.col-xs-7,.col-sm-7,.col-md-7,.col-lg-7,.col-xs-8,.col-sm-8,.col-md-8,.col-lg-8,.col-xs-9,.col-sm-9,.col-md-9,.col-lg-9,.col-xs-10,.col-sm-10,.col-md-10,.col-lg-10,.col-xs-11,.col-sm-11,.col-md-11,.col-lg-11,.col-xs-12,.col-sm-12,.col-md-12,.col-lg-12
 	{
-	position: relative;
 	min-height: 1px;
 	padding-right: 15px;
 	padding-left: 15px;
@@ -3430,7 +3429,6 @@ input[type="submit"].btn-block,input[type="reset"].btn-block,input[type="button"
 }
 
 .input-group {
-	position: relative;
 	display: table;
 	border-collapse: separate;
 }
@@ -3552,7 +3550,6 @@ textarea.input-group-sm>.form-control,textarea.input-group-sm>.input-group-addon
 }
 
 .input-group-btn {
-	position: relative;
 	white-space: nowrap;
 }
 
@@ -4462,7 +4459,6 @@ textarea.input-group-sm>.form-control,textarea.input-group-sm>.input-group-addon
 }
 
 .pagination>li>a,.pagination>li>span {
-	position: relative;
 	float: left;
 	padding: 6px 12px;
 	margin-left: -1px;
@@ -5092,7 +5088,6 @@ to {
 }
 
 .list-group-item {
-	position: relative;
 	display: block;
 	padding: 10px 15px;
 	margin-bottom: -1px;
@@ -6542,14 +6537,11 @@ th.hidden-lg,td.hidden-lg {
   border-radius: 5px;
   padding: 0;
   margin: 0;
-  width: 200px;
 }
 .vertical-menu li {
   position: relative;
   list-style: none;
   outline: none;
-  background: #357ebd;
-  border: solid 1px #D6C2FF;
   border-radius: 5px;
   padding: 0;
   margin: 2px;
@@ -6560,7 +6552,6 @@ th.hidden-lg,td.hidden-lg {
 }
 
 .vertical-menu li:hover {
-  background: #285e8e;
   border: solid 1px transparent;
   border-radius: 5px;
 }
@@ -6630,7 +6621,6 @@ th.hidden-lg,td.hidden-lg {
   z-index: 1000;
   right: 100%;
   top: -9999em;
-  
   border: solid 1px #b9c4d5;
   border-radius: 10px;
   box-shadow: 0.5em 1em 1em #666;
@@ -6642,6 +6632,7 @@ th.hidden-lg,td.hidden-lg {
 }
 .drop-link:hover > .drop-block {
   visibility: visible;
+    z-index: 999999;
   top: 0;
   opacity: 1;
   transition: opacity 1.0s ease;
@@ -6670,7 +6661,7 @@ th.hidden-lg,td.hidden-lg {
 .toppanel{
 	width:100%; 
 	margin-top:120px; 
-	height:150px;
+	height:50px;
 	z-index:99
 }
 .topstyle{

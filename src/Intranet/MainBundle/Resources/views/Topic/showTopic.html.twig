@@ -50,20 +50,6 @@
 		{% endif %}
 		{% endif %}
 		<div>
-				<div id='menu-block'>
-       	<ul class='vertical-menu btn-block transition3'>
-           	<li class='drop-link'><a href="#">Topics </a>
-           		<ul class='drop-block'>
-           			{% for topic in office.getTopTopics(em, app.user.userSettings.showHiddenTopics) %}
-           				{{include(
-       						'IntranetMainBundle:Topic:showTopicMenuTree.html.twig',
-       						{ 'topic': topic }
-       					)}}
-           			{% endfor %}
-           		</ul>
-           	</li>
-    	</ul>
-	</div>
 		</div>
 
 	</div>
@@ -144,7 +130,7 @@
 											</div>
 											
 											<div class="col-md-4" style="margin: 20px 0;">
-											<div  id='menu-block' style="position: absolute;left: 80%;">
+											<div  id='menu-block' style="position: absolute;left: 96%;">
             								<ul class='vertical-menu btn-block'style="width:40px">
             								<li class='drop-link' style="width:35px;"><a href="#"style="background-color:#454140" ><img src="http://zectranet.com/bundles/intranet/images/win.png" style="width: 25px;margin-left: -3px;"></a>
             								<ul class='drop-block1'style="margin-right: 5px;">
