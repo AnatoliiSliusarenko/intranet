@@ -132,20 +132,20 @@
 											<div class="col-md-4" style="margin: 20px 0;">
 											<div  id='menu-block' style="position: absolute;left: 96%;">
             								<ul class='vertical-menu btn-block'style="width:40px">
-            								<li class='drop-link' style="width:35px;"><a href="#"style="background-color:#454140" ><img src="http://zectranet.com/bundles/intranet/images/win.png" style="width: 25px;margin-left: -3px;"></a>
+            								<li class='drop-link' style="width:35px"><a href="#"style="background-color:#454140" ><img src="http://zectranet.com/bundles/intranet/images/win.png" style="width: 25px;margin-left: -3px;"></a>
             								<ul class='drop-block1'style="margin-right: 5px;">
-            									<li  style="width:200px"><a href="{{ url('intranet_add_topic_to_personal_page', {topic_id: topic.getId()} ) }}"><i class="fa fa-fw fa-windows" ></i>Add to new window </a></li>
-                                                <li class="drop-link"style="width:200px"><a href="#"><i class="fa fa-fw fa-plus-square"></i>Add new tab to existing window</a>
-            									<ul class='drop-block1'style="margin-right: 5px;">
+            									<li  style="width:200px;background-color: #285e8e;"><a href="{{ url('intranet_add_topic_to_personal_page', {topic_id: topic.getId()} ) }}"><i class="fa fa-fw fa-windows" ></i>Add to new window </a></li>
+                                                <li class="drop-link"style="width:200px;background-color: #285e8e;"><a href="#"><i class="fa fa-fw fa-plus-square"></i>Add new tab to existing window</a>
+            									<ul class='drop-block1'style="margin-right: 5px">
             									{% for window in windows %}
-            										<li class='drop-link' style="width:200px"><a href="{{ url('intranet_add_topic_to_exist_window_personal_page', {topic_id: topic.getId(), window_id: window.getWindowid()} ) }}">{{window.getNamewindow()}}</a></li>
+            										<li class='drop-link' style="width:200px;background-color: #285e8e;"><a href="{{ url('intranet_add_topic_to_exist_window_personal_page', {topic_id: topic.getId(), window_id: window.getWindowid()} ) }}">{{window.getNamewindow()}}</a></li>
             									{% endfor %}
             									</ul>
             									</li>
-                                                <li class="drop-link" style="width:200px"><a href="#"><i class="fa fa-fw fa-list-alt"></i>Add new drop downdown to existing Tab</a>
+                                                <li class="drop-link" style="width:200px;background-color: #285e8e;"><a href="#"><i class="fa fa-fw fa-list-alt"></i>Add new drop downdown to existing Tab</a>
                                                 <ul class='drop-block1'style="margin-right: 5px;">
             									{% for window in windows %}
-            										<li class='drop-link' style="width:200px"><a href="{{ url('intranet_add_topic_to_dropdown', {topicId: topic.getId(), windowId: window.getWindowid()} ) }}">{{window.getNamewindow()}}</a></li>
+            										<li class='drop-link' style="width:200px;background-color: #285e8e;"><a href="{{ url('intranet_add_topic_to_dropdown', {topicId: topic.getId(), windowId: window.getWindowid()} ) }}">{{window.getNamewindow()}}</a></li>
             									{% endfor %}
             									</ul>
                                                 </li>

@@ -2,18 +2,19 @@
 {% set children = topic.getChildrenForOffice(em, localOffice, app.user.userSettings.showHiddenTopics) %}
 <li class='drop-link {% if topic.status == "closed" %}closed{% else %} active {% endif %} ' style="width:400px">
     <a  href="{{ url('intranet_show_topic', {topic_id: topic.getId()}) }}">
-        {{topic.name}}{% if (children|length > 0 ) %}
-            <i class="fa fa-share right"></i>
-        {% endif %}
+        {{topic.name}}
         {% if topic.status == 'closed' %}
             <i class="fa fa-warning right"></i>
         {% endif %}
         {% if topic.getTasksCount() > 0 %}
-            <span class="badge bg-danger right">{{ topic.getTasksCount() }}</span>
-        {% endif %}
+            <span class="badge bg-danger right">{{ topic.getTasksCount() }}</span>{% endif %}
+        {% if (children|length > 0 ) %}<i class="fa fa-share right"></i>{% endif %}
     </a>
-
-
+    {% for task in localOffice.getTasksList() %}
+        <div class="tooltips">
+            <a ng-click="editTask(task)" data-original-title="{{ task.description }}" data-placement="top" href="#" >{{  task.name }}</a>
+        </div>
+    {% endfor %}
 		{% if ( children|length > 0 ) %}
 		<ul class='drop-block active'>
         {% for child in children %}

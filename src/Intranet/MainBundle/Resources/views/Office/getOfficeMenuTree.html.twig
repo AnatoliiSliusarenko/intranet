@@ -12,12 +12,19 @@
 					<i class='fa fa-group'></i>
 					<span class='hidden-minibar'> {{ localOffice.getName() }}</span>
 				</a>
-                <ul class='drop-block '>
+                <ul class='drop-block 'style="display: block!important;">
                     {% for topic in localOffice.getTopTopics(em, app.user.userSettings.showHiddenTopics) %}
                         {{include(
                         'IntranetMainBundle:Index:showTopicMenuTree.html.twig',
                         { 'topic': topic }
                         )}}
+                    {% endfor %}
+                    {% for task in localOffice.getTasksList() %}
+                        <div class="row" style="margin-left: 5px">
+                        <a href="#" style="all: unset">
+                            {{ task.name }}
+                        </a>
+                        </div>
                     {% endfor %}
                 </ul>
             </li>
@@ -30,12 +37,19 @@
 								        <i class='fa fa-user'></i>
 								        <span class='hidden-minibar'> {{ office.name }}</span>
 							        </a>
-                                    <ul class='drop-block '>
+                                    <ul class='drop-block' style="display: block!important;">
                                         {% for topic in office.getTopTopics(em, app.user.userSettings.showHiddenTopics) %}
                                             {{include(
                                             'IntranetMainBundle:Topic:showTopicMenuTree.html.twig',
                                             { 'topic': topic }
                                             )}}
+                                        {% endfor %}
+                                        {% for task in office.getTasksList() %}
+                                            <div class="row" style="margin-left: 5px">
+                                                <a href="#" style="all: unset">
+                                                    {{ task.name }}
+                                                </a>
+                                            </div>
                                         {% endfor %}
                                     </ul>
                                 </li>

@@ -475,7 +475,19 @@ class Office
     {
         return $this->tasks;
     }
-    
+
+    public function getTasksList()
+    {
+        $tasks = array();
+        $allTasks = $this->tasks;
+        foreach($allTasks as $task)
+            if($task->getTopicid() == null && $task->getParentid() == null)
+                array_push($tasks, $task);
+
+        return $tasks;
+
+    }
+
     public function getTasksInArray()
     {
     	return array_map(function($t){return $t->getInArray();}, $this->tasks->toArray());
