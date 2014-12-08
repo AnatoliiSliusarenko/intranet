@@ -444,7 +444,6 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 			$(this).toggleClass('fa-square-o');
 		});
 		$('.finish').$scope.checkItem(function(){
-			debugger
 			$(this).parent().toggleClass('finished');
 			$(this).toggleClass('fa-square-o');
 		});

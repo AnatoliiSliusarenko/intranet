@@ -36,7 +36,7 @@ class Task
     private $officeid;
     
     /**
-     * @ORM\ManyToOne(targetEntity="Office", inversedBy="tasks")
+     * @ORM\ManyToOne(targetEntity="Office", cascade={"persist"}, inversedBy="tasks")
      * @ORM\JoinColumn(name="officeid")
      * @var Office
      */
@@ -64,7 +64,7 @@ class Task
     private $topicid;
     
     /**
-     * @ORM\ManyToOne(targetEntity="Topic", inversedBy="tasks")
+     * @ORM\ManyToOne(targetEntity="Topic",cascade={"persist"}, inversedBy="tasks")
      * @ORM\JoinColumn(name="topicid")
      * @var Topic
      */
@@ -318,7 +318,6 @@ class Task
     public function setOffice(\Intranet\MainBundle\Entity\Office $office = null)
     {
         $this->office = $office;
-
         return $this;
     }
 

@@ -64,7 +64,7 @@ class Document
      */
     private $user;
     
-    private static $fileTypes = array('doc','docx','xls','xlsx','jpg','jpeg','gif','png','avi','pdf','mp3');
+    private static $fileTypes = array('doc','docx','xls','xlsx','jpg','jpeg','gif','png','avi','pdf','mp3', 'zip');
     
     private static $SALT = 'kj3o4ityijn873250u4hc978234h[oj670q7ufhjsdhoa4';
     

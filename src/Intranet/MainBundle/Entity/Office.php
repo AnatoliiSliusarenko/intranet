@@ -4,6 +4,7 @@ namespace Intranet\MainBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
+
 /**
  * Office
  *
@@ -95,13 +96,11 @@ class Office
     	$officeChildren = $this->getChildren($em);
     	$userOfficesId = array_map(function($e){return $e->getId();}, $user->getOffices()->toArray());
     	$result = array();
-    	
     	foreach ($officeChildren as $office)
     	{
     		if (in_array($office->getId(), $userOfficesId))
     			$result[] = $office;
     	}
-    	
     	return $result;
     }
     
@@ -413,11 +412,11 @@ class Office
     {
     	$officeTree = $this->getOfficeTree($em);
     	$topics = new \Doctrine\Common\Collections\ArrayCollection();
-    	
+        if($this->topics == null) return array();
     	foreach ($this->topics as $topic)
     	{
     		if (($topic->getStatus() == 'closed') && (!$showHiddenTopics)) continue;
-    		
+
     		if ($topic->getParentid() == $officeTree[0]->getId())
     		{
     			$topics[] = $topic;
@@ -480,6 +479,7 @@ class Office
     {
         $tasks = array();
         $allTasks = $this->tasks;
+        if($allTasks == null) return array();
         foreach($allTasks as $task)
             if($task->getTopicid() == null && $task->getParentid() == null)
                 array_push($tasks, $task);
@@ -573,26 +573,5 @@ class Office
     			'offices' => $childrenOfficesForUser,
     			"windows" => $windows,
     			'message'=>$param);
-    }
-
-    public function getProgects()
-    {
-        $topics = $this->getTopics();
-        $projects = array();
-        foreach($topics as $topic){
-            if ($topic->getProject() != null)
-                array_push($projects, $topic->getProject());
-        }
-        return $projects = array_unique($projects);
-    }
-
-    public function getTopicsForProject($project, $em)
-    {
-        $topics  = $this->getTopTopics($em);
-        $topInProj = array();
-        foreach($topics as $topic)
-            if($topic->getProject() == $project)
-                array_push($topInProj,$topic);
-        return $topInProj;
     }
 }

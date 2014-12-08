@@ -26,7 +26,6 @@ class OfficeController extends Controller
         $em = $this->getDoctrine()->getManager();
         $this->get('intranet.notifier')->clearNotificationsByOfficeId($office_id);
         $office = $em->getRepository('IntranetMainBundle:Office')->find($office_id);
-
         if (($office == null) || (!$office->hasUser($this->getUser())))
             return $this->redirect($this->generateUrl('intranet_main_homepage'));
 

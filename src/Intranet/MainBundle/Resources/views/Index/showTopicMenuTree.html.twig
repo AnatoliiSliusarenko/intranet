@@ -1,14 +1,19 @@
 
 {% set children = topic.getChildrenForOffice(em, localOffice, app.user.userSettings.showHiddenTopics) %}
-<li class='drop-link {% if topic.status == "closed" %}closed{% else %} active {% endif %} ' style="width:400px">
+<li class='drop-link {% if topic.status == "closed" %}closed{% else %} active {% endif %} ' style="width:495px">
     <a  href="{{ url('intranet_show_topic', {topic_id: topic.getId()}) }}">
         {{topic.name}}
-        {% if topic.status == 'closed' %}
-            <i class="fa fa-warning right"></i>
-        {% endif %}
-        {% if topic.getTasksCount() > 0 %}
-            <span class="badge bg-danger right">{{ topic.getTasksCount() }}</span>{% endif %}
-        {% if (children|length > 0 ) %}<i class="fa fa-share right"></i>{% endif %}
+        <div class="right">
+            {% if (children|length > 0 ) %}
+                <i class="fa fa-chevron-right right"></i>
+            {% endif %}
+            {% if topic.getTasksCount() > 0 %}
+                <span class="badge bg-danger right">{{ topic.getTasksCount() }}</span>
+            {% endif %}
+            {% if topic.status == 'closed' %}
+                <i class="fa fa-warning"></i>
+            {% endif %}
+        </div>
     </a>
     {% for task in localOffice.getTasksList() %}
         <div class="tooltips">
