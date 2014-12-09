@@ -15,6 +15,7 @@
             {% endif %}
         </div>
     </a>
+    {% if topic.getTasks()|length > 0 %}
     <ul class="drop-block" style="display: block !important;">
         {% for task in topic.getTasks() %}
             <div class="row" style="margin-left: 5px">
@@ -24,6 +25,7 @@
             </div>
         {% endfor %}
     </ul>
+    {% endif %}
 	{% if ( children|length > 0 ) %}
 		<ul class='drop-block active'>
         {% for child in children %}
