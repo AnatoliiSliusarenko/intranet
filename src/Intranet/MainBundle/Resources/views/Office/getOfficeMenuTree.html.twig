@@ -12,6 +12,7 @@
 					<i class='fa fa-group'></i>
 					<span class='hidden-minibar'> {{ localOffice.getName() }}</span>
 				</a>
+                {% if localOffice.getTopTopics(em) is not empty or localOffice.getTasksList() is not empty%}
                 <ul class='drop-block 'style="display: block!important;">
                     {% for topic in localOffice.getTopTopics(em, app.user.userSettings.showHiddenTopics) %}
                         {{include(
@@ -27,6 +28,7 @@
                         </div>
                     {% endfor %}
                 </ul>
+                {% endif %}
             </li>
 				{% if localOffice.getChildrenForUser(em, app.user)|length>0 %}
 					<ul class=" sub-menu {% if (fullOfficeBreadcrumbsIds is defined and localOffice.getId() in fullOfficeBreadcrumbsIds) %}{{ 'active' }}{% endif %}">
@@ -37,6 +39,7 @@
 								        <i class='fa fa-user'></i>
 								        <span class='hidden-minibar'> {{ office.name }}</span>
 							        </a>
+                                    {% if office.getTopTopics(em) is not empty or office.getTasksList() is not empty%}
                                     <ul class='drop-block' style="display: block!important; width: 500px">
                                         {% for topic in office.getTopTopics(em, app.user.userSettings.showHiddenTopics) %}
                                             {{include(
@@ -52,6 +55,7 @@
                                             </div>
                                         {% endfor %}
                                     </ul>
+                                    {% endif %}
                                 </li>
                             </ul>
                     {% endfor %}
