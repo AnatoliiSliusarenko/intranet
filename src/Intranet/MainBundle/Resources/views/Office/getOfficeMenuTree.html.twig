@@ -7,7 +7,7 @@
     <div  id='menu-block' style="display: block !important;">
         <ul class="vertical-menu btn-block transition3" style="display: block !important;">
 		{% for localOffice in office_.getChildrenForUser(em, app.user) %}
-			<li class="drop-link {% if (fullOfficeBreadcrumbsIds is defined and localOffice.getId() in fullOfficeBreadcrumbsIds) %}{{ 'active' }}{% else %}{{ 'submenu' }}{% endif %}" style="width: 240px">
+			<li class="drop-link {% if (fullOfficeBreadcrumbsIds is defined and localOffice.getId() in fullOfficeBreadcrumbsIds) %}{{ 'active' }}{% else %}{{ 'submenu' }}{% endif %}" style="width: 235px">
 				<a class="main-item" href='{{ url('intranet_show_office', {office_id: localOffice.getId()}) }}' data-original-title='{{ localOffice.name }}'>
 					<i class='fa fa-group'></i>
 					<span class='hidden-minibar'> {{ localOffice.getName() }}</span>
@@ -23,6 +23,7 @@
                     {% for task in localOffice.getTasksList() %}
                         <div class="row" style="margin-left: 5px">
                         <a href="#" style="all: unset">
+                            {% if localOffice.getTasksList()|length > 1 %} * {% endif %}
                             {{ task.name }}
                         </a>
                         </div>
@@ -50,6 +51,7 @@
                                         {% for task in office.getTasksList() %}
                                             <div class="row" style="margin-left: 5px">
                                                 <a href="#" style="all: unset; width: 495px">
+                                                    {% if office.getTasksList()|length > 1 %} * {% endif %}
                                                     {{ task.name }}
                                                 </a>
                                             </div>

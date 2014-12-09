@@ -8,19 +8,23 @@
                 <i class="fa fa-chevron-right right"></i>
             {% endif %}
             {% if topic.getTasksCount() > 0 %}
-                <span class="badge bg-danger right">{{ topic.getTasksCount() }}</span>
+                <span class="badge bg-danger">{{ topic.getTasksCount() }}</span>
             {% endif %}
             {% if topic.status == 'closed' %}
                 <i class="fa fa-warning"></i>
             {% endif %}
         </div>
     </a>
-    {% for task in localOffice.getTasksList() %}
-        <div class="tooltips">
-            <a ng-click="editTask(task)" data-original-title="{{ task.description }}" data-placement="top" href="#" >{{  task.name }}</a>
-        </div>
-    {% endfor %}
-		{% if ( children|length > 0 ) %}
+    <ul class="drop-block" style="display: block !important;">
+        {% for task in topic.getTasks() %}
+            <div class="row" style="margin-left: 5px">
+                <a href="#" style="all: unset">
+                    {% if topic.getTasks()|length > 1 %} * {% endif %} {{ task.name }}
+                </a>
+            </div>
+        {% endfor %}
+    </ul>
+	{% if ( children|length > 0 ) %}
 		<ul class='drop-block active'>
         {% for child in children %}
 			{{include(
@@ -29,6 +33,5 @@
         	)}}
         {% endfor %}
         </ul>
-        {% endif %}
-		</li>
-{#{% endif %}#}
+    {% endif %}
+</li>
