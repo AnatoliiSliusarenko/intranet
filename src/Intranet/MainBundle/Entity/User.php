@@ -162,7 +162,13 @@ class User implements UserInterface, \Serializable
 	 * @ORM\OneToOne(targetEntity="UserSettingsNotifications", mappedBy="user")
 	 */
 	private $userSettingsNotifications;
-	
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="lastofficeid", type="integer")
+     */
+    private $lastOfficeId;
+
 	public function __construct()
 	{
 		$this->active = true;
@@ -1113,5 +1119,35 @@ class User implements UserInterface, \Serializable
     	$result = $query->getResult();
     	
     	return count($result);
+    }
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getLastOfficeId()
+    {
+        return $this->lastOfficeId;
+    }
+
+    /**
+     * Set lastofficeid
+     *
+     * @param integer $lastOfficeid
+     * @return User
+     */
+    public function setLastOfficeId( $lastOfficeid)
+    {
+        $this->lastOfficeId = $lastOfficeid;
+        return $this;
+    }
+
+    public static function SetOfficeForUser($em, $userid,$offceid)
+    {
+        $user = $em->getRepository('IntranetMainBundle:User')->find($userid);
+        $user->setLastOfficeId($offceid);
+        $em->persist($user);
+        $em->flush();
     }
 }
