@@ -52,26 +52,27 @@ class OfficeController extends Controller
             "windows" => $windows,
             'message'=>false);
 
-
-        if ($request->getSession()->has('errorOffice'))
+        if($request->getSession())
         {
-            $parameters['errorOffice'] = $request->getSession()->get('errorOffice');
-            $parameters['nameOffice'] = $request->getSession()->get('nameOffice');
-            $parameters['descriptionOffice'] = $request->getSession()->get('descriptionOffice');
-            $request->getSession()->remove('errorOffice');
-            $request->getSession()->remove('nameOffice');
-            $request->getSession()->remove('descriptionOffice');
+            if ($request->getSession()->has('errorOffice'))
+            {
+                $parameters['errorOffice'] = $request->getSession()->get('errorOffice');
+                $parameters['nameOffice'] = $request->getSession()->get('nameOffice');
+                $parameters['descriptionOffice'] = $request->getSession()->get('descriptionOffice');
+                $request->getSession()->remove('errorOffice');
+                $request->getSession()->remove('nameOffice');
+                $request->getSession()->remove('descriptionOffice');
+            }
+            if ($request->getSession()->has('errorTopic'))
+            {
+                $parameters['errorTopic'] = $request->getSession()->get('errorTopic');
+                $parameters['nameTopic'] = $request->getSession()->get('nameTopic');
+                $parameters['descriptionTopic'] = $request->getSession()->get('descriptionTopic');
+                $request->getSession()->remove('errorTopic');
+                $request->getSession()->remove('nameTopic');
+                $request->getSession()->remove('descriptionTopic');
+            }
         }
-        if ($request->getSession()->has('errorTopic'))
-        {
-            $parameters['errorTopic'] = $request->getSession()->get('errorTopic');
-            $parameters['nameTopic'] = $request->getSession()->get('nameTopic');
-            $parameters['descriptionTopic'] = $request->getSession()->get('descriptionTopic');
-            $request->getSession()->remove('errorTopic');
-            $request->getSession()->remove('nameTopic');
-            $request->getSession()->remove('descriptionTopic');
-        }
-
         $fullOfficeBreadcrumbs = $breadcrumbs;
         array_push($fullOfficeBreadcrumbs, $office);
         $fullOfficeBreadcrumbsIds = array_map(function($e){return $e->getId();}, $fullOfficeBreadcrumbs);

@@ -1145,9 +1145,13 @@ class User implements UserInterface, \Serializable
 
     public static function SetOfficeForUser($em, $userid,$offceid)
     {
-        $user = $em->getRepository('IntranetMainBundle:User')->find($userid);
-        $user->setLastOfficeId($offceid);
-        $em->persist($user);
-        $em->flush();
+        $office = $em->getRepository('IntranetMainBundle:Office')->find($offceid);
+        if($office->getOfficeid() == 1)
+        {
+            $user = $em->getRepository('IntranetMainBundle:User')->find($userid);
+            $user->setLastOfficeId($offceid);
+            $em->persist($user);
+            $em->flush();
+        }
     }
 }
