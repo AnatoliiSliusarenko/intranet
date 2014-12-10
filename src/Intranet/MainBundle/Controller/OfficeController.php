@@ -30,7 +30,7 @@ class OfficeController extends Controller
             return $this->redirect($this->generateUrl('intranet_main_homepage'));
 
         $breadcrumbs = $office->getBreadcrumbs($em);
-        $users = $this->getUser()->getAllUsers($em, false);
+        $users =$this->getUser()->getAllUsers($em, false);
 
         $officeUsers = $office->getUsers();
         $childrenOfficesForUser = $office->getChildrenForUser($em, $this->getUser());
@@ -79,6 +79,7 @@ class OfficeController extends Controller
 
         $this->get('twig')->addGlobal('activeSection', 'office');
         $this->get('twig')->addGlobal('fullOfficeBreadcrumbsIds', $fullOfficeBreadcrumbsIds);
+        User::SetOfficeForUser($em,$this->getUser()->getId(),$office_id);
         return $this->render("IntranetMainBundle:Office:showOffice.html.twig", $parameters);
     }
 
