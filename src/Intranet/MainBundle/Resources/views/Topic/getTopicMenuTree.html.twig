@@ -4,23 +4,5 @@
 			<i class='fa fa-comment'></i>
 			<span class='hidden-minibar'> {{ topic.name }}</span>
 		</a>
-        {% if topic.getOffice().getTopTopics(em) is not empty or topic.getOffice().getTasksList() is not empty%}
-            <ul class='drop-block 'style="display: block!important;">
-                {% for topic in topic.getOffice().getTopTopics(em, app.user.userSettings.showHiddenTopics) %}
-                    {{include(
-                    'IntranetMainBundle:Index:showTopicMenuTree2.html.twig',
-                    { 'topic': topic }
-                    )}}
-                {% endfor %}
-                {% for task in topic.getOffice().getTasksList() %}
-                    <div class="row" style="margin-left: 5px">
-                        <a href="#" style="all: unset">
-                            {% if topic.getOffice().getTasksList()|length > 1 %} * {% endif %}
-                            {{ task.name }}
-                        </a>
-                    </div>
-                {% endfor %}
-            </ul>
-        {% endif %}
 	</li>
 {% endfor %}

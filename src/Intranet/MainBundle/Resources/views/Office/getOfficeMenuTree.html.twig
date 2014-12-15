@@ -4,24 +4,6 @@
         <i class='fa fa-sitemap'></i>
         <span class='hidden-minibar'> {{ office_.name }}</span>
     </a>
-    {% if office_.getTopTopics(em) is not empty or office_.getTasksList() is not empty%}
-        <ul class='drop-block 'style="display: block!important;">
-            {% for topic in office_.getTopTopics(em, app.user.userSettings.showHiddenTopics) %}
-                {{include(
-                'IntranetMainBundle:Index:showTopicMenuTree1.html.twig',
-                { 'topic': topic }
-                )}}
-            {% endfor %}
-            {% for task in office_.getTasksList() %}
-                <div class="row" style="margin-left: 5px">
-                    <a href="#" style="all: unset">
-                        {% if office_.getTasksList()|length > 1 %} * {% endif %}
-                        {{ task.name }}
-                    </a>
-                </div>
-            {% endfor %}
-        </ul>
-    {% endif %}
     <div  id='menu-block' style="display: block !important;">
         <ul class="vertical-menu btn-block transition3" style="display: block !important;">
             {% for localOffice in office_.getChildrenForUser(em, app.user) %}
@@ -39,10 +21,10 @@
                                 )}}
                             {% endfor %}
                             {% for task in localOffice.getTasksList() %}
-                                <div class="row" style="margin-left: 5px">
+                                <div class="row" style="margin-left: 5px; width: 250px;">
                                     <a href="#" style="all: unset">
                                         {% if localOffice.getTasksList()|length > 1 %} * {% endif %}
-                                        {{ task.name }}
+                                        {{ task.getUserStory() }}
                                     </a>
                                 </div>
                             {% endfor %}
@@ -63,11 +45,11 @@
                                     </a>
                                     {% for topic in office.getTopTopics(em) %}
                                     <ul class="sub-menu " >
-                                        <li><a href="#"> {{ topic.getName() }} </a></li>
+                                        <li><a href="{{ url('intranet_show_topic', {topic_id: topic.getId()}) }}"> {{ topic.getName() }} </a></li>
                                     </ul>
                                     {% endfor %}
                                     {% if office.getTopTopics(em) is not empty or office.getTasksList() is not empty%}
-                                        <ul class='drop-block' style="display: block!important; width: 500px">
+                                        <ul class='drop-block' style="display: block!important;">
                                             {% for topic in office.getTopTopics(em, app.user.userSettings.showHiddenTopics) %}
                                                 {{include(
                                                 'IntranetMainBundle:Topic:showTopicMenuTree.html.twig',
@@ -75,10 +57,10 @@
                                                 )}}
                                             {% endfor %}
                                             {% for task in office.getTasksList() %}
-                                                <div class="row" style="margin-left: 5px">
-                                                    <a href="#" style="all: unset; width: 495px">
+                                                <div class="row" style="margin-left: 5px; width: 250px;">
+                                                    <a href="#" style="all: unset; ">
                                                         {% if office.getTasksList()|length > 1 %} * {% endif %}
-                                                        {{ task.name }}
+                                                        {{ task.getUserStory() }}
                                                     </a>
                                                 </div>
                                             {% endfor %}

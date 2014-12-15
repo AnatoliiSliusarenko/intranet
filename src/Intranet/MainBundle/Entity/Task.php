@@ -654,6 +654,10 @@ class Task
 
     public function getUserStory()
     {
-        return $rest = substr($this->getName(), 0, 40);
+        $rest = $this->getName();
+        if(strlen($rest)< 100)
+            return $rest;
+        $rest = substr($rest, 0, 97);
+        return $rest."...";
     }
 }

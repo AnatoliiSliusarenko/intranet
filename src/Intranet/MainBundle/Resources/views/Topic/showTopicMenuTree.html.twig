@@ -1,7 +1,7 @@
 
 {% set children = topic.getChildrenForOffice(em, office, app.user.userSettings.showHiddenTopics) %}
 {#{% if topic.getTasksCount() > 0 or children|length > 0 %}#}
-<li class='drop-link {% if topic.status == "closed" %}closed{% else %} active {% endif %} ' style="width:495px">
+<li class='drop-link {% if topic.status == "closed" %}closed{% else %} active {% endif %} '>
     <a href="{{ url('intranet_show_topic', {topic_id: topic.getId()}) }}">
         {{topic.name}}
         {% if (children|length > 0 ) %}
@@ -23,7 +23,7 @@
         {% for task in topic.getTasks() %}
             <div class="row" style="margin-left: 5px">
                 <a href="#" style="all: unset">
-                   {% if topic.getTasks()|length > 1 %} * {% endif %} {{ task.name }}
+                   {% if topic.getTasks()|length > 1 %} * {% endif %} {{ task.getUserStory() }}
                 </a>
             </div>
         {% endfor %}
