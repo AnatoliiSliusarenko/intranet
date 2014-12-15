@@ -6575,11 +6575,11 @@ th.hidden-lg,td.hidden-lg {
 }
 
 .drop-link:hover {
-  background: #ccf;
+  background: #fff;
 }
 .drop-link:before {
   border: solid 14px;
-  border-color: #D6ADFF transparent transparent transparent;
+  border-color: #ffffff transparent transparent transparent;
   margin: 0 12px 0 0;
 }
 .drop-link:after {
@@ -6589,12 +6589,12 @@ th.hidden-lg,td.hidden-lg {
 }
 .drop-link:hover:before {
   border: solid 16px;
-  border-color: transparent #6323b2 transparent transparent;
+  border-color: transparent #ffffff transparent transparent;
   margin: -3px 0 0 0;
 }
 .drop-link:hover:after {
   border: solid 12px;
-  border-color: transparent #b685f7 transparent transparent;
+  border-color: transparent #ffffff transparent transparent;
   margin-right: 0;
 }
 .drop-block {
@@ -6605,7 +6605,7 @@ th.hidden-lg,td.hidden-lg {
   left: 100%;
   top: -9999em;
   background: #fff;
-  border: solid 1px #b9c4d5;
+  border: solid 1px #ffffff;
   border-radius: 10px;
   box-shadow: 0.5em 1em 1em #666;
   opacity: 0;
@@ -6722,4 +6722,9 @@ user-avatar{
 .sub-menu:hover
 {
     display: block;
+}
+
+.float
+{
+    float: left;
 }

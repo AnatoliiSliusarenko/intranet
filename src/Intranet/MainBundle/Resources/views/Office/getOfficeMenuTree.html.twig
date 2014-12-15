@@ -1,80 +1,87 @@
 {% for office_ in officeTree %}
-	<li class='{% if (activeSection is defined and activeSection=='office') %}{{ 'active' }}{% endif %}' >
-		<a class="dropdown" href='{{ url('intranet_show_office', {office_id: office_.getId()}) }}' data-original-title='{{ office_.name }}'>
-			<i class='fa fa-sitemap'></i>
-			<span class='hidden-minibar'> {{ office_.name }}</span>
-		</a>
+<li class='{% if (activeSection is defined and activeSection=='office') %}{{ 'active' }}{% endif %}' >
+    <a class="dropdown" href='{{ url('intranet_show_office', {office_id: office_.getId()}) }}' data-original-title='{{ office_.name }}'>
+        <i class='fa fa-sitemap'></i>
+        <span class='hidden-minibar'> {{ office_.name }}</span>
+    </a>
     <div  id='menu-block' style="display: block !important;">
         <ul class="vertical-menu btn-block transition3" style="display: block !important;">
-		{% for localOffice in office_.getChildrenForUser(em, app.user) %}
-			<li class="drop-link {% if (fullOfficeBreadcrumbsIds is defined and localOffice.getId() in fullOfficeBreadcrumbsIds) %}{{ 'active' }}{% else %}{{ 'submenu' }}{% endif %}" style="width: 235px">
-				<a class="main-item" href='{{ url('intranet_show_office', {office_id: localOffice.getId()}) }}' data-original-title='{{ localOffice.name }}'>
-					<i class='fa fa-group'></i>
-					<span class='hidden-minibar'> {{ localOffice.getName() }}</span>
-				</a>
-                {% if localOffice.getTopTopics(em) is not empty or localOffice.getTasksList() is not empty%}
-                <ul class='drop-block 'style="display: block!important;">
-                    {% for topic in localOffice.getTopTopics(em, app.user.userSettings.showHiddenTopics) %}
-                        {{include(
-                        'IntranetMainBundle:Index:showTopicMenuTree.html.twig',
-                        { 'topic': topic }
-                        )}}
-                    {% endfor %}
-                    {% for task in localOffice.getTasksList() %}
-                        <div class="row" style="margin-left: 5px">
-                        <a href="#" style="all: unset">
-                            {% if localOffice.getTasksList()|length > 1 %} * {% endif %}
-                            {{ task.name }}
-                        </a>
-                        </div>
-                    {% endfor %}
-                </ul>
-                {% endif %}
-            </li>
-				{% if localOffice.getChildrenForUser(em, app.user)|length>0 %}
-					<ul class=" sub-menu {% if (fullOfficeBreadcrumbsIds is defined and localOffice.getId() in fullOfficeBreadcrumbsIds) %}{{ 'active' }}{% endif %}">
-					{% for office in localOffice.getChildrenForUser(em, app.user) %}
+            {% for localOffice in office_.getChildrenForUser(em, app.user) %}
+                <li class="drop-link {% if (fullOfficeBreadcrumbsIds is defined and localOffice.getId() in fullOfficeBreadcrumbsIds) %}{{ 'active' }}{% else %}{{ 'submenu' }}{% endif %}" style="width: 235px">
+                    <a class="main-item" href='{{ url('intranet_show_office', {office_id: localOffice.getId()}) }}' data-original-title='{{ localOffice.name }}'>
+                        <i class='fa fa-group'></i>
+                        <span class='hidden-minibar'> {{ localOffice.getName() }}</span>
+                    </a>
+                    {% if localOffice.getTopTopics(em) is not empty or localOffice.getTasksList() is not empty%}
+                        <ul class='drop-block 'style="display: block!important;">
+                            {% for topic in localOffice.getTopTopics(em, app.user.userSettings.showHiddenTopics) %}
+                                {{include(
+                                'IntranetMainBundle:Index:showTopicMenuTree.html.twig',
+                                { 'topic': topic }
+                                )}}
+                            {% endfor %}
+                            {% for task in localOffice.getTasksList() %}
+                                <div class="row" style="margin-left: 5px">
+                                    <a href="#" style="all: unset">
+                                        {% if localOffice.getTasksList()|length > 1 %} * {% endif %}
+                                        {{ task.name }}
+                                    </a>
+                                </div>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </li>
+                {% if localOffice.getChildrenForUser(em, app.user)|length>0 %}
+                    <ul class=" sub-menu {% if (fullOfficeBreadcrumbsIds is defined and localOffice.getId() in fullOfficeBreadcrumbsIds) %}{{ 'active' }}{% endif %}">
+                        {% for office in localOffice.getChildrenForUser(em, app.user) %}
                             <ul style="display: block !important;">
-						        <li class="drop-link {% if (fullOfficeBreadcrumbsIds is defined and office.getId() in fullOfficeBreadcrumbsIds) %}{{ 'active' }}{% endif %}">
-							        <a href='{{ url('intranet_show_office', {office_id: office.getId()}) }}' data-original-title='{{ office.name }}'>
-								        <i class='fa fa-user'></i>
-								        <span class='hidden-minibar'> {{ office.name }}</span>
-							        </a>
-                                    {% if office.getTopTopics(em) is not empty or office.getTasksList() is not empty%}
-                                    <ul class='drop-block' style="display: block!important; width: 500px">
-                                        {% for topic in office.getTopTopics(em, app.user.userSettings.showHiddenTopics) %}
-                                            {{include(
-                                            'IntranetMainBundle:Topic:showTopicMenuTree.html.twig',
-                                            { 'topic': topic }
-                                            )}}
-                                        {% endfor %}
-                                        {% for task in office.getTasksList() %}
-                                            <div class="row" style="margin-left: 5px">
-                                                <a href="#" style="all: unset; width: 495px">
-                                                    {% if office.getTasksList()|length > 1 %} * {% endif %}
-                                                    {{ task.name }}
-                                                </a>
-                                            </div>
-                                        {% endfor %}
+                                <li class="drop-link {% if (fullOfficeBreadcrumbsIds is defined and office.getId() in fullOfficeBreadcrumbsIds) %}{{ 'active' }}{% endif %}">
+                                    {% if office.getTasksList()|length > 0 %}<a href="#" class="main-item" style=" width: 15px; float: left" tabindex="1" ><i class="fa fa-caret-right" style="margin-left: 0px"></i></a>{% endif %}
+                                    <a href='{{ url('intranet_show_office', {office_id: office.getId()}) }}' data-original-title='{{ office.name }}'>
+                                        <i class='fa fa-user'></i>
+                                        <span class='hidden-minibar'> {{ office.name }}
+                                            {% if office.getTasksList()|length > 0 %} ({{ office.getTasksList()|length }}){% endif %}
+                                        </span>
+                                    </a>
+                                    {% for task in office.getTasksList() %}
+                                    <ul class="sub-menu " >
+                                        <li><a href="#"> {{ task.getUserStory() }} </a></li>
                                     </ul>
+                                    {% endfor %}
+                                    {% if office.getTopTopics(em) is not empty or office.getTasksList() is not empty%}
+                                        <ul class='drop-block' style="display: block!important; width: 500px">
+                                            {% for topic in office.getTopTopics(em, app.user.userSettings.showHiddenTopics) %}
+                                                {{include(
+                                                'IntranetMainBundle:Topic:showTopicMenuTree.html.twig',
+                                                { 'topic': topic }
+                                                )}}
+                                            {% endfor %}
+                                            {% for task in office.getTasksList() %}
+                                                <div class="row" style="margin-left: 5px">
+                                                    <a href="#" style="all: unset; width: 495px">
+                                                        {% if office.getTasksList()|length > 1 %} * {% endif %}
+                                                        {{ task.name }}
+                                                    </a>
+                                                </div>
+                                            {% endfor %}
+                                        </ul>
                                     {% endif %}
                                 </li>
                             </ul>
-                    {% endfor %}
+                        {% endfor %}
                     </ul>
-				{% endif %}
-		{% endfor %}
-    </ul>
+                {% endif %}
+            {% endfor %}
+        </ul>
     </div>
-	{% if office_.getChildrenForUser(em, app.user)|length==0 %}
-		{% for userOffice in app.user.getOfficesWithoutOne(office_) %}
-		<li class='{% if (fullOfficeBreadcrumbsIds is defined and userOffice.getId() in fullOfficeBreadcrumbsIds) %}{{ 'active' }}{% endif %}' >
-				<a class="dropdown" href='{{ url('intranet_show_office', {office_id: userOffice.getId()}) }}' data-original-title='{{ userOffice.name }}'>
-					<i class='fa fa-group'></i>
-					<span class='hidden-minibar'> {{ userOffice.name }}</span>
-				</a>
-		</li>
-		{% endfor %}
-	{% endif %}
+    {% if office_.getChildrenForUser(em, app.user)|length==0 %}
+        {% for userOffice in app.user.getOfficesWithoutOne(office_) %}
+            <li class='{% if (fullOfficeBreadcrumbsIds is defined and userOffice.getId() in fullOfficeBreadcrumbsIds) %}{{ 'active' }}{% endif %}' >
+                <a class="dropdown" href='{{ url('intranet_show_office', {office_id: userOffice.getId()}) }}' data-original-title='{{ userOffice.name }}'>
+                    <i class='fa fa-group'></i>
+                    <span class='hidden-minibar'> {{ userOffice.name }}</span>
+                </a>
+            </li>
+        {% endfor %}
+    {% endif %}
 {% endfor %}
-

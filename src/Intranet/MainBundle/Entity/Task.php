@@ -651,4 +651,9 @@ class Task
     		}, $tasks);
     	else return $tasks;
     }
+
+    public function getUserStory()
+    {
+        return $rest = substr($this->getName(), 0, 40);
+    }
 }
