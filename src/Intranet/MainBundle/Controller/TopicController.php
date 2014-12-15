@@ -19,7 +19,7 @@ class TopicController extends Controller
     	
     	$topicTree = Topic::getTopicTree($em);
 		
-		return $this->render("IntranetMainBundle:Topic:getTopicMenuTree.html.twig", array("topicTree" => $topicTree));
+		return $this->render("IntranetMainBundle:Topic:getTopicMenuTree.html.twig", array("topicTree" => $topicTree, "em" => $em));
 	}
 	    
     public function showTopicAction(Request $request, $topic_id)
