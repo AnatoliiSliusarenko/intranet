@@ -6552,7 +6552,6 @@ th.hidden-lg,td.hidden-lg {
 }
 
 .vertical-menu li:hover {
-  border: solid 1px transparent;
   border-radius: 5px;
 }
 
