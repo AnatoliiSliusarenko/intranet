@@ -18,11 +18,12 @@
     {% if topic.getTasks()|length > 0 %}
     <ul class="drop-block" style="display: block !important;">
         {% for task in topic.getTasks() %}
-            <div class="row" style="margin-left: 5px">
-                <li style="all: unset;"><a href="#" style="all: unset">
-                    {% if topic.getTasks()|length > 1 %} * {% endif %} {{ task.getUserStory() }}
-                </a></li>
-            </div>
+            <li class="drop-link">
+                <a href="#" style="background-color: #33AAFF">
+                    {% if office.getTasksList()|length > 1 %} * {% endif %}
+                    {{ task.getUserStory() }}
+                </a>
+            </li>
         {% endfor %}
     </ul>
     {% endif %}

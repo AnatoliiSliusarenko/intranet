@@ -36,18 +36,29 @@
                         {% for office in localOffice.getChildrenForUser(em, app.user) %}
                             <ul style="display: block !important;">
                                 <li class="drop-link {% if (fullOfficeBreadcrumbsIds is defined and office.getId() in fullOfficeBreadcrumbsIds) %}{{ 'active' }}{% endif %}">
-                                    {% if office.getTopTopics(em)|length > 0 %}<a href="#" class="main-item" style=" width: 15px; float: left" tabindex="1" ><i class="fa fa-caret-right" style="margin-left: 0px"></i></a>{% endif %}
+                                    {% if office.getTopTopics(em)|length > 0 %}<a href="#" class="main-item" style=" width: 30px; float: left" tabindex="1" ><i class="fa fa-chevron-right" style="margin-left: 0px"></i></a>{% endif %}
                                     <a href='{{ url('intranet_show_office', {office_id: office.getId()}) }}' data-original-title='{{ office.name }}'>
                                         <i class='fa fa-user'></i>
                                         <span class='hidden-minibar'> {{ office.name }}
                                             {% if office.getTasksList()|length > 0 %} ({{ office.getTasksList()|length }}){% endif %}
                                         </span>
                                     </a>
-                                    {% for topic in office.getTopTopics(em) %}
+                                    {% if office.getTopTopics(em) is not empty %}
                                     <ul class="sub-menu " >
-                                        <li class="{% if topic.status == "closed" %}closed{% endif %}"><a href="{{ url('intranet_show_topic', {topic_id: topic.getId()}) }}"> {{ topic.getName() }} </a></li>
-                                    </ul>
+                                    {% for topic in office.getTopTopics(em) %}
+
+                                        <li class="{% if topic.status == "closed" %}closed{% endif %}" style="background-color: #5C7399">
+                                            <a href="{{ url('intranet_show_topic', {topic_id: topic.getId()}) }}">
+                                                {{ topic.getName() }}
+                                                {% if topic.status == 'closed' %}
+                                                    <i class="fa fa-warning right"></i>
+                                                {% endif %}
+                                            </a>
+                                        </li>
+
                                     {% endfor %}
+                                    </ul>
+                                    {% endif %}
                                     {% if office.getTopTopics(em) is not empty or office.getTasksList() is not empty%}
                                         <ul class='drop-block' style="display: block!important;">
                                             {% for topic in office.getTopTopics(em, app.user.userSettings.showHiddenTopics) %}
@@ -57,12 +68,12 @@
                                                 )}}
                                             {% endfor %}
                                             {% for task in office.getTasksList() %}
-                                                <div class="row" style="margin-left: 5px; width: 250px;">
-                                                    <a href="#" style="all: unset; ">
+                                                <li class="drop-link">
+                                                    <a href="#" style="background-color: #33AAFF" >
                                                         {% if office.getTasksList()|length > 1 %} * {% endif %}
                                                         {{ task.getUserStory() }}
                                                     </a>
-                                                </div>
+                                                </li>
                                             {% endfor %}
                                         </ul>
                                     {% endif %}

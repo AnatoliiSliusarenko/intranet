@@ -6521,138 +6521,139 @@ th.hidden-lg,td.hidden-lg {
 		display: none !important;
 	}
 }
-/*  	vertical menu block	  */
 .right {
-	float: right;
+    float: right;
 }
 #menu-block {
-  margin-top:150px;	
-  padding: 0;
-  width: 300;
-  margin: 0;
+    margin-top:150px;
+    padding: 0;
+    width: 300;
+    margin: 0;
 }
 .vertical-menu {
-  display: block;
-  border: solid 1px #b9c4d5;
-  border-radius: 5px;
-  padding: 0;
-  margin: 0;
+    display: block;
+    border: solid 1px #b9c4d5;
+    border-radius: 5px;
+    padding: 0;
+    margin: 0;
 }
 .vertical-menu li {
-  position: relative;
-  list-style: none;
-  outline: none;
-  border-radius: 5px;
-  padding: 0;
-  margin: 2px;
+    position: relative;
+    list-style: none;
+    outline: none;
+    border-radius: 5px;
+    padding: 0;
+    margin: 2px;
 }
 
 .vertical-menu li.closed {
-  background: #d9534f;
+    background: #d9534f!important;
 }
 
 .vertical-menu li:hover {
-  border-radius: 5px;
+    border-radius: 5px;
+    background-color: #617999;
 }
 
 .vertical-menu li.closed:hover{
-  background: #d2322d;
+    background: #d2322d!important;
 }
 
 .vertical-menu a {
-  display: block;
-  text-decoration: none;
-  text-align: left;
-  color: #E6E6FF;
-  box-shadow: none;
-  padding: 7px;
-  margin: 0;
+    display: block;
+    text-decoration: none;
+    text-align: left;
+    color: #E6E6FF;
+    box-shadow: none;
+    padding: 7px;
+    margin: 0;
 }
 .drop-link > a {
-  margin: 0;
-  transition: margin 0.5s ease;
+    margin: 0;
+    transition: margin 0.5s ease;
 }
 
 .drop-link:hover {
-  background: #fff;
+    //background: #fff;
+    background-color: #617999;
 }
 .drop-link:before {
-  border: solid 14px;
-  border-color: #ffffff transparent transparent transparent;
-  margin: 0 12px 0 0;
+    border: solid 14px;
+    border-color: #ffffff transparent transparent transparent;
+    margin: 0 12px 0 0;
 }
 .drop-link:after {
-  border: solid 10px;
-  border-color: #4C1A80 transparent transparent transparent;
-  margin: 0 15px 0 0;
+    border: solid 10px;
+    border-color: #4C1A80 transparent transparent transparent;
+    margin: 0 15px 0 0;
 }
 .drop-link:hover:before {
-  border: solid 16px;
-  border-color: transparent #ffffff transparent transparent;
-  margin: -3px 0 0 0;
+    border: solid 16px;
+    border-color: transparent #ffffff transparent transparent;
+    margin: -3px 0 0 0;
 }
 .drop-link:hover:after {
-  border: solid 12px;
-  border-color: transparent #ffffff transparent transparent;
-  margin-right: 0;
+    border: solid 12px;
+    border-color: transparent #ffffff transparent transparent;
+    margin-right: 0;
 }
 .drop-block {
-  visibility: hidden;
-  display: block;
-  position: absolute;
-  z-index: 1000;
-  left: 100%;
-  top: -9999em;
-  background: #fff;
-  border: solid 1px #ffffff;
-  border-radius: 10px;
-  box-shadow: 0.5em 1em 1em #666;
-  opacity: 0;
-  padding: 0;
-  margin: -10px -20px 0 0;
-  min-width: 250px;
-  width: auto;
+    visibility: hidden;
+    display: block;
+    position: absolute;
+    z-index: 1000;
+    left: 100%;
+    top: -9999em;
+    background: #fff;
+    border: solid 1px #ffffff;
+    border-radius: 10px;
+    box-shadow: 0.5em 1em 1em #666;
+    opacity: 0;
+    padding: 0;
+    margin: -10px -20px 0 0;
+    min-width: 250px;
+    width: auto;
 }
 .drop-block1 {
-  visibility: hidden;
-  display: block;
-  position: absolute;
-  z-index: 1000;
-  right: 100%;
-  top: -9999em;
-  border: solid 1px #b9c4d5;
-  border-radius: 10px;
-  box-shadow: 0.5em 1em 1em #666;
-  opacity: 0;
-  padding: 0;
-  margin: -10px -20px 0 0;
-  min-width: 100px;
-  width: auto;
+    visibility: hidden;
+    display: block;
+    position: absolute;
+    z-index: 1000;
+    right: 100%;
+    top: -9999em;
+    border: solid 1px #b9c4d5;
+    border-radius: 10px;
+    box-shadow: 0.5em 1em 1em #666;
+    opacity: 0;
+    padding: 0;
+    margin: -10px -20px 0 0;
+    min-width: 100px;
+    width: auto;
 }
 .drop-link:hover > .drop-block {
-  visibility: visible;
+    visibility: visible;
     z-index: 999999;
-  top: 0;
-  opacity: 1;
-  transition: opacity 1.0s ease;
+    top: 0;
+    opacity: 1;
+    transition: opacity 1.0s ease;
 }
 .drop-link:hover > .drop-block1 {
-  visibility: visible;
-  top: 0;
-  opacity: 1;
-  transition: opacity 1.0s ease;
+    visibility: visible;
+    top: 0;
+    opacity: 1;
+    transition: opacity 1.0s ease;
 }
 .drop-link:not(:hover) > .drop-block {
-  visibility: hidden;
-  top: 0;
-  opacity: 0;
-  transition: opacity 3.0s ease, visibility 1.0s ease;
+    visibility: hidden;
+    top: 0;
+    opacity: 0;
+    transition: opacity 3.0s ease, visibility 1.0s ease;
 }
 .drop-link:not(:hover) > .drop-block1 {
-  visibility: hidden;
-  top: 0;
-  opacity: 0;
-  transition: opacity 3.0s ease, visibility 1.0s ease;
+    visibility: hidden;
+    top: 0;
+    opacity: 0;
+    transition: opacity 3.0s ease, visibility 1.0s ease;
 }
 .fix{
 	position:fixed;
