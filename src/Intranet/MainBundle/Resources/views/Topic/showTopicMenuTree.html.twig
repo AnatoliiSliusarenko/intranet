@@ -22,9 +22,9 @@
     <ul class="drop-block" style="display: block !important;">
         {% for task in topic.getTasks() %}
             <div class="row" style="margin-left: 5px">
-                <a href="#" style="all: unset">
-                   {% if topic.getTasks()|length > 1 %} * {% endif %} {{ task.getUserStory() }}
-                </a>
+                <li style="all: unset;"><a href="#" style="all: unset">
+                        {% if topic.getTasks()|length > 1 %} * {% endif %} {{ task.getUserStory() }}
+                    </a></li>
             </div>
         {% endfor %}
     </ul>

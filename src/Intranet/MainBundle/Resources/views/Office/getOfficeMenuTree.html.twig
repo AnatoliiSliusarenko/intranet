@@ -45,7 +45,7 @@
                                     </a>
                                     {% for topic in office.getTopTopics(em) %}
                                     <ul class="sub-menu " >
-                                        <li><a href="{{ url('intranet_show_topic', {topic_id: topic.getId()}) }}"> {{ topic.getName() }} </a></li>
+                                        <li class="{% if topic.status == "closed" %}closed{% endif %}"><a href="{{ url('intranet_show_topic', {topic_id: topic.getId()}) }}"> {{ topic.getName() }} </a></li>
                                     </ul>
                                     {% endfor %}
                                     {% if office.getTopTopics(em) is not empty or office.getTasksList() is not empty%}

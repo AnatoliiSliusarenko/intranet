@@ -153,7 +153,7 @@ body {
 	overflow: hidden;
 	height: auto !important;
 	min-height: 900px !important;
-	position: relative;
+	//position: relative;
 	background: #FFFFFF;
 }
 
