@@ -36,10 +36,10 @@
                         {% for office in localOffice.getChildrenForUser(em, app.user) %}
                             <ul style="display: block !important;">
                                 <li class="drop-link {% if (fullOfficeBreadcrumbsIds is defined and office.getId() in fullOfficeBreadcrumbsIds) %}{{ 'active' }}{% endif %}">
-                                    {% if office.getTopTopics(em)|length > 0 %}<a href="#" class="main-item" style=" width: 30px; float: left" tabindex="1" ><i class="fa fa-chevron-right" style="margin-left: 0px"></i></a>{% endif %}
+                                    {% if office.getTopTopics(em)|length > 0 %}<a href="#" class="main-item" style=" width: 10px; float: left" tabindex="1" ><i class="fa fa-chevron-right" style="margin-left: -10px"></i></a>{% endif %}
                                     <a href='{{ url('intranet_show_office', {office_id: office.getId()}) }}' data-original-title='{{ office.name }}'>
-                                        <i class='fa fa-user'></i>
-                                        <span class='hidden-minibar'> {{ office.name }}
+                                        <i class='fa fa-user' style="margin-left: 0px;"></i>
+                                        <span class='hidden-minibar' style="margin-left: -15px;"> {{ office.name }}
                                             {% if office.getTasksList()|length > 0 %} ({{ office.getTasksList()|length }}){% endif %}
                                         </span>
                                     </a>
