@@ -172,6 +172,7 @@ class OfficeController extends Controller
 
     public function addOfficeChatToPersonalAction($office_id)
     {
+
         $em = $this->getDoctrine()->getManager();
         $office = $em->getRepository('IntranetMainBundle:Office')->find($office_id);
         $personal_office = $em->getRepository('IntranetMainBundle:PersonalPage')->findByOfficeid($office_id);
