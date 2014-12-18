@@ -13,7 +13,7 @@
                         <span class='hidden-minibar'> {{ localOffice.getName() }}</span>
                     </a>
                     {% if localOffice.getTopTopics(em) is not empty or localOffice.getTasksList() is not empty%}
-                        <ul class='drop-block 'style="display: block!important;">
+                        <ul class='drop-block ' style="display: block!important;">
                             {% for topic in localOffice.getTopTopics(em, app.user.userSettings.showHiddenTopics) %}
                                 {{include(
                                 'IntranetMainBundle:Index:showTopicMenuTree.html.twig',
@@ -38,7 +38,7 @@
                                 <li class="drop-link {% if (fullOfficeBreadcrumbsIds is defined and office.getId() in fullOfficeBreadcrumbsIds) %}{{ 'active' }}{% endif %}">
                                     {% if office.getTopTopics(em)|length > 0 %}<a href="#" class="main-item" style=" width: 10px; float: left" tabindex="1" ><i class="fa fa-chevron-right" style="margin-left: -10px"></i></a>{% endif %}
                                     <a href='{{ url('intranet_show_office', {office_id: office.getId()}) }}' data-original-title='{{ office.name }}'>
-                                        <i class='fa fa-user' style="margin-left: 0px;"></i>
+                                        <i class='fa fa-user' style="margin-left: 0 px;"></i>
                                         <span class='hidden-minibar' style="margin-left: -15px;"> {{ office.name }}
                                             {% if office.getTasksList()|length > 0 %} ({{ office.getTasksList()|length }}){% endif %}
                                         </span>
@@ -48,7 +48,7 @@
                                     {% for topic in office.getTopTopics(em) %}
 
                                         <li class="{% if topic.status == "closed" %}closed{% endif %}" style="background-color: #5C7399">
-                                            <a href="{{ url('intranet_show_topic', {topic_id: topic.getId()}) }}">
+                                            <a href="{{ url('intranet_show_topic', {topic_id: topic.getId()}) }}" style="color: white">
                                                 {{ topic.getName() }}
                                                 {% if topic.status == 'closed' %}
                                                     <i class="fa fa-warning right"></i>
