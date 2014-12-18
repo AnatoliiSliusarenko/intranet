@@ -29,7 +29,7 @@
 
 {% block body %}
 <!-- .content -->
-<div class="content" style="position: absolute;top: 30px;">
+<div class="content">
 	{% block breadcrumbs %}
 	{% endblock %}
 	{% block search %}
@@ -39,7 +39,7 @@
 	{% block content %}
 	<div class="row">
 		<div class="col-md-12" style="margin-top:90px">
-			<div class="jumbotron">
+			<div class="jumbotron" style="position: absolute;top: 100px;width: 100%;">
 				<h1>Hello, {{ app.user.name }}!</h1>
 				<p>We welcome to our service. Here you can chat with other users, create your own private community with its topics for discussion.</p>
 			</div>
