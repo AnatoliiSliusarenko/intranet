@@ -3,7 +3,7 @@
 {% block title %}{{ office.name }}{% endblock %}
 
 {% block breadcrumbs %}
-<ul class="breadcrumb fix topstyle" style="z-index:9">
+<ul class="breadcrumb topstyle" style="z-index:9">
 <div class="row">
 	<div class="col-md-12" style="display: flex">
 			{% for item in breadcrumbs %}
@@ -13,10 +13,10 @@
 	</div>
 </div>
 </ul>
-    <div class="panel fix toppanel" style="z-index:9">
+    <div class="panel toppanel" style="z-index:9">
         <h3 class="page-header "><i class="fa fa-sitemap"></i> {{ office.name }} <i class="fa fa-info-circle animated bounceInDown show-info"></i> {% if (office.getUserid() != 0 and office.getUserid() == app.user.getId()) %}<i class="fa fa-times-circle animated bounceInDown show-danger"></i>{% endif %} </h3>
 
-        <blockquote class="page-information hidden">
+        <blockquote class="page-information hidden" style="position: relative;">
             <p>
                 {{ office.description }}
             </p>
@@ -33,7 +33,7 @@
 
 {% block pageheader %}   
 <div class="row">
-	<div class="col-md-12" style="margin-top: 180px">
+	<div class="col-md-12">
         <div class="panel panel-cascade">
             <div class="panel-heading">
                 <h3 class="panel-title">

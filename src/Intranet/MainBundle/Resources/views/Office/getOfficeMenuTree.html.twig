@@ -47,23 +47,8 @@
                                             {% if office.getTasksList()|length > 0 %} ({{ office.getTasksList()|length }}){% endif %}
                                         </span>
                                     </a>
-                                    {% if office.getTopTopics(em) is not empty %}
-                                        <ul id="hover" class="sub-menu" >
-                                            {% for topic in office.getTopTopics(em) %}
-                                                <li class="{% if topic.status == "closed" %}closed{% endif %}" style="background-color: #5C7399">
-                                                    <a href="{{ url('intranet_show_topic', {topic_id: topic.getId()}) }}" style="color: white">
-                                                        {{ topic.getName() }}
-                                                        {% if topic.status == 'closed' %}
-                                                            <i class="fa fa-warning right"></i>
-                                                        {% endif %}
-                                                    </a>
-                                                </li>
-
-                                            {% endfor %}
-                                        </ul>
-                                    {% endif %}
                                     {% if office.getTopTopics(em) is not empty or office.getTasksList() is not empty%}
-                                        <ul id="menu" class='drop-block'>
+                                        <ul id="menu" class='drop-block' style="display: block!important;">
                                             {% for topic in office.getTopTopics(em, app.user.userSettings.showHiddenTopics) %}
                                                 {{include(
                                                 'IntranetMainBundle:Topic:showTopicMenuTree.html.twig',
@@ -81,6 +66,21 @@
                                         </ul>
                                     {% endif %}
                                 </li>
+                                {% if office.getTopTopics(em) is not empty %}
+                                    <ul id="hover" class="sub-menu">
+                                        {% for topic in office.getTopTopics(em) %}
+                                            <li style="background-color: #5C7399" class="{% if topic.status == "closed" %}closed{% endif %}">
+                                                <a href="{{ url('intranet_show_topic', {topic_id: topic.getId()}) }}" style="color: white">
+                                                    {{ topic.getName() }}
+                                                    {% if topic.status == 'closed' %}
+                                                        <i class="fa fa-warning right"></i>
+                                                    {% endif %}
+                                                </a>
+                                            </li>
+
+                                        {% endfor %}
+                                    </ul>
+                                {% endif %}
                             </ul>
                         {% endfor %}
                     </ul>
@@ -101,13 +101,11 @@
 {% endfor %}
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 <script>
-    $( "#clickme" ).click(function() {
-        this.closest( ".sub-menu" ).toggleClass('block');
-        $("i").toggleClass('fa-chevron-right');
-        $("i").toggleClass('fa-chevron-down');
-    });
-    $( "#clickme" ).hover(function() {
-        this.siblings( ".drop-block" ).hide();
-    });
 
+    $('.main-item').bind('click', function()
+    {
+        $(this).children('i').toggleClass('fa fa-chevron-down');
+        $(this).children('i').toggleClass('fa fa-chevron-right');
+        $(this).parent().next('.sub-menu' ).toggleClass('block');
+    });
 </script>
