@@ -6599,7 +6599,7 @@ th.hidden-lg,td.hidden-lg {
 }
 .drop-block {
     visibility: hidden;
-    display: block;
+    display: block!important;
     position: absolute;
     z-index: 1000;
     left: 100%;
@@ -6638,7 +6638,7 @@ th.hidden-lg,td.hidden-lg {
     transition: opacity 1.0s ease;
 }
 .drop-link:hover > .drop-block1 {
-    visibility: visible;
+    visibility: visible!important;
     top: 0;
     opacity: 1;
     transition: opacity 1.0s ease;
@@ -6649,6 +6649,14 @@ th.hidden-lg,td.hidden-lg {
     opacity: 0;
     transition: opacity 3.0s ease, visibility 1.0s ease;
 }
+
+.drop:hover > .drop-block {
+    visibility: hidden!important;
+    top: 0;
+    opacity: 0;
+    transition: opacity 3.0s ease, visibility 1.0s ease;
+}
+
 .drop-link:not(:hover) > .drop-block1 {
     visibility: hidden;
     top: 0;
@@ -6727,4 +6735,7 @@ user-avatar{
 .float
 {
     float: left;
+}
+.block{
+    display: block!important;
 }

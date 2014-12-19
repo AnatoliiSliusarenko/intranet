@@ -36,31 +36,34 @@
                         {% for office in localOffice.getChildrenForUser(em, app.user) %}
                             <ul style="display: block !important;">
                                 <li class="drop-link {% if (fullOfficeBreadcrumbsIds is defined and office.getId() in fullOfficeBreadcrumbsIds) %}{{ 'active' }}{% endif %}">
-                                    {% if office.getTopTopics(em)|length > 0 %}<a href="#" class="main-item" style=" width: 10px; float: left" tabindex="1" ><i class="fa fa-chevron-right" style="margin-left: -10px"></i></a>{% endif %}
-                                    <a href='{{ url('intranet_show_office', {office_id: office.getId()}) }}' data-original-title='{{ office.name }}'>
+                                    {% if office.getTopTopics(em)|length > 0 %}
+                                        <a id="clickme" href="#" class="main-item" style=" width: 10px; float: left" tabindex="1" >
+                                            <i id="i" class="fa fa-chevron-right" style="margin-left: -10px"></i>
+                                        </a>
+                                    {% endif %}
+                                    <a id="click" href='{{ url('intranet_show_office', {office_id: office.getId()}) }}' data-original-title='{{ office.name }}'>
                                         <i class='fa fa-user' style="margin-left: 0 px;"></i>
                                         <span class='hidden-minibar' style="margin-left: -15px;"> {{ office.name }}
                                             {% if office.getTasksList()|length > 0 %} ({{ office.getTasksList()|length }}){% endif %}
                                         </span>
                                     </a>
                                     {% if office.getTopTopics(em) is not empty %}
-                                    <ul class="sub-menu " >
-                                    {% for topic in office.getTopTopics(em) %}
+                                        <ul id="hover" class="sub-menu" >
+                                            {% for topic in office.getTopTopics(em) %}
+                                                <li class="{% if topic.status == "closed" %}closed{% endif %}" style="background-color: #5C7399">
+                                                    <a href="{{ url('intranet_show_topic', {topic_id: topic.getId()}) }}" style="color: white">
+                                                        {{ topic.getName() }}
+                                                        {% if topic.status == 'closed' %}
+                                                            <i class="fa fa-warning right"></i>
+                                                        {% endif %}
+                                                    </a>
+                                                </li>
 
-                                        <li class="{% if topic.status == "closed" %}closed{% endif %}" style="background-color: #5C7399">
-                                            <a href="{{ url('intranet_show_topic', {topic_id: topic.getId()}) }}" style="color: white">
-                                                {{ topic.getName() }}
-                                                {% if topic.status == 'closed' %}
-                                                    <i class="fa fa-warning right"></i>
-                                                {% endif %}
-                                            </a>
-                                        </li>
-
-                                    {% endfor %}
-                                    </ul>
+                                            {% endfor %}
+                                        </ul>
                                     {% endif %}
                                     {% if office.getTopTopics(em) is not empty or office.getTasksList() is not empty%}
-                                        <ul class='drop-block' style="display: block!important;">
+                                        <ul id="menu" class='drop-block'>
                                             {% for topic in office.getTopTopics(em, app.user.userSettings.showHiddenTopics) %}
                                                 {{include(
                                                 'IntranetMainBundle:Topic:showTopicMenuTree.html.twig',
@@ -96,3 +99,15 @@
         {% endfor %}
     {% endif %}
 {% endfor %}
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<script>
+    $( "#clickme" ).click(function() {
+        this.closest( ".sub-menu" ).toggleClass('block');
+        $("i").toggleClass('fa-chevron-right');
+        $("i").toggleClass('fa-chevron-down');
+    });
+    $( "#clickme" ).hover(function() {
+        this.siblings( ".drop-block" ).hide();
+    });
+
+</script>
