@@ -67,7 +67,6 @@ public function getTasksForOfficeAction(Request $request, $office_id)
     	{
     		$data = json_decode(file_get_contents("php://input"));
     		$task = (object) $data;
-    		
     		$name = $task->name;
     		$description = $task->description;
     		$priority = $task->priority;
@@ -84,8 +83,7 @@ public function getTasksForOfficeAction(Request $request, $office_id)
     		$task->setTopicid($topicid);
     		$task->setStatusid($statusid);
     		$task->setEstimated($estimated);
-    		
-    		
+
     		$status = ($statusid != null) ? $em->getRepository('IntranetMainBundle:TaskStatus')->find($statusid) : null;
     		if ($status == null)
     		{
@@ -105,7 +103,7 @@ public function getTasksForOfficeAction(Request $request, $office_id)
     		$task->setUser($user, $this->get('intranet.notifier'));
     		
     		$topic = ($topicid != null) ? $em->getRepository('IntranetMainBundle:Topic')->find($topicid): null;
-    		if ($topic == null)
+    		if ($topic == null && $topicid != null)
     		{
     			$response = new Response(json_encode(array("result" => null, "message" => 'Topic not found!')));
     			$response->headers->set('Content-Type', 'application/json');

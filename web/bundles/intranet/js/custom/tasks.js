@@ -71,7 +71,6 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 				delete groupedList[task.id];
 			}
 		});
-		//topList = [];
 		for (key in groupedList)
 			topList = topList.concat(groupedList[key]);
 		return topList;
@@ -158,6 +157,10 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 	$scope.addTask = function(task)
 	{	
 		var parentid = (typeof task != 'undefined') ? task.id : null;
+		if(ENTITY.type == "topic")
+			$scope.curentTopic = ENTITY.id;
+		else
+			$scope.curentTopic = null;
 		$http({
 			method: "GET", 
 			url: $scope.urlsTasksAdd,
@@ -327,7 +330,6 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 		if ($scope.task.name != undefined && $scope.task.description != undefined){
 			event.preventDefault();
 		}
-		
 		$scope.task.estimated = parseInt($scope.task.esth)*60 + parseInt($scope.task.estm);
 		$http({
 			method: "POST", 
