@@ -3,7 +3,7 @@ Intranet.controller('ChatController', ['$scope', '$http', '$paginator', '$modal'
 	messageContainer = $('#write-message');
 	
 	$scope.paginator = $paginator;
-	$scope.postsPerPage = 10;
+	$scope.postsPerPage = 20;
 	$scope.paginator.postsPerPage = $scope.postsPerPage;
 	
 	$scope.$watch('paginator.curPageId', function(){
@@ -350,7 +350,7 @@ Intranet.controller('ChatController', ['$scope', '$http', '$paginator', '$modal'
 	function getDocuments()
 	{
 		$http({
-			method: "GET", 
+			method: "GET",
 			url: $scope.urlsDocumentsGet,
 			params: {
 				userid: USER.id
