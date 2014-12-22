@@ -21,7 +21,6 @@ Intranet.controller('MembersController', ['$scope', '$http', function($scope, $h
 	
 	function sendMembers()
 	{
-		console.log($scope.membersURL);
 		$http({
 			method: "POST", 
 			url: $scope.membersURL, 

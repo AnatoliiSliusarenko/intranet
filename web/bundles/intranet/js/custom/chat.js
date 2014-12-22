@@ -10,7 +10,6 @@ Intranet.controller('ChatController', ['$scope', '$http', '$paginator', '$modal'
 		var offset = $scope.paginator.postsPerPage*($scope.paginator.curPageId - 1);
 		var limit = $scope.paginator.postsPerPage;
 		getPosts(offset, limit);
-		//console.log("curPageId: paginator--->", $scope.paginator);
 	});
 		
 	$scope.pressEnter = function(e)
@@ -66,7 +65,6 @@ Intranet.controller('ChatController', ['$scope', '$http', '$paginator', '$modal'
 			url: $scope.postsGetURL, 
 			params: {offset: offset, limit: limit}})
 		.success(function(response){
-			//console.log("posts: ",response.result);
 			if (response.result)
 			{
 				$scope.posts = response.result.reverse();
@@ -83,10 +81,9 @@ Intranet.controller('ChatController', ['$scope', '$http', '$paginator', '$modal'
 	{
 		$http({
 			method: "GET", 
-			url: $scope.postsCountURL, 
+			url: $scope.postsCountURL
 			})
 		.success(function(response){
-			//console.log("posts count: ", response.result);
 			if (response.result)
 				callback(response.result);
 		})
@@ -96,10 +93,9 @@ Intranet.controller('ChatController', ['$scope', '$http', '$paginator', '$modal'
 	{
 		$http({
 			method: "GET", 
-			url: $scope.membersURL, 
+			url: $scope.membersURL
 			})
 		.success(function(response){
-			//console.log("members: ", response.result);
 			if (response.result)
 				$scope.members = response.result;
 		})
@@ -115,7 +111,6 @@ Intranet.controller('ChatController', ['$scope', '$http', '$paginator', '$modal'
 				url: $scope.postsNewURL, 
 				params: {last_posted: $scope.lastDate}})
 			.success(function(response){
-				//console.log("new posts: ", response.result);
 				if ((response.result) && (response.result.length > 0))
 				{	
 					var onlyUpdated = updatePosts(response.result);
@@ -156,7 +151,6 @@ Intranet.controller('ChatController', ['$scope', '$http', '$paginator', '$modal'
 		  var date1_ms = date1.getTime();
 		  var date2_ms = date2.getTime();
 		  var difference_ms = date2_ms - date1_ms;
-		  
 		  return difference_ms; 
 	}
 	
@@ -170,9 +164,7 @@ Intranet.controller('ChatController', ['$scope', '$http', '$paginator', '$modal'
 		var postedTime = new Date(Date.parse(post.posted.date));
 		var now = new Date();
 		var utc = new Date(now.getTime() + now.getTimezoneOffset() * 60000);
-		
 		var minutesAgo = Date.minutesBetween(postedTime, utc);
-
 		return (minutesAgo <= 5 && post.userid == $scope.userid);
 	}
 	
@@ -215,7 +207,6 @@ Intranet.controller('ChatController', ['$scope', '$http', '$paginator', '$modal'
 			url: $scope.postAddURL, 
 			data: post })
 		.success(function(response){
-			console.log("Created post: ", response.result);
 			if (response.result)
 			{
 				// maybe need to request for posts and init paginator!!!
@@ -257,7 +248,6 @@ Intranet.controller('ChatController', ['$scope', '$http', '$paginator', '$modal'
 			$scope.paginator.init(postsCount, $scope.postsPerPage);
 			
 		});
-		//console.log('==========');
 		setInterval(getNewPosts, 3000);
 	}
 	
@@ -340,8 +330,7 @@ Intranet.controller('ChatController', ['$scope', '$http', '$paginator', '$modal'
 			if (response.result)	
 			{
 				$scope.documents = prepareDocuments(response.result);
-				setTimeout(bindList, 500);
-				debugger
+				setTimeout(bindList, 1000);
 				$scope.documents[0].checked = true;
 			}
 		})
@@ -357,7 +346,6 @@ Intranet.controller('ChatController', ['$scope', '$http', '$paginator', '$modal'
 			}
 			  })
 		.success(function(response){
-			//console.log(response);
 			if (response.result)	
 			{
 				$scope.documents = prepareDocuments(response.result);

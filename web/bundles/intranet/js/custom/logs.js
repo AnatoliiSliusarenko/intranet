@@ -7,7 +7,7 @@ Intranet.controller('LogsController', ['$scope', '$http', '$modal', function($sc
 	
 	$scope.$watch('filter', function(){
 		if ($scope.timeoutHandler != null) clearTimeout($scope.timeoutHandler);
-		$scope.timeoutHandler = setTimeout(getLogs, 2000);
+		$scope.timeoutHandler = setTimeout(getLogs, 3000);
 	}, true);
 	
 	$scope.logs = [];

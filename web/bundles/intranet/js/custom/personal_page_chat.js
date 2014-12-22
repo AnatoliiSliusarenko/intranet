@@ -31,7 +31,6 @@ Intranet.controller('PersonalOfficeChatController',['$http', '$scope', '$paginat
 		var offset = $scope.paginator.postsPerPage*($scope.paginator.curPageId - 1);
 		var limit = $scope.paginator.postsPerPage;
 		getOfficesPosts(offset, limit, $scope.officesIdArray);
-		//console.log("curPageId: paginator--->", $scope.paginator);
 	});
 	
 	$scope.pressEnter = function(e)
@@ -45,7 +44,6 @@ Intranet.controller('PersonalOfficeChatController',['$http', '$scope', '$paginat
 	
 	$scope.init = function (count )
 	{
-		//console.log('Office',count);
 		$scope.count = count;
 	}
 	
@@ -74,7 +72,6 @@ Intranet.controller('PersonalOfficeChatController',['$http', '$scope', '$paginat
 				url: url, 
 				params: {offset: offset, limit: limit}})
 			.success(function(response){
-				//console.log("posts: ",response.result);
 				if (response.result)
 				{
 					$scope.posts = response.result.reverse();
@@ -110,7 +107,6 @@ Intranet.controller('PersonalOfficeChatController',['$http', '$scope', '$paginat
 					url: url
                 })
 				.success(function(response){
-					//console.log("posts count: ", response.result);
 					if (response.result)
 						callback(response.result);
 				})
@@ -126,7 +122,6 @@ Intranet.controller('PersonalOfficeChatController',['$http', '$scope', '$paginat
 					url: url, 
 					params: {last_posted: $scope.lastDate}})
 				.success(function(response){
-					//console.log("new posts: ", response.result);
 					if ((response.result) && (response.result.length > 0))
 					{	
 						var onlyUpdated = updatePosts(response.result);
@@ -150,7 +145,6 @@ Intranet.controller('PersonalOfficeChatController',['$http', '$scope', '$paginat
 	$scope.editPost = function(post)
 	{
 		if ((!$scope.isEditable(post)) || ($scope.editingPost != null)) return;
-		//console.log(post);
 		$scope.editingPost = post;
 		messageContainer.val(post.message);
 	}
@@ -205,7 +199,6 @@ Intranet.controller('PersonalOfficeChatController',['$http', '$scope', '$paginat
 			url: url, 
 			data: post })
 		.success(function(response){
-			//console.log("Created post: ", response.result);
 			if (response.result)
 			{
 				// maybe need to request for posts and init paginator!!!
@@ -285,7 +278,6 @@ Intranet.controller('PersonalTopicChatController',['$http', '$scope', '$paginato
 		var offset = $scope.paginator.postsPerPage*($scope.paginator.curPageId - 1);
 		var limit = $scope.paginator.postsPerPage;
 		getTopicsPosts(offset, limit, $scope.topicsArray);
-		//console.log("curPageId: paginator--->", $scope.paginator);
 	});
 	
 	$scope.pressEnter = function(e)

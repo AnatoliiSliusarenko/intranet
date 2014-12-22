@@ -83,13 +83,11 @@ Intranet.controller('NavigationController', ['$scope', '$http', function($scope,
 								notification_to_show = true;
 								break;
 							}
-							//console.log("notification_to_show["+i+"] -> "+notification_to_show);
 							if(notification_to_show == false){
 								response.result.splice(i,1);
 								i--;
 							}
 						}
-						//console.log("response_result -> "+response.result);
 						if(!response2.result.user_settings.disable_message_on_site){
 							if(response.result.length > 0){
 								if ($scope.notifyHandler == null) StartNotify();
@@ -115,7 +113,6 @@ Intranet.controller('NavigationController', ['$scope', '$http', function($scope,
 									notification_to_show2 = false;
 									break;
 								}
-								//console.log("notification_to_show["+i+"] -> "+notification_to_show);
 								if(notification_to_show2 == false){
 									response.result.splice(i,1);
 									i--;
@@ -171,7 +168,7 @@ Intranet.controller('NavigationController', ['$scope', '$http', function($scope,
 		
 	}
 	
-	setInterval(getNotifications, 2000);
+	setInterval(getNotifications, 3000);
 	
 	$(".write-message").keyup(function(){
 		var msg = $(this).val();
@@ -185,7 +182,6 @@ Intranet.controller('NavigationController', ['$scope', '$http', function($scope,
 			}else{
 				user_to_light_name = tmp_str.substring('1');
 			}
-			//alert(user_to_light_name);
 		}
 	});
 	
@@ -211,6 +207,6 @@ Intranet.controller('NavigationController', ['$scope', '$http', function($scope,
 			}
 		});
 	}
-	setInterval(refreshConversationUsernameLight,2000);
+	setInterval(refreshConversationUsernameLight,3000);
 	
 }]);
