@@ -325,7 +325,7 @@
 				</div>
             </div>
             
-            <div class="panel-body" >
+            <div class="panel-body" ng-controller="SprintController">
 	          <table class="table users-table table-condensed table-hover" >
 	           <thead>
 	           		<tr>
@@ -382,7 +382,8 @@
 				             <a data-original-title="Add subtasks" data-placement="top" href="#"><button type="button" class="btn btn-primary btn-xs" ng-click="addTask(task)"><i class="fa fa-code-fork"></i></button></a>
 				             <a data-original-title="Delete task" data-placement="top" href="#"><button type="button" class="btn btn-danger btn-xs" ng-click="removeTask(task)"><i class="fa fa-trash-o"></i></button></a>
 				             <a data-original-title="Go to topic" data-placement="top" href="[[ task.hrefTopic ]]" ng-show="task.topicid != null" class="btn btn-info btn-xs"><i class="fa fa-mail-forward"></i></a>
-				            </div>
+								<a ng-click="addToSprint(task.id)" data-original-title="Add to Sprint" data-placement="top" href="#" class="btn btn-info btn-xs"><i class="fa fa-mail-forward"></i></a>
+							</div>
 				            </td>
 	           			</tr>
 	           			<tr ng-show="task.dropped == true" class="success" ng-repeat="subtask in task.subtasks">
@@ -413,7 +414,7 @@
 				            <div class="tooltips">
 				             <a data-original-title="Delete subtask" data-placement="top" href="#"><button type="button" class="btn btn-danger btn-xs" ng-click="removeTask(subtask)"><i class="fa fa-trash-o"></i></button></a>
 				             <a data-original-title="Go to topic" data-placement="top" href="#" href="[[ subtask.hrefTopic ]]" ng-show="subtask.topicid != null" class="btn btn-info btn-xs"><i class="fa fa-mail-forward"></i></a>
-				            </div>
+							</div>
 				            </td>
 		            	</tr>
 			  </tbody>

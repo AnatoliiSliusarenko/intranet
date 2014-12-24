@@ -574,4 +574,10 @@ class Office
     			"windows" => $windows,
     			'message'=>$param);
     }
+
+    public function getUser($em)
+    {
+        $user = $em->getRepository('IntranetMainBundle:User')->find($this->getUserid());
+        return $user;
+    }
 }

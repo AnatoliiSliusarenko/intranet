@@ -7,7 +7,7 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 			name: "",
 			user: [],
 			topic: []
-	}
+	};
 	
 	$scope.$watch('filter', function(){
 		getTasks();
@@ -48,8 +48,8 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 				});
 			}
 		});
-    	
-	};
+
+	}
 	$scope.$watch(function(){return TASKS_NOTIFICATIONS;}, function(input) {
 		calculateNotifications();
     });
@@ -92,7 +92,6 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 			data: $scope.filter
 			  })
 		.success(function(response){
-			//console.log(response);
 			if (response.result)
 			{
 				$scope.tasks = prepareTasks(response.result);
@@ -115,7 +114,7 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 	{
 		if (task.subtasks.length == 0) return;
 		task.dropped = !task.dropped;
-	}
+	};
 	
 	$scope.removeTask = function(task)
 	{
@@ -136,13 +135,13 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 				});
 			}
 		})
-	}
+	};
 	
 	$scope.changeHrefTopic = function(task)
 	{	
 		url = $scope.urlsTopicsShow.replace('0', task.topicid);
 		task.hrefTopic = url;
-	}
+	};
 	
 	function addTooltips()
 	{
@@ -192,7 +191,7 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 				}
 			}, function(){});
 		})
-	}
+	};
 	
 	$scope.editTask = function(task)
 	{
@@ -240,7 +239,7 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 				});
 			}, function(){});
 		})
-	}
+	};
 	
 	$scope.showPosts = function(task)
 	{
@@ -257,9 +256,9 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 						task: function(){return task;}
 					}
 			    });
-			
-            modalInstance.result.finally(function () {;
-				if (modalInstance.result.response.result != null)
+
+modalInstance.result.finally(function () {
+					if (modalInstance.result.response.result != null)
 				{
 					_.map($scope.tasks, function(t){
 						if(t.id == modalInstance.result.response.result)
@@ -383,7 +382,7 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 	
 	$scope.users = users;
 	
-	$scope.task.topicsIdsCurrent = _.map($scope.task.topics, function(t){return t.id;})
+	$scope.task.topicsIdsCurrent = _.map($scope.task.topics, function(t){return t.id;});
 		
 	$scope.editTask = function(event)
 	{	
@@ -413,7 +412,7 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 				alert(response.message);
 			}
 		})
-	}
+	};
 	
 	$http({
 		method: "GET", 
@@ -521,7 +520,7 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 		_.map($scope.documents, function(d){
 			if (d.id == documentid) d.checked = !d.checked;
 		});
-	}
+	};
 	
 	$scope.isEditable = function(post)
 	{
@@ -532,7 +531,7 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 		var minutesAgo = Date.minutesBetween(postedTime, utc);
 
 		return (minutesAgo <= 5 && post.userid == $scope.userid);
-	}
+	};
 	
 	$scope.editPost = function(post)
 	{
@@ -540,7 +539,7 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 		console.log(post);
 		$scope.editingPost = post;
 		$scope.messageContainerTask.val(post.message);
-	}
+	};
 	
 	$scope.pressEnter = function(e)
 	{
@@ -549,7 +548,7 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 			e.preventDefault();
 			$scope.addPost();
 		}
-	}
+	};
 	
 	$scope.addPost = function()
 	{
@@ -571,7 +570,7 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 				message: $scope.comment,
 				posted: new Date(),
 				usertosendname: user_to_send_name
-		}
+		};
 		
 		if(symb_index != -1){
 			//console.log("1");
@@ -615,7 +614,7 @@ Intranet.controller('TasksController', ['$scope', '$http', '$modal', function($s
 			$scope.messageContainerTask.val("");
 			$scope.messageContainerTask.focus();
 		})
-	}
+	};
 	
 	function insertDocumentsLinks(documents)
 	{

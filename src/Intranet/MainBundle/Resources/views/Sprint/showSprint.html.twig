@@ -1,0 +1,138 @@
+{% extends 'IntranetMainBundle:Index:index.html.twig' %}
+
+{% block title %}{{ sprint.name }}{% endblock %}
+
+{% block breadcrumbs %}{% endblock %}
+
+{% block pageheader %} {% endblock %}
+
+{% block content %}
+<h1 style="margin-top: 90px">
+    <b style="color: {{ sprint.status.getColor() }}">
+        {{ sprint.name }} ({{ sprint.status.getLabel() }})
+    </b>
+</h1>
+    <div>
+<table id="grid" class="table users-table table-condensed table-hover">
+    <thead>
+    <tr>
+        <th class="visible-lg" data-type="number">#</th>
+        <th class="visible-lg" data-type="number">id</th>
+        <th class="visible-lg" data-type="string">user story</th>
+        <th class="visible-lg" data-type="string">status</th>
+        <th class="visible-lg" data-type="string">Estimate</th>
+        <th class="visible-lg" data-type="string">Time spent</th>
+        <th class="visible-lg" data-type="string">Assigned</th>
+        <th class="visible-lg" data-type="string">Parent</th>
+        <th class="visible-lg" data-type="string">Remaining</th>
+        <th class="visible-lg" data-type="string">Owner</th>
+    </tr>
+    </thead>
+    <tbody>
+        {% for task in tasks %}
+        {% set spent = task.getTimeSpent() %}
+        {% set remaning = task.getRemaining()%}
+        <tr style="font-size: 15px;font-weight: 400;">
+            <td class="visible-lg">{{ loop.index }}</td>
+            <td class="visible-lg">{{ task.id }}</td>
+            <td class="visible-lg">{{ task.name }}</td>
+            <td class="visible-lg" >
+                <label class="label" style="background-color: {{ task.status.color }};">{{ task.status.label }}</label>
+            </td>
+            <td class="visible-lg">
+                {% if task.estimated > 0 %}{{ task.estimated/60 }}&nbsp;hrs
+                {% else %} - {% endif %}
+            </td>
+            <td class="visible-lg">{{ spent }}</td>
+            {% if task.getUser().getName is defined %}
+                <td class="visible-lg">{{ task.getUser().getName() }}</td>
+            {% else %}
+                <td class="visible-lg"> - </td>
+            {% endif %}
+            <td class="visible-lg">{{ task.getParent(em) }}</td>
+            <td class="visible-lg">{{ remaning }}</td>
+            <td class="visible-lg">{{ task.getOffice().getUser(em).getName() }}</td>
+        {% endfor %}
+    </tbody>
+
+</table>
+    </div>
+    <script>
+        // сортировка таблицы
+        // использовать делегирование!
+        // должно быть масштабируемо:
+        // код работает без изменений при добавлении новых столбцов и строк
+
+        var grid = document.getElementById('grid');
+
+        grid.onclick = function(e) {
+            var target = e && e.target || window.event.srcElement;
+
+            if (target.tagName != 'TH') return;
+
+            // Если TH -- сортируем
+            sortGrid(target.cellIndex, target.getAttribute('data-type'));
+        };
+
+        function sortGrid(colNum, type) {
+            var tbody = grid.getElementsByTagName('tbody')[0];
+
+            // Составить массив из TR
+            var rowsArray = [];
+            for(var i = 0; i<tbody.children.length; i++) {
+                rowsArray.push(tbody.children[i]);
+            }
+
+
+            // определить функцию сравнения, в зависимости от типа
+            var compare;
+
+            switch(type) {
+                case 'number':
+                    compare = function(rowA, rowB) {
+                        return rowA.cells[colNum].innerHTML - rowB.cells[colNum].innerHTML;
+                    };
+                    break;
+                case 'string':
+                    compare = function(rowA, rowB) {
+                        return rowA.cells[colNum].innerHTML > rowB.cells[colNum].innerHTML ? 1 : -1;
+                    };
+                    break;
+            }
+
+            // сортировать
+            rowsArray.sort(compare);
+
+            // Убрать tbody из большого DOM документа для лучшей производительности
+            grid.removeChild(tbody);
+
+
+            // Убрать TR из TBODY.
+            // Присваивание tbody.innerHTML = '' не работает в IE
+            //
+            // на самом деле без этих строк можно обойтись!
+            // при добавлении appendChild все узлы будут сами перемещены на правильное место!
+            while(tbody.firstChild) {
+                tbody.removeChild(tbody.firstChild);
+            }
+
+
+            // добавить результат в нужном порядке в TBODY
+            for(var i=0; i<rowsArray.length; i++) {
+                tbody.appendChild(rowsArray[i]);
+            }
+
+            grid.appendChild(tbody);
+
+        }
+
+        // P.S. В IE7 cells, cellIndex не работают, если элемент вне документа
+
+    </script>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+{% endblock %}
+

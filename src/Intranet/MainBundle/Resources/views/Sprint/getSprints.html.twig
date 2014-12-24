@@ -1,0 +1,9 @@
+
+{% for sprint in sprints %}
+    <li><a tooltip="{{ sprint.description }}" href="{{ url('intranet_show_sprint', {sprintid: sprint.getId()}) }}">
+            <i class="fa fa-github-square"></i>{{ sprint.getName() }}
+        </a>
+    </li>
+{% endfor %}
+
+

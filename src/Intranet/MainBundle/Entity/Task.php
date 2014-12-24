@@ -138,6 +138,13 @@ class Task
      * @var array
      */
     private $posts;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="sprintid", type="integer")
+     */
+    private $sprintid;
     
     private $subTasks = null;
     
@@ -660,4 +667,145 @@ class Task
         $rest = substr($rest, 0, 97);
         return $rest."...";
     }
+
+    /**
+     * Set sprintid
+     *
+     * @param integer $sprintid
+     * @return Task
+     */
+    public function setSprintid($sprintid)
+    {
+        $this->sprintid = $sprintid;
+
+        return $this;
+    }
+
+    /**
+     * Get sprintid
+     *
+     * @return integer
+     */
+    public function getSprintid()
+    {
+        return $this->sprintid;
+    }
+
+    public function getParent($em)
+    {
+        $pid = $this->getParentid();
+        if(!$pid)
+        {
+            $topic = $this->getTopic();
+            if($topic)
+                return $topic->getName();
+            $office = $this->getOffice();
+            if($office)
+                return $office->getName();
+        }
+        $parent = $em->getRepository('IntranetMainBundle:Task')->find($pid);
+        return $parent->getId();
+
+    }
+
+    public function dateIntervalToString(\DateInterval $interval) {
+
+        // Reading all non-zero date parts.
+        $date = array_filter(array(
+            ' year ' => $interval->y,
+            ' month ' => $interval->m,
+            ' days ' => $interval->d
+        ));
+
+        // Reading all non-zero time parts.
+        $time = array_filter(array(
+            ' hrs ' => $interval->h,
+            ' mins ' => $interval->i,
+            ' sec ' => $interval->s
+        ));
+
+        $specString = '';
+
+        // Adding each part to the spec-string.
+        foreach ($date as $key => $value) {
+            $specString .= $value . $key;
+        }
+        if (count($time) != 0) {
+            foreach ($time as $key => $value) {
+                $specString .= $value . $key;
+            }
+        }
+
+        return $specString;
+    }
+
+    public function getTimeSpent1()
+    {
+        $status = $this->getStatus()->getLabel();
+        if($status == 'In-progress: coding' || $status == 'In-progress: testing'
+            || $status == 'In-progress: research')
+        {
+            $start = $this->getStatusUpdated();
+            $now = new \DateTime();
+            $spent =$now->diff($start);
+            return $spent;
+        }
+        else
+            return  0;
+    }
+
+    public function getTimeSpent()
+    {
+        $status = $this->getStatus()->getLabel();
+        if($status == 'In-progress: coding' || $status == 'In-progress: testing'
+            || $status == 'In-progress: research')
+        {
+            $start = $this->getStatusUpdated();
+            $now = new \DateTime();
+            $spent =$now->diff($start);
+            return $this->dateIntervalToString($spent);
+        }
+        else
+            return  0;
+    }
+
+    public function getRemaining()
+    {
+        $status = $this->getStatus()->getLabel();
+        if($status == 'In-progress: coding' || $status == 'In-progress: testing'
+            || $status == 'In-progress: research')
+        {
+            $start = $this->getEstimated();
+            $now = $this->getTimeSpent1();
+            $mins = $now->m*30*24*60 + $now->d*24*60 + $now->i;
+            $remaning = $start-$mins;
+            if($remaning < 0)
+                return "TIME OUT!";
+            if($remaning == 0)
+                return 0;
+            $min = $remaning%60;
+            $hrs = ($remaning-$min)/60;
+            if($hrs != 0 && $min != 0)
+                return $hrs." hrs ".$min." mins";
+            if($min == 0)
+                return $hrs." hrs ";
+            if($hrs == 0)
+                return $min." mins";
+        }
+        else
+        {
+            if($this->getEstimated() == 0)
+                return 0;
+            $min = $this->getEstimated()%60;
+            $hrs = ($this->getEstimated()-$min)/60;
+            if($hrs != 0 && $min != 0)
+                return $hrs." hrs ".$min." mins";
+            if($min == 0)
+                return $hrs." hrs ";
+            if($hrs == 0)
+                return $min." mins";
+        }
+
+    }
+
 }

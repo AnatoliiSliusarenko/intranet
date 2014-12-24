@@ -10,16 +10,22 @@
 {% block leftSidebar %}
 <!-- .left-sidebar -->
 <div style="height:100%">
-	<div class="left-sidebar" style="background-color:#EBEFF2">
+	<div class="left-sidebar" ng-controller="SprintController" style="background-color:#EBEFF2">
 		<div class="sidebar-holder">
 			<ul class="nav  nav-list">
-
 				<!-- sidebar to mini Sidebar toggle -->
 				<li class="nav-toggle">
                     <button class="btn  btn-nav-toggle text-primary"><i class="fa fa-angle-double-left toggle-left"></i> </button>
 				</li>
                 {% render(controller('IntranetMainBundle:Topic:getTopicMenuTree')) %}
                 {% render(controller('IntranetMainBundle:Office:getOfficeMenuTree')) %}				
+			</ul>
+			<br>
+			<h4 >Sprints &nbsp;
+				<a href="#" style="text-decoration: none;" ng-click="addSprint()"><i class="fa fa-plus"></i></a>
+			</h4>
+			<ul class="nav  nav-list" style="display: block">
+				{% render(controller('IntranetMainBundle:Sprint:getSprints')) %}
 			</ul>
 		</div>
 	</div> <!-- /.left-sidebar -->
@@ -40,7 +46,7 @@
 	<div class="row">
 		<div class="col-md-12" style="margin-top:90px">
 			<div class="jumbotron" style="position: absolute;top: 100px;width: 100%;">
-				<h1>Hello, {{ app.user.name }}!</h1>
+				<h1 >Hello, {{ app.user.name }}!</h1>
 				<p>We welcome to our service. Here you can chat with other users, create your own private community with its topics for discussion.</p>
 			</div>
 		</div>
@@ -58,7 +64,8 @@
 {% endblock %}
 
 {% block javascripts %}
-	{{ parent() }}  
+	{{ parent() }}
+	<script src="{{ asset('bundles/intranet/js/custom/sprint.js') }}"></script>
 	<script src="{{ asset('bundles/intranet/js/uploadify/jquery.uploadify.min.js') }}"></script>
 {% endblock %}
 

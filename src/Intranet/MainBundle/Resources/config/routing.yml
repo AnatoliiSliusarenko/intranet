@@ -259,4 +259,15 @@ intranet_get_user_settings:
 intranet_send_private_msg:
   pattern: /sendprivatemsg/
   defaults: { _controller: IntranetMainBundle:Index:sendPrivateMsg }
-  
+
+intranet_create_sprint:
+  pattern: /createsprint/
+  defaults: { _controller: IntranetMainBundle:Sprint:createSprint }
+
+intranet_show_sprint:
+  pattern: /showsprint/{sprintid}
+  defaults: { _controller: IntranetMainBundle:Sprint:showSprint }
+
+intranet_add_task_to_sprint:
+  pattern: /addtasktosprint/{taskid}
+  defaults: { _controller: IntranetMainBundle:Sprint:addTaskToSprint }
