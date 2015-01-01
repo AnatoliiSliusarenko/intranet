@@ -1,6 +1,6 @@
 
 {% for sprint in sprints %}
-    <li><a tooltip="{{ sprint.description }}" href="{{ url('intranet_show_sprint', {sprintid: sprint.getId()}) }}">
+    <li><a tooltip="{{ sprint.description }}" style=" {% if sprint.statusid == 2 %} color: green {% endif %}" href="{{ url('intranet_show_sprint', {sprintid: sprint.getId()}) }}">
             <i class="fa fa-github-square"></i>{{ sprint.getName() }}
         </a>
     </li>

@@ -2,6 +2,8 @@ Intranet.controller('SprintController', ['$scope', '$http', '$modal', function($
     console.log('SprintController was loaded!');
     $scope.urlAddSprint = JSON_URLS.addSprint;
     $scope.urlAddTaskToSprint = JSON_URLS.addTaskToSprint;
+    $scope.urlChangeStatus = JSON_URLS.changeStatus;
+    $scope.urlShowSprint = JSON_URLS.showSprint;
 
     $scope.addSprint = function()
     {
@@ -29,6 +31,22 @@ Intranet.controller('SprintController', ['$scope', '$http', '$modal', function($
                     template: response,
                     controller: 'AddTaskToSprintController'
                 })
+            })
+    }
+
+    $scope.changeStatus = function(sprintid)
+    {
+        var url = $scope.urlChangeStatus.replace('0', sprintid);
+        $http({
+            method: "GET",
+            url: url
+        })
+            .success(function(response) {
+                if(response.message)
+                {
+                    var url = $scope.urlShowSprint.replace('0', sprintid);
+                    document.location.href = url;
+                }
             })
     }
 }])

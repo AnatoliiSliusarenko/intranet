@@ -271,3 +271,7 @@ intranet_show_sprint:
 intranet_add_task_to_sprint:
   pattern: /addtasktosprint/{taskid}
   defaults: { _controller: IntranetMainBundle:Sprint:addTaskToSprint }
+
+intranet_change_sprint_status:
+  pattern: /gangesprint/{sprintid}
+  defaults: { _controller: IntranetMainBundle:Sprint:changeSprintStatus }

@@ -245,7 +245,8 @@
 					checkEmail: "{{ url('intranet_user_check_email') }}",
 					addSprint: "{{ url('intranet_create_sprint') }}",
 					showSprint: "{{ url('intranet_show_sprint', {sprintid: 0}) }}",
-					addTaskToSprint: "{{ url('intranet_add_task_to_sprint', {taskid: 0}) }}"
+					addTaskToSprint: "{{ url('intranet_add_task_to_sprint', {taskid: 0}) }}",
+					changeStatus: "{{ url('intranet_change_sprint_status', {sprintid: 0}) }}"
 			};
 			</script>
 		{% endblock %}

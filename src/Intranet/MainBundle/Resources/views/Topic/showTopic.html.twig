@@ -95,6 +95,167 @@
 {% block content %}
 <div class="row">
 	<div class="col-md-12">
+		{% if subtopics|length > 0 %}
+
+		{% endif %}
+		<div class="panel panel-cascade" ng-controller="TasksController">
+			<div class="panel-heading tooltips">
+				<h3 class="panel-title">
+                	<span>
+                    	<a data-original-title="Filter tasks" data-placement="top" href="#" class="panel-minimize"><i class="fa fa-filter"></i> Tasks of this topic</a>
+                    </span>
+					<a data-original-title="Add new task" data-placement="top"><button type="button" class="btn btn-success" ng-click="addTask()"><i class="fa fa-plus-circle"></i></button></a>
+				</h3>
+			</div>
+			<div class="panel-body" style="display:none;">
+				<div class="form-group">
+					<label for="inputEmail1" class="col-lg-2 col-md-3 control-label">Name</label>
+					<div class="col-lg-10 col-md-9">
+						<input type="text" ng-model="filter.name" class="form-control form-cascade-control" id="inputEmail1" placeholder="Type task name here" value="">
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="inputEmail1" class="col-lg-2 col-md-3 control-label">Status</label>
+					<div class="col-lg-10 col-md-9">
+						<select multiple ng-model="filter.status" class="form-control">
+							{% for status in availableStatus %}
+								<option value="{{ status.id }}">{{ status.label }}</option>
+							{% endfor %}
+						</select>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="inputEmail1" class="col-lg-2 col-md-3 control-label">Priority</label>
+					<div class="col-lg-10 col-md-9">
+						<select multiple ng-model="filter.priority" class="form-control">
+							<option value="high">High</option>
+							<option value="medium">Medium</option>
+							<option value="low">Low</option>
+						</select>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="inputEmail1" class="col-lg-2 col-md-3 control-label">User</label>
+					<div class="col-lg-10 col-md-9">
+						<select multiple ng-model="filter.user" class="form-control">
+							<option ng-repeat="user in users" value="[[user.id]]">[[ user.surname + ' ' + user.name + ' (' + user.username + ')' ]]</option>
+						</select>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="inputEmail1" class="col-lg-2 col-md-3 control-label">Topic</label>
+					<div class="col-lg-10 col-md-9">
+						<select multiple ng-model="filter.topic" class="form-control">
+							<option ng-repeat="topic in topics" value="[[topic.id]]" >[[topic.name]]</option>
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="panel-body" ng-controller="SprintController">
+				<table class="table users-table table-condensed table-hover" >
+					<thead>
+					<tr>
+						<th class="visible-lg">#</th>
+						<th class="visible-lg">Id</th>
+						<th class="visible-lg" style="width: 450px">Name</th>
+						<th class="visible-lg">Status</th>
+						<th class="visible-lg">Priority</th>
+						<th class="visible-lg">StartDate</th>
+						<th class="visible-lg">EndDate</th>
+						<th class="visible-lg">Estimated</th>
+						<th class="visible-lg">Assigned</th>
+						<th class="visible-lg">Parent</th>
+						<th class="visible-lg">Sprint</th>
+						<th class="visible-lg">Owner</th>
+						<th>&nbsp;</th>
+					</tr>
+					</thead>
+					<tbody ng-repeat="(i, task) in tasks">
+					<tr>
+						<td class="visible-lg">[[i+1]]</td>
+						<td class="visible-lg">[[task.id]]</td>
+						<td class="visible-lg">
+							<div class="tooltips">
+				            	<span class="clickable" ng-click="changeDrop(task)">
+				            		<i ng-show="task.subtasks.length>0 && !task.dropped" class="fa fa-plus"></i>
+				            		<i ng-show="task.subtasks.length>0 && task.dropped" class="fa fa-minus"></i>
+				            	</span>
+								<span ng-show="task.newCommentsCount>0" class="badge bg-danger">[[task.newCommentsCount]]</span>
+								<a ng-click="editTask(task)" data-original-title="[[task.description]]" data-placement="top" href="#" >[[ task.name ]]</a>
+							</div>
+						</td>
+						<td class="visible-lg">
+							<label class="label" style="background-color: [[task.status.color]];">[[task.status.label]]</label>
+						</td>
+						<td class="visible-lg">
+							<label ng-show="task.priority=='high'" class="label label-danger">High</label>
+							<label ng-show="task.priority=='medium'" class="label label-warning">Medium</label>
+							<label ng-show="task.priority=='low'" class="label label-success">Low</label>
+						</td>
+						<td class="visible-lg">[[ task.startdate.date ]]</td>
+						<td class="visible-lg">[[ task.enddate.date ]]</td>
+						<td class="visible-lg">[[ task.estimated | estimatedTime ]]</td>
+						<td class="visible-lg">
+							<span ng-show="task.user==null">-</span>
+							<span ng-show="task.user!=null">[[task.user.surname + ' ' + task.user.name]]</span>
+						</td>
+						<td class="visible-lg">
+							<span ng-show="task.topic==null">-</span>
+							<span ng-show="task.topic!=null">[[task.topic.name]]</span>
+						</td>
+						<td class="visible-lg">[[ task.sprint.name ]]</td>
+						<td class="visible-lg">[[ task.owner.name ]]</td>
+						<td>
+							<div class="tooltips">
+								<a data-original-title="Add subtasks" data-placement="top" href="#"><button type="button" class="btn btn-primary btn-xs" ng-click="addTask(task)"><i class="fa fa-code-fork"></i></button></a>
+								<a data-original-title="Delete task" data-placement="top" href="#"><button type="button" class="btn btn-danger btn-xs" ng-click="removeTask(task)"><i class="fa fa-trash-o"></i></button></a>
+								<a data-original-title="Go to topic" data-placement="top" href="[[ task.hrefTopic ]]" ng-show="task.topicid != null" class="btn btn-info btn-xs"><i class="fa fa-mail-forward"></i></a>
+								<a ng-click="addToSprint(task.id)" data-original-title="Add to Sprint" data-placement="top" href="#" class="btn btn-xs" style="border-color: #000088"><i class="fa fa-stack-overflow"></i></a>
+							</div>
+						</td>
+					</tr>
+					<tr ng-show="task.dropped == true" class="success" ng-repeat="subtask in task.subtasks">
+						<td class="visible-lg">&nbsp;&nbsp;[[i+1]].[[$index+1]]</td>
+						<td  class="visible-lg">[[subtask.id]]</td>
+						<td class="visible-lg"><div class="tooltips"><a ng-click="editTask(subtask)" data-original-title="[[subtask.description]]" data-placement="top" href="#">[[ subtask.name ]]</a></div></td>
+						<td class="visible-lg">
+							<label class="label" style="background-color: [[subtask.status.color]];">[[subtask.status.label]]</label>
+						</td>
+						<td class="visible-lg">
+							<label ng-show="subtask.priority=='high'" class="label label-danger">High</label>
+							<label ng-show="subtask.priority=='medium'" class="label label-warning">Medium</label>
+							<label ng-show="subtask.priority=='low'" class="label label-success">Low</label>
+						</td>
+						<td class="visible-lg">[[ subtask.startdate.date ]]</td>
+						<td class="visible-lg">[[ subtask.enddate.date ]]</td>
+						<td class="visible-lg">[[ subtask.estimated | estimatedTime]]</td>
+						<td class="visible-lg">
+							<span ng-show="subtask.user==null">-</span>
+							<span ng-show="subtask.user!=null">[[subtask.user.surname + ' ' + subtask.user.name]]</span>
+						</td>
+						<td class="visible-lg">
+							<span ng-show="subtask.topic==null">-</span>
+							<span ng-show="subtask.topic!=null">[[subtask.topic.name]]</span>
+						</td>
+						<td class="visible-lg">[[ subtask.sprint.name ]]</td>
+						<td class="visible-lg">[[ subtask.owner.name ]]</td>
+						<td>
+							<div class="tooltips">
+								<a data-original-title="Delete subtask" data-placement="top" href="#"><button type="button" class="btn btn-danger btn-xs" ng-click="removeTask(subtask)"><i class="fa fa-trash-o"></i></button></a>
+								<a data-original-title="Go to topic" data-placement="top" href="#" href="[[ subtask.hrefTopic ]]" ng-show="subtask.topicid != null" class="btn btn-info btn-xs"><i class="fa fa-mail-forward"></i></a>
+							</div>
+						</td>
+					</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-md-12">
 		<div class="row chat-box" ng-controller="ChatController">
   							<div class="col-md-2">
   								<div class="panel panel-cascade contacts-box">
@@ -190,158 +351,11 @@
   								</div>
   							</div>
   						</div>
-  						
- <div class="row">
-	<div class="col-md-12">
-		{% if subtopics|length > 0 %}
-		
-		{% endif %}
-		<div class="panel panel-cascade" ng-controller="TasksController">
-			<div class="panel-heading tooltips">
-                <h3 class="panel-title">
-                	<span>
-                    	<a data-original-title="Filter tasks" data-placement="top" href="#" class="panel-minimize"><i class="fa fa-filter"></i> Tasks of this topic</a>
-                    </span> 
-                    <a data-original-title="Add new task" data-placement="top"><button type="button" class="btn btn-success" ng-click="addTask()"><i class="fa fa-plus-circle"></i></button></a>
-                </h3>
-            </div>
-            <div class="panel-body" style="display:none;">
-            	<div class="form-group">
-                		<label for="inputEmail1" class="col-lg-2 col-md-3 control-label">Name</label>
-                		<div class="col-lg-10 col-md-9">
-                 			<input type="text" ng-model="filter.name" class="form-control form-cascade-control" id="inputEmail1" placeholder="Type task name here" value="">
-               			</div>
-             	</div>
-            	<div class="form-group">
-  					<label for="inputEmail1" class="col-lg-2 col-md-3 control-label">Status</label>
-  					<div class="col-lg-10 col-md-9">
-   						<select multiple ng-model="filter.status" class="form-control">
-						    {% for status in availableStatus %}
-						    <option value="{{ status.id }}">{{ status.label }}</option>
-						    {% endfor %}
-						</select>
-					</div>
-				</div>
-				<div class="form-group">
-  					<label for="inputEmail1" class="col-lg-2 col-md-3 control-label">Priority</label>
-  					<div class="col-lg-10 col-md-9">
-   						<select multiple ng-model="filter.priority" class="form-control">
-						    <option value="high">High</option>
-						    <option value="medium">Medium</option>
-						    <option value="low">Low</option>
-						</select>
-					</div>
-				</div>
-             	<div class="form-group">
-  					<label for="inputEmail1" class="col-lg-2 col-md-3 control-label">User</label>
-  					<div class="col-lg-10 col-md-9">
-   						<select multiple ng-model="filter.user" class="form-control">
-						    <option ng-repeat="user in users" value="[[user.id]]">[[ user.surname + ' ' + user.name + ' (' + user.username + ')' ]]</option>
-						</select>
-					</div>
-				</div>
-				<div class="form-group">
-  					<label for="inputEmail1" class="col-lg-2 col-md-3 control-label">Topic</label>
-  					<div class="col-lg-10 col-md-9">
-   						<select multiple ng-model="filter.topic" class="form-control">
-						    <option ng-repeat="topic in topics" value="[[topic.id]]" >[[topic.name]]</option>
-						</select>
-					</div>
-				</div>
-            </div>
-            <div class="panel-body">
-	          <table class="table users-table table-condensed table-hover" >
-	           <thead>
-	           		<tr>
-			             <th  class="visible-lg">#</th>
-			             <th  class="visible-lg">Id</th>
-			             <th  class="visible-lg">Name</th>
-			             <th class="visible-lg">Status</th>
-			              <th class="visible-lg">StatusUpdated</th>
-			             <th class="visible-lg">Priority</th>
-			             <th class="visible-lg">StartDate</th>
-			             <th class="visible-lg">Estimated</th>
-			             <th class="visible-lg">EndDate</th>
-			             <th class="visible-lg">Assigned</th>
-			             <th class="visible-lg">Topic</th>
-			             <th>&nbsp;</th>
-	           		</tr>
-	           </thead>
-	           <tbody ng-repeat="(i, task) in tasks">
-		           		<tr>
-					   		<td class="visible-lg">[[i+1]]</td>
-					   		<td  class="visible-lg">[[task.id]]</td>
-				            <td class="visible-lg"><div class="tooltips"><span class="clickable" ng-click="changeDrop(task)"><i ng-show="task.subtasks.length>0 && !task.dropped" class="fa fa-plus"></i><i ng-show="task.subtasks.length>0 && task.dropped" class="fa fa-minus"></i></span>
-				            <span ng-show="task.newCommentsCount>0" class="badge bg-danger">[[task.newCommentsCount]]</span>
-				            <a ng-click="editTask(task)" data-original-title="[[task.description]]" data-placement="top" href="#">[[ task.name ]]</a></div></td>
-				            <td class="visible-lg">
-				            	<label class="label" style="background-color: [[task.status.color]];">[[task.status.label]]</label>
-				            </td>
-				            <td class="visible-lg">[[ task.statusUpdated.date ]]</td>
-				            <td class="visible-lg">
-				            <label ng-show="task.priority=='high'" class="label label-danger">High</label>
-				            <label ng-show="task.priority=='medium'" class="label label-warning">Medium</label>
-				            <label ng-show="task.priority=='low'" class="label label-success">Low</label>
-				            </td>
-				            <td class="visible-lg">[[ task.startdate.date ]]</td>
-				            <td class="visible-lg">[[ task.estimated | estimatedTime ]]</td>
-				            <td class="visible-lg">[[ task.enddate.date ]]</td>
-				            <td class="visible-lg">
-				            <span ng-show="task.user==null">-</span>
-				            <span ng-show="task.user!=null">[[task.user.surname + ' ' + task.user.name]]</span>
-				            </td>
-				            <td class="visible-lg">
-				            <span ng-show="task.topic==null">-</span>
-				            <span ng-show="task.topic!=null">[[task.topic.name]]</span>
-				            </td>
-				            <td>
-				            <div class="tooltips">
-				             <a data-original-title="Subtasks" data-placement="top" href="#"><button data-original-title="Create subtask" data-placement="top" type="button" class="btn btn-primary btn-xs" ng-click="addTask(task)"><i class="fa fa-code-fork"></i></button></a>
-				             <a data-original-title="Delete task" data-placement="top" href="#"><button data-original-title="Delete task" data-placement="top" type="button" class="btn btn-danger btn-xs" ng-click="removeTask(task)"><i class="fa fa-trash-o"></i></button></a>
-				             <a data-original-title="Go to topic" data-placement="top" href="[[ task.hrefTopic ]]" ng-show="task.topicid != 0" class="btn btn-info btn-xs" ><i class="fa fa-mail-forward"></i></a>
-				            </div>
-				            </td>
-	           			</tr>
-	           			<tr ng-show="task.dropped == true" class="success" ng-repeat="subtask in task.subtasks">
-				            <td class="visible-lg">&nbsp;&nbsp;[[i+1]].[[$index+1]]</td>
-				            <td  class="visible-lg">[[subtask.id]]</td>
-				            <td class="visible-lg"><div class="tooltips"><a ng-click="editTask(subtask)" data-original-title="[[subtask.description]]" data-placement="top" href="#">[[ subtask.name ]]</a></div></td>
-				            <td class="visible-lg">
-				            	<label class="label" style="background-color: [[subtask.status.color]];">[[subtask.status.label]]</label>
-				            </td>
-				            <td class="visible-lg">[[ subtask.statusUpdated.date ]]</td>
-				            <td class="visible-lg">
-				            <label ng-show="subtask.priority=='high'" class="label label-danger">High</label>
-				            <label ng-show="subtask.priority=='medium'" class="label label-warning">Medium</label>
-				            <label ng-show="subtask.priority=='low'" class="label label-success">Low</label>
-				            </td>
-				            <td class="visible-lg">[[ subtask.startdate.date ]]</td>
-				            <td class="visible-lg">[[ subtask.estimated | estimatedTime ]]</td>
-				            <td class="visible-lg">[[ subtask.enddate.date ]]</td>
-				            <td class="visible-lg">
-				            <span ng-show="subtask.user==null">-</span>
-				            <span ng-show="subtask.user!=null">[[subtask.user.surname + ' ' + subtask.user.name]]</span>
-				            </td>
-				            <td class="visible-lg">
-				            <span ng-show="subtask.topic==null">-</span>
-				            <span ng-show="subtask.topic!=null">[[subtask.topic.name]]</span>
-				            </td>
-				            <td>
-				            <div class="tooltips">
-				             <a data-original-title="Delete subtask" data-placement="top" href="#"><button type="button" class="btn btn-danger btn-xs" ng-click="removeTask(subtask)"><i class="fa fa-trash-o"></i></button></a>
-				             <a href="[[ subtask.hrefTopic ]]" ng-show="subtask.topicid != null" class="btn btn-info btn-xs"><i class="fa fa-mail-forward"></i></a>
-				            </div>
-				            </td>
-		            	</tr>
-			  </tbody>
-			</table>
-		  </div>
-		</div>
-		
+  				</div>
 	</div>
- </div>
- </div>
- </div>
+	</div>
+	</div>
+
 {% endblock %}
 {% block javascripts %}
 	{{ parent() }}

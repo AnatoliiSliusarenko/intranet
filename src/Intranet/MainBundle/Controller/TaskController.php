@@ -75,7 +75,7 @@ public function getTasksForOfficeAction(Request $request, $office_id)
     		$userid = (isset($task->userid) && ($task->userid != 0)) ? $task->userid : null;
     		$parentid = (isset($task->parentid) && ($task->parentid != 0)) ? $task->parentid : null;
     		$topicid = (isset($task->topicid) && ($task->topicid != 0)) ? $task->topicid : null;
-    		
+    		$ownerid = (isset($task->ownerid) && ($task->ownerid != 0)) ? $task->ownerid : $this->getUser()->getId();
     		$task = new Task();
     		$task->setOfficeid($office_id);
     		$task->setParentid($parentid);
@@ -83,7 +83,7 @@ public function getTasksForOfficeAction(Request $request, $office_id)
     		$task->setTopicid($topicid);
     		$task->setStatusid($statusid);
     		$task->setEstimated($estimated);
-
+			$task->setOwnerid($ownerid);
     		$status = ($statusid != null) ? $em->getRepository('IntranetMainBundle:TaskStatus')->find($statusid) : null;
     		if ($status == null)
     		{
@@ -98,7 +98,8 @@ public function getTasksForOfficeAction(Request $request, $office_id)
     		$task->setName($name);
     		$task->setDescription($description);
     		$task->setPriority($priority);
-    		
+    		$owner = $owner = ($ownerid != null) ? $em->getRepository('IntranetMainBundle:User')->find($ownerid) : $this->getUser();
+			$task->setOwner($owner);
     		$user = ($userid != null) ? $em->getRepository('IntranetMainBundle:User')->find($userid) : null;
     		$task->setUser($user, $this->get('intranet.notifier'));
     		
@@ -166,7 +167,8 @@ public function getTasksForOfficeAction(Request $request, $office_id)
     		$parentid = (isset($taskData->parentid)) ? $taskData->parentid : null;
     		$topicid = (isset($taskData->topicid) && ($taskData->topicid != 'null')) ? $taskData->topicid : null;
     		$status = ($statusid != null) ? $em->getRepository('IntranetMainBundle:TaskStatus')->find($statusid) : null;
-    		if ($status == null)
+    		$ownerid = (isset($taskData->ownerid) && ($taskData->ownerid != 0)) ? $taskData->ownerid : $this->getUser()->getId();
+			if ($status == null)
     		{
     			$response = new Response(json_encode(array("result" => null, "message" => 'Status not found!')));
     			$response->headers->set('Content-Type', 'application/json');
@@ -176,7 +178,7 @@ public function getTasksForOfficeAction(Request $request, $office_id)
     		$task->setUserid($userid);
     		$user = ($userid != null) ? $em->getRepository('IntranetMainBundle:User')->find($userid) : null;
     		$topic = ($topicid != null) ? $em->getRepository('IntranetMainBundle:Topic')->find($topicid) : null;
-    		
+    		$owner = ($ownerid != null) ? $em->getRepository('IntranetMainBundle:User')->find($ownerid) : $this->getUser();
     		$inProgress = ($user != null) ? $user->isInProgress($em) : 0;
     		
     		if ($status->getCalcTimeStart() && $inProgress > 0)
@@ -194,8 +196,6 @@ public function getTasksForOfficeAction(Request $request, $office_id)
     		}
     		
     		$task->setUser($user, $this->get('intranet.notifier'));
-    		
-    		
     		$task->setName($name);
     		$task->setDescription($description);
     		$task->setPriority($priority);
@@ -205,6 +205,9 @@ public function getTasksForOfficeAction(Request $request, $office_id)
     		$task->setParentid($parentid);
     		$task->setEstimated($estimated);
     		$task->setTopic($topic);
+			var_dump($owner);die;
+			$task->setOwnerid($ownerid);
+			$task->setOwner($owner);
     		$em->persist($task);
     		$em->flush();
     		

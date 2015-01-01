@@ -145,6 +145,28 @@ class Task
      * @ORM\Column(name="sprintid", type="integer")
      */
     private $sprintid;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Sprint", inversedBy="tasks")
+     * @ORM\JoinColumn(name="sprintid")
+     * @var Sprint
+     */
+    private $sprint;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="ownerid", type="integer")
+     */
+    private $ownerid;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="tasks")
+     * @ORM\JoinColumn(name="ownerid")
+     * @var User
+     */
+    private $owner;
+
     
     private $subTasks = null;
     
@@ -361,7 +383,11 @@ class Task
     			'status' => $this->getStatus()->getInArray(),
     			'startdate' => $this->getStartdate(),
     			'estimated' => $this->getEstimated(),
-    			'enddate' => $this->getEnddate()
+    			'enddate' => $this->getEnddate(),
+                'sprintid' => $this->getSprintid(),
+                'sprint' => ($this->getSprint() != null ) ? $this->getSprint()->getInArray() : null,
+                'ownerid' => $this->getOwnerid(),
+                'owner' => ($this->getOwner() != null ) ? $this->getOwner()->getInArray() : null
     	);
     }
 
@@ -808,4 +834,73 @@ class Task
 
     }
 
+
+    /**
+     * Set ownerid
+     *
+     * @param integer $ownerid
+     * @return Task
+     */
+    public function setOwnerid($ownerid)
+    {
+        $this->ownerid = $ownerid;
+
+        return $this;
+    }
+
+    /**
+     * Get ownerid
+     *
+     * @return integer 
+     */
+    public function getOwnerid()
+    {
+        return $this->ownerid;
+    }
+
+    /**
+     * Set sprint
+     *
+     * @param \Intranet\MainBundle\Entity\Sprint $sprint
+     * @return Task
+     */
+    public function setSprint(\Intranet\MainBundle\Entity\Sprint $sprint = null)
+    {
+        $this->sprint = $sprint;
+
+        return $this;
+    }
+
+    /**
+     * Get sprint
+     *
+     * @return \Intranet\MainBundle\Entity\Sprint 
+     */
+    public function getSprint()
+    {
+        return $this->sprint;
+    }
+
+    /**
+     * Set owner
+     *
+     * @param \Intranet\MainBundle\Entity\User $owner
+     * @return Task
+     */
+    public function setOwner(\Intranet\MainBundle\Entity\User $owner = null)
+    {
+        $this->owner = $owner;
+
+        return $this;
+    }
+
+    /**
+     * Get owner
+     *
+     * @return \Intranet\MainBundle\Entity\User 
+     */
+    public function getOwner()
+    {
+        return $this->owner;
+    }
 }
